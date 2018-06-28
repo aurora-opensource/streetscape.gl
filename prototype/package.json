@@ -1,0 +1,32 @@
+{
+  "name": "kitti-prototype",
+  "version": "0.0.1",
+  "contributors": [
+    "Xiaoji Chen <xiaoji@uber.com>",
+    "Xintong Xia <xintong@uber.com>"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --progress --hot --open",
+    "start-local": "webpack-dev-server --env.local --progress --hot --open",
+    "build-clean": "rm -rf dist && mkdir dist",
+    "build-copy": "cp index.html dist",
+    "build-script": "NODE_ENV=production webpack --env.prod=true",
+    "build": "npm run build-clean && npm run build-script && npm run build-copy"
+  },
+  "dependencies": {
+    "@deck.gl/experimental-layers": "^5.2.2",
+    "d3-fetch": "^1.1.0",
+    "d3-scale": "^2.0.0",
+    "deck.gl": "^5.2.2",
+    "math.gl": "^1.2.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-map-gl": "^3.2.7",
+    "webgl-obj-loader": "^0.1.1"
+  },
+  "devDependencies": {
+    "buble-loader": "^0.4.1",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}

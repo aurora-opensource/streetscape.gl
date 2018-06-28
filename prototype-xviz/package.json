@@ -1,0 +1,40 @@
+{
+  "name": "kitti-xviz-prototype",
+  "version": "0.0.1",
+  "contributors": [
+    "Xiaoji Chen <xiaoji@uber.com>",
+    "Xintong Xia <xintong@uber.com>"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.js --progress --hot --open",
+    "build-clean": "rm -rf dist && mkdir dist",
+    "build-copy": "cp index.html dist",
+    "build-script": "NODE_ENV=production webpack --env.prod=true",
+    "build": "npm run build-clean && npm run build-script && npm run build-copy"
+  },
+  "dependencies": {
+    "@deck.gl/experimental-layers": "^5.2.2",
+    "@uber/request-utils": "0.0.1",
+    "@uber/xviz": "^0.0.5",
+    "d3-fetch": "^1.1.0",
+    "d3-scale": "^2.0.0",
+    "deck.gl": "^5.2.2",
+    "math.gl": "^1.2.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-map-gl": "^3.2.7",
+    "webgl-obj-loader": "^0.1.1",
+    "webworkify-webpack": "^2.1.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.4.5"
+  }
+}

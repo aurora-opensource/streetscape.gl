@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>KITTI</title>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.42.2/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        line-height: 24px;
+      }
+      #container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow:hidden;
+      }
+      #videos {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 12px;
+        width: 320px;
+      }
+      #videos label {
+        display: inline-block;
+        background: #444;
+        color: #fff;
+        padding: 0 4px;
+      }
+      #videos img {
+        width: 100%;
+      }
+      #timeline {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        padding: 20px;
+      }
+      #timeline input {
+        width: 100%;
+      }
+      #timeline .play-btn {
+        cursor: pointer;
+        display: inline-block;
+        width: 32px;
+      }
+    </style>
+  </head>
+  <body/>
+    <script src='bundle.js'></script>
+  </body>
+</html>
