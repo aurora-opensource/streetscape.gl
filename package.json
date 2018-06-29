@@ -14,6 +14,9 @@
     "Xiaoji Chen <xiaoji@uber.com>",
     "Xintong Xia <xintong@uber.com>"
   ],
+  "main": "es5/index.js",
+  "module": "esm/index.js",
+  "esnext": "es6/index.js",
   "scripts": {
     "babel-version": "babel --version",
     "build": "scripts/build.sh",
