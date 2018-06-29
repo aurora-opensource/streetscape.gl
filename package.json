@@ -1,17 +1,71 @@
 {
-  "name": "jskitti",
-  "version": "1.0.0",
-  "description": "Provides a minimal set of tools for working with the KITTI dataset in Javascript",
-  "author": "Xintong Xia",
+  "name": "@uber/streestcape.gl",
+  "description": "Utility library for handling XVIZ protocol",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "gitolite@code.uber.internal:vis/streetscape.gl.git"
+  },
+  "bugs": {
+    "url": "https://code.uberinternal.com/maniphest/task/create/",
+    "email": "xiaoji@uber.com"
+  },
+  "contributors": [
+    "Xiaoji Chen <xiaoji@uber.com>",
+    "Xintong Xia <xintong@uber.com>"
+  ],
+  "scripts": {
+    "build": "scripts/build.sh",
+    "cover": "nyc npm run test",
+    "lint": "scripts/lint.sh",
+    "publish-beta": "scripts/publish.sh beta",
+    "publish-prod": "scripts/publish.sh prod",
+    "test": "NODE_ENV=test node test/start test",
+    "test-browser": "webpack-dev-server --config test/webpack.config.js --hot --open"
+  },
   "dependencies": {
-    "@turf/turf": "^5.1.6",
-    "binary-parser": "^1.3.2",
-    "glob": "^7.1.2",
-    "math.gl": "^1.2.0",
-    "minimist": "^1.2.0",
-    "read-chunk": "^2.1.0",
-    "uuid": "^3.2.1",
-    "ws": "^5.1.1",
-    "xml2json": "^0.11.2"
+    "@deck.gl/core": "^5.3.1",
+    "@deck.gl/layers": "^5.3.2",
+    "color": "^3.0.0",
+    "deck.gl": "^5.3.2",
+    "earcut": "^2.1.3",
+    "luma.gl": "^6.0.0-alpha.2",
+    "prop-types": "^15.6.2",
+    "react-map-gl": "^3.2.10"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta",
+    "@babel/core": "^7.0.0-beta",
+    "@babel/preset-env": "^7.0.0-beta",
+    "@babel/preset-es2015": "^7.0.0-beta",
+    "@babel/preset-stage-2": "^7.0.0-beta",
+    "@babel/register": "^7.0.0-beta",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^8.0.0-beta",
+    "babel-plugin-istanbul": "^4.1.1",
+    "babel-plugin-version-inline": "^1.0.0",
+    "babel-preset-minify": "^0.4.0-alpha.caaefb4c",
+    "coveralls": "^2.13.0",
+    "eslint": "^4.13.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-config-uber-es2015": "^3.1.2",
+    "html-webpack-plugin": "^3.2.0",
+    "module-alias": "^2.0.0",
+    "nyc": "^10.2.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.9.2",
+    "prettier-check": "^2.0.0",
+    "source-map-loader": "^0.2.1",
+    "tap-browser-color": "^0.1.2",
+    "tape": "^4.9",
+    "tape-catch": "^1.0.4",
+    "webpack": "^4.3.0",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1",
+    "webworkify-webpack": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": "15.x - 16.x",
+    "react-dom": "15.x - 16.x"
   }
 }
