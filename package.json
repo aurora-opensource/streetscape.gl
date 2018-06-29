@@ -8,7 +8,7 @@
   },
   "bugs": {
     "url": "https://code.uberinternal.com/maniphest/task/create/",
-    "email": "xiaoji@uber.com"
+    "email": "xintong@uber.com"
   },
   "contributors": [
     "Xiaoji Chen <xiaoji@uber.com>",
@@ -68,5 +68,11 @@
   "peerDependencies": {
     "react": "15.x - 16.x",
     "react-dom": "15.x - 16.x"
-  }
+  },
+  "engines": {
+    "node": "8.11.3",
+    "npm": "5.6.0",
+    "yarn": "1.7.0"
+  },
+  "private": true
 }
