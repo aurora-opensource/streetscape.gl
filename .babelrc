@@ -3,19 +3,23 @@
     "es5": {
       "presets": [
         ["@babel/es2015", {modules: 'commonjs'}],
-        ["@babel/stage-2", {decoratorsLegacy: true}]
+        ["@babel/stage-2", {decoratorsLegacy: true}],
+        "@babel/react"
       ],
       "plugins": [
-        "version-inline"
+        "version-inline",
+        "@babel/proposal-class-properties"
       ]
     },
     "esm": {
       "presets": [
         ["@babel/es2015", {modules: false}],
-        ["@babel/stage-2", {decoratorsLegacy: true}]
+        ["@babel/stage-2", {decoratorsLegacy: true}],
+        "@babel/react"
       ],
       "plugins": [
-        "version-inline"
+        "version-inline",
+        "@babel/proposal-class-properties"
       ]
     },
     "es6": {
@@ -30,19 +34,23 @@
             "node": "8"
           },
           "modules": false
-        }]
+        }],
+        "@babel/react"
       ],
       "plugins": [
-        "version-inline"
+        "version-inline",
+        "@babel/proposal-class-properties"
       ]
     },
     "test": {
       "presets": [
         ["@babel/es2015", {modules: 'commonjs'}],
-        ["@babel/stage-2", {decoratorsLegacy: true}]
+        ["@babel/stage-2", {decoratorsLegacy: true}],
+        "@babel/react"
       ],
       "plugins": [
-        "istanbul"
+        "istanbul",
+        "@babel/proposal-class-properties"
       ]
     }
   }
