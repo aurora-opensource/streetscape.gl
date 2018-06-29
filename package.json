@@ -18,6 +18,7 @@
     "build": "scripts/build.sh",
     "cover": "nyc npm run test",
     "lint": "scripts/lint.sh",
+    "publish": "scripts/publish.sh",
     "publish-beta": "scripts/publish.sh beta",
     "publish-prod": "scripts/publish.sh prod",
     "test": "NODE_ENV=test node test/start test",
