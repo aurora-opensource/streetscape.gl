@@ -15,6 +15,7 @@
     "Xintong Xia <xintong@uber.com>"
   ],
   "scripts": {
+    "babel-version": "babel --version",
     "build": "scripts/build.sh",
     "cover": "nyc npm run test",
     "lint": "scripts/lint.sh",
