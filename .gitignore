@@ -1,6 +1,6 @@
 /.sass-cache
 /coverage
-/dist
+dist
 node_modules
 /_maps
 /config/secrets/secrets.json
@@ -14,5 +14,6 @@ package-lock.json
 *~
 /*.log*
 *.DS_Store
+yarn-error.log
 
-*/data
+data
