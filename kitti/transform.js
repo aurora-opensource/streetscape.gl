@@ -135,7 +135,7 @@ function getPoseOffset(p1, p2) {
   return [distInMeters * Math.cos(radianDiff), distInMeters * Math.sin(radianDiff)];
 }
 
-function generateVehiclePoseTrajectory(frameDirs) {
+function generateVehiclePoseTrajectory(originDataPath, getDestinationPath, frameDirs) {
 
   generateTrajectory({
     frameDirs,
@@ -159,7 +159,7 @@ function generateVehiclePoseTrajectory(frameDirs) {
   });
 }
 
-function generateTrackletsTrajectory(frameDirs) {
+function generateTrackletsTrajectory(originDataPath, getDestinationPath, frameDirs) {
   generateTrajectory({
     frameDirs,
     trajectoryFileName: 'motion-planning-tracklets.json',
@@ -324,7 +324,7 @@ const frameDirs = createGeneratedDirs(getDestinationPath, numOfFrames);
 // generate streams
 SORTED_STREAMS.forEach(stream => {
   if (!disableStreams[stream] && typeof STREAMS_MAP[stream].set === 'function') {
-    STREAMS_MAP[stream].set(originDataPath, getDestinationPath);
+    STREAMS_MAP[stream].set(originDataPath, getDestinationPath, frameDirs);
   }
 });
 

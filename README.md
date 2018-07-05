@@ -25,7 +25,7 @@ Unzip these archives and put it in `./prototype/data` directory
 ## Transform Kitti to xviz format
 ```
 cd <path-to-jskitti-root-dir>
-node --max-old-space-size=4096 src/transform.js --root=./prototype/data --date=2011_09_26 --drive=0005 --outdir=./prototype-xviz/data --disable-streams=lidar-points,vehicle-pose-trajectory
+node --max-old-space-size=4096 kitti/transform.js --root=./data --date=2011_09_26 --drive=0005 --outdir=./prototype-xviz/data --disable-streams=lidar-points,vehicle-pose-trajectory
 ```
 ##### available streams
 ```
