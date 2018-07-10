@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Layer} from 'deck.gl';
+import {Layer} from '@deck.gl/core';
 import {Model, Geometry} from 'luma.gl';
 
 import IMAGERY_VERTEX_SHADER from './imagery-layer-vertex';

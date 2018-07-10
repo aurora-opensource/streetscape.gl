@@ -18,8 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Layer} from 'deck.gl';
-import {GL, Model, Geometry} from 'luma.gl';
+import {Layer} from '@deck.gl/core';
+import {Model, Geometry} from 'luma.gl';
+import GL from 'luma.gl/constants';
 import {getTexture} from '../layer-utils';
 
 import BITMAP_VERTEX_SHADER from './bitmap-layer-vertex';

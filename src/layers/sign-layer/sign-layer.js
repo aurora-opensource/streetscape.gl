@@ -1,4 +1,4 @@
-import {IconLayer} from 'deck.gl';
+import {IconLayer} from '@deck.gl/layers';
 
 import vertex from './sign-layer-vertex.glsl';
 

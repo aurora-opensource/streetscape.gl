@@ -1,4 +1,5 @@
-import {Geometry, GL} from 'luma.gl';
+import {Geometry} from 'luma.gl';
+import GL from 'luma.gl/constants';
 
 export default class GridGeometry extends Geometry {
   constructor({

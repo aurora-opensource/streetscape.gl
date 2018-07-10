@@ -18,8 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Layer} from 'deck.gl';
-import {GL, Cube, Sphere} from 'luma.gl';
+import {Layer} from '@deck.gl/core';
+import {Cube, Sphere} from 'luma.gl';
+import GL from 'luma.gl/constants';
 import Color from 'color';
 
 import trafficLightLayerVertex from './traffic-light-layer-vertex.glsl';
