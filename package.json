@@ -24,7 +24,7 @@
     "publish": "scripts/publish.sh",
     "publish-beta": "scripts/publish.sh beta",
     "publish-prod": "scripts/publish.sh prod",
-    "test": "NODE_ENV=test node test/start test",
+    "test": "npm run lint && NODE_ENV=test node test/start test",
     "test-browser": "webpack-dev-server --config test/webpack.config.js --hot --open"
   },
   "dependencies": {
