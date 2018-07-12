@@ -24,6 +24,7 @@ export default `\
 attribute vec3 positions;
 
 attribute vec3 instancePositions;
+attribute vec2 instancePositions64xyLow;
 attribute float instanceAngles;
 attribute float instanceSizes;
 attribute vec4 instanceColors;
@@ -69,9 +70,7 @@ void main(void) {
     render3D
   );
 
-  vec3 vertex_worldspace = project_position(instancePositions + rotationMatrix * vertex);
-
-  gl_Position = project_to_clipspace(vec4(vertex_worldspace, 1.0));
+  gl_Position = project_position_to_clipspace(instancePositions + rotationMatrix * vertex, instancePositions64xyLow, vec3(0.0));
 
   vTextureCoords = mix(
     instanceIconFrames.xy,
