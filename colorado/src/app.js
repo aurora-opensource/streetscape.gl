@@ -1,17 +1,20 @@
 /* global document, wdwindow,*/
 /* eslint-disable no-console */
+import * as d3 from 'd3-fetch';
+import DeckGL from 'deck.gl';
 import React, {PureComponent} from 'react';
+import {COORDINATE_SYSTEM, MapView} from '@deck.gl/core';
+import {GLBBufferUnpacker} from '@uber/xviz';
 import {Matrix4} from 'math.gl';
+import {PointCloudLayer} from '@deck.gl/layers'
 import {render} from 'react-dom';
 import {StaticMap} from 'react-map-gl';
-import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer, MapView, MapController} from 'deck.gl';
-import * as d3 from 'd3-fetch';
-import {GLBBufferUnpacker} from '@uber/xviz';
 
-import {loadBinary} from './ply-loader';
 import {DATA_DIR, MAP_STYLE} from './constants';
+import {loadBinary} from './ply-loader';
 
-const NUM_CHUNKS = 13;
+// Set mapbox token here
+const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 const bufferUnpacker = new GLBBufferUnpacker();
 
@@ -24,33 +27,18 @@ const ORIGIN = {
 const INITIAL_VIEW_STATE = {
   latitude: 37.789624956789275,
   longitude: -122.400724064268,
-  zoom: 20,
+  zoom: 17,
+  maxZoom: 100,
   pitch: 59.99,
   bearing: 89.17
 };
-
-function getRange(positions, resMap) {
-  const size = positions.length / 3;
-
-  for (let i = 0; i < size; i = i + 3) {
-    resMap.xMin = Math.min(resMap.xMin, positions[i * 3]);
-    resMap.yMin = Math.min(resMap.yMin, positions[i * 3 + 1]);
-    resMap.zMin = Math.min(resMap.zMin, positions[i * 3 + 2]);
-    resMap.xMax = Math.max(resMap.xMax, positions[i * 3]);
-    resMap.yMax = Math.max(resMap.yMax, positions[i * 3 + 1]);
-    resMap.zMax = Math.max(resMap.zMax, positions[i * 3 + 2]);
-  }
-
-  return resMap;
-}
 
 function unpackData(metadata, data) {
   return bufferUnpacker.unpackBuffers(metadata, data);
 }
 
-function format(metadata, data) {
-  const unpacked = unpackData(metadata, data);
-  const positions = unpacked[0];
+function format(posBuffer, colorBuffer) {
+  const positions = posBuffer;
   const size = positions.length / 3;
 
   const normals = new Float32Array(size * 3);
@@ -59,9 +47,9 @@ function format(metadata, data) {
   for (let i = 0; i < size; i++) {
     normals[i * 3 + 2] = 1;
 
-    colors[i * 4 + 0] = unpacked[1][i * 3 + 0];
-    colors[i * 4 + 1] = unpacked[1][i * 3 + 1];
-    colors[i * 4 + 2] = unpacked[1][i * 3 + 2];
+    colors[i * 4 + 0] = colorBuffer[i * 3 + 0];
+    colors[i * 4 + 1] = colorBuffer[i * 3 + 1];
+    colors[i * 4 + 2] = colorBuffer[i * 3 + 2];
     colors[i * 4 + 3] = 255;
   }
 
@@ -73,12 +61,13 @@ function format(metadata, data) {
   };
 }
 
-class Example extends PureComponent {
+class Demo extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      viewState: INITIAL_VIEW_STATE
+      viewState: INITIAL_VIEW_STATE,
+      data: []
     };
 
     this._onViewportChange = this._onViewportChange.bind(this);
@@ -90,30 +79,21 @@ class Example extends PureComponent {
   }
 
   _loadData() {
-    const resMap = {
-      xMin: Number.POSITIVE_INFINITY,
-      xMax: Number.NEGATIVE_INFINITY,
-      yMin: Number.POSITIVE_INFINITY,
-      yMax: Number.NEGATIVE_INFINITY,
-      zMin: Number.POSITIVE_INFINITY,
-      zMax: Number.NEGATIVE_INFINITY
-    };
-
-
-    for (let i = 0; i < NUM_CHUNKS; i++) {
-      loadBinary(`${DATA_DIR}/${i}`).then(data => {
-        d3.json(`${DATA_DIR}/${i}-metadata.json`)
-          .then(metadata => {
-            const newData = format(metadata, data);
-            getRange(newData.positions, resMap);
+    loadBinary(`${DATA_DIR}/0`).then(data => {
+      d3.json(`${DATA_DIR}/0-metadata.json`)
+        .then(metadata => {
+          const unpacked = unpackData(metadata, data);
+          const size = unpacked.length / 2;
+          for (let i = 0; i < size; i++) {
+            // array of buffers
+            // [posBuffer, colorBuffer, posBuffer, colorBuffer, ...]
+            const formatted = format(unpacked[i * 2], unpacked[i * 2 + 1]);
             this.setState({
-              [`data${i}`]: newData
+              data: [...this.state.data, formatted]
             });
-          });
-      });
-    }
-
-    console.log(' range  ', resMap)
+          }
+        });
+    });
   }
 
   _onViewportChange(viewState) {
@@ -123,6 +103,7 @@ class Example extends PureComponent {
   }
 
   _getLayers() {
+    const {data} = this.state;
     const coordinateProps = {
       coordinateOrigin: [ORIGIN.longitude, ORIGIN.latitude, ORIGIN.altitude],
       coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS
@@ -130,8 +111,8 @@ class Example extends PureComponent {
 
     const layers = [];
 
-    for (let i = 0; i < NUM_CHUNKS; i++) {
-      const layerData = this.state[`data${i}`];
+    for (let i = 0; i < data.length; i++) {
+      const layerData = this.state.data[i];
       if (layerData) {
         layers.push(
           new PointCloudLayer({
@@ -154,27 +135,34 @@ class Example extends PureComponent {
   }
 
   render() {
-    const {viewState, data0} = this.state;
+    const {viewState, controller = true, baseMap = true} = this.props;
+    const {data} = this.state;
 
-    if (!data0 || !data0.size) {
+    if (!data || !data.length) {
       return null;
     }
 
     return (
-      <div id="container">
+      <div id='container'>
 
         <DeckGL
-          width="100%"
-          height="100%"
+          width='100%'
+          height='100%'
           views={new MapView({id: 'map'})}
+          initialViewState={INITIAL_VIEW_STATE}
           viewState={viewState}
-          controller={MapController}
+          controller={controller}
           onViewportChange={this._onViewportChange}
-          layers={this._getLayers()} >
+          layers={this._getLayers()}>
 
-          <StaticMap {...viewState}
-            viewId="map"
-            mapStyle={MAP_STYLE} />
+          {baseMap && (
+            <StaticMap
+              reuseMaps
+              mapStyle={MAP_STYLE}
+              preventStyleDiffing={true}
+              mapboxApiAccessToken={MAPBOX_TOKEN}
+            />
+          )}
 
         </DeckGL>
 
@@ -186,5 +174,5 @@ class Example extends PureComponent {
 const root = document.createElement('div');
 document.body.appendChild(root);
 
-render(<Example/>, root);
+render(<Demo/>, root);
 

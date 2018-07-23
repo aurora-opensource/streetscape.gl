@@ -23,4 +23,4 @@ done
 echo "SRC is $SRC";
 echo "DST is $DST";
 
-node dist/es5/process.js --src=$SRC --dst=$DST
+node --max-old-space-size=4096 dist/es5/server/process.js --src=$SRC --dst=$DST

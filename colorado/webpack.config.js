@@ -14,17 +14,24 @@ const CONFIG = {
   module: {
     rules: [
       {
+        // Compile ES2015 using buble
         test: /\.js$/,
-        loader: 'buble-loader',
-        include: [resolve('.')],
         exclude: [/node_modules/],
-        options: {
-          objectAssign: 'Object.assign'
-        }
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/react']
+            }
+          }
+        ]
       }
     ]
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
+  ]
 };
 
 // This line enables bundling against src in this repo rather than installed deck.gl module
