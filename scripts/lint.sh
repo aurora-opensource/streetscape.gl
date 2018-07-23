@@ -9,8 +9,8 @@ prettier-check "{modules,examples,test}/**/*.js" || \
 
 eslint src
 
-# check if yarn.lock contains private registry information
-[ -n "`grep unpm.u yarn.lock`" ] && \
-  echo 'Please rebuild yarn file using public npmrc' && \
-  exit 1 || \
-  echo 'Lockfile valid.'
+# check if yarn.lock contains private registry information - TODO - enable when we go public
+#[ -n "`grep unpm.u yarn.lock`" ] && \
+#  echo 'Please rebuild yarn file using public npmrc' && \
+#  exit 1 || \
+#  echo 'Lockfile valid.'

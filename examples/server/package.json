@@ -1,0 +1,13 @@
+{
+  "name": "xviz-demo-server",
+  "contributors": [
+    "Xintong Xia <xintong@uber.com>"
+  ],
+  "scripts": {
+    "start": "node ./xviz-serve-data.js"
+  },
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "ws": "^5.2.1"
+  }
+}

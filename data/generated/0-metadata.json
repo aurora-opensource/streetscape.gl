@@ -1,0 +1,36 @@
+{
+  "buffers": [
+    {
+      "byteLength": 540
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 432,
+      "byteOffset": 0
+    },
+    {
+      "buffer": 0,
+      "byteLength": 108,
+      "byteOffset": 432
+    }
+  ],
+  "accessors": [
+    {
+      "bufferView": 0,
+      "type": "SCALAR",
+      "componentType": 5126,
+      "count": 108
+    },
+    {
+      "bufferView": 1,
+      "type": "SCALAR",
+      "componentType": 5121,
+      "count": 108
+    }
+  ],
+  "header": {
+    "points": 36
+  }
+}

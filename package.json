@@ -1,6 +1,6 @@
 {
   "name": "@uber/streetscape.gl",
-  "description": "Utility library for handling XVIZ protocol",
+  "description": "Visualizaton engine for 3D maps and autonomous XVIZ protocol data",
   "version": "0.1.0-beta.1",
   "repository": {
     "type": "git",
@@ -12,6 +12,9 @@
   },
   "contributors": [
     "Xiaoji Chen <xiaoji@uber.com>",
+    "Ib Green <ib@uber.com>",
+    "Joseph Lisee <jlisee@uber.com>",
+    "Tim Wojtaszek <towjtasz@uber.com>",
     "Xintong Xia <xintong@uber.com>"
   ],
   "main": "es5/index.js",
