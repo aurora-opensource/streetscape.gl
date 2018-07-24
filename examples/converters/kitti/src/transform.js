@@ -26,8 +26,16 @@ const runPath = __dirname;
 // extract args from user input
 function getArgs() {
   const args = parseArgs();
-  const baseInputPath = path.join(runPath, args.root || DEFAULT_INPUT_ROOT, args.date || DEFAULT_DATE);
-  const baseOutputPath = path.join(runPath, args.root || DEFAULT_OUTPUT_ROOT, args.date || DEFAULT_DATE);
+  const baseInputPath = path.join(
+    runPath,
+    args.root || DEFAULT_INPUT_ROOT,
+    args.date || DEFAULT_DATE
+  );
+  const baseOutputPath = path.join(
+    runPath,
+    args.root || DEFAULT_OUTPUT_ROOT,
+    args.date || DEFAULT_DATE
+  );
   console.log(baseInputPath, baseOutputPath);
   const disableStreams = (args.disable_streams || '').split(',').reduce((resMap, name) => {
     resMap[name] = name;

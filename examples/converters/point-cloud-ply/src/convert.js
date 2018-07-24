@@ -5,7 +5,12 @@ import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import stream from 'stream';
-import {GLBContainer, GLBBufferPacker, GLBBufferUnpacker, addglTFBufferDescriptors} from '@uber/xviz';
+import {
+  GLBContainer,
+  GLBBufferPacker,
+  GLBBufferUnpacker,
+  addglTFBufferDescriptors
+} from '@uber/xviz';
 
 import {getRange, toArrayBuffer, toBuffer} from './utils';
 

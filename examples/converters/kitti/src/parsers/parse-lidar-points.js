@@ -7,7 +7,12 @@ const fs = require('fs');
 const uuid = require('uuid').v4;
 const parser = new BinaryParser().floatle();
 const path = require('path');
-const {GLBContainer, GLBBufferPacker, packJsonArrays, addglTFBufferDescriptors} = require('@uber/xviz');
+const {
+  GLBContainer,
+  GLBBufferPacker,
+  packJsonArrays,
+  addglTFBufferDescriptors
+} = require('@uber/xviz');
 
 const {getTimestamps} = require('./common');
 
@@ -57,17 +62,20 @@ function toBuffer(ab) {
 
 function generateFile(filePath, inputJson, format = 'glb') {
   switch (format) {
-  case 'glb':
-    const bufferPacker = new GLBBufferPacker();
-    const xvizJson = packJsonArrays(inputJson, bufferPacker);
-    const {json, arrayBuffer} = bufferPacker.packBuffers(bufferPacker.buffers, addglTFBufferDescriptors);
-    json.xviz = xvizJson;
-    const glbFileBuffer = GLBContainer.createGlbBuffer(son, arrayBuffer);
-    fs.writeFileSync(`${filePath}.glb`, toBuffer(glbFileBuffer), {flag: 'w'});
-    console.log(`Wrote ${filePath}.glb`);
-    break;
-  default:
-    fs.writeFileSync(`${filePath}.json`, JSON.stringify(inputJson), {flag: 'w'});
+    case 'glb':
+      const bufferPacker = new GLBBufferPacker();
+      const xvizJson = packJsonArrays(inputJson, bufferPacker);
+      const {json, arrayBuffer} = bufferPacker.packBuffers(
+        bufferPacker.buffers,
+        addglTFBufferDescriptors
+      );
+      json.xviz = xvizJson;
+      const glbFileBuffer = GLBContainer.createGlbBuffer(son, arrayBuffer);
+      fs.writeFileSync(`${filePath}.glb`, toBuffer(glbFileBuffer), {flag: 'w'});
+      console.log(`Wrote ${filePath}.glb`);
+      break;
+    default:
+      fs.writeFileSync(`${filePath}.json`, JSON.stringify(inputJson), {flag: 'w'});
   }
 }
 

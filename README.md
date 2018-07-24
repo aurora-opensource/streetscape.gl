@@ -14,6 +14,13 @@ References
 nvm use 8.9.4 (or higher)
 ```
 
+### Install dependencies
+Create a public .npmrc at the root of this repository with this [tool](https://www.npmjs.com/package/npmrc) and run:
+
+```
+yarn
+```
+
 
 ## Data Sets
 
