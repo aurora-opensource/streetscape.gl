@@ -2,7 +2,7 @@
   "env": {
     "es5": {
       "presets": [
-        ["@babel/es2015", {modules: 'commonjs'}],
+        ["@babel/env", {modules: 'commonjs'}],
         ["@babel/stage-2", {decoratorsLegacy: true}],
         "@babel/react"
       ],
@@ -13,7 +13,7 @@
     },
     "esm": {
       "presets": [
-        ["@babel/es2015", {modules: false}],
+        ["@babel/env", {modules: false}],
         ["@babel/stage-2", {decoratorsLegacy: true}],
         "@babel/react"
       ],
