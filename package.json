@@ -1,7 +1,7 @@
 {
   "name": "@uber/streetscape.gl",
   "description": "Visualizaton engine for 3D maps and autonomous XVIZ protocol data",
-  "version": "0.0.5",
+  "version": "0.1.0-beta.2",
   "repository": {
     "type": "git",
     "url": "gitolite@code.uber.internal:vis/streetscape.gl.git"
