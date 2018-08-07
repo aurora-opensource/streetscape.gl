@@ -6,9 +6,8 @@ const webpack = require('webpack');
 // Seems to be a Babel bug
 // https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
-  presets: ['env', 'stage-2', 'react'].map(function configMap(name) {
-    return require.resolve(`@babel/preset-${name}`);
-  })
+  presets: ['@babel/preset-env', '@babel/preset-react'],
+  plugins: ['@babel/proposal-class-properties']
 };
 
 const CONFIG = {
