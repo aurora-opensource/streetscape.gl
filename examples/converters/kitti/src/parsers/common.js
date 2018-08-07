@@ -18,15 +18,6 @@ function getTimestamps(timestampsFilePath) {
   return timestamps;
 }
 
-function getTimeRange(timestampsFilePath) {
-  const timestamps = getTimestamps(timestampsFilePath);
-  timestamps.sort();
-  return {
-    startTime: timestamps[0],
-    endTime: timestamps[timestamps.length - 1]
-  };
-}
-
 function createDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
     // make sure parent exists
@@ -88,7 +79,6 @@ function unpackGLB(filePath) {
 module.exports = {
   createDir,
   deleteDirRecursive,
-  getTimeRange,
   getTimestamps,
   packGLB,
   toArrayBuffer,
