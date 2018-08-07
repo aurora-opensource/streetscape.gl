@@ -1,0 +1,10 @@
+{
+  "name": "xviz-demo-server",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "argparse": "^1.0.10",
+    "ws": "^5.2.1"
+  }
+}
