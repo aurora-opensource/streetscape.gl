@@ -12,13 +12,32 @@
     "dotty": "^0.1.0",
     "glob": "^7.1.2",
     "math.gl": "^2.0.0",
-    "minimist": "^1.2.0",
     "read-chunk": "^2.1.0",
     "uuid": "^3.2.1",
-    "ws": "^5.1.1",
     "xml2json": "^0.11.2"
   },
   "devDependencies": {
-    "reify": "^0.16.4"
+    "reify": "^0.16.4",
+    "@babel/cli": "^7.0.0-beta.54",
+    "@babel/core": "^7.0.0-beta.54",
+    "@babel/plugin-proposal-class-properties": "7.0.0-beta.54",
+    "@babel/plugin-proposal-decorators": "7.0.0-beta.54",
+    "@babel/plugin-proposal-do-expressions": "7.0.0-beta.54",
+    "@babel/plugin-proposal-export-default-from": "7.0.0-beta.54",
+    "@babel/plugin-proposal-export-namespace-from": "7.0.0-beta.54",
+    "@babel/plugin-proposal-function-bind": "7.0.0-beta.54",
+    "@babel/plugin-proposal-function-sent": "7.0.0-beta.54",
+    "@babel/plugin-proposal-json-strings": "7.0.0-beta.54",
+    "@babel/plugin-proposal-logical-assignment-operators": "7.0.0-beta.54",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.0.0-beta.54",
+    "@babel/plugin-proposal-numeric-separator": "7.0.0-beta.54",
+    "@babel/plugin-proposal-optional-chaining": "7.0.0-beta.54",
+    "@babel/plugin-proposal-pipeline-operator": "7.0.0-beta.54",
+    "@babel/plugin-proposal-throw-expressions": "7.0.0-beta.54",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.54",
+    "@babel/plugin-syntax-import-meta": "7.0.0-beta.54",
+    "@babel/preset-env": "^7.0.0-beta.54",
+    "@babel/preset-react": "^7.0.0-beta.54",
+    "@babel/register": "^7.0.0-beta.54"
   }
 }

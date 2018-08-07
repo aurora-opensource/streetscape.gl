@@ -1,3 +1,18 @@
+### KITTI XVIZ Conversion Example
+
+This public KITTI data set is used to demonstrate how to convert data into the XVIZ format.
+
+The structure of this examples places the core conversion objects in `src/converters` with
+an object per data source. Data source will also have parsing utilities in `src/parsers`.
+
+The *converter* objects are responsible for calling the parsers and knowing the structure of the data
+such that it can be processed by a *frame*, which is all the data required for a point in time.
+
+In this example, the data has been synchronized for us, but XVIZ does support data sources operating at
+different rates.
+
+Follow the comments to get an understanding of the how's and why's of converting data to XVIZ.
+
 ### KITTI Data Set
 
 * [kitti dataset](http://www.cvlibs.net/datasets/kitti/raw_data.php)**
@@ -17,24 +32,23 @@
 
 E.g date=2011_09_26 drive=0005
 
-Unzip these archives and put them in `./kitti/data` directory
+Unzip these archives and put them in `../../../data/kitti` directory
 
 ```
-cd <path-to-jskitti-root-dir>
-node --max-old-space-size=4096 kitti/transform.js --root=./data --date=2011_09_26 --drive=0005 --outdir=./prototype-xviz/data --disable-streams=lidar-points,vehicle-pose-trajectory
+yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
 ```
 
 
 ## Available Streams in KITTI data sets
 
 ```
-  vehicle-pose,
-  velocity,
-  acceleration,
-  lidar-points,
-  tracklets,
-  vehicle-pose-trajectory,
-  tracklets-trajectory
+  vehicle-pose
+  /vehicle/velocity
+  /vehicle/acceleration
+  /vehicle/trajectory
+  /lidar/points
+  /tracklets/objects
+  /tracklets/trajectory
 ```
 
 ### Structure of KITTI data
@@ -59,12 +73,4 @@ node --max-old-space-size=4096 kitti/transform.js --root=./data --date=2011_09_2
                       |--0-frame.json                       // per frame per json file
                    |--1
                       |--1-frame.json
-```
-
-## Demo
-
-```
-cd prototype
-yarn install
-yarn start
 ```

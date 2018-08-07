@@ -18,64 +18,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/**
- * Parse GPS/IMU data (stored in oxts dir),
- * extract vehicle pose, velocity and acceleration information
- */
+const turf = require('@turf/turf');
 
-// Per dataformat.txt
-const OxtsPacket = [
-  'lat',
-  'lon',
-  'alt',
-  'roll',
-  'pitch',
-  'yaw',
-  'vn',
-  've',
-  'vf',
-  'vl',
-  'vu',
-  'ax',
-  'ay',
-  'az',
-  'af',
-  'al',
-  'au',
-  'wx',
-  'wy',
-  'wz',
-  'wf',
-  'wl',
-  'wu',
-  'pos_accuracy',
-  'vel_accuracy',
-  'navstat',
-  'numsats',
-  'posmode',
-  'velmode',
-  'orimode'
-];
+const MOTION_PLANNING_STEPS = 50;
 
-function getOxtsPacket(oxtsLine) {
-  const res = OxtsPacket.reduce((resMap, key, i) => {
-    resMap[key] = oxtsLine[i];
-    return resMap;
-  }, {});
+export function generateTrajectoryFrame(start, limit, getMotion, getTrajectory) {
+  const motions = [];
 
-  return res;
+  const iter_limit = Math.min(start + MOTION_PLANNING_STEPS, limit);
+  for (let i = start; i < iter_limit; i++) {
+    motions.push(getMotion(i));
+  }
+
+  return getTrajectory(motions);
 }
 
-export function loadOxtsPackets(content) {
-  // Generator to read OXTS ground truth data.
-  // Poses are given in an East-North-Up coordinate system
-  // whose origin is the first GPS position.
-
-  const values = content.split(' ').filter(Boolean);
-  // TODO: this should validate the # of fields
-  return getOxtsPacket(values);
+export function getPoseOffset(p1, p2) {
+  const point1 = turf.point([p1.longitude, p1.latitude]);
+  const point2 = turf.point([p2.longitude, p2.latitude]);
+  const distInMeters = turf.distance(point1, point2, {units: 'meters'});
+  const bearing = turf.bearing(point1, point2);
+  const radianDiff = ((90 - bearing) * Math.PI) / 180.0 - p1.yaw;
+  return [distInMeters * Math.cos(radianDiff), distInMeters * Math.sin(radianDiff)];
 }
-
-module.exports = {
-  loadOxtsPackets
-};

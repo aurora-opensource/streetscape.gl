@@ -18,64 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/**
- * Parse GPS/IMU data (stored in oxts dir),
- * extract vehicle pose, velocity and acceleration information
- */
+const fs = require('fs');
+const path = require('path');
 
-// Per dataformat.txt
-const OxtsPacket = [
-  'lat',
-  'lon',
-  'alt',
-  'roll',
-  'pitch',
-  'yaw',
-  'vn',
-  've',
-  'vf',
-  'vl',
-  'vu',
-  'ax',
-  'ay',
-  'az',
-  'af',
-  'al',
-  'au',
-  'wx',
-  'wy',
-  'wz',
-  'wf',
-  'wl',
-  'wu',
-  'pos_accuracy',
-  'vel_accuracy',
-  'navstat',
-  'numsats',
-  'posmode',
-  'velmode',
-  'orimode'
-];
+const {packGLB} = require('../parsers/common');
 
-function getOxtsPacket(oxtsLine) {
-  const res = OxtsPacket.reduce((resMap, key, i) => {
-    resMap[key] = oxtsLine[i];
-    return resMap;
-  }, {});
+export class XVIZWriter {
+  // xvizMetadata is the object returned
+  // from a Builder.
+  writeMetadata(xvizDirectory, xvizMetadata) {
+    const xvizMetadataFilename = path.join(xvizDirectory, '1-frame');
+    packGLB(xvizMetadataFilename, xvizMetadata);
+    fs.writeFileSync(`${xvizMetadataFilename}.json`, JSON.stringify(xvizMetadata, null, 2), {
+      flag: 'w'
+    });
+  }
 
-  return res;
+  writeFrame(xvizDirectory, frame_number, xvizFrame) {
+    // +2 is because 1 is metadata, so we start with 2
+    const frameFilePath = path.join(xvizDirectory, `${frame_number + 2}-frame`);
+    packGLB(frameFilePath, xvizFrame);
+
+    // fs.writeFileSync(`${frameFilePath}.json`, JSON.stringify(xvizFrame, null, 2), {flag: 'w'});
+  }
 }
-
-export function loadOxtsPackets(content) {
-  // Generator to read OXTS ground truth data.
-  // Poses are given in an East-North-Up coordinate system
-  // whose origin is the first GPS position.
-
-  const values = content.split(' ').filter(Boolean);
-  // TODO: this should validate the # of fields
-  return getOxtsPacket(values);
-}
-
-module.exports = {
-  loadOxtsPackets
-};

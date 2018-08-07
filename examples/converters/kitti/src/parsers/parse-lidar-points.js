@@ -23,19 +23,9 @@
  */
 
 const BinaryParser = require('binary-parser').Parser;
-const fs = require('fs');
-const uuid = require('uuid').v4;
 const parser = new BinaryParser().floatle();
-const path = require('path');
 
-const {getTimestamps, packGLB} = require('./common');
-
-function loadTimestamps(timestampsFile) {
-  return getTimestamps(timestampsFile);
-}
-
-function readBinaryFile(file) {
-  const binary = fs.readFileSync(file);
+function readBinaryFile(binary) {
   const res = [];
   for (let i = 0; i < binary.length; i = i + 4) {
     if (i + 4 > binary.length) {
@@ -47,8 +37,8 @@ function readBinaryFile(file) {
   return res;
 }
 
-function loadLidarData(filePath) {
-  const binary = readBinaryFile(filePath);
+function loadLidarData(contents) {
+  const binary = readBinaryFile(contents);
   const float = new Float32Array(binary);
   const size = Math.round(binary.length / 4);
 
@@ -67,45 +57,6 @@ function loadLidarData(filePath) {
   return {positions, reflectance};
 }
 
-function generateFile(filePath, inputJson, format = 'glb') {
-  switch (format) {
-    case 'glb':
-      packGLB(filePath, inputJson, {flattenArrays: true});
-      // this no longer exists, not sure what it did yet
-      // unpack(filePath);
-      break;
-    default:
-      fs.writeFileSync(`${filePath}.json`, JSON.stringify(inputJson), {flag: 'w'});
-  }
-}
-
-function processSingleFrame(srcFilePath, dstFilePath, timestamp) {
-  console.log(`Lidar processing: ${srcFilePath}`); // eslint-disable-line
-  const {positions} = loadLidarData(srcFilePath);
-  const formattedData = [
-    {
-      timestamp,
-      id: uuid(),
-      type: 'points3d',
-      color: [0, 0, 0, 255],
-      vertices: positions
-    }
-  ];
-  generateFile(dstFilePath, formattedData, 'glb');
-}
-
-function parse(originDataPath, getPath) {
-  const timeFilePath = path.join(originDataPath, 'velodyne_points', 'timestamps.txt');
-  // TODO load start and end timestamps if necessary
-  const timestamps = loadTimestamps(timeFilePath);
-  const lidarDirPath = path.join(originDataPath, 'velodyne_points', 'data');
-  const lidarDataFiles = fs.readdirSync(lidarDirPath).sort();
-  lidarDataFiles.forEach((fileName, i) => {
-    console.log(`processing lidar data frame ${i}/${timestamps.length}`); // eslint-disable-line
-    const srcFilePath = `${lidarDirPath}/${fileName}`;
-    const dstFilePath = path.join(getPath(i), 'lidar-points');
-    processSingleFrame(srcFilePath, dstFilePath, timestamps[i]);
-  });
-}
-
-module.exports = parse;
+module.exports = {
+  loadLidarData
+};

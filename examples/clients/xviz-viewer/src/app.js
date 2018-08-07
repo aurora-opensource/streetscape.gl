@@ -28,7 +28,7 @@ import {render} from 'react-dom';
 import {XVIZStreamLoader, LogViewer, VIEW_MODES} from 'streetscape.gl';
 import {PlaybackControl, Form, AutoSizer} from 'monochrome-ui';
 
-import {SETTINGS, MAP_STYLE, XVIZ_STYLES, CAR} from './constants';
+import {SETTINGS, MAP_STYLE, CAR} from './constants';
 
 import './main.scss';
 
@@ -50,7 +50,8 @@ class Example extends PureComponent {
         this.setState({
           timestamp: metadata.start_time,
           startTime: metadata.start_time,
-          endTime: metadata.end_time
+          endTime: metadata.end_time,
+          xvizStyle: metadata.styles
         });
       })
       .on('error', console.error); // eslint-disable-line
@@ -109,7 +110,7 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {isPlaying, log, timestamp, startTime, endTime, settings} = this.state;
+    const {isPlaying, log, timestamp, startTime, endTime, settings, xvizStyle} = this.state;
 
     if (timestamp === null) {
       return null;
@@ -122,7 +123,7 @@ class Example extends PureComponent {
             log={log}
             timestamp={timestamp}
             mapStyle={MAP_STYLE}
-            xvizStyle={XVIZ_STYLES}
+            xvizStyle={xvizStyle}
             car={CAR}
             viewMode={VIEW_MODES[settings.viewMode]}
           />

@@ -40,6 +40,11 @@ parser.addArgument(['--disable-streams'], {
   help: 'Comma separated stream names to disable'
 });
 
+parser.addArgument(['--frame_limit'], {
+  defaultValue: Number.MAX_SAFE_INTEGER,
+  help: 'Limit XVIZ frame generation to this value. Useful for testing conversion quickly'
+});
+
 // extract args from user input
 module.exports = function getArgs() {
   const args = parser.parseArgs();
@@ -50,14 +55,11 @@ module.exports = function getArgs() {
     args.out || args.data_directory
   );
   console.log(inputDir, outputDir); // eslint-disable-line
-  const disableStreams = args.disable_streams.split(',').reduce((resMap, name) => {
-    resMap[name] = name;
-    return resMap;
-  }, {});
-
+  const disableStreams = args.disable_streams.split(',');
   return {
     inputDir,
     outputDir,
-    disableStreams
+    disableStreams,
+    frame_limit: args.frame_limit
   };
 };

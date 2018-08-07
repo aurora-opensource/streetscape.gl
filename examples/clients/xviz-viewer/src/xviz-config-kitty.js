@@ -75,6 +75,11 @@ export const XVIZ_CONFIG = {
   getTrackedObjectPosition: (logSlice, trackedObjectId) => {
     return null;
   },
+  postProcessMetadata: (metadata, data) => {
+    if (data.styles) {
+      metadata.styles = data.styles;
+    }
+  },
   postProcessVehiclePose: datum => {
     const vehiclePose = new Pose(datum);
 

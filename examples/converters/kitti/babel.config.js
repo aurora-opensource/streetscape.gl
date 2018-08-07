@@ -18,64 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/**
- * Parse GPS/IMU data (stored in oxts dir),
- * extract vehicle pose, velocity and acceleration information
- */
+module.exports = function babelConfig(api) {
+  api.cache(() => process.env.NODE_ENV === 'production'); // eslint-disable-line
 
-// Per dataformat.txt
-const OxtsPacket = [
-  'lat',
-  'lon',
-  'alt',
-  'roll',
-  'pitch',
-  'yaw',
-  'vn',
-  've',
-  'vf',
-  'vl',
-  'vu',
-  'ax',
-  'ay',
-  'az',
-  'af',
-  'al',
-  'au',
-  'wx',
-  'wy',
-  'wz',
-  'wf',
-  'wl',
-  'wu',
-  'pos_accuracy',
-  'vel_accuracy',
-  'navstat',
-  'numsats',
-  'posmode',
-  'velmode',
-  'orimode'
-];
+  return {
+    presets: ['@babel/preset-env'],
+    plugins: [
+      ['@babel/plugin-proposal-decorators', {legacy: true}],
+      '@babel/plugin-proposal-function-sent',
+      '@babel/plugin-proposal-function-bind',
+      '@babel/plugin-proposal-do-expressions',
+      '@babel/plugin-proposal-export-namespace-from',
+      '@babel/plugin-proposal-export-default-from',
+      '@babel/plugin-proposal-logical-assignment-operators',
+      '@babel/plugin-proposal-nullish-coalescing-operator',
+      '@babel/plugin-proposal-optional-chaining',
+      '@babel/plugin-proposal-numeric-separator',
+      '@babel/plugin-proposal-throw-expressions',
 
-function getOxtsPacket(oxtsLine) {
-  const res = OxtsPacket.reduce((resMap, key, i) => {
-    resMap[key] = oxtsLine[i];
-    return resMap;
-  }, {});
-
-  return res;
-}
-
-export function loadOxtsPackets(content) {
-  // Generator to read OXTS ground truth data.
-  // Poses are given in an East-North-Up coordinate system
-  // whose origin is the first GPS position.
-
-  const values = content.split(' ').filter(Boolean);
-  // TODO: this should validate the # of fields
-  return getOxtsPacket(values);
-}
-
-module.exports = {
-  loadOxtsPackets
+      // Stage 3
+      '@babel/plugin-syntax-dynamic-import',
+      '@babel/plugin-syntax-import-meta',
+      ['@babel/plugin-proposal-class-properties', {loose: false}],
+      '@babel/plugin-proposal-json-strings'
+    ]
+  };
 };
