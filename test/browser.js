@@ -1,0 +1,1 @@
+require('tap-browser-color')();
