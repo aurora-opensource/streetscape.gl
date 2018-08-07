@@ -1,0 +1,45 @@
+{
+  "name": "streetscape.gl",
+  "description": "Visualizaton engine for 3D maps and autonomous XVIZ protocol data",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uber/streetscape.gl.git"
+  },
+  "main": "dist/es5/index.js",
+  "module": "dist/esm/index.js",
+  "esnext": "dist/es6/index.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rm -fr dist && mkdir -p dist",
+    "build-es6": "BABEL_ENV=es6 babel src --out-dir dist/es6 --source-maps --ignore 'node_modules/'",
+    "build-esm": "BABEL_ENV=esm babel src --out-dir dist/esm --source-maps --ignore 'node_modules/'",
+    "build-es5": "BABEL_ENV=es5 babel src --out-dir dist/es5 --source-maps --ignore 'node_modules/'",
+    "build": "npm run clean && npm run build-es6 && npm run build-esm && npm run build-es5"
+  },
+  "dependencies": {
+    "deck.gl": "^6.0.0",
+    "@deck.gl/experimental-layers": "^6.0.0",
+    "@xviz/client": "./../xviz",
+    "color": "^3.0.0",
+    "d3-fetch": "^1.1.0",
+    "deep-extend": "^0.6.0",
+    "earcut": "^2.1.3",
+    "prop-types": "^15.6.2",
+    "react-map-gl": "^3.3.2",
+    "webgl-obj-loader": "^0.1.1"
+  },
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "engines": {
+    "node": ">= 8",
+    "npm": ">= 5",
+    "yarn": "1.7.0"
+  },
+  "private": true
+}
