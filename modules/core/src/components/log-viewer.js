@@ -12,7 +12,9 @@ import {XvizStyleParser} from '@xviz/client';
 import {loadOBJMesh} from '../loaders/obj-loader';
 import XvizLayer from '../layers/xviz-layer';
 
+import VIEW_MODES from '../constants/view-modes';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
+import connectToLog from './connect';
 
 const CAR_DATA = [[0, 0, 0]];
 const LIGHT_SETTINGS = {
@@ -30,7 +32,7 @@ const DEFAULT_CAR = {
   origin: [0, 0, 0]
 };
 
-export default class Core3DViewer extends PureComponent {
+class Core3DViewer extends PureComponent {
   static propTypes = {
     frame: PropTypes.object,
     xvizStyle: PropTypes.object,
@@ -40,7 +42,9 @@ export default class Core3DViewer extends PureComponent {
   };
 
   static defaultProps = {
-    car: DEFAULT_CAR
+    xvizStyle: {},
+    car: DEFAULT_CAR,
+    viewMode: VIEW_MODES.PERSPECTIVE
   };
 
   constructor(props) {
@@ -197,3 +201,9 @@ export default class Core3DViewer extends PureComponent {
     );
   }
 }
+
+const getLogState = log => ({
+  frame: log.getCurrentFrame()
+});
+
+export default connectToLog({getLogState, Component: Core3DViewer});

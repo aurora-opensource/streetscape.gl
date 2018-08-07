@@ -9,13 +9,11 @@
 const resolve = require('path').resolve;
 
 const ROOT_DIR = resolve(__dirname, '..');
-const LIB_DIR = resolve(ROOT_DIR, './modules/core');
-const SRC_DIR = resolve(LIB_DIR, './src');
 
 const ALIASES = require('../aliases');
 
 // Support for hot reloading changes to the deck.gl library:
-function makeLocalDevConfig(EXAMPLE_DIR = LIB_DIR) {
+function makeLocalDevConfig() {
   return {
     // TODO - Uncomment when all examples use webpack 4 for faster bundling
     // mode: 'development',
@@ -31,7 +29,7 @@ function makeLocalDevConfig(EXAMPLE_DIR = LIB_DIR) {
 
     resolve: {
       // mainFields: ['esnext', 'module', 'main'],
-      modules: [resolve('./node_modules'), resolve(ROOT_DIR, './node_modules')],
+      modules: [resolve(ROOT_DIR, './node_modules'), resolve('./node_modules')],
       alias: ALIASES
     },
     module: {
@@ -47,26 +45,6 @@ function makeLocalDevConfig(EXAMPLE_DIR = LIB_DIR) {
   };
 }
 
-const BUBLE_CONFIG = {
-  module: {
-    rules: [
-      {
-        // Compile source using buble
-        test: /\.js$/,
-        loader: 'buble-loader',
-        include: [SRC_DIR],
-        options: {
-          objectAssign: 'Object.assign',
-          transforms: {
-            dangerousForOf: true,
-            modules: false
-          }
-        }
-      }
-    ]
-  }
-};
-
 function addLocalDevSettings(config, exampleDir) {
   const LOCAL_DEV_CONFIG = makeLocalDevConfig(exampleDir);
   config = Object.assign({}, LOCAL_DEV_CONFIG, config);
@@ -81,19 +59,10 @@ function addLocalDevSettings(config, exampleDir) {
   return config;
 }
 
-function addBubleSettings(config) {
-  config.module = config.module || {};
-  Object.assign(config.module, {
-    rules: (config.module.rules || []).concat(BUBLE_CONFIG.module.rules)
-  });
-  return config;
-}
-
 module.exports = (config, exampleDir) => env => {
   // npm run start-local now transpiles the lib
   if (env && env.local) {
     config = addLocalDevSettings(config, exampleDir);
-    config = addBubleSettings(config);
   }
 
   // npm run start-es6 does not transpile the lib

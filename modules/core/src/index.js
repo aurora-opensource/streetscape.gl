@@ -17,7 +17,7 @@ export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
 
 // COMPONENTS
 
-export {default as LogPlayer} from './components/log-player';
+export {default as LogViewer} from './components/log-viewer';
 export {default as PerspectivePopup} from './components/perspective-popup';
 
 // Constants
@@ -25,4 +25,4 @@ export {default as VIEW_MODES} from './constants/view-modes';
 
 export * from './layers/layer-utils';
 
-export {openLogStream} from './loaders/data-loader';
+export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
