@@ -25,7 +25,7 @@ import './xviz-config-kitty';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {openLogStream, LogPlayer, VIEW_MODES} from 'streetscape.gl';
+import {XVIZStreamLoader, LogViewer, VIEW_MODES} from 'streetscape.gl';
 import {PlaybackControl, Form, AutoSizer} from 'monochrome-ui';
 
 import {SETTINGS, MAP_STYLE, XVIZ_STYLES, CAR} from './constants';
@@ -36,35 +36,36 @@ class Example extends PureComponent {
   constructor(props) {
     super(props);
 
+    const log = new XVIZStreamLoader({
+      logGuid: 'mock',
+      serverConfig: {
+        defaultLogLength: 30000,
+        serverUrl: 'ws://localhost:8081',
+        worker: require.resolve('./stream-data-worker'),
+        maxConcurrency: 4
+      }
+    })
+      .on('ready', () => {
+        const {metadata} = log;
+        this.setState({
+          timestamp: metadata.start_time,
+          startTime: metadata.start_time,
+          endTime: metadata.end_time
+        });
+      })
+      .on('error', console.error); // eslint-disable-line
+
+    log.connect();
+
     this.state = {
       isPlaying: false,
-      metadata: null,
-      log: null,
+      log,
       timestamp: null,
       lastUpdate: 0,
       settings: {
         viewMode: 'PERSPECTIVE'
       }
     };
-
-    openLogStream({
-      serverConfig: {
-        serverUrl: 'ws://localhost:8081',
-        worker: require.resolve('./stream-data-worker'),
-        maxConcurrency: 4
-      },
-      onMetadata: metadata => {
-        this.setState({
-          metadata,
-          timestamp: metadata.start_time,
-          startTime: metadata.start_time,
-          endTime: metadata.end_time
-        });
-      },
-      onUpdate: logSynchronizer => {
-        this.setState({log: logSynchronizer});
-      }
-    });
   }
 
   _animate = () => {
@@ -108,7 +109,7 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {isPlaying, metadata, log, timestamp, startTime, endTime, settings} = this.state;
+    const {isPlaying, log, timestamp, startTime, endTime, settings} = this.state;
 
     if (timestamp === null) {
       return null;
@@ -117,9 +118,8 @@ class Example extends PureComponent {
     return (
       <div id="container">
         <div id="map-view">
-          <LogPlayer
+          <LogViewer
             log={log}
-            metadata={metadata}
             timestamp={timestamp}
             mapStyle={MAP_STYLE}
             xvizStyle={XVIZ_STYLES}

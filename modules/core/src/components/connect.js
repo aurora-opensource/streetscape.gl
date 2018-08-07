@@ -21,43 +21,47 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import {clamp} from 'math.gl';
-import {getXvizSettings} from '@xviz/client';
+import XVIZLoaderInterface from '../loaders/xviz-loader-interface';
 
-import Core3DViewer from './core-3d-viewer';
-import VIEW_MODES from '../constants/view-modes';
+export default function connectToLog({getLogState, Component}) {
+  class WrappedComponent extends PureComponent {
+    static propTypes = {
+      log: PropTypes.instanceOf(XVIZLoaderInterface).isRequired,
+      timestamp: PropTypes.number
+    };
 
-export default class LogPlayer extends PureComponent {
-  static propTypes = {
-    log: PropTypes.object,
-    metadata: PropTypes.object,
-    timestamp: PropTypes.number
-  };
+    state = {
+      lastUpdate: 0
+    };
 
-  render() {
-    const {log, metadata, mapStyle, xvizStyle, car, viewMode = VIEW_MODES.PERSPECTIVE} = this.props;
-    const timeWindow = getXvizSettings().TIME_WINDOW;
-
-    if (!log || !metadata) {
-      return null;
+    componentDidMount() {
+      this.props.log.on('update', this._update);
     }
 
-    const timestamp = clamp(
-      this.props.timestamp,
-      metadata.start_time + timeWindow,
-      metadata.end_time
-    );
-    log.setTime(timestamp);
-    const frame = log.getCurrentFrame(metadata.streams);
+    componentWillReceiveProps(nextProps) {
+      if (this.props.log !== nextProps.log) {
+        this.props.log.off('update', this._update);
+        nextProps.log.on('update', this._update);
+      }
+    }
 
-    return (
-      <Core3DViewer
-        frame={frame}
-        mapStyle={mapStyle}
-        xvizStyle={xvizStyle}
-        car={car}
-        viewMode={viewMode}
-      />
-    );
+    componentWillUnmount() {
+      this.props.log.off('update', this._update);
+    }
+
+    _update = () => {
+      this.setState({lastUpdate: Date.now()});
+    };
+
+    render() {
+      const {log, timestamp, ...otherProps} = this.props;
+
+      log.seek(timestamp);
+      const logState = getLogState(log);
+
+      return <Component {...otherProps} {...logState} />;
+    }
   }
+
+  return WrappedComponent;
 }
