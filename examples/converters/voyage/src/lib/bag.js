@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {open} from 'rosbag';
 
 export default class Bag {
@@ -14,7 +13,7 @@ export default class Bag {
 
     let frame = {};
     function flushFrame() {
-      if (!_.isEmpty(frame)) {
+      if (frame.keyTopic) {
         onFrame(frame);
         frame = {};
       }

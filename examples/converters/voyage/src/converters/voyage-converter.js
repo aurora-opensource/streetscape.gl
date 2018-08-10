@@ -1,15 +1,18 @@
 import {GPSDataSource} from './gps-converter';
 import {LidarDataSource} from './lidar-converter';
+import {TrackletsDataSource} from './tracklets-converter';
 
 import {XVIZBuilder} from '../xviz-writer';
 
 export class VoyageConverter {
   constructor(disableStreams) {
     this.disableStreams = disableStreams;
-    this.gpsDataSource = new GPSDataSource();
-    this.lidarDataSource = new LidarDataSource();
 
-    this.converters = [this.gpsDataSource, this.lidarDataSource];
+    this.converters = [
+      new GPSDataSource(),
+      new LidarDataSource(),
+      new TrackletsDataSource()
+    ];
   }
 
   convertFrame(frame) {
