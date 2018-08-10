@@ -25,12 +25,12 @@ module.exports = async function main(args) {
   let frameNum = 0;
   let startTime = null;
   let frameTime = null;
-  await bag.readFrames(frame => {
+  await bag.readFrames(async (frame) => {
     frameTime = frame.keyTopic.timestamp.toDate();
     if (!startTime) {
       startTime = frameTime;
     }
-    const xvizFrame = converter.convertFrame(frame);
+    const xvizFrame = await converter.convertFrame(frame);
     xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
     frameNum++;
   });
