@@ -1,12 +1,13 @@
 import {VoyageConverter} from './converters';
 import {XVIZWriter} from './xviz-writer';
-import {createDir} from './parsers/common';
+import {createDir, deleteDirRecursive} from './parsers/common';
 import {XVIZMetadataBuilder} from './xviz-writer';
 import Bag from './lib/bag';
 
 module.exports = async function main(args) {
   const {bag: bagPath, outputDir, disableStreams} = args;
 
+  deleteDirRecursive(outputDir);
   createDir(outputDir);
   const converter = new VoyageConverter(disableStreams);
   const bag = new Bag({
@@ -14,8 +15,8 @@ module.exports = async function main(args) {
     keyTopic: '/current_pose',
     topics: [
       '/current_pose',
-      '/points_raw',
       '/planner/path',
+      '/commander/points_fore',
       '/commander/perception_dct/track_list'
     ]
   });

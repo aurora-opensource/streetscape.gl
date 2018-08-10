@@ -1,7 +1,7 @@
 const uuid = require('uuid').v4;
 
 const {encodeBinaryXVIZ, parseBinaryXVIZ} = require('@xviz/client');
-import {loadLidarData} from '../parsers/parse-lidar-points';
+import {loadProcessedLidarData} from '../parsers/parse-lidar-points';
 
 // load file
 export class LidarDataSource {
@@ -10,10 +10,16 @@ export class LidarDataSource {
   }
 
   convertFrame(frame, xvizBuilder) {
-    const data = frame['/points_raw'];
+    let data = frame['/commander/points_fore'];
     if (!data) {
-      return;
+      if (!this.previousData) {
+        return;
+      }
+      data = this.previousData;
     }
+
+    this.previousData = data;
+
     // This encode/parse is a temporary workaround until we get fine-grain
     // control of which streams should be packed in the binary.
     // By doing this we are able to have the points converted to the appropriate
@@ -21,7 +27,7 @@ export class LidarDataSource {
     // works better with the rest of the conversion.
     for (const {timestamp, message} of data) {
       const pointsSize = message.data.length / (message.height * message.width);
-      const {positions} = loadLidarData(message.data, pointsSize);
+      const {positions} = loadProcessedLidarData(message.data, pointsSize);
       const tmp_obj = {vertices: positions};
       const bin_tmp_obj = encodeBinaryXVIZ(tmp_obj, {flattenArrays: true});
       const bin_xviz_lidar = parseBinaryXVIZ(bin_tmp_obj);

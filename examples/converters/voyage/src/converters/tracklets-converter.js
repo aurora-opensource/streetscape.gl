@@ -13,6 +13,7 @@ export class TrackletsDataSource {
     for (const {message} of trackMessages) {
       const tracks = message.confirmed_tracks;
       for (const track of tracks) {
+        console.log('trac,class_prob', track.class_probabilities, track);
         xvizBuilder
           .stream(this.TRACKLETS)
           .polygon(track.shape_points.map(p => [p.x, p.y, p.z]))
@@ -53,15 +54,15 @@ export class TrackletsDataSource {
       .styleClass('Unknown', {
         fillColor: '#D6A00080',
         strokeColor: '#D6A000'
-      })
+      });
 
-      // .stream(this.TRACKLETS_TRAJECTORY)
-      // .category('primitive')
-      // .type('polyline')
-      // .styleClassDefault({
-      //   strokeColor: '#FEC557',
-      //   strokeWidth: 0.3,
-      //   strokeWidthMinPixels: 1
-      // });
+    // .stream(this.TRACKLETS_TRAJECTORY)
+    // .category('primitive')
+    // .type('polyline')
+    // .styleClassDefault({
+    //   strokeColor: '#FEC557',
+    //   strokeWidth: 0.3,
+    //   strokeWidthMinPixels: 1
+    // });
   }
 }

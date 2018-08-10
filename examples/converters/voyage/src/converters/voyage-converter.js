@@ -8,11 +8,7 @@ export class VoyageConverter {
   constructor(disableStreams) {
     this.disableStreams = disableStreams;
 
-    this.converters = [
-      new GPSDataSource(),
-      new LidarDataSource(),
-      new TrackletsDataSource()
-    ];
+    this.converters = [new GPSDataSource(), new LidarDataSource(), new TrackletsDataSource()];
   }
 
   convertFrame(frame) {
