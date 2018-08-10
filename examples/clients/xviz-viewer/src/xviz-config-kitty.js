@@ -61,13 +61,10 @@ export const XVIZ_CONFIG = {
     }
   },
   postProcessVehiclePose: datum => {
-    const vehiclePose = new Pose(datum);
-
     return {
-      carPosition: datum,
-      heading: (datum.yaw / Math.PI) * 180,
-      vehiclePose: new Pose(datum),
-      transformMatrix: vehiclePose.getTransformationMatrix()
+      mapOrigin: [datum.longitude, datum.latitude, 0],
+      mapPose: null,
+      vehiclePose: new Pose(datum)
     };
   },
   postProcessPrimitive: p => p,
