@@ -9,5 +9,6 @@ yarn start --bag ./example.bag
 
 ```
   vehicle-pose
+  /vehicle/trajectory
   /lidar/points
 ```

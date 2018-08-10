@@ -12,7 +12,7 @@ module.exports = async function main(args) {
   const bag = new Bag({
     bagPath,
     keyTopic: '/current_pose',
-    topics: ['/current_pose', '/points_raw']
+    topics: ['/current_pose', '/points_raw', '/planner/path']
   });
 
   console.log(`Converting data at ${bagPath}`); // eslint-disable-line
