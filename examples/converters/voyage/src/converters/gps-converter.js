@@ -100,6 +100,7 @@ export class GPSDataSource {
       .category('vehicle-pose')
 
       .stream(this.VEHICLE_TRAJECTORY)
+      .coordinate('map_relative')
       .category('primitive')
       .type('polyline')
 

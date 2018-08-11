@@ -25,6 +25,7 @@ export class TrackletsDataSource {
   getMetadata(xvizMetaBuilder) {
     const xb = xvizMetaBuilder;
     xb.stream(this.TRACKLETS)
+      .coordinate('map_relative')
       .category('primitive')
       .type('polygon')
       .styleClassDefault({
