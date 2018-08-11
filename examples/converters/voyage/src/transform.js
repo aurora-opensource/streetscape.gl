@@ -5,7 +5,7 @@ import {XVIZMetadataBuilder} from './xviz-writer';
 import Bag from './lib/bag';
 
 module.exports = async function main(args) {
-  const {bag: bagPath, outputDir, disableStreams} = args;
+  const {bag: bagPath, outputDir, disableStreams, frameLimit} = args;
 
   deleteDirRecursive(outputDir);
   createDir(outputDir);
@@ -16,7 +16,7 @@ module.exports = async function main(args) {
     topics: [
       '/current_pose',
       '/planner/path',
-      '/commander/points_fore',
+      '/points_raw',
       '/commander/perception_dct/track_list'
     ]
   });
@@ -32,13 +32,16 @@ module.exports = async function main(args) {
   let startTime = null;
   let frameTime = null;
   await bag.readFrames(frame => {
-    frameTime = frame.keyTopic.timestamp.toDate();
-    if (!startTime) {
-      startTime = frameTime;
+    if (frameNum < frameLimit) {
+      frameTime = frame.keyTopic.timestamp.toDate();
+      if (!startTime) {
+        startTime = frameTime;
+      }
+
+      const xvizFrame = converter.convertFrame(frame);
+      xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
+      frameNum++;
     }
-    const xvizFrame = converter.convertFrame(frame);
-    xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
-    frameNum++;
   });
 
   // Write metadata file

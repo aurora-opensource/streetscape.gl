@@ -13,7 +13,6 @@ export class TrackletsDataSource {
     for (const {message} of trackMessages) {
       const tracks = message.confirmed_tracks;
       for (const track of tracks) {
-        console.log('trac,class_prob', track.class_probabilities, track);
         xvizBuilder
           .stream(this.TRACKLETS)
           .polygon(track.shape_points.map(p => [p.x, p.y, p.z]))

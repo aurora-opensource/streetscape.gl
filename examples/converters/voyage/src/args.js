@@ -20,6 +20,11 @@ parser.addArgument(['--disable-streams'], {
   help: 'Comma separated stream names to disable'
 });
 
+parser.addArgument(['--frame_limit'], {
+  defaultValue: Number.MAX_SAFE_INTEGER,
+  help: 'Limit XVIZ frame generation to this value. Useful for testing conversion quickly'
+});
+
 // extract args from user input
 module.exports = function getArgs() {
   const args = parser.parseArgs();
@@ -32,6 +37,7 @@ module.exports = function getArgs() {
   return {
     bag: args.bag,
     outputDir,
-    disableStreams
+    disableStreams,
+    frameLimit: args.frame_limit
   };
 };
