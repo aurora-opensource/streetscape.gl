@@ -15,7 +15,7 @@ export class TrackletsDataSource {
       for (const track of tracks) {
         xvizBuilder
           .stream(this.TRACKLETS)
-          .polygon(track.shape_points.map(p => [p.x, p.y, p.z]))
+          .polygon(track.shape_bottom.points.map(p => [p.x, p.y, p.z]))
           .classes(['Car'])
           .id(track.track_id);
       }
