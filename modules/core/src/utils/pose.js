@@ -18,44 +18,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export default {
-  TOP_DOWN: {
-    name: 'map',
-    initialProps: {
-      minZoom: 12,
-      maxZoom: 24,
-      minPitch: 0,
-      maxPitch: 0,
-      pitch: 0,
-      zoom: 20
-    },
-    orthographic: true
-  },
-  PERSPECTIVE: {
-    name: 'map',
-    initialProps: {
-      minZoom: 12,
-      maxZoom: 24,
-      minPitch: 0,
-      maxPitch: 85,
-      pitch: 60,
-      zoom: 20
-    }
-  },
-  DRIVER: {
-    name: 'driver',
-    initialProps: {
-      minPitch: 0,
-      maxPitch: 0,
-      pitch: 0
-    },
-    firstPerson: {
-      position: [0, 0, 1.5]
-    },
-    mapInteraction: {
-      dragPan: false,
-      scrollZoom: false
-    },
-    tracked: true
+import {_Pose as Pose} from 'math.gl';
+
+export function getPoseFromJson(obj) {
+  if (!obj) {
+    return null;
   }
-};
+  if (obj instanceof Pose) {
+    return obj;
+  }
+  if (obj.position && obj.orientation) {
+    return new Pose({
+      x: obj.position[0],
+      y: obj.position[1],
+      z: obj.position[2],
+      roll: obj.orientation[0],
+      pitch: obj.orientation[1],
+      yaw: obj.orientation[2]
+    });
+  }
+  return new Pose(obj);
+}

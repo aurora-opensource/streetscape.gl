@@ -237,6 +237,11 @@ export class XVIZMetadataBuilder {
     return this;
   }
 
+  coordinate(t) {
+    this.tmp_stream.coordinate = t;
+    return this;
+  }
+
   styleClassDefault(style) {
     this.styleClass('*', style);
     return this;
