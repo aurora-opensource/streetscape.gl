@@ -1,4 +1,12 @@
-export default {
+
+export const COORDINATES = {
+  GEOGRAPHIC: 'geographic',
+  MAP_RELATIVE: 'map_relative',
+  VEHICLE_RELATIVE: 'vehicle_relative',
+  CUSTOM: 'custom'
+};
+
+export const VIEW_MODES = {
   TOP_DOWN: {
     name: 'map',
     initialProps: {
