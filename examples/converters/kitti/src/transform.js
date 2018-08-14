@@ -20,7 +20,7 @@
 
 /* eslint-disable camelcase */
 import {KittiConverter} from './converters';
-import {XVIZWriter} from './xviz-writer';
+import {XVIZWriter} from '@xviz/client';
 
 module.exports = function main(args) {
   const {inputDir, outputDir, disableStreams, frame_limit} = args;
