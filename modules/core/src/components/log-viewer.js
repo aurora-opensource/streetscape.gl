@@ -195,7 +195,6 @@ class Core3DViewer extends PureComponent {
           return new XvizLayer({
             id: `xviz-${streamName}`,
             ...coordinateProps,
-            modelMatrix,
 
             pickable: true,
             lightSettings: LIGHT_SETTINGS,
