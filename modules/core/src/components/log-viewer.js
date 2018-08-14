@@ -103,8 +103,8 @@ class Core3DViewer extends PureComponent {
     const mapPose = getPoseFromJson(frame.mapPose || {});
     const vehiclePose = getPoseFromJson(frame.vehiclePose || {});
 
-    const mapRelativeTransform = mapPose.getTransformationMatrix().invert();
-    const vehicleRelativeTransform = vehiclePose.getTransformationMatrixFromPose(mapPose);
+    const mapRelativeTransform = mapPose.getTransformationMatrix();
+    const vehicleRelativeTransform = mapRelativeTransform.clone().multiplyRight(vehiclePose.getTransformationMatrix());
     const headingVector = vehicleRelativeTransform.transformVector([0, 1, 0]);
 
     const viewport = new WebMercatorViewport({
