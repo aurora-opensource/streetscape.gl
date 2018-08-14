@@ -103,8 +103,11 @@ class Core3DViewer extends PureComponent {
     const mapPose = getPoseFromJson(frame.mapPose || {});
     const vehiclePose = getPoseFromJson(frame.vehiclePose || {});
 
+    // equivalent to IDENTITY_POSE.getTransformationMatrixFromPose(mapPose);
     const mapRelativeTransform = mapPose.getTransformationMatrix();
-    const vehicleRelativeTransform = mapRelativeTransform.clone().multiplyRight(vehiclePose.getTransformationMatrix());
+    const vehicleRelativeTransform = mapRelativeTransform
+      .clone()
+      .multiplyRight(vehiclePose.getTransformationMatrix());
     const headingVector = vehicleRelativeTransform.transformVector([0, 1, 0]);
 
     const viewport = new WebMercatorViewport({
@@ -137,7 +140,7 @@ class Core3DViewer extends PureComponent {
       return [];
     }
 
-    const {streams, mapOrigin} = frame;
+    const {streams, mapOrigin, transformMatrix} = frame;
     const {
       styleParser,
       carMesh,
@@ -146,19 +149,14 @@ class Core3DViewer extends PureComponent {
       vehicleRelativeTransform
     } = this.state;
 
-    const coordinateProps = {
-      coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-      coordinateOrigin: mapOrigin
-    };
-
     // TODO
     return [
       carMesh &&
         new MeshLayer({
           id: 'car',
-          ...coordinateProps,
+          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+          coordinateOrigin: mapOrigin,
           // Adjust for car center position relative to GPS/IMU
-          // http://www.cvlibs.net/datasets/kitti/setup.php
           modelMatrix: vehicleRelativeTransform.clone().translate(car.origin || DEFAULT_CAR.origin),
           mesh: carMesh,
           texture: car.texture || DEFAULT_CAR.texture,
@@ -175,16 +173,22 @@ class Core3DViewer extends PureComponent {
       Object.keys(streams).map(streamName => {
         const stream = streams[streamName];
         const {coordinate} = metadata.streams[streamName] || {};
-        let modelMatrix;
+        const coordinateProps = {
+          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+          coordinateOrigin: mapOrigin
+        };
         switch (coordinate) {
-          case COORDINATES.LNGLAT:
-            modelMatrix = null;
+          case COORDINATES.GEOGRAPHIC:
+            coordinateProps.coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
             break;
           case COORDINATES.MAP_RELATIVE:
-            modelMatrix = mapRelativeTransform;
+            coordinateProps.modelMatrix = mapRelativeTransform;
+            break;
+          case COORDINATES.CUSTOM:
+            coordinateProps.modelMatrix = transformMatrix;
             break;
           default:
-            modelMatrix = vehicleRelativeTransform;
+            coordinateProps.modelMatrix = vehicleRelativeTransform;
         }
 
         if (stream.features && stream.features.length) {
@@ -208,7 +212,6 @@ class Core3DViewer extends PureComponent {
           return new PointCloudLayer({
             id: `xviz-${streamName}`,
             ...coordinateProps,
-            modelMatrix,
             numInstances: stream.pointCloud.numInstances,
             instancePositions: stream.pointCloud.positions,
             instanceNormals: stream.pointCloud.normals,
