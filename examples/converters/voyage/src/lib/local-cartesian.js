@@ -1,4 +1,4 @@
-import {spawn} from 'child_process';
+import {spawn, spawnSync} from 'child_process';
 import _ from 'lodash';
 
 function createDeferred() {
@@ -17,6 +17,7 @@ function createDeferred() {
  */
 export default class LocalCartesian {
   constructor(latitude, longitude, altitude) {
+    this._ensureCartConvertInstalled();
     // Forward converts from lla -> local cartesian
     this.forward = this.createConverterFunc(latitude, longitude, altitude, false);
     // Reverse goes from local cartesian -> lla
@@ -54,5 +55,15 @@ export default class LocalCartesian {
       promises.push(p);
       return p.promise;
     };
+  }
+
+  _ensureCartConvertInstalled() {
+    const {status} = spawnSync('CartConvert');
+    if (status !== 0) {
+      throw new Error([
+        'CartConvert utility not installed.',
+        'Install via `brew install geographiclib` or `sudo apt-get install libgeographic-dev`'
+      ].join('\n'))
+    }
   }
 }
