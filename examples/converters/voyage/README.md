@@ -1,4 +1,15 @@
-### Convert Voyage ROS bag
+# Convert Voyage ROS bag
+
+
+## Initial setup
+Install geographiclib:
+
+### OSX
+`brew install geographiclib`
+
+### Ubuntu
+`apt-get install libgeographic-dev`
+
 
 ```
 yarn start --bag ./example.bag
