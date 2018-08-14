@@ -2,9 +2,8 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import {StaticMap} from 'react-map-gl';
-import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
+import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer, WebMercatorViewport} from 'deck.gl';
 import {CubeGeometry} from 'luma.gl';
-import {Matrix4} from 'math.gl';
 
 import {MeshLayer} from '@deck.gl/experimental-layers';
 import {XvizStyleParser} from '@xviz/client';
@@ -12,8 +11,9 @@ import {XvizStyleParser} from '@xviz/client';
 import {loadOBJMesh} from '../loaders/obj-loader';
 import XvizLayer from '../layers/xviz-layer';
 
-import VIEW_MODES from '../constants/view-modes';
+import {VIEW_MODES, COORDINATES} from '../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
+import {getPoseFromJson} from '../utils/pose';
 import connectToLog from './connect';
 
 const CAR_DATA = [[0, 0, 0]];
@@ -77,12 +77,54 @@ class Core3DViewer extends PureComponent {
     }
   }
 
+  componentDidMount() {
+    this._updateTransforms(this.props.frame);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
       this.setState({
         viewState: {...this.state.viewState, ...nextProps.viewMode.initialProps}
       });
     }
+    if (this.props.frame !== nextProps.frame) {
+      this._updateTransforms(nextProps.frame);
+    }
+  }
+
+  _updateTransforms(frame) {
+    if (!frame) {
+      return;
+    }
+    const {mapOrigin} = frame;
+
+    // Pose instance is flattened when passed back from worker
+    // TODO - Fix this in XVIZ
+    const mapPose = getPoseFromJson(frame.mapPose || {});
+    const vehiclePose = getPoseFromJson(frame.vehiclePose || {});
+
+    // equivalent to IDENTITY_POSE.getTransformationMatrixFromPose(mapPose);
+    const mapRelativeTransform = mapPose.getTransformationMatrix();
+    const vehicleRelativeTransform = mapRelativeTransform
+      .clone()
+      .multiplyRight(vehiclePose.getTransformationMatrix());
+    const headingVector = vehicleRelativeTransform.transformVector([0, 1, 0]);
+
+    const viewport = new WebMercatorViewport({
+      longitude: mapOrigin[0],
+      latitude: mapOrigin[1]
+    });
+    const carPosition = viewport.addMetersToLngLat(
+      mapOrigin,
+      vehicleRelativeTransform.transformVector([0, 0, 0])
+    );
+
+    this.setState({
+      mapRelativeTransform,
+      vehicleRelativeTransform,
+      heading: (Math.atan2(headingVector[1], headingVector[0]) / Math.PI) * 180 - 90,
+      carPosition
+    });
   }
 
   _onViewStateChange = ({viewState, oldViewState}) => {
@@ -93,30 +135,29 @@ class Core3DViewer extends PureComponent {
   };
 
   _getLayers() {
-    const {frame, car, viewMode} = this.props;
-    if (!frame) {
+    const {frame, car, viewMode, metadata} = this.props;
+    if (!frame || !metadata) {
       return [];
     }
 
-    const {features, heading, carPosition, pointCloud} = frame;
-    const {styleParser, carMesh} = this.state;
-    const transformMatrix = new Matrix4(this.props.frame.transformMatrix);
-
-    const coordinateProps = {
-      coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-      coordinateOrigin: [carPosition.longitude, carPosition.latitude],
-      modelMatrix: transformMatrix
-    };
+    const {streams, mapOrigin, transformMatrix} = frame;
+    const {
+      styleParser,
+      carMesh,
+      heading,
+      mapRelativeTransform,
+      vehicleRelativeTransform
+    } = this.state;
 
     // TODO
     return [
       carMesh &&
         new MeshLayer({
           id: 'car',
-          ...coordinateProps,
+          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+          coordinateOrigin: mapOrigin,
           // Adjust for car center position relative to GPS/IMU
-          // http://www.cvlibs.net/datasets/kitti/setup.php
-          modelMatrix: transformMatrix.clone().translate(car.origin || DEFAULT_CAR.origin),
+          modelMatrix: vehicleRelativeTransform.clone().translate(car.origin || DEFAULT_CAR.origin),
           mesh: carMesh,
           texture: car.texture || DEFAULT_CAR.texture,
           sizeScale: car.scale || DEFAULT_CAR.scale,
@@ -129,35 +170,58 @@ class Core3DViewer extends PureComponent {
             getYaw: heading
           }
         }),
-      pointCloud &&
-        new PointCloudLayer({
-          id: `xviz-pointcloud`,
-          ...coordinateProps,
-          numInstances: pointCloud.numInstances,
-          instancePositions: pointCloud.positions,
-          instanceNormals: pointCloud.normals,
-          instanceColors: pointCloud.colors,
-          instancePickingColors: pointCloud.colors,
-          radiusPixels: viewMode.firstPerson ? 4 : 1,
-          lightSettings: {}
-        }),
-      Object.keys(features).map(
-        streamName =>
-          new XvizLayer({
+      Object.keys(streams).map(streamName => {
+        const stream = streams[streamName];
+        const {coordinate} = metadata.streams[streamName] || {};
+        const coordinateProps = {
+          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+          coordinateOrigin: mapOrigin
+        };
+        switch (coordinate) {
+          case COORDINATES.GEOGRAPHIC:
+            coordinateProps.coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
+            break;
+          case COORDINATES.MAP_RELATIVE:
+            coordinateProps.modelMatrix = mapRelativeTransform;
+            break;
+          case COORDINATES.CUSTOM:
+            coordinateProps.modelMatrix = transformMatrix;
+            break;
+          default:
+            coordinateProps.modelMatrix = vehicleRelativeTransform;
+        }
+
+        if (stream.features && stream.features.length) {
+          return new XvizLayer({
             id: `xviz-${streamName}`,
             ...coordinateProps,
 
             pickable: true,
             lightSettings: LIGHT_SETTINGS,
 
-            data: features[streamName],
+            data: stream.features,
             style: styleParser.getStylesheet(streamName),
             objectStates: {},
 
             // Selection props (app defined, not used by deck.gl)
             streamName
-          })
-      )
+          });
+        }
+        if (stream.pointCloud) {
+          return new PointCloudLayer({
+            id: `xviz-${streamName}`,
+            ...coordinateProps,
+            numInstances: stream.pointCloud.numInstances,
+            instancePositions: stream.pointCloud.positions,
+            instanceNormals: stream.pointCloud.normals,
+            instanceColors: stream.pointCloud.colors,
+            instancePickingColors: stream.pointCloud.colors,
+            radiusPixels: viewMode.firstPerson ? 4 : 1,
+            lightSettings: {}
+          });
+        }
+        return null;
+      })
     ];
   }
 
@@ -169,14 +233,14 @@ class Core3DViewer extends PureComponent {
   }
 
   _getViewState() {
-    const {frame, viewMode} = this.props;
-    const {viewState, viewOffset} = this.state;
+    const {viewMode} = this.props;
+    const {viewState, viewOffset, heading, carPosition} = this.state;
 
-    const trackedPosition = frame
+    const trackedPosition = carPosition
       ? {
-          longitude: frame.carPosition.longitude,
-          latitude: frame.carPosition.latitude,
-          bearing: frame.heading
+          longitude: carPosition[0],
+          latitude: carPosition[1],
+          bearing: heading
         }
       : null;
 
@@ -203,7 +267,8 @@ class Core3DViewer extends PureComponent {
 }
 
 const getLogState = log => ({
-  frame: log.getCurrentFrame()
+  frame: log.getCurrentFrame(),
+  metadata: log.metadata
 });
 
 export default connectToLog({getLogState, Component: Core3DViewer});
