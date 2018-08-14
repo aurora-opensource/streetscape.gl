@@ -12,6 +12,7 @@
   "scripts": {
     "bootstrap": "scripts/bootstrap.sh",
     "build": "lerna run build",
+    "bump": "lerna publish --skip-npm --skip-git && npm version patch --force",
     "cover": "nyc npm run test",
     "lint": "scripts/lint.sh",
     "publish": "scripts/publish.sh",
