@@ -2,7 +2,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const {encodeBinaryXVIZ, parseBinaryXVIZ} = require('@xviz/client');
+const {encodeBinaryXVIZ, parseBinaryXVIZ} = require('@xviz/builder');
 
 function getTimestamps(timestampsFilePath) {
   // Read and parse the timestamps

@@ -19,8 +19,7 @@ To install dependencies, run:
 # TODO - remove when XVIZ is published to npm
 $ git clone https://github.com/uber/xviz.git
 $ cd xviz
-$ yarn
-$ yarn build
+$ npm run bootstrap
 $ cd ..
 
 # Set up streetscape.gl
