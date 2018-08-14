@@ -1,3 +1,5 @@
+import LocalCartesian from '../lib/local-cartesian';
+
 function quaternionToEuler({w, x, y, z}) {
   const ysqr = y * y;
   const t0 = -2.0 * (ysqr + z * z) + 1.0;
@@ -17,41 +19,29 @@ function quaternionToEuler({w, x, y, z}) {
   return ans;
 }
 
-// The current xviz-viewer application expects to have
-// pose in lat, lng.  Manually convert here from reference point
-function positionToLatLng(lat, lon, position) {
-  // Earth’s radius, sphere
-  const R = 6378137;
-
-  // offsets in meters
-  const dn = position.y;
-  const de = position.x;
-
-  // Coordinate offsets in radians
-  const dLat = dn / R;
-  const dLon = de / (R * Math.cos((Math.PI * lat) / 180));
-
-  // OffsetPosition, decimal degrees
-  const latitude = lat + (dLat * 180) / Math.PI;
-  const longitude = lon + (dLon * 180) / Math.PI;
-  const altitude = 0;
-
-  return {latitude, longitude, altitude};
-}
-
 export class GPSDataSource {
-  constructor() {
+  constructor(origin) {
     // XVIZ stream names produced by this converter
     this.VEHICLE_POSE = 'vehicle-pose';
     this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
+    this.localCartesian = new LocalCartesian(origin.latitude, origin.longitude, origin.altitude);
   }
 
-  convertFrame(frame, xvizBuilder) {
-    this._buildPose(frame, xvizBuilder);
+  async convertFrame(frame, xvizBuilder) {
+    await this._buildPose(frame, xvizBuilder);
     this._buildTrajectory(frame, xvizBuilder);
   }
 
-  _buildPose(frame, xvizBuilder) {
+  // The current xviz-viewer application expects to have
+  // pose in lat, lng.  Manually convert here from reference point
+  async poseToLatLng(position) {
+    const [latitude, longitude, altitude] = await this.localCartesian.reverse(
+      position.x, position.y, position.z
+    );
+    return {latitude, longitude, altitude};
+  }
+
+  async _buildPose(frame, xvizBuilder) {
     const {timestamp, message} = frame.keyTopic;
 
     // Every frame *MUST* have a pose. The pose can be considered
@@ -59,11 +49,11 @@ export class GPSDataSource {
     // of the system.
 
     // Position, decimal degrees
-    const latLng = positionToLatLng(37.3059663, -121.75191, message.pose.position);
+    const lla = await this.poseToLatLng(message.pose.position);
     const rotation = quaternionToEuler(message.pose.orientation);
 
     xvizBuilder.pose(this.VEHICLE_POSE, {
-      ...latLng,
+      ...lla,
       ...rotation,
       time: timestamp.toDate().getTime(),
       /* This pose is in x, y, z local cartesian coordinates */

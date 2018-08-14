@@ -1,4 +1,4 @@
-export const MAP_STYLE = 'https://d3dt5tsgfu6lcf.cloudfront.net/style/tools/web?mode=light';
+export const MAP_STYLE = 'mapbox://styles/mapbox/satellite-v9';
 
 // OBJ model width 2073mm, length 4946mm
 // Volkswagen Passat: width 1820mm, length 4780mm
