@@ -2,11 +2,11 @@ const path = require('path');
 
 const {getTimestamps, createDir} = require('../parsers/common');
 
-import {GPSDataSource} from './gps_converter';
-import {LidarDataSource} from './lidar_converter';
-import {TrackletsDataSource} from './tracklets_converter';
+import {GPSDataSource} from './gps-converter';
+import {LidarDataSource} from './lidar-converter';
+import {TrackletsDataSource} from './tracklets-converter';
 
-import {XVIZBuilder, XVIZMetadataBuilder} from '../xviz-writer';
+import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/client';
 
 export class KittiConverter {
   constructor(inputDir, outputDir, disableStreams) {
