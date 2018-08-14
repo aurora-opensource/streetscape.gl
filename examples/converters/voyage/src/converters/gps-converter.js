@@ -67,7 +67,8 @@ export class GPSDataSource {
       ...rotation,
       time: timestamp.toDate().getTime(),
       /* This pose is in x, y, z local cartesian coordinates */
-      ...message.pose
+      ...message.pose.position,
+      z: 0
     });
   }
 
@@ -100,6 +101,7 @@ export class GPSDataSource {
       .category('vehicle-pose')
 
       .stream(this.VEHICLE_TRAJECTORY)
+      .coordinate('map_relative')
       .category('primitive')
       .type('polyline')
 

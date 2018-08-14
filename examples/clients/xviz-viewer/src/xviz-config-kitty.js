@@ -62,7 +62,7 @@ export const XVIZ_CONFIG = {
   },
   postProcessVehiclePose: datum => {
     return {
-      mapOrigin: [datum.longitude, datum.latitude, 0],
+      mapOrigin: [-121.75191, 37.3059663, 0],
       mapPose: null,
       vehiclePose: new Pose(datum)
     };
