@@ -18,34 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// streetscape.gl exports
-
-// LAYERS
-
-// The generic XVIZ layer
-export {default as XvizLayer} from './layers/xviz-layer';
-
-// Streetscape.gl custom layers
-export {default as SignLayer} from './layers/sign-layer/sign-layer';
-export {default as TrafficLightLayer} from './layers/traffic-light-layer/traffic-light-layer';
-export {default as ImageryLayer} from './layers/imagery-layer/imagery-layer';
-export {default as BinaryPathLayer} from './layers/binary-path-layer/binary-path-layer';
-
-// Generic layers (should be moved back to deck.gl)
-export {default as BitmapLayer} from './layers/bitmap-layer/bitmap-layer';
-export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
-
-// COMPONENTS
-
-export {default as LogViewer} from './components/log-viewer';
-export {default as PerspectivePopup} from './components/perspective-popup';
-
-// Constants
-export * from './constants';
-
-export * from './layers/layer-utils';
-
-export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
-export {default as XVIZFileLoader} from './loaders/xviz-file-loader';
-
-export * from './utils/request-utils';
+/**
+ * Logs the state change of an asynchronous operation
+ * @params promise {Promise} - the asynchronous operation to trace
+ * @callback log
+ * @params status {String} - start, success or failure
+ * @params time {Number} - the time it took to complete the operation, in seconds.
+ *   Available if the promise resolves.
+ * @params error {Error} - the error message if the promise is rejected.
+ * Extra arguments are included as-is for the callback function.
+ */
+export function tracePromise({log, promise, ...extraParams}) {
+  log({...extraParams, status: 'start'});
+  const startTime = Date.now();
+  return promise.then(
+    result => {
+      const time = (Date.now() - startTime) / 1000;
+      log({...extraParams, status: 'success', time});
+      return result;
+    },
+    error => {
+      log({...extraParams, status: 'failure', error});
+      throw error;
+    }
+  );
+}
