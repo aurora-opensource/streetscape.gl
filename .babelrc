@@ -9,7 +9,12 @@
       ],
       "plugins": [
         "version-inline",
-        "@babel/proposal-class-properties"
+        "@babel/proposal-class-properties",
+        ["module-resolver", {
+          "alias": {
+            "@xviz/parser": "@uber/xviz"
+          }
+        }]
       ]
     },
     "esm": {
@@ -21,7 +26,12 @@
       ],
       "plugins": [
         "version-inline",
-        "@babel/proposal-class-properties"
+        "@babel/proposal-class-properties",
+        ["module-resolver", {
+          "alias": {
+            "@xviz/parser": "@uber/xviz"
+          }
+        }]
       ]
     },
     "es6": {
@@ -41,7 +51,12 @@
       ],
       "plugins": [
         "version-inline",
-        "@babel/proposal-class-properties"
+        "@babel/proposal-class-properties",
+        ["module-resolver", {
+          "alias": {
+            "@xviz/parser": "@uber/xviz"
+          }
+        }]
       ]
     },
     "test": {
