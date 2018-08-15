@@ -35,4 +35,4 @@ case $MODE in
   esac
 
 # check if yarn.lock contains private registery information
-!(grep -q unpm.u yarn.lock) && echo 'Lockfile valid.' || (echo 'Please rebuild yarn file using public npmrc' && false)
+# !(grep -q unpm.u yarn.lock) && echo 'Lockfile valid.' || (echo 'Please rebuild yarn file using public npmrc' && false)

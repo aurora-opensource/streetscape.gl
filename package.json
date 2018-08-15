@@ -1,7 +1,7 @@
 {
   "name": "streetscape.gl",
   "description": "Visualizaton engine for 3D maps and autonomous XVIZ protocol data",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -12,6 +12,7 @@
   "scripts": {
     "bootstrap": "scripts/bootstrap.sh",
     "build": "lerna run build",
+    "bump": "lerna publish --skip-npm --skip-git && npm version patch --force",
     "cover": "nyc npm run test",
     "lint": "scripts/lint.sh",
     "publish": "scripts/publish.sh",
@@ -19,7 +20,9 @@
     "publish-prod": "scripts/publish.sh prod",
     "test": "npm run lint && NODE_ENV=test node test/start test",
     "test-fast": "npm run lint fast && NODE_ENV=test node test/start test",
-    "test-browser": "webpack-dev-server --config test/webpack.config.js --hot --open"
+    "test-browser": "webpack-dev-server --config test/webpack.config.js --hot --open",
+    "version": "git add .",
+    "postversion": "git push && git push --tags"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta",
@@ -31,6 +34,7 @@
     "babel-eslint": "^7.1.1",
     "babel-loader": "^8.0.0-beta",
     "babel-plugin-istanbul": "^4.1.1",
+    "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-version-inline": "^1.0.0",
     "babel-preset-minify": "^0.4.0-alpha.caaefb4c",
     "coveralls": "^2.13.0",
@@ -60,7 +64,7 @@
   "engines": {
     "node": ">= 8",
     "npm": ">= 5",
-    "yarn": ">= 1.7.0"
+    "yarn": "1.7.0"
   },
   "pre-commit": [
     "test-fast"
