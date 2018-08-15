@@ -1,7 +1,7 @@
 {
   "name": "streetscape.gl",
   "description": "Visualizaton engine for 3D maps and autonomous XVIZ protocol data",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -12,7 +12,7 @@
   "scripts": {
     "bootstrap": "scripts/bootstrap.sh",
     "build": "lerna run build",
-    "bump": "lerna publish --skip-npm --skip-git && npm version patch --force",
+    "bump": "lerna publish --force-publish=* --skip-npm --skip-git && npm version patch --force",
     "cover": "nyc npm run test",
     "lint": "scripts/lint.sh",
     "publish": "scripts/publish.sh",
