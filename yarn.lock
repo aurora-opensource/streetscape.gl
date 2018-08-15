@@ -812,6 +812,9 @@
     "@webassemblyjs/wast-parser" "1.5.13"
     long "^3.2.0"
 
+"@xviz/builder@./../xviz/modules/builder":
+  version "0.0.1"
+
 "@xviz/parser@./../xviz/modules/parser":
   version "0.0.1"
   dependencies:

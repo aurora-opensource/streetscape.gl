@@ -23,6 +23,7 @@
   "dependencies": {
     "deck.gl": "^6.0.0",
     "@deck.gl/experimental-layers": "^6.0.0",
+    "@xviz/builder": "./../xviz/modules/builder",
     "@xviz/parser": "./../xviz/modules/parser",
     "color": "^3.0.0",
     "d3-fetch": "^1.1.0",
