@@ -26,7 +26,7 @@ import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer, WebMercatorViewport} from 'd
 import {CubeGeometry} from 'luma.gl';
 
 import {MeshLayer} from '@deck.gl/experimental-layers';
-import {XvizStyleParser} from '@xviz/client';
+import {XvizStyleParser} from '@xviz/parser';
 
 import {loadOBJMesh} from '../loaders/obj-loader';
 import XvizLayer from '../layers/xviz-layer';

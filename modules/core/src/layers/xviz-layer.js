@@ -24,7 +24,7 @@ import {PointCloudLayer, ScatterplotLayer, PathLayer, PolygonLayer} from '@deck.
 // import PathLayer from './binary-path-layer/binary-path-layer';
 // import PolygonLayer from './binary-polygon-layer/binary-polygon-layer';
 
-import {XvizObject} from '@xviz/client';
+import {XvizObject} from '@xviz/parser';
 
 import deepExtend from 'deep-extend';
 

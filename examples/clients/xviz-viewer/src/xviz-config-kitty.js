@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {setXvizSettings, setXvizConfig, XvizObject, XvizObjectCollection} from '@xviz/client';
+import {setXvizSettings, setXvizConfig, XvizObject, XvizObjectCollection} from '@xviz/parser';
 import {_Pose as Pose} from 'math.gl';
 
 XvizObject.setDefaultCollection(new XvizObjectCollection({ObjectType: XvizObject}));

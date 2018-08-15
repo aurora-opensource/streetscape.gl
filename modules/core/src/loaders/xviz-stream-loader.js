@@ -27,7 +27,7 @@ import {
   XvizStreamBuffer,
   parseBinaryXVIZ,
   StreamSynchronizer
-} from '@xviz/client';
+} from '@xviz/parser';
 import PromiseRetry from 'promise-retry';
 
 import XVIZLoaderInterface from './xviz-loader-interface';

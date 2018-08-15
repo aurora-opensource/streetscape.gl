@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {getXvizSettings} from '@xviz/client';
+import {getXvizSettings} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 /* eslint-disable callback-return */
