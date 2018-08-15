@@ -1,4 +1,4 @@
-import {getXvizSettings} from '@xviz/client';
+import {getXvizSettings} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 /* eslint-disable callback-return */

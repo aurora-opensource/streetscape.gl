@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import {encodeBinaryXVIZ, parseBinaryXVIZ} from '@xviz/client';
+import {encodeBinaryXVIZ, parseBinaryXVIZ} from '@xviz/builder';
 import {loadProcessedLidarData} from '~/parsers/parse-lidar-points';
 
 // load file

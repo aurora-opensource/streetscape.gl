@@ -1,4 +1,4 @@
-import {setXvizSettings, setXvizConfig, XvizObject, XvizObjectCollection} from '@xviz/client';
+import {setXvizSettings, setXvizConfig, XvizObject, XvizObjectCollection} from '@xviz/parser';
 import {_Pose as Pose} from 'math.gl';
 
 XvizObject.setDefaultCollection(new XvizObjectCollection({ObjectType: XvizObject}));

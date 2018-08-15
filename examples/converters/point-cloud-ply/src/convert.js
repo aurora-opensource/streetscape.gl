@@ -10,7 +10,7 @@ import {
   GLBBufferPacker,
   GLBBufferUnpacker,
   addglTFBufferDescriptors
-} from '@xviz/client';
+} from '@xviz/builder';
 
 import {getRange, toArrayBuffer, toBuffer} from './utils';
 
