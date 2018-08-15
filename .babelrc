@@ -1,0 +1,68 @@
+{
+  "env": {
+    "es5": {
+      "presets": [
+        [ "@babel/env", {
+          "modules": "commonjs"
+        }],
+        "@babel/react"
+      ],
+      "plugins": [
+        "version-inline",
+        "@babel/proposal-class-properties",
+        ["module-resolver", {
+          "alias": {
+            "@xviz/parser": "@uber/xviz"
+          }
+        }]
+      ]
+    },
+    "esm": {
+      "presets": [
+        [ "@babel/env", {
+          "modules": false
+        }],
+        "@babel/react"
+      ],
+      "plugins": [
+        "version-inline",
+        "@babel/proposal-class-properties",
+        ["module-resolver", {
+          "alias": {
+            "@xviz/parser": "@uber/xviz"
+          }
+        }]
+      ]
+    },
+    "es6": {
+      "presets": [
+        [ "@babel/env", {
+          "targets": {
+            "chrome": "60",
+            "edge": "15",
+            "firefox": "53",
+            "ios": "10.3",
+            "safari": "10.1",
+            "node": "8"
+          },
+          "modules": false
+        }],
+        "@babel/react"
+      ],
+      "plugins": [
+        "version-inline",
+        "@babel/proposal-class-properties",
+        ["module-resolver", {
+          "alias": {
+            "@xviz/parser": "@uber/xviz"
+          }
+        }]
+      ]
+    },
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    }
+  }
+}
