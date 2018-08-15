@@ -1,7 +1,6 @@
-const uuid = require('uuid').v4;
-
-const {encodeBinaryXVIZ, parseBinaryXVIZ} = require('@xviz/client');
-import {loadRawLidarData, loadProcessedLidarData} from '../parsers/parse-lidar-points';
+import {v4 as uuid} from 'uuid';
+import {encodeBinaryXVIZ, parseBinaryXVIZ} from '@xviz/client';
+import {loadProcessedLidarData} from '../parsers/parse-lidar-points';
 
 // load file
 export class LidarDataSource {
@@ -10,24 +9,22 @@ export class LidarDataSource {
   }
 
   convertFrame(frame, xvizBuilder) {
-    let data = frame['/points_raw'];
+    this._buildPoints(frame['/commander/points_back'], xvizBuilder, {
+      color: [0, 0, 0, 255]
+    });
+    this._buildPoints(frame['/commander/points_fore'], xvizBuilder, {
+      color: [0, 255, 0, 255]
+    });
+  }
+
+  _buildPoints(data, xvizBuilder, {color}) {
     if (!data) {
-      if (!this.previousData) {
-        return;
-      }
-      data = this.previousData;
+      return;
     }
 
-    this.previousData = data;
-
-    // This encode/parse is a temporary workaround until we get fine-grain
-    // control of which streams should be packed in the binary.
-    // By doing this we are able to have the points converted to the appropriate
-    // TypedArray, and by unpacking them, they are in a JSON structure that
-    // works better with the rest of the conversion.
     for (const {timestamp, message} of data) {
       const pointsSize = message.data.length / (message.height * message.width);
-      const {positions} = loadRawLidarData(message.data, pointsSize);
+      const {positions} = loadProcessedLidarData(message.data, pointsSize);
       const tmp_obj = {vertices: positions};
       const bin_tmp_obj = encodeBinaryXVIZ(tmp_obj, {flattenArrays: true});
       const bin_xviz_lidar = parseBinaryXVIZ(bin_tmp_obj);
@@ -37,7 +34,7 @@ export class LidarDataSource {
         .points(bin_xviz_lidar.vertices)
         .timestamp(timestamp.toDate().getTime())
         .id(uuid())
-        .color([0, 0, 0, 255]);
+        .color(color);
     }
   }
 

@@ -16,7 +16,8 @@ module.exports = async function main(args) {
     topics: [
       '/current_pose',
       '/planner/path',
-      '/points_raw',
+      '/commander/points_fore',
+      '/commander/points_back',
       '/commander/perception_dct/track_list'
     ]
   });
@@ -32,15 +33,19 @@ module.exports = async function main(args) {
   let startTime = null;
   let frameTime = null;
   await bag.readFrames(async frame => {
-    if (frameNum < frameLimit) {
-      frameTime = frame.keyTopic.timestamp.toDate();
-      if (!startTime) {
-        startTime = frameTime;
-      }
+    try {
+      if (frameNum < frameLimit) {
+        frameTime = frame.keyTopic.timestamp.toDate();
+        if (!startTime) {
+          startTime = frameTime;
+        }
 
-      const xvizFrame = await converter.convertFrame(frame);
-      xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
-      frameNum++;
+        const xvizFrame = await converter.convertFrame(frame);
+        xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
+        frameNum++;
+      }
+    } catch (err) {
+      console.error(err);
     }
   });
 

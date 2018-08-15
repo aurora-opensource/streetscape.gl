@@ -1,3 +1,4 @@
+/* global Buffer */
 import {open} from 'rosbag';
 
 export default class Bag {
@@ -20,6 +21,10 @@ export default class Bag {
     }
 
     await this.bag.readMessages({topics: this.topics}, result => {
+      // rosbag.js reuses the data buffer for subsequent messages, so we need to make a copy
+      if (result.message.data) {
+        result.message.data = Buffer.from(result.message.data);
+      }
       if (result.topic === this.keyTopic) {
         flushFrame();
         frame.keyTopic = result;

@@ -36,7 +36,9 @@ export class GPSDataSource {
   // pose in lat, lng.  Manually convert here from reference point
   async poseToLatLng(position) {
     const [latitude, longitude, altitude] = await this.localCartesian.reverse(
-      position.x, position.y, position.z
+      position.x,
+      position.y,
+      position.z
     );
     return {latitude, longitude, altitude};
   }

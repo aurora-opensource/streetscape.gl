@@ -26,7 +26,7 @@ export class VoyageConverter {
     // many different options or variant data types supported.
     const xvizBuilder = new XVIZBuilder(this.disableStreams);
 
-    await Promise.map(this.converters, (c) => c.convertFrame(frame, xvizBuilder));
+    await Promise.map(this.converters, c => c.convertFrame(frame, xvizBuilder));
 
     return xvizBuilder.getFrame();
   }
