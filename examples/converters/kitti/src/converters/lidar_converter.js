@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid').v4;
 
-const {encodeBinaryXVIZ, parseBinaryXVIZ} = require('@xviz/client');
+const {encodeBinaryXVIZ, parseBinaryXVIZ} = require('@xviz/builder');
 
 import {getTimestamps} from '../parsers/common';
 
