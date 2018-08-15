@@ -3,6 +3,19 @@ module.exports = function babelConfig(api) {
 
   return {
     presets: ['@babel/preset-env'],
-    plugins: [['@babel/plugin-proposal-class-properties', {loose: false}]]
+    plugins: [
+      [
+        'babel-plugin-module-resolver',
+        {
+          root: ['./src'],
+          alias: {
+            '~': './src'
+          }
+        }
+      ],
+      [
+        '@babel/plugin-proposal-class-properties', {loose: false}
+      ]
+    ]
   };
 };

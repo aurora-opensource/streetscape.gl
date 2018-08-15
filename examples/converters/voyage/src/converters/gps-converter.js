@@ -1,4 +1,4 @@
-import LocalCartesian from '../lib/local-cartesian';
+import LocalCartesian from '~/lib/local-cartesian';
 
 function quaternionToEuler({w, x, y, z}) {
   const ysqr = y * y;
