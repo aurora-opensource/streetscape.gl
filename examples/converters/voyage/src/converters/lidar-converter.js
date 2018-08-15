@@ -6,21 +6,29 @@ import {loadProcessedLidarData} from '../parsers/parse-lidar-points';
 export class LidarDataSource {
   constructor() {
     this.LIDAR_POINTS = '/lidar/points';
+    this.previousData = {};
   }
 
   convertFrame(frame, xvizBuilder) {
-    this._buildPoints(frame['/commander/points_back'], xvizBuilder, {
+    this._buildPoints(frame, xvizBuilder, {
+      topic: '/commander/points_back',
       color: [0, 0, 0, 255]
     });
-    this._buildPoints(frame['/commander/points_fore'], xvizBuilder, {
+    this._buildPoints(frame, xvizBuilder, {
+      topic: '/commander/points_fore',
       color: [0, 255, 0, 255]
     });
   }
 
-  _buildPoints(data, xvizBuilder, {color}) {
+  _buildPoints(frame, xvizBuilder, {color, topic}) {
+    let data = frame[topic];
     if (!data) {
-      return;
+      data = this.previousData[topic];
+      if (!data) {
+        return;
+      }
     }
+    this.previousData[topic] = data;
 
     for (const {timestamp, message} of data) {
       const pointsSize = message.data.length / (message.height * message.width);
