@@ -1,32 +1,21 @@
 import assert from 'assert';
-import {requestBinary, requestJson} from '../utils/request-utils';
 import {
-  parseStreamMessage,
   LOG_STREAM_MESSAGE,
-  XvizStreamBuffer,
   parseBinaryXVIZ,
-  StreamSynchronizer
+  parseStreamMessage,
+  StreamSynchronizer,
+  XvizStreamBuffer
 } from '@xviz/client';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
+import {requestBinary, requestJson} from '../utils/request-utils';
 
-const DEFAULT_LOG_PROFILE = 'default';
+const MAX_FILES = 9999;
 
 function getParams(options) {
-  const {logGuid, logProfile = DEFAULT_LOG_PROFILE, fileFormat, timestamp, serverConfig} = options;
-
-  // set duration overrides & defaults
-  const duration = options.duration || serverConfig.defaultLogLength;
-
-  assert(logGuid && duration);
-  assert(fileFormat);
+  const {timestamp, serverConfig} = options;
 
   return {
-    fileFormat,
-    dataPath: serverConfig.dataPath,
-    logGuid,
-    logProfile,
-    duration,
     timestamp,
     serverConfig
   };
@@ -36,13 +25,14 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   constructor(options) {
     super(options);
 
-    assert(options.getFilePath);
-    this._getFilePath = options.getFilePath;
+    assert(options.getFileInfo);
+    this._getFileInfo = options.getFileInfo;
 
     this.requestParams = getParams(options);
     this.streamBuffer = new XvizStreamBuffer();
     this.logSynchronizer = null;
     this.metadata = null;
+    this._promises = [];
   }
 
   isOpen() {
@@ -50,12 +40,20 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   }
 
   connect() {
-    // verify the dataPath exists?
-    this._getFile();
+    let sequence = 0;
+    let fileInfo = this._getFileInfo(sequence);
+
+    while (fileInfo && sequence < MAX_FILES) {
+      // if there is more file to load
+      this._loadFile(fileInfo);
+      sequence++;
+      fileInfo = this._getFileInfo(sequence);
+    }
+    this.close();
   }
 
   close() {
-    // what should do here?
+    // Stop file loading
   }
 
   getBufferRange() {
@@ -64,32 +62,10 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
   seek(timestamp) {
     this.timestamp = timestamp;
-
-    if (!timestamp) {
-      return;
-    }
-
-    const {timestamp: currentTimestamp, duration: currentDuration} = this.requestParams;
-
-    if (timestamp >= currentTimestamp && timestamp < currentTimestamp + currentDuration) {
-      // within range
-      return;
-    }
-
-    this.requestParams = getParams({
-      ...this.requestParams,
-      fileFormat: this.fileFormat,
-      timestamp
-    });
-
-    this._getFile();
   }
 
-  _getFile() {
+  _loadFile({filePath, fileFormat}) {
     const params = this.requestParams;
-    const {timestamp} = params;
-    const filePath = this._getFilePath(timestamp);
-    const fileFormat = this.fileFormat || 'binary';
 
     switch (fileFormat) {
       case 'binary':
@@ -115,6 +91,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
         );
         break;
       default:
+        this.emit('error', 'Invalid file format.');
     }
   }
 

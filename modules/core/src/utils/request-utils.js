@@ -10,6 +10,7 @@ import PromiseRetry from 'promise-retry';
 import PromiseTracker from './promise-tracker';
 
 let defaultRequestFunction;
+// TODO comments contains `uber-xhr`
 if (module.require) {
   // xhr / uber-xhr is great but it doesn't work under Node.js (e.g. for unit tests),
   // So, under Node.js, we use the (reasonably) API-compatible npm "request" module instead.
