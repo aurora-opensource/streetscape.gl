@@ -1,4 +1,4 @@
-import {KittiConverter} from './kitti_converter';
+import {KittiConverter} from './kitti-converter';
 
 module.exports = {
   KittiConverter
