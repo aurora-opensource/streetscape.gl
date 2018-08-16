@@ -22,7 +22,8 @@
 const path = require('path');
 
 const ALIASES = {
-  'streetscape.gl': path.resolve(__dirname, './modules/core/src')
+  'streetscape.gl': path.resolve(__dirname, './modules/core/src'),
+  'data': path.resolve(__dirname, './data'),
 };
 
 if (module.require) {
