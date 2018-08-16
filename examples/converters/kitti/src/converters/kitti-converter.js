@@ -26,7 +26,7 @@ import {GPSDataSource} from './gps-converter';
 import {LidarDataSource} from './lidar-converter';
 import {TrackletsDataSource} from './tracklets-converter';
 
-import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/client';
+import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
 export class KittiConverter {
   constructor(inputDir, outputDir, disableStreams) {
