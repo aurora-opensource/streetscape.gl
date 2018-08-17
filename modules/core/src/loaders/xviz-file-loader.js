@@ -19,6 +19,7 @@
 // THE SOFTWARE.
 
 import assert from 'assert';
+import {json, buffer} from 'd3-fetch';
 import {
   LOG_STREAM_MESSAGE,
   parseBinaryXVIZ,
@@ -28,7 +29,6 @@ import {
 } from '@xviz/parser';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
-import {requestBinary, requestJson} from '../utils/request-utils';
 
 function getParams(options) {
   const {timestamp, serverConfig} = options;
@@ -48,13 +48,12 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     assert(options.getFileInfo);
     this._getFileInfo = options.getFileInfo;
     this._batchSize = options.batchSize || DEFUALT_BATCH_SIZE;
-    this._startFrame = options.startFrame || 0;
 
     this.requestParams = getParams(options);
     this.streamBuffer = new XvizStreamBuffer();
     this.logSynchronizer = null;
     this.metadata = null;
-    this._isOpen = true;
+    this._isOpen = false;
   }
 
   isOpen() {
@@ -62,9 +61,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   }
 
   connect() {
-    if (this._isOpen) {
-      this._loadNextBatch(this._startFrame);
-    }
+    this._isOpen = true;
+    this._loadNextBatch(0);
   }
 
   close() {
@@ -86,8 +84,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       return;
     }
 
-    const params = this.requestParams;
-    const arrayOfNFrames = [];
+    const promises = [];
     let isLastFrame = false;
 
     for (let i = 0; i < this._batchSize && !isLastFrame; i++) {
@@ -96,7 +93,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       if (!fileInfo) {
         isLastFrame = true;
       } else {
-        arrayOfNFrames.push(this._loadFile(fileInfo));
+        promises.push(this._loadFile(fileInfo));
       }
     }
 
@@ -105,18 +102,9 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     }
 
     // if there are more frames need to fetch
-    if (arrayOfNFrames.length > 0) {
-      Promise.all(arrayOfNFrames.filter(Boolean))
-        .then(frames => {
-          frames.forEach(data =>
-            parseStreamMessage({
-              message: data instanceof ArrayBuffer ? parseBinaryXVIZ(data) : data,
-              onResult: this._onMessage,
-              onError: this._onError,
-              worker: params.serverConfig.worker,
-              maxConcurrency: params.serverConfig.maxConcurrency
-            })
-          );
+    if (promises.length > 0) {
+      Promise.all(promises.filter(Boolean))
+        .then(() => {
           this._loadNextBatch(startFrame + this._batchSize);
         })
         .catch(error => {
@@ -126,12 +114,29 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   }
 
   _loadFile({filePath, fileFormat}) {
+    const params = this.requestParams;
     switch (fileFormat) {
       case 'binary':
-        return requestBinary(filePath);
+        return buffer(filePath).then(data => {
+          parseStreamMessage({
+            message: parseBinaryXVIZ(data),
+            onResult: this._onMessage,
+            onError: this._onError,
+            worker: params.serverConfig.worker,
+            maxConcurrency: params.serverConfig.maxConcurrency
+          });
+        });
 
       case 'json':
-        return requestJson(filePath);
+        return json(filePath).then(data => {
+          parseStreamMessage({
+            message: data,
+            onResult: this._onMessage,
+            onError: this._onError,
+            worker: params.serverConfig.worker,
+            maxConcurrency: params.serverConfig.maxConcurrency
+          });
+        });
 
       default:
         this.emit('error', 'Invalid file format.');
