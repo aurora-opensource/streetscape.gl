@@ -83,12 +83,10 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
     // if there are more frames need to fetch
     if (promises.length > 0) {
-      Promise.all(promises.filter(Boolean))
+      Promise
+        .all(promises.filter(Boolean))
         .then(() => {
           this._loadNextBatch(startFrame + this._batchSize);
-        })
-        .catch(error => {
-          this.emit('error', error);
         });
     }
   }
@@ -97,17 +95,19 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     const params = this.requestParams;
     switch (fileFormat) {
       case 'glb':
-        return buffer(filePath).then(data => {
-          parseStreamMessage({
-            message: parseBinaryXVIZ(data),
-            onResult: this._onMessage,
-            onError: this._onError,
-            worker: params.serverConfig.worker,
-            maxConcurrency: params.serverConfig.maxConcurrency
+        return buffer(filePath)
+          .then(data => {
+            parseStreamMessage({
+              message: parseBinaryXVIZ(data),
+              onResult: this._onMessage,
+              onError: this._onError,
+              worker: params.serverConfig.worker,
+              maxConcurrency: params.serverConfig.maxConcurrency
+            });
+          })
+          .catch(error => {
+            this.emit('error', error);
           });
-        }).catch(error => {
-          this.emit('error', error);
-        });
 
       case 'json':
         return json(filePath).then(data => {
