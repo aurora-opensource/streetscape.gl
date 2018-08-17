@@ -36,7 +36,6 @@ export class LidarDataSource {
       const tmp_obj = {vertices: positions};
       const bin_tmp_obj = encodeBinaryXVIZ(tmp_obj, {flattenArrays: true});
       const bin_xviz_lidar = parseBinaryXVIZ(bin_tmp_obj);
-
       xvizBuilder
         .stream(this.LIDAR_POINTS)
         .points(bin_xviz_lidar.vertices)

@@ -11,6 +11,9 @@ const TRACKLET_TYPE = {
   UNRECOGNIZED: 'Unknown'
 };
 
+const VGCC = [-121.753868103027343750, 37.290493011474609375, 204.159072875976562500];
+const SPRINGFIELD = [-121.75191, 37.3059663, 0];
+
 // ocs-lite implementation specific
 // refactor to stylesheet?
 const TRACKLET_COLOR_PALETTE = {
@@ -62,7 +65,7 @@ export const XVIZ_CONFIG = {
   },
   postProcessVehiclePose: datum => {
     return {
-      mapOrigin: [-121.75191, 37.3059663, 0],
+      mapOrigin: VGCC,
       mapPose: null,
       vehiclePose: new Pose(datum)
     };

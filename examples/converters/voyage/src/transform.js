@@ -2,6 +2,7 @@ import {VoyageConverter} from './converters';
 import {XVIZWriter} from './xviz-writer';
 import {createDir, deleteDirRecursive} from './parsers/common';
 import {XVIZMetadataBuilder} from './xviz-writer';
+import * as Topics from '~/topics';
 import Bag from './lib/bag';
 
 module.exports = async function main(args) {
@@ -12,14 +13,8 @@ module.exports = async function main(args) {
   const converter = new VoyageConverter(disableStreams);
   const bag = new Bag({
     bagPath,
-    keyTopic: '/current_pose',
-    topics: [
-      '/current_pose',
-      '/planner/path',
-      '/commander/points_fore',
-      '/commander/points_back',
-      '/commander/perception_dct/track_list'
-    ]
+    keyTopic: Topics.CURRENT_POSE,
+    topics: Topics.ALL
   });
 
   console.log(`Converting data at ${bagPath}`); // eslint-disable-line
@@ -31,27 +26,28 @@ module.exports = async function main(args) {
   const profileStart = Date.now();
   let frameNum = 0;
   let startTime = null;
-  let frameTime = null;
+  let endTime = null;
   await bag.readFrames(async frame => {
     try {
       if (frameNum < frameLimit) {
-        frameTime = frame.keyTopic.timestamp.toDate();
+        endTime = frame.keyTopic.timestamp.toDate();
         if (!startTime) {
-          startTime = frameTime;
+          startTime = endTime;
         }
 
         const xvizFrame = await converter.convertFrame(frame);
         xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
         frameNum++;
       }
-    } catch (err) {
+    }
+    catch (err) {
       console.error(err);
     }
   });
 
   // Write metadata file
   const xb = new XVIZMetadataBuilder();
-  xb.startTime(startTime.getTime()).endTime(frameTime.getTime());
+  xb.startTime(startTime.getTime()).endTime(endTime.getTime());
   converter.buildMetadata(xb);
   xvizWriter.writeMetadata(outputDir, xb.getMetadata());
 

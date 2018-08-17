@@ -2,21 +2,31 @@ import Promise from 'bluebird';
 import {GPSDataSource} from './gps-converter';
 import {LidarDataSource} from './lidar-converter';
 import {TrackletsDataSource} from './tracklets-converter';
+import {RouteDataSource} from './route-converter';
 
 import {XVIZBuilder} from '~/xviz-writer';
+
+const VGCC = {
+  latitude: 37.290493011474609375,
+  longitude: -121.753868103027343750,
+  altitude: 204.159072875976562500
+};
+
+const SPRINGFIELD = {
+  latitude: 37.3059663,
+  longitude: -121.75191,
+  altitude: 0
+};
 
 export class VoyageConverter {
   constructor(disableStreams) {
     this.disableStreams = disableStreams;
 
     this.converters = [
-      new GPSDataSource({
-        latitude: 37.3059663,
-        longitude: -121.75191,
-        altitude: 0
-      }),
+      new GPSDataSource(VGCC),
       new LidarDataSource(),
-      new TrackletsDataSource()
+      new TrackletsDataSource(),
+      new RouteDataSource()
     ];
   }
 

@@ -1,3 +1,5 @@
+import {TRACKS_LIST} from '~/topics';
+
 export class TrackletsDataSource {
   constructor() {
     this.TRACKLETS = '/tracklets/objects';
@@ -5,7 +7,7 @@ export class TrackletsDataSource {
   }
 
   convertFrame(frame, xvizBuilder) {
-    const trackMessages = frame['/commander/perception_dct/track_list'];
+    const trackMessages = frame[TRACKS_LIST];
     if (!trackMessages) {
       return;
     }
@@ -13,6 +15,7 @@ export class TrackletsDataSource {
     for (const {message} of trackMessages) {
       const tracks = message.confirmed_tracks;
       for (const track of tracks) {
+        // console.log('tracklets', track.shape_bottom.points.map(p => [p.x, p.y, p.z]));
         xvizBuilder
           .stream(this.TRACKLETS)
           .polygon(track.shape_bottom.points.map(p => [p.x, p.y, p.z]))
