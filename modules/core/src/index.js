@@ -49,4 +49,10 @@ export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
 export {default as XVIZFileLoader} from './loaders/xviz-file-loader';
 
 // Utils
-export {request, requestBinary, requestJson, requestText, requestImage} from './utils/request-utils';
+export {
+  request,
+  requestBinary,
+  requestJson,
+  requestText,
+  requestImage
+} from './utils/request-utils';
