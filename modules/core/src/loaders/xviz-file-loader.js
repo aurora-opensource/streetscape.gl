@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import assert from 'assert';
-import {json, buffer} from 'd3-fetch';
+import { json, buffer } from 'd3-fetch';
 import {
   LOG_STREAM_MESSAGE,
   parseBinaryXVIZ,
@@ -31,7 +31,7 @@ import {
 import XVIZLoaderInterface from './xviz-loader-interface';
 
 function getParams(options) {
-  const {timestamp, serverConfig} = options;
+  const { timestamp, serverConfig } = options;
 
   return {
     timestamp,
@@ -113,10 +113,10 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     }
   }
 
-  _loadFile({filePath, fileFormat}) {
+  _loadFile({ filePath, fileFormat }) {
     const params = this.requestParams;
     switch (fileFormat) {
-      case 'binary':
+      case 'glb':
         return buffer(filePath).then(data => {
           parseStreamMessage({
             message: parseBinaryXVIZ(data),
@@ -125,6 +125,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
             worker: params.serverConfig.worker,
             maxConcurrency: params.serverConfig.maxConcurrency
           });
+        }).catch(error => {
+          this.emit('error', error);
         });
 
       case 'json':
@@ -135,6 +137,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
             onError: this._onError,
             worker: params.serverConfig.worker,
             maxConcurrency: params.serverConfig.maxConcurrency
+          }).catch(error => {
+            this.emit('error', error);
           });
         });
 
