@@ -7,7 +7,6 @@
 /* global XMLHttpRequest */
 import HttpStatusCodes from 'http-status-codes';
 import PromiseRetry from 'promise-retry';
-import PromiseTracker from './promise-tracker';
 
 let defaultRequestFunction;
 // TODO comments contains `uber-xhr`
@@ -31,24 +30,6 @@ if (module.require) {
 // The request cache contains a map of urls to promises returned by request
 const requestCache = {};
 
-let defaultPromiseTracker = new PromiseTracker();
-
-/**
- * Register a default promise tracker instance
- * @param {PromiseTracker} promiseTracker
- */
-export function setDefaultPromiseTracker(promiseTracker) {
-  defaultPromiseTracker = promiseTracker;
-}
-
-/**
- * Return the default promise tracker instance
- * @param {PromiseTracker} promiseTracker
- */
-export function getDefaultPromiseTracker() {
-  return defaultPromiseTracker;
-}
-
 /**
  * Promisified request
  *
@@ -70,7 +51,6 @@ export function request(
   {
     useLocalCache = false,
     defeatBrowserCache = false,
-    promiseTracker = null,
     id = null,
     requestFunction = defaultRequestFunction,
     retries = 0
@@ -107,13 +87,6 @@ export function request(
   if (useLocalCache) {
     // console.log(`request saving promise in cache ${cacheUrl}`); // eslint-disable-line
     requestCache[cacheUrl] = requestCache[cacheUrl] || promise;
-  }
-
-  // If a promiseTracker is provided, start tracking the promise
-  promiseTracker = promiseTracker || defaultPromiseTracker;
-  if (promiseTracker) {
-    id = id || uriOptions.uri;
-    promiseTracker.add({promise, id});
   }
 
   return promise;
