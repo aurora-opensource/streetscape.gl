@@ -18,7 +18,7 @@ module.exports = function main(args) {
   const xvizWriter = new XVIZWriter();
 
   // Write metadata file
-  const xvizMetadata = converter.getMetadata();
+  const xvizMetadata = converter.metadata;
   xvizWriter.writeMetadata(outputDir, xvizMetadata);
 
   const start = Date.now();

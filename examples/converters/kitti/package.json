@@ -6,7 +6,6 @@
     "start": "node ./src/index.js"
   },
   "dependencies": {
-    "@xviz/builder": "./../../../../xviz/modules/builder",
     "@turf/turf": "^5.1.6",
     "@xviz/builder": "../../../../xviz/modules/builder",
     "argparse": "^1.0.10",
