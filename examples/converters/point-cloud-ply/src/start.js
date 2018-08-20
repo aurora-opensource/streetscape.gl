@@ -1,2 +1,0 @@
-require('reify');
-require('./convert');
