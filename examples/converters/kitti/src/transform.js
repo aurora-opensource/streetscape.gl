@@ -35,7 +35,7 @@ module.exports = function main(args) {
   // data is easier, we have choosen this path for the initial example to avoid
   // any unnecessary complications
   for (let i = 0; i < limit; i++) {
-    const xvizFrame = converter.convertFrame(i, xvizMetadata);
+    const xvizFrame = converter.convertFrame(i);
     xvizWriter.writeFrame(outputDir, i, xvizFrame);
   }
 
