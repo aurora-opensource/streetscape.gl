@@ -18,7 +18,7 @@ module.exports = function main(args) {
   const xvizWriter = new XVIZWriter();
 
   // Write metadata file
-  const xvizMetadata = converter.getMetadata();
+  const xvizMetadata = converter.metadata;
   xvizWriter.writeMetadata(outputDir, xvizMetadata);
 
   const start = Date.now();
@@ -35,7 +35,7 @@ module.exports = function main(args) {
   // data is easier, we have choosen this path for the initial example to avoid
   // any unnecessary complications
   for (let i = 0; i < limit; i++) {
-    const xvizFrame = converter.convertFrame(i);
+    const xvizFrame = converter.convertFrame(i, xvizMetadata);
     xvizWriter.writeFrame(outputDir, i, xvizFrame);
   }
 

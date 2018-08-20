@@ -37,6 +37,7 @@ export class KittiConverter {
     // Note: order is important due to data deps on the pose
     this.converters = [this.gps_ds, this.lidar_ds, this.tracklet_ds];
 
+    this._metadata = this._getMetadata();
     this.converters.forEach(c => c.load());
   }
 
@@ -50,14 +51,18 @@ export class KittiConverter {
     // The XVIZBuilder provides a fluent-API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
-    const xvizBuilder = new XVIZBuilder(this.disableStreams);
+    const xvizBuilder = new XVIZBuilder(this._metadata, this.disableStreams, {});
 
     this.converters.forEach(c => c.convertFrame(i, xvizBuilder));
 
     return xvizBuilder.getFrame();
   }
 
-  getMetadata() {
+  get metadata() {
+    return this._metadata;
+  }
+
+  _getMetadata() {
     // The XVIZMetadataBuilder provides a fluent-API to collect
     // metadata about the XVIZ streams produced during conversion.
     //
