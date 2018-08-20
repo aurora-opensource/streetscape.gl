@@ -46,3 +46,4 @@ export * from './constants';
 export * from './layers/layer-utils';
 
 export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
+export {default as XVIZFileLoader} from './loaders/xviz-file-loader';

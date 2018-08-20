@@ -35,3 +35,6 @@ export const SETTINGS = {
     data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
   }
 };
+
+export const FRAMES = 155;
+export const FRAME_SUFFIX = '-frame.glb';
