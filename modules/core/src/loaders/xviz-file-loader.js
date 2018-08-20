@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import assert from 'assert';
-import { json, buffer } from 'd3-fetch';
+import {json, buffer} from 'd3-fetch';
 import {
   LOG_STREAM_MESSAGE,
   parseBinaryXVIZ,
@@ -31,7 +31,7 @@ import {
 import XVIZLoaderInterface from './xviz-loader-interface';
 
 function getParams(options) {
-  const { timestamp, serverConfig } = options;
+  const {timestamp, serverConfig} = options;
 
   return {
     timestamp,
@@ -103,15 +103,13 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
     // if there are more frames need to fetch
     if (promises.length > 0) {
-      Promise
-        .all(promises.filter(Boolean))
-        .then(() => {
-          this._loadNextBatch(startFrame + this._batchSize);
-        });
+      Promise.all(promises.filter(Boolean)).then(() => {
+        this._loadNextBatch(startFrame + this._batchSize);
+      });
     }
   }
 
-  _loadFile({ filePath, fileFormat }) {
+  _loadFile({filePath, fileFormat}) {
     const params = this.requestParams;
     switch (fileFormat) {
       case 'glb':
