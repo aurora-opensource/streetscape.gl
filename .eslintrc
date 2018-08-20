@@ -7,7 +7,7 @@
     "uber-jsx",
     "uber-es2015",
     "prettier",
-    "prettier/react",
+    "prettier/react"
   ],
   "rules": {
     "guard-for-in": 0,

@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import {StaticMap} from 'react-map-gl';
-import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer, WebMercatorViewport} from 'deck.gl';
+import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
 import {CubeGeometry} from 'luma.gl';
 
 import {MeshLayer} from '@deck.gl/experimental-layers';
@@ -13,7 +13,6 @@ import XvizLayer from '../layers/xviz-layer';
 
 import {VIEW_MODES, COORDINATES} from '../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
-import {getPoseFromJson} from '../utils/pose';
 import connectToLog from './connect';
 
 const CAR_DATA = [[0, 0, 0]];
@@ -77,54 +76,12 @@ class Core3DViewer extends PureComponent {
     }
   }
 
-  componentDidMount() {
-    this._updateTransforms(this.props.frame);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
       this.setState({
         viewState: {...this.state.viewState, ...nextProps.viewMode.initialProps}
       });
     }
-    if (this.props.frame !== nextProps.frame) {
-      this._updateTransforms(nextProps.frame);
-    }
-  }
-
-  _updateTransforms(frame) {
-    if (!frame) {
-      return;
-    }
-    const {mapOrigin} = frame;
-
-    // Pose instance is flattened when passed back from worker
-    // TODO - Fix this in XVIZ
-    const mapPose = getPoseFromJson(frame.mapPose || {});
-    const vehiclePose = getPoseFromJson(frame.vehiclePose || {});
-
-    // equivalent to IDENTITY_POSE.getTransformationMatrixFromPose(mapPose);
-    const mapRelativeTransform = mapPose.getTransformationMatrix();
-    const vehicleRelativeTransform = mapRelativeTransform
-      .clone()
-      .multiplyRight(vehiclePose.getTransformationMatrix());
-    const headingVector = vehicleRelativeTransform.transformVector([0, 1, 0]);
-
-    const viewport = new WebMercatorViewport({
-      longitude: mapOrigin[0],
-      latitude: mapOrigin[1]
-    });
-    const carPosition = viewport.addMetersToLngLat(
-      mapOrigin,
-      vehicleRelativeTransform.transformVector([0, 0, 0])
-    );
-
-    this.setState({
-      mapRelativeTransform,
-      vehicleRelativeTransform,
-      heading: (Math.atan2(headingVector[1], headingVector[0]) / Math.PI) * 180 - 90,
-      carPosition
-    });
   }
 
   _onViewStateChange = ({viewState, oldViewState}) => {
@@ -140,14 +97,15 @@ class Core3DViewer extends PureComponent {
       return [];
     }
 
-    const {streams, mapOrigin, transformMatrix} = frame;
     const {
-      styleParser,
-      carMesh,
+      streams,
+      origin,
       heading,
+      customTransform,
       mapRelativeTransform,
       vehicleRelativeTransform
-    } = this.state;
+    } = frame;
+    const {styleParser, carMesh} = this.state;
 
     // TODO
     return [
@@ -155,7 +113,7 @@ class Core3DViewer extends PureComponent {
         new MeshLayer({
           id: 'car',
           coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-          coordinateOrigin: mapOrigin,
+          coordinateOrigin: origin,
           // Adjust for car center position relative to GPS/IMU
           modelMatrix: vehicleRelativeTransform.clone().translate(car.origin || DEFAULT_CAR.origin),
           mesh: carMesh,
@@ -175,7 +133,7 @@ class Core3DViewer extends PureComponent {
         const {coordinate} = metadata.streams[streamName] || {};
         const coordinateProps = {
           coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-          coordinateOrigin: mapOrigin
+          coordinateOrigin: origin
         };
         switch (coordinate) {
           case COORDINATES.GEOGRAPHIC:
@@ -185,7 +143,7 @@ class Core3DViewer extends PureComponent {
             coordinateProps.modelMatrix = mapRelativeTransform;
             break;
           case COORDINATES.CUSTOM:
-            coordinateProps.modelMatrix = transformMatrix;
+            coordinateProps.modelMatrix = customTransform;
             break;
           default:
             coordinateProps.modelMatrix = vehicleRelativeTransform;
@@ -233,14 +191,14 @@ class Core3DViewer extends PureComponent {
   }
 
   _getViewState() {
-    const {viewMode} = this.props;
-    const {viewState, viewOffset, heading, carPosition} = this.state;
+    const {viewMode, frame} = this.props;
+    const {viewState, viewOffset} = this.state;
 
-    const trackedPosition = carPosition
+    const trackedPosition = frame
       ? {
-          longitude: carPosition[0],
-          latitude: carPosition[1],
-          bearing: heading
+          longitude: frame.trackPosition[0],
+          latitude: frame.trackPosition[1],
+          bearing: frame.heading
         }
       : null;
 

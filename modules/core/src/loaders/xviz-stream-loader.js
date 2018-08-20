@@ -5,9 +5,9 @@ import {
   parseStreamMessage,
   LOG_STREAM_MESSAGE,
   XvizStreamBuffer,
-  StreamSynchronizer
+  parseBinaryXVIZ,
+  StreamSynchronizer,
 } from '@xviz/parser';
-import {parseBinaryXVIZ} from '@xviz/builder';
 import PromiseRetry from 'promise-retry';
 
 import XVIZLoaderInterface from './xviz-loader-interface';

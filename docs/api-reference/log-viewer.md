@@ -1,5 +1,8 @@
 # LogViewer (React Component)
 
+*Uber Confidential Information*
+
+
 Renders a 3D view of a XVIZ log.
 
 ```jsx
