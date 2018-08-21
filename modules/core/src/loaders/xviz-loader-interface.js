@@ -1,5 +1,6 @@
-import {getXvizSettings} from '@xviz/parser';
+import {getXvizSettings, XvizStreamBuffer} from '@xviz/parser';
 import {clamp} from 'math.gl';
+import {getTimeSeries} from '../utils/metrics-helper';
 
 import createSelector from '../utils/create-selector';
 
@@ -135,5 +136,22 @@ export default class XVIZLoaderInterface {
     const timestamp = this.get('timestamp');
     const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
     this.seek(newTimestamp);
+  }
+
+  getTimeDomain() {
+    const {metadata} = this;
+    if (metadata) {
+      return [metadata.logStartTime || metadata.start_time, metadata.logEndTime || metadata.end_time];
+    }
+    return null;
+  }
+
+  getTimeSeries() {
+    const {streamBuffer} = this;
+    if (streamBuffer && streamBuffer.streams) {
+      const streams = streamBuffer.streams;
+      return getTimeSeries(streams);
+    }
+    return null;
   }
 }
