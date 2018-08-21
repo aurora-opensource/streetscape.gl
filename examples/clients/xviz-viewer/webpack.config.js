@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* eslint-disable no-process-env */
+/* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
 
@@ -29,6 +31,8 @@ const BABEL_CONFIG = {
   presets: ['@babel/preset-env', '@babel/preset-react'],
   plugins: ['@babel/proposal-class-properties']
 };
+
+const appName = process.env.appName || 'kitti';
 
 const CONFIG = {
   entry: {
@@ -80,6 +84,7 @@ const CONFIG = {
   },
   resolve: {
     alias: {
+      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`),
       webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
     }
   },
