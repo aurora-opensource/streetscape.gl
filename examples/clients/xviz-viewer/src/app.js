@@ -1,6 +1,6 @@
 /* global document, window,*/
 /* eslint-disable no-console */
-import './xviz-config-kitty';
+import 'xviz-config';
 
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
