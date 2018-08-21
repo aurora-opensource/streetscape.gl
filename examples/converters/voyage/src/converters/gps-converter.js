@@ -1,16 +1,5 @@
 import LocalCartesian from '~/lib/local-cartesian';
 
-const VGCC = {
-  longitude: -121.753868103027343750,
-  latitude: 37.290493011474609375,
-  altitude: 204.159072875976562500
-};
-const SPRINGFIELD = {
-  longitude: -121.75191,
-  latitude: 37.3059663,
-  altitude: 0
-};
-
 function quaternionToEuler({w, x, y, z}) {
   const ysqr = y * y;
   const t0 = -2.0 * (ysqr + z * z) + 1.0;
@@ -36,6 +25,7 @@ export class GPSDataSource {
     this.VEHICLE_POSE = 'vehicle-pose';
     this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
     this.localCartesian = new LocalCartesian(origin.latitude, origin.longitude, origin.altitude);
+    this.origin = origin;
   }
 
   async convertFrame(frame, xvizBuilder) {
@@ -66,7 +56,7 @@ export class GPSDataSource {
 
     xvizBuilder.pose(this.VEHICLE_POSE, {
       time: timestamp.toDate().getTime(),
-      ...VGCC,
+      ...this.origin,
       ...rotation,
       /* This pose is in x, y, z local cartesian coordinates */
       ...message.pose.position,

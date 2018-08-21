@@ -23,7 +23,7 @@ export class VoyageConverter {
     this.disableStreams = disableStreams;
 
     this.converters = [
-      new GPSDataSource(VGCC),
+      new GPSDataSource(SPRINGFIELD),
       new LidarDataSource(),
       new TrackletsDataSource(),
       new RouteDataSource()
