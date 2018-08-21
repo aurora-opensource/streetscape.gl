@@ -48,7 +48,8 @@ export class RouteDataSource {
       .type('polyline')
       .styleClass('Map', {
         fillColor: '#FF0000',
-        radiusPixels: 2
+        strokeWidth: 0.2,
+        strokeWidthMinPixels: 1
       });
   }
 }
