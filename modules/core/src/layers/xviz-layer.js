@@ -9,14 +9,20 @@ import {XvizObject} from '@xviz/parser';
 import deepExtend from 'deep-extend';
 
 const XVIZ_TO_LAYER_TYPE = {
+  // V1
   points2d: 'scatterplot',
   points3d: 'pointcloud',
   point2d: 'scatterplot',
-  circle: 'scatterplot',
   circle2d: 'scatterplot',
   line2d: 'path',
   path2d: 'path',
-  polygon2d: 'polygon'
+  polygon2d: 'polygon',
+
+  // V2
+  point: 'pointcloud',
+  circle: 'scatterplot',
+  polyline: 'path',
+  polygon: 'polygon'
 };
 
 const STYLE_TO_LAYER_PROP = {

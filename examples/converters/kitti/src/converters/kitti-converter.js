@@ -15,6 +15,7 @@ export class KittiConverter {
     this.disableStreams = disableStreams;
 
     this.numFrames = 0;
+    this.metadata = null;
 
     this.initialize();
   }
@@ -38,6 +39,8 @@ export class KittiConverter {
     this.converters = [this.gps_ds, this.lidar_ds, this.tracklet_ds];
 
     this.converters.forEach(c => c.load());
+
+    this.metadata = this.getMetadata();
   }
 
   frameCount() {
@@ -50,7 +53,7 @@ export class KittiConverter {
     // The XVIZBuilder provides a fluent-API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
-    const xvizBuilder = new XVIZBuilder(this.disableStreams);
+    const xvizBuilder = new XVIZBuilder(this.metadata, this.disableStreams, {});
 
     this.converters.forEach(c => c.convertFrame(i, xvizBuilder));
 
