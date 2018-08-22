@@ -54,6 +54,11 @@ export class LidarDataSource {
       .styleClassDefault({
         fillColor: '#00a',
         radiusPixels: 2
+      })
+      .pose({
+        x: 0,
+        y: 0,
+        z: 1.5
       });
   }
 }

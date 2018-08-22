@@ -1,7 +1,7 @@
 import {VoyageConverter} from './converters';
-import {XVIZWriter} from './xviz-writer';
+import {XVIZWriter} from '@xviz/builder';
 import {createDir, deleteDirRecursive} from './parsers/common';
-import {XVIZMetadataBuilder} from './xviz-writer';
+import {XVIZMetadataBuilder} from '@xviz/builder';
 import * as Topics from '~/topics';
 import Bag from './lib/bag';
 
@@ -46,9 +46,8 @@ module.exports = async function main(args) {
   });
 
   // Write metadata file
-  const xb = new XVIZMetadataBuilder();
+  const xb = converter.getXVIZMetadataBuilder();
   xb.startTime(startTime.getTime()).endTime(endTime.getTime());
-  converter.buildMetadata(xb);
   xvizWriter.writeMetadata(outputDir, xb.getMetadata());
 
   const profileEnd = Date.now();

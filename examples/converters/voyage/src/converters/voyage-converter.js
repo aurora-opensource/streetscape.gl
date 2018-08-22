@@ -5,7 +5,7 @@ import {TrackletsDataSource} from './tracklets-converter';
 import {RouteDataSource} from './route-converter';
 import TracksMarkersDataSource from './tracks-markers-data-source';
 
-import {XVIZBuilder} from '~/xviz-writer';
+import {XVIZMetadataBuilder, XVIZBuilder} from '@xviz/builder';
 
 const VGCC = {
   latitude: 37.290493011474609375,
@@ -22,28 +22,37 @@ const SPRINGFIELD = {
 export class VoyageConverter {
   constructor(disableStreams) {
     this.disableStreams = disableStreams;
-
     this.converters = [
       new GPSDataSource(VGCC),
       new LidarDataSource(),
       new TrackletsDataSource(),
-      new TracksMarkersDataSource(),
+      // new TracksMarkersDataSource(),
       new RouteDataSource()
     ];
+
+    this.xvizMetadataBuilder = this._initMetadataBuilder();
+    this.metadata = this.xvizMetadataBuilder.getMetadata();
+  }
+
+  getXVIZMetadataBuilder() {
+    return this.xvizMetadataBuilder;
   }
 
   async convertFrame(frame) {
     // The XVIZBuilder provides a fluent-API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
-    const xvizBuilder = new XVIZBuilder(this.disableStreams);
+    const xvizBuilder = new XVIZBuilder(this.metadata, this.disableStreams, {});
 
     await Promise.map(this.converters, c => c.convertFrame(frame, xvizBuilder));
 
     return xvizBuilder.getFrame();
   }
 
-  buildMetadata(xvizMetadataBuilder) {
+  _initMetadataBuilder() {
+    const xvizMetadataBuilder = new XVIZMetadataBuilder();
     this.converters.forEach(c => c.getMetadata(xvizMetadataBuilder));
+
+    return xvizMetadataBuilder;
   }
 }

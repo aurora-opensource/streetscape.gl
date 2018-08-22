@@ -3,7 +3,6 @@ import {TRACKS_LIST} from '~/topics';
 export class TrackletsDataSource {
   constructor() {
     this.TRACKLETS = '/tracklets/objects';
-    this.TRACKLETS_TRAJECTORY = '/tracklets/trajectory';
   }
 
   convertFrame(frame, xvizBuilder) {
@@ -15,11 +14,10 @@ export class TrackletsDataSource {
     for (const {message} of trackMessages) {
       const tracks = message.confirmed_tracks;
       for (const track of tracks) {
-        // console.log('tracklets', track.shape_bottom.points.map(p => [p.x, p.y, p.z]));
         xvizBuilder
           .stream(this.TRACKLETS)
-          .polygon(track.shape_bottom.points.map(p => [p.x, p.y, p.z]))
-          .classes(['Car'])
+          .polygon(track.shape_bottom.points.map(p => [p.x, p.y, 0]))
+          .classes([this._getClass(track)])
           .id(track.track_id);
       }
     }
@@ -35,7 +33,7 @@ export class TrackletsDataSource {
         extruded: true,
         wireframe: true,
         // TODO - use dynamic height
-        height: 1.5,
+        height: 1.2,
         fillColor: '#00000080'
       })
       .styleClass('Car', {
@@ -58,14 +56,22 @@ export class TrackletsDataSource {
         fillColor: '#D6A00080',
         strokeColor: '#D6A000'
       });
+  }
 
-    // .stream(this.TRACKLETS_TRAJECTORY)
-    // .category('primitive')
-    // .type('polyline')
-    // .styleClassDefault({
-    //   strokeColor: '#FEC557',
-    //   strokeWidth: 0.3,
-    //   strokeWidthMinPixels: 1
-    // });
+  _getClass(track) {
+    // Order has significance
+    const CLASSES = [
+      'Car',
+      'Pedestrian'
+    ];
+
+    const {index} = track.class_probabilities.reduce((currentMax, probability, i) => {
+      if (probability > currentMax.probability) {
+        return {probability, index: i}
+      }
+      return currentMax
+    }, {index: -1, probability: -1});
+
+    return CLASSES[index];
   }
 }
