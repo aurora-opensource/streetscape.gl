@@ -1,10 +1,10 @@
 // TODO fix style
-import React, { PureComponent } from 'react';
-import { MetricCard, MetricChart, FloatPanel } from 'monochrome-ui';
+import React, {PureComponent} from 'react';
+import {MetricCard, MetricChart, FloatPanel} from 'monochrome-ui';
 
 import connectToLog from './connect';
 
-const CHART_MARGIN = { left: 45, right: 45, top: 45, bottom: 20 };
+const CHART_MARGIN = {left: 45, right: 45, top: 45, bottom: 20};
 
 const DEFAULT_PROPS = {
   metrics: {},
@@ -15,13 +15,12 @@ const DEFAULT_PROPS = {
 };
 
 class FloatingMetrics extends PureComponent {
-
   static get defaultProps() {
     return DEFAULT_PROPS;
   }
 
-  _formatDate = (time) => {
-    return this.props.formatDate((time - this.props.timeDomain[0]));
+  _formatDate = time => {
+    return this.props.formatDate(time - this.props.timeDomain[0]);
   };
 
   render() {
@@ -32,19 +31,15 @@ class FloatingMetrics extends PureComponent {
     const {title, width, height, timeDomain} = this.props;
 
     return (
-      <FloatPanel
-        id={'floating-metrics'}
-        title={title}
-        width={width}
-        height={height}
-      >
+      <FloatPanel id={'floating-metrics'} title={title} width={width} height={height}>
         {this.props.timeSeries.map((metric, i) => {
           return (
             <MetricCard
               key={metric.id || i}
               title={metric.title}
               height={400}
-              description={metric.description}>
+              description={metric.description}
+            >
               <MetricChart
                 data={{[metric.id]: metric.valueSeries}}
                 margin={CHART_MARGIN}
@@ -61,7 +56,6 @@ class FloatingMetrics extends PureComponent {
             </MetricCard>
           );
         })}
-
       </FloatPanel>
     );
   }
@@ -72,5 +66,4 @@ const getLogState = log => ({
   timeDomain: log.getTimeDomain()
 });
 
-
-export default connectToLog({ getLogState, Component: FloatingMetrics });
+export default connectToLog({getLogState, Component: FloatingMetrics});

@@ -1,4 +1,4 @@
-import {getXvizSettings, XvizStreamBuffer} from '@xviz/parser';
+import {getXvizSettings} from '@xviz/parser';
 import {clamp} from 'math.gl';
 import {getTimeSeries} from '../utils/metrics-helper';
 
@@ -14,6 +14,7 @@ export default class XVIZLoaderInterface {
     this.listeners = [];
     this.state = {};
     this._version = 0;
+    this.timestamp = null;
   }
 
   /* Event types:
@@ -141,7 +142,10 @@ export default class XVIZLoaderInterface {
   getTimeDomain() {
     const {metadata} = this;
     if (metadata) {
-      return [metadata.logStartTime || metadata.start_time, metadata.logEndTime || metadata.end_time];
+      return [
+        metadata.logStartTime || metadata.start_time,
+        metadata.logEndTime || metadata.end_time
+      ];
     }
     return null;
   }

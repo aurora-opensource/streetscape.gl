@@ -42,10 +42,13 @@ function getTimeSeriesForStream({streamName, stream}) {
  */
 export function getTimeRange(valueSeries) {
   if (valueSeries || valueSeries.length) {
-    const {min, max} = valueSeries.reduce((acc, value) => {
-      acc.min = Math.min(acc.min, value.time);
-      acc.max = Math.max(acc.max, value.time);
-    }, {min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY})
+    const {min, max} = valueSeries.reduce(
+      (acc, value) => {
+        acc.min = Math.min(acc.min, value.time);
+        acc.max = Math.max(acc.max, value.time);
+      },
+      {min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY}
+    );
 
     return [min, max];
   }

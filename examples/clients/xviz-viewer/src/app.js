@@ -62,10 +62,7 @@ class Example extends PureComponent {
         <div id="control-panel">
           <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
         </div>
-        <FloatingMetrics
-          log={log}
-          formatDate={timeDiff => timeDiff / 1000}
-        />
+        <FloatingMetrics log={log} formatDate={timeDiff => timeDiff / 1000} />
       </div>
     );
   }
