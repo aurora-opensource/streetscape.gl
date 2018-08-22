@@ -2,7 +2,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import {PlaybackControl as BasePlaybackControl} from 'monochrome-ui';
+import {PlaybackControl as MonochromePlaybackControl} from 'monochrome-ui';
 import {getXvizSettings} from '@xviz/parser';
 
 import connectToLog from './connect';
@@ -71,7 +71,7 @@ class PlaybackControl extends PureComponent {
     }
 
     const deltaTimeS = (x - startTime) / timeScale / 1000;
-    return BasePlaybackControl.formatTimeCode(deltaTimeS, '{mm}:{ss}');
+    return MonochromePlaybackControl.formatTimeCode(deltaTimeS, '{mm}:{ss}');
   };
 
   render() {
@@ -84,7 +84,7 @@ class PlaybackControl extends PureComponent {
     // TODO - markers
 
     return (
-      <BasePlaybackControl
+      <MonochromePlaybackControl
         {...otherProps}
         currentTime={timestamp}
         startTime={startTime}
