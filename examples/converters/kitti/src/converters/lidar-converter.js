@@ -80,6 +80,13 @@ export class LidarDataSource {
       .styleClassDefault({
         fillColor: '#00a',
         radiusPixels: 2
+      })
+      // laser scanner relative to GPS position
+      // http://www.cvlibs.net/datasets/kitti/setup.php
+      .pose({
+        x: 0.81,
+        y: -0.32,
+        z: 1.73
       });
   }
 }

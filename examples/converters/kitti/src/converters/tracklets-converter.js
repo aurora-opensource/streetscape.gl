@@ -136,6 +136,13 @@ export class TrackletsDataSource {
         fillColor: '#D6A00080',
         strokeColor: '#D6A000'
       })
+      // laser scanner relative to GPS position
+      // http://www.cvlibs.net/datasets/kitti/setup.php
+      .pose({
+        x: 0.81,
+        y: -0.32,
+        z: 1.73
+      })
 
       .stream(this.TRACKLETS_TRAJECTORY)
       .category('primitive')
@@ -144,6 +151,13 @@ export class TrackletsDataSource {
         strokeColor: '#FEC557',
         strokeWidth: 0.3,
         strokeWidthMinPixels: 1
+      })
+      // laser scanner relative to GPS position
+      // http://www.cvlibs.net/datasets/kitti/setup.php
+      .pose({
+        x: 0.81,
+        y: -0.32,
+        z: 1.73
       });
   }
 
