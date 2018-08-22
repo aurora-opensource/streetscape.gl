@@ -11,11 +11,11 @@
     "build": "npm run build-clean && npm run build-script && npm run build-copy"
   },
   "dependencies": {
-    "streetscape.gl": "^0.0.1",
     "math.gl": "^2.0.0",
-    "monochrome-ui": "^0.0.1",
+    "monochrome-ui": "^0.0.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "streetscape.gl": "^0.0.1",
     "webworkify-webpack": "^2.1.2"
   },
   "devDependencies": {
@@ -25,12 +25,12 @@
     "@babel/preset-env": "^7.0.0-beta",
     "@babel/preset-react": "^7.0.0-beta",
     "babel-loader": "^8.0.0-beta",
-    "node-sass": "^4.9.0",
     "css-loader": "^0.28.11",
-    "sass-loader": "^7.0.1",
-    "style-loader": "^0.21.0",
+    "node-sass": "^4.9.0",
     "reify": "^0.16.4",
+    "sass-loader": "^7.0.1",
     "source-map-loader": "^0.2.3",
+    "style-loader": "^0.21.0",
     "webpack": "^2.7.0",
     "webpack-dev-server": "^2.4.5"
   }
