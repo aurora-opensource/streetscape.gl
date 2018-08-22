@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {StaticMap} from 'react-map-gl';
 import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
 import {CubeGeometry} from 'luma.gl';
+import {_Pose as Pose, Matrix4} from 'math.gl';
 
 import {MeshLayer} from '@deck.gl/experimental-layers';
 import {XvizStyleParser} from '@xviz/parser';
@@ -95,20 +96,51 @@ class Core3DViewer extends PureComponent {
     });
   };
 
+  _getCoordinateTransform(streamName) {
+    const {frame, metadata} = this.props;
+
+    const {origin, transforms = {}, vehicleRelativeTransform} = frame;
+
+    const {coordinate, pose} = metadata.streams[streamName] || {};
+
+    let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
+    let modelMatrix = vehicleRelativeTransform;
+
+    switch (coordinate) {
+      case COORDINATES.GEOGRAPHIC:
+        coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
+        break;
+
+      case COORDINATES.VEHICLE_RELATIVE:
+        modelMatrix = vehicleRelativeTransform;
+        break;
+
+      default:
+        if (coordinate) {
+          modelMatrix = transforms[coordinate];
+        }
+    }
+
+    if (pose) {
+      modelMatrix = new Matrix4(modelMatrix).multiplyRight(
+        new Pose(pose).getTransformationMatrix()
+      );
+    }
+
+    return {
+      coordinateSystem,
+      coordinateOrigin: origin,
+      modelMatrix
+    };
+  }
+
   _getLayers() {
     const {frame, car, viewMode, metadata} = this.props;
     if (!frame || !metadata) {
       return [];
     }
 
-    const {
-      streams,
-      origin,
-      heading,
-      customTransform,
-      mapRelativeTransform,
-      vehicleRelativeTransform
-    } = frame;
+    const {streams, origin, heading, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
     // TODO
@@ -134,24 +166,7 @@ class Core3DViewer extends PureComponent {
         }),
       Object.keys(streams).map(streamName => {
         const stream = streams[streamName];
-        const {coordinate} = metadata.streams[streamName] || {};
-        const coordinateProps = {
-          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-          coordinateOrigin: origin
-        };
-        switch (coordinate) {
-          case COORDINATES.GEOGRAPHIC:
-            coordinateProps.coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
-            break;
-          case COORDINATES.MAP_RELATIVE:
-            coordinateProps.modelMatrix = mapRelativeTransform;
-            break;
-          case COORDINATES.CUSTOM:
-            coordinateProps.modelMatrix = customTransform;
-            break;
-          default:
-            coordinateProps.modelMatrix = vehicleRelativeTransform;
-        }
+        const coordinateProps = this._getCoordinateTransform(streamName);
 
         if (stream.features && stream.features.length) {
           return new XvizLayer({
