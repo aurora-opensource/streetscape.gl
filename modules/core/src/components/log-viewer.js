@@ -230,7 +230,7 @@ class Core3DViewer extends PureComponent {
 
 const getLogState = log => ({
   frame: log.getCurrentFrame(),
-  metadata: log.metadata
+  metadata: log.getMetadata()
 });
 
 export default connectToLog({getLogState, Component: Core3DViewer});
