@@ -11,8 +11,9 @@ import {XvizStyleParser} from '@xviz/parser';
 import {loadOBJMesh} from '../loaders/obj-loader';
 import XvizLayer from '../layers/xviz-layer';
 
-import {VIEW_MODES, COORDINATES} from '../constants';
+import {VIEW_MODES} from '../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
+import {resolveCoordinateTransform} from '../utils/transform';
 import connectToLog from './connect';
 
 const CAR_DATA = [[0, 0, 0]];
@@ -101,14 +102,7 @@ class Core3DViewer extends PureComponent {
       return [];
     }
 
-    const {
-      streams,
-      origin,
-      heading,
-      customTransform,
-      mapRelativeTransform,
-      vehicleRelativeTransform
-    } = frame;
+    const {streams, origin, heading, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
     // TODO
@@ -134,24 +128,8 @@ class Core3DViewer extends PureComponent {
         }),
       Object.keys(streams).map(streamName => {
         const stream = streams[streamName];
-        const {coordinate} = metadata.streams[streamName] || {};
-        const coordinateProps = {
-          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-          coordinateOrigin: origin
-        };
-        switch (coordinate) {
-          case COORDINATES.GEOGRAPHIC:
-            coordinateProps.coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
-            break;
-          case COORDINATES.MAP_RELATIVE:
-            coordinateProps.modelMatrix = mapRelativeTransform;
-            break;
-          case COORDINATES.CUSTOM:
-            coordinateProps.modelMatrix = customTransform;
-            break;
-          default:
-            coordinateProps.modelMatrix = vehicleRelativeTransform;
-        }
+        const streamMetadata = metadata.streams[streamName];
+        const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
 
         if (stream.features && stream.features.length) {
           return new XvizLayer({

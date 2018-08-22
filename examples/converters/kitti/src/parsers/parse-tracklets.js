@@ -24,11 +24,11 @@ function parseObjectMetadata(tracklets) {
     };
 
     const bounds = [
-      [-item.l / 2, -item.w / 2],
-      [-item.l / 2, item.w / 2],
-      [item.l / 2, item.w / 2],
-      [item.l / 2, -item.w / 2],
-      [-item.l / 2, -item.w / 2]
+      [-item.l / 2, -item.w / 2, 0],
+      [-item.l / 2, item.w / 2, 0],
+      [item.l / 2, item.w / 2, 0],
+      [item.l / 2, -item.w / 2, 0],
+      [-item.l / 2, -item.w / 2, 0]
     ];
 
     const first_frame = Number(item.first_frame);
