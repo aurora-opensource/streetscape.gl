@@ -85,10 +85,20 @@ $ yarn start -d kitti/2011_09_26/2011_09_26_drive_0005_sync
 
 To see a full list of options of the stream server, run `yarn start --help`.
 
+Add an application config file
+```
+$ cd examples/clients/config
+```
+
+- An example is xviz-config-kitti.js, for complete xviz configs, check [xviz-config](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-configuration.md)
+- Config file naming convention: xviz-config-${appName}.js
+- `appName` is used for loading the correct configuration file for the client app (default is `kitti`).
+
 In another terminal, run the client app:
 
 ```
 $ cd examples/clients/xviz-viewer
 $ yarn  # install dependencies
-$ yarn run start-local
+$ appName=kitti yarn start-local
 ```
+
