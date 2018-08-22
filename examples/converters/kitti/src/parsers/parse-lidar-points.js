@@ -29,9 +29,7 @@ function loadLidarData(contents) {
   for (let i = 0; i < size; i++) {
     positions[i * 3 + 0] = float[i * 4 + 0];
     positions[i * 3 + 1] = float[i * 4 + 1];
-    // height of laser scanner
-    // http://www.cvlibs.net/datasets/kitti/setup.php
-    positions[i * 3 + 2] = float[i * 4 + 2] + 1.73;
+    positions[i * 3 + 2] = float[i * 4 + 2];
     reflectance[i] = float[i * 4 + 3];
   }
   return {positions, reflectance};
