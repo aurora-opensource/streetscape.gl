@@ -92,7 +92,6 @@ $ cd examples/clients/config
 
 - An example is xviz-config-kitti.js, for complete xviz configs, check [xviz-config](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-configuration.md)
 - Config file naming convention: xviz-config-${appName}.js
-- `appName` is used for loading the correct configuration file for the client app (default is `kitti`).
 
 In another terminal, run the client app:
 
@@ -102,3 +101,4 @@ $ yarn  # install dependencies
 $ appName=kitti yarn start-local
 ```
 
+- `appName` is used for loading the correct configuration file for the client app (default is `kitti`).
