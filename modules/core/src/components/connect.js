@@ -26,8 +26,7 @@ import XVIZLoaderInterface from '../loaders/xviz-loader-interface';
 export default function connectToLog({getLogState, Component}) {
   class WrappedComponent extends PureComponent {
     static propTypes = {
-      log: PropTypes.instanceOf(XVIZLoaderInterface).isRequired,
-      timestamp: PropTypes.number
+      log: PropTypes.instanceOf(XVIZLoaderInterface).isRequired
     };
 
     state = {
@@ -54,12 +53,11 @@ export default function connectToLog({getLogState, Component}) {
     };
 
     render() {
-      const {log, timestamp, ...otherProps} = this.props;
+      const {log, ...otherProps} = this.props;
 
-      log.seek(timestamp);
       const logState = getLogState(log);
 
-      return <Component {...otherProps} {...logState} />;
+      return <Component {...otherProps} {...logState} log={log} />;
     }
   }
 

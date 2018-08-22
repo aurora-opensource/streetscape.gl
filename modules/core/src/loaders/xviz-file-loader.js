@@ -51,8 +51,6 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
     this.requestParams = getParams(options);
     this.streamBuffer = new XvizStreamBuffer();
-    this.logSynchronizer = null;
-    this.metadata = null;
     this._isOpen = false;
   }
 
@@ -75,8 +73,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   }
 
   seek(timestamp) {
-    this.timestamp = timestamp;
     // TODO incomplete
+    super.seek(timestamp);
   }
 
   _loadNextBatch(startFrame) {
@@ -150,7 +148,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
         this.logSynchronizer = new StreamSynchronizer(message.start_time, this.streamBuffer);
-        this.metadata = message;
+        this._setMetadata(message);
         this.emit('ready', message);
         break;
 

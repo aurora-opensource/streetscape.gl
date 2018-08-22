@@ -101,7 +101,7 @@ export function getViewStates({viewState, trackedPosition, viewMode, offset}) {
         ...firstPerson,
         longitude: trackedPosition.longitude,
         latitude: trackedPosition.latitude,
-        bearing: bearing + offset.bearing
+        bearing: 90 - bearing + offset.bearing
       };
     }
     viewStates[name] = viewState;

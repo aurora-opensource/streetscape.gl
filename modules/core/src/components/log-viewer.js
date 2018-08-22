@@ -54,14 +54,13 @@ const DEFAULT_CAR = {
 class Core3DViewer extends PureComponent {
   static propTypes = {
     frame: PropTypes.object,
-    xvizStyle: PropTypes.object,
+    metadata: PropTypes.object,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     car: PropTypes.object,
     viewMode: PropTypes.object
   };
 
   static defaultProps = {
-    xvizStyle: {},
     car: DEFAULT_CAR,
     viewMode: VIEW_MODES.PERSPECTIVE
   };
@@ -85,7 +84,7 @@ class Core3DViewer extends PureComponent {
         y: 0,
         bearing: 0
       },
-      styleParser: new XvizStyleParser(props.xvizStyle),
+      styleParser: props.metadata && new XvizStyleParser(props.metadata.styles),
       carMesh: null
     };
 
@@ -100,6 +99,11 @@ class Core3DViewer extends PureComponent {
     if (this.props.viewMode !== nextProps.viewMode) {
       this.setState({
         viewState: {...this.state.viewState, ...nextProps.viewMode.initialProps}
+      });
+    }
+    if (this.props.metadata !== nextProps.metadata) {
+      this.setState({
+        styleParser: new XvizStyleParser(nextProps.metadata.styles)
       });
     }
   }
@@ -142,7 +146,7 @@ class Core3DViewer extends PureComponent {
           data: CAR_DATA,
           getPosition: d => d,
           getColor: d => [160, 160, 160],
-          getYaw: d => heading,
+          getYaw: d => -heading,
           lightSettings: {},
           updateTriggers: {
             getYaw: heading
@@ -218,7 +222,7 @@ class Core3DViewer extends PureComponent {
       ? {
           longitude: frame.trackPosition[0],
           latitude: frame.trackPosition[1],
-          bearing: frame.heading
+          bearing: 90 - frame.heading
         }
       : null;
 
@@ -246,7 +250,7 @@ class Core3DViewer extends PureComponent {
 
 const getLogState = log => ({
   frame: log.getCurrentFrame(),
-  metadata: log.metadata
+  metadata: log.getMetadata()
 });
 
 export default connectToLog({getLogState, Component: Core3DViewer});
