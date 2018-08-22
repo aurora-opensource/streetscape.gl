@@ -63,27 +63,35 @@ class PlaybackControl extends PureComponent {
     }
   };
 
-  _formatTick = x => {
+  _formatTime = (x, formatter) => {
     const {startTime, timeScale} = this.props;
+
+    if (formatter) {
+      return formatter(x, startTime);
+    }
+
     const deltaTimeS = (x - startTime) / timeScale / 1000;
     return BasePlaybackControl.formatTimeCode(deltaTimeS, '{mm}:{ss}');
   };
 
   render() {
-    const {startTime, endTime, timestamp, ...otherProps} = this.props;
+    const {startTime, endTime, timestamp, formatTick, formatTimestamp, ...otherProps} = this.props;
 
     if (!Number.isFinite(timestamp)) {
       return null;
     }
 
+    // TODO - markers
+
     return (
       <BasePlaybackControl
-        formatTick={this._formatTick}
         {...otherProps}
         currentTime={timestamp}
         startTime={startTime}
         endTime={endTime}
         isPlaying={this.state.isPlaying}
+        formatTick={x => this._formatTime(x, formatTick)}
+        formatTimestamp={x => this._formatTime(x, formatTimestamp)}
         onSeek={this._onSeek}
         onPlay={this._onPlay}
         onPause={this._onPause}

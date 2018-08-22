@@ -8,7 +8,7 @@ Renders a 3D view of a XVIZ log.
 ```jsx
 import {LogViewer, VIEW_MODES} from 'streetscape.gl';
 
-<LogViewer log={log} xvizStyle={xvizStyle} viewMode={VIEW_MODES.TOP_DOWN} />
+<LogViewer log={log} viewMode={VIEW_MODES.TOP_DOWN} />
 
 ```
 
@@ -17,10 +17,6 @@ import {LogViewer, VIEW_MODES} from 'streetscape.gl';
 ##### `log` (`XVIZLoader`)
 
 The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) object.
-
-##### `xvizStyle` (Object, optional)
-
-An XVIZ stylesheet that defines the visual properties of each stream. See XVIZ documentation for specifications.
 
 ##### `mapStyle` (Object|String, optional)
 
