@@ -120,8 +120,6 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     this.WebSocketClass = options.WebSocketClass || WebSocket;
 
     this.streamBuffer = new XvizStreamBuffer();
-    this.logSynchronizer = null;
-    this.metadata = null;
   }
 
   isOpen() {
@@ -133,11 +131,10 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   }
 
   seek(timestamp) {
-    this.timestamp = timestamp;
+    super.seek(timestamp);
 
-    if (!timestamp) {
-      return;
-    }
+    // use clamped timestamp
+    timestamp = this.timestamp;
 
     const {timestamp: currentTimestamp, duration: currentDuration} = this.requestParams;
 
@@ -246,7 +243,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
         this.logSynchronizer = new StreamSynchronizer(message.start_time, this.streamBuffer);
-        this.metadata = message;
+        this._setMetadata(message);
         this.emit('ready', message);
         break;
 
