@@ -3,6 +3,7 @@ import {GPSDataSource} from './gps-converter';
 import {LidarDataSource} from './lidar-converter';
 import {TrackletsDataSource} from './tracklets-converter';
 import {RouteDataSource} from './route-converter';
+import TracksMarkersDataSource from './tracks-markers-data-source';
 
 import {XVIZBuilder} from '~/xviz-writer';
 
@@ -26,6 +27,7 @@ export class VoyageConverter {
       new GPSDataSource(VGCC),
       new LidarDataSource(),
       new TrackletsDataSource(),
+      new TracksMarkersDataSource(),
       new RouteDataSource()
     ];
   }
