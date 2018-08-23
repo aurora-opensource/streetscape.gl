@@ -4,7 +4,7 @@ import {parseBinaryXVIZ} from '@xviz/parser';
 import {loadProcessedLidarData} from '~/parsers/parse-lidar-points';
 
 // load file
-export class LidarDataSource {
+export default class LidarConverter {
   constructor() {
     this.LIDAR_POINTS = '/lidar/points';
     this.previousData = {};

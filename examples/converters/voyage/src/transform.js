@@ -1,7 +1,6 @@
 import {VoyageConverter} from './converters';
 import {XVIZWriter} from '@xviz/builder';
 import {createDir, deleteDirRecursive} from './parsers/common';
-import {XVIZMetadataBuilder} from '@xviz/builder';
 import * as Topics from '~/topics';
 import Bag from './lib/bag';
 

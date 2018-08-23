@@ -8,7 +8,7 @@ const ACTION_DELETE_ALL = 3;
 
 const NAMESPACE_SEPARATOR = '/';
 
-export default class PerceptionMarkersDataSource {
+export default class PerceptionMarkersConverter {
   constructor(namespace, filterNs=null) {
     this.filterNs = filterNs;
     this.POLYLINE_STREAM = [namespace, 'polylines'].join(NAMESPACE_SEPARATOR);
@@ -62,7 +62,7 @@ export default class PerceptionMarkersDataSource {
     // Add a perpendicular-ish point to form a makeshift arrow
     points.push(
       new Vector3(...points[1])
-        .rotateZ({radians: Math.PI / 16, origin: points[0]})
+        .rotateZ({radians: Math.PI / 24, origin: points[0]})
         .toArray()
     );
 

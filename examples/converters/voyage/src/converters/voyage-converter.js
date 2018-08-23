@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
-import {GPSDataSource} from './gps-converter';
-import {LidarDataSource} from './lidar-converter';
-import {TrackletsDataSource} from './tracklets-converter';
-import {RouteDataSource} from './route-converter';
-import PerceptionMarkersDataSource from '~/data-sources/perception-markers-data-source';
+import GPSConverter from './gps-converter';
+import LidarConverter from './lidar-converter';
+import TrackletsConverter from './tracklets-converter';
+import RouteConverter from './route-converter';
+import PerceptionMarkersConverter from './perception-markers-converter';
 
 import {XVIZMetadataBuilder, XVIZBuilder} from '@xviz/builder';
 
@@ -19,15 +19,15 @@ const SPRINGFIELD = {
   altitude: 0
 };
 
-export class VoyageConverter {
+export default class VoyageConverter {
   constructor(disableStreams) {
     this.disableStreams = disableStreams;
     this.converters = [
-      new GPSDataSource(VGCC),
-      new LidarDataSource(),
-      new TrackletsDataSource(),
-      new PerceptionMarkersDataSource('/map-annotations', ['velocity_arrow']),
-      new RouteDataSource()
+      new GPSConverter(VGCC),
+      new LidarConverter(),
+      new TrackletsConverter(),
+      new PerceptionMarkersConverter('/map-annotations', ['velocity_arrow']),
+      new RouteConverter()
     ];
 
     this.xvizMetadataBuilder = this._initMetadataBuilder();

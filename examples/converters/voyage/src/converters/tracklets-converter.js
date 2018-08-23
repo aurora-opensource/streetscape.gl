@@ -1,6 +1,6 @@
 import {TRACKS_LIST} from '~/topics';
 
-export class TrackletsDataSource {
+export default class TrackletsConverter {
   constructor() {
     this.TRACKLETS = '/tracklets/objects';
   }

@@ -1,5 +1,1 @@
-import {VoyageConverter} from './voyage-converter';
-
-module.exports = {
-  VoyageConverter
-};
+export {default as VoyageConverter} from './voyage-converter';

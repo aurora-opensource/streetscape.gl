@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {v4 as uuid} from 'uuid';
 import {ROUTE} from '~/topics';
 
-export class RouteDataSource {
+export default class RouteConverter {
   constructor() {
     this.ROUTE = '/map/route';
   }

@@ -19,7 +19,7 @@ function quaternionToEuler({w, x, y, z}) {
   return ans;
 }
 
-export class GPSDataSource {
+export default class GPSConverter {
   constructor(origin) {
     // XVIZ stream names produced by this converter
     this.VEHICLE_POSE = 'vehicle-pose';
