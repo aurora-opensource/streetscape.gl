@@ -26,7 +26,7 @@ export default class VoyageConverter {
       new GPSConverter(VGCC),
       new LidarConverter(),
       new TrackletsConverter(),
-      new PerceptionMarkersConverter('/map-annotations', ['velocity_arrow']),
+      new PerceptionMarkersConverter('/perception/markers'),
       new RouteConverter()
     ];
 
