@@ -135,7 +135,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       case LOG_STREAM_MESSAGE.TIMESLICE:
         const oldVersion = this.streamBuffer.valueOf();
         this.streamBuffer.insert(message);
-        if (this.streamBuffer.valueOf !== oldVersion) {
+        if (this.streamBuffer.valueOf() !== oldVersion) {
           this.set('streams', this.streamBuffer.getStreams());
         }
         this.emit('update', message);
