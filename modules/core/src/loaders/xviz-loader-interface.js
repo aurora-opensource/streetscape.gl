@@ -21,6 +21,8 @@
 import {getXvizSettings} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
+import createSelector from '../utils/create-selector';
+
 /* eslint-disable callback-return */
 export default class XVIZLoaderInterface {
   constructor(options = {}) {
@@ -28,10 +30,9 @@ export default class XVIZLoaderInterface {
     this._debug = options.debug || (() => {});
     this.callbacks = {};
 
-    // private
-    this.logSynchronizer = null;
-    this.timestamp = null;
-    this.metadata = null;
+    this.listeners = [];
+    this.state = {};
+    this._version = 0;
   }
 
   /* Event types:
@@ -66,6 +67,29 @@ export default class XVIZLoaderInterface {
     }
   }
 
+  subscribe(instance) {
+    this.listeners.push(instance);
+  }
+
+  unsubscribe(instance) {
+    const index = this.listeners.findIndex(o => o === instance);
+    if (index >= 0) {
+      this.listeners.splice(index, 1);
+    }
+  }
+
+  get(key) {
+    return this.state[key];
+  }
+
+  set(key, value) {
+    if (this.state[key] !== value) {
+      this.state[key] = value;
+      this._version++;
+      this.listeners.forEach(o => o(this._version));
+    }
+  }
+
   /* Connection API */
   isOpen() {
     return false;
@@ -76,7 +100,7 @@ export default class XVIZLoaderInterface {
   }
 
   seek(timestamp) {
-    const {metadata} = this;
+    const metadata = this.getMetadata();
 
     if (metadata) {
       const startTime = this.getLogStartTime();
@@ -84,8 +108,7 @@ export default class XVIZLoaderInterface {
       timestamp = clamp(timestamp, startTime, endTime);
     }
 
-    this.timestamp = timestamp;
-    this.emit('update');
+    this.set('timestamp', timestamp);
   }
 
   close() {
@@ -94,41 +117,43 @@ export default class XVIZLoaderInterface {
 
   /* Data selector API */
 
-  getCurrentTime() {
-    return this.timestamp;
-  }
+  getCurrentTime = () => this.get('timestamp');
 
-  getMetadata() {
-    return this.metadata;
-  }
+  getMetadata = () => this.get('metadata');
 
-  getLogStartTime() {
-    const timeWindow = getXvizSettings().TIME_WINDOW;
-    return this.metadata && this.metadata.start_time + timeWindow;
-  }
+  getLogSynchronizer = () => this.get('logSynchronizer');
 
-  getLogEndTime() {
-    return this.metadata && this.metadata.end_time;
-  }
+  getStreams = () => this.get('streams');
+
+  getLogStartTime = createSelector(this, this.getMetadata, metadata => {
+    return metadata && metadata.start_time + getXvizSettings().TIME_WINDOW;
+  });
+
+  getLogEndTime = createSelector(this, this.getMetadata, metadata => {
+    return metadata && metadata.end_time;
+  });
 
   getBufferRange() {
     throw new Error('not implemented');
   }
 
-  getCurrentFrame() {
-    const {logSynchronizer, metadata, timestamp} = this;
-
-    if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
-      logSynchronizer.setTime(timestamp);
-      return logSynchronizer.getCurrentFrame(metadata.streams);
+  getCurrentFrame = createSelector(
+    this,
+    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime, this.getStreams],
+    (logSynchronizer, metadata, timestamp, streams) => {
+      if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
+        logSynchronizer.setTime(timestamp);
+        return logSynchronizer.getCurrentFrame(metadata.streams);
+      }
+      return null;
     }
-    return null;
-  }
+  );
 
   /* Private actions */
   _setMetadata(metadata) {
-    this.metadata = metadata;
-    const newTimestamp = Number.isFinite(this.timestamp) ? this.timestamp : metadata.start_time;
+    this.set('metadata', metadata);
+    const timestamp = this.get('timestamp');
+    const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
     this.seek(newTimestamp);
   }
 }
