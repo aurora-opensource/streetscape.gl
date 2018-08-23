@@ -28,7 +28,7 @@ import {render} from 'react-dom';
 import {XVIZStreamLoader, LogViewer, PlaybackControl, VIEW_MODES} from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
 
-import {SETTINGS, MAP_STYLE, CAR} from './constants';
+import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
 
 import './main.scss';
 
@@ -67,6 +67,7 @@ class Example extends PureComponent {
         <div id="map-view">
           <LogViewer
             log={log}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
             mapStyle={MAP_STYLE}
             car={CAR}
             viewMode={VIEW_MODES[settings.viewMode]}

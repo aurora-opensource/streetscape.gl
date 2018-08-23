@@ -56,6 +56,7 @@ class Core3DViewer extends PureComponent {
   static propTypes = {
     frame: PropTypes.object,
     metadata: PropTypes.object,
+    mapboxApiAccessToken: PropTypes.string,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     car: PropTypes.object,
     viewMode: PropTypes.object
@@ -208,7 +209,7 @@ class Core3DViewer extends PureComponent {
   }
 
   render() {
-    const {mapStyle, viewMode} = this.props;
+    const {mapboxApiAccessToken, mapStyle, viewMode} = this.props;
 
     return (
       <DeckGL
@@ -220,7 +221,10 @@ class Core3DViewer extends PureComponent {
         layerFilter={this._layerFilter}
         onViewStateChange={this._onViewStateChange}
       >
-        <StaticMap mapStyle={mapStyle} visible={!viewMode.firstPerson} />
+        <StaticMap
+          mapboxApiAccessToken={mapboxApiAccessToken}
+          mapStyle={mapStyle}
+          visible={!viewMode.firstPerson} />
       </DeckGL>
     );
   }

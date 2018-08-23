@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+
 export const MAP_STYLE = 'https://d3dt5tsgfu6lcf.cloudfront.net/style/tools/web?mode=light';
 
 // OBJ model width 2073mm, length 4946mm
