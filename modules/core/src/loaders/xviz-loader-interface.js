@@ -137,10 +137,9 @@ export default class XVIZLoaderInterface {
     (logStartTime, logEndTime) => [logStartTime, logEndTime]
   );
 
-  getTimeSeries = createSelector(
-    this,
-    [this.getMetadata, this.getStreams],
-    (metadata, streams) => getTimeSeries({metadata, streams})
+  // TODO add declare ui metadata
+  getTimeSeries = createSelector(this, [this.getMetadata, this.getStreams], (metadata, streams) =>
+    getTimeSeries({metadata, streams})
   );
 
   /* Private actions */
@@ -150,5 +149,4 @@ export default class XVIZLoaderInterface {
     const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
     this.seek(newTimestamp);
   }
-
 }

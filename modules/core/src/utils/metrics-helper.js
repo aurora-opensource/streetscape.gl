@@ -31,39 +31,23 @@ function getTimeSeriesForStream({metadata, streamName, stream}) {
 }
 
 /**
- * Get the time range of a time series
- * @param valueSeries array of time and variable pair
- * @returns {Array | null} [minTime, maxTime]
- */
-export function getTimeRange(valueSeries) {
-  if (valueSeries || valueSeries.length) {
-    const {min, max} = valueSeries.reduce(
-      (acc, value) => {
-        acc.min = Math.min(acc.min, value.time);
-        acc.max = Math.max(acc.max, value.time);
-      },
-      {min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY}
-    );
-
-    return [min, max];
-  }
-
-  return null;
-}
-
-/**
  * Get the time series for given streams
- * @param metadata {object} log metadata
+ * @param logMetadata {object} log metadata
+ * @param uiMetadata {object} declare ui metadata
  * @param streams array of streams data
  * @returns {Array} array of time series data
  */
-export function getTimeSeries({metadata, streams}) {
+export function getTimeSeries({logMetadata = {}, uiMetadata = {}, streams}) {
   const timeSeries = {};
   for (const streamName in streams) {
-    if (streams.hasOwnProperty(streamName)) {
+    // if there is ui configuration for this stream
+    if (streams.hasOwnProperty(streamName) && uiMetadata[streamName]) {
       const stream = streams[streamName];
       const streamTimeSeries = getTimeSeriesForStream({
-        metadata: metadata.streams[streamName],
+        metadata: {
+          ...logMetadata.streams[streamName],
+          ...uiMetadata[streamName]
+        },
         streamName,
         stream
       });

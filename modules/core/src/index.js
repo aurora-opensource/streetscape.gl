@@ -20,7 +20,6 @@ export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
 export {default as LogViewer} from './components/log-viewer';
 export {default as PlaybackControl} from './components/playback-control';
 export {default as PerspectivePopup} from './components/perspective-popup';
-export {default as FloatingMetrics} from './components/floating-metrics';
 
 // Constants
 export * from './constants';
