@@ -18,6 +18,10 @@ import {LogViewer, VIEW_MODES} from 'streetscape.gl';
 
 The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) object.
 
+##### `mapboxApiAccessToken` (String, optional)
+
+A [Mapbox API access token](https://www.mapbox.com).
+
 ##### `mapStyle` (Object|String, optional)
 
 A [Mapbox style](https://www.mapbox.com/mapbox-gl-js/api/#map) to render the base map with.
