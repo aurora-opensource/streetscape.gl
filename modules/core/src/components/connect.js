@@ -10,26 +10,26 @@ export default function connectToLog({getLogState, Component}) {
     };
 
     state = {
-      lastUpdate: 0
+      logVersion: -1
     };
 
     componentDidMount() {
-      this.props.log.on('update', this._update);
+      this.props.log.subscribe(this._update);
     }
 
     componentWillReceiveProps(nextProps) {
       if (this.props.log !== nextProps.log) {
-        this.props.log.off('update', this._update);
-        nextProps.log.on('update', this._update);
+        this.props.log.unsubscribe(this._update);
+        nextProps.log.subscribe(this._update);
       }
     }
 
     componentWillUnmount() {
-      this.props.log.off('update', this._update);
+      this.props.log.subscribe(this._update);
     }
 
-    _update = () => {
-      this.setState({lastUpdate: Date.now()});
+    _update = logVersion => {
+      this.setState({logVersion});
     };
 
     render() {
