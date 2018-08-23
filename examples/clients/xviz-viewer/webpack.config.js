@@ -63,7 +63,10 @@ const CONFIG = {
       webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
     }
   },
-  plugins: [new webpack.HotModuleReplacementPlugin()]
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
+  ]
 };
 
 // This line enables bundling against src in this repo rather than installed module
