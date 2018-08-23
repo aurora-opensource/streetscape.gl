@@ -31,7 +31,6 @@ export class RouteDataSource {
         xvizBuilder
           .stream(this.ROUTE)
           .polyline(points)
-          .classes(['Map'])
           .timestamp(timestamp.toDate().getTime())
           .color([0, 0, 255, 255])
           .id(uuid());
@@ -39,16 +38,14 @@ export class RouteDataSource {
     }
   }
 
-
   getMetadata(xvizMetaBuilder) {
     const xb = xvizMetaBuilder;
     xb.stream(this.ROUTE)
       .coordinate('map_relative')
       .category('primitive')
       .type('polyline')
-      .styleClass('Map', {
-        fillColor: '#FF0000',
-        strokeWidth: 0.2,
+      .styleClassDefault({
+        strokeWidth: 1.2,
         strokeWidthMinPixels: 1
       });
   }
