@@ -1,7 +1,7 @@
 import {getXvizSettings} from '@xviz/parser';
 import {clamp} from 'math.gl';
-import {getTimeSeries} from '../utils/metrics-helper';
 
+import {getTimeSeries} from '../utils/metrics-helper';
 import createSelector from '../utils/create-selector';
 
 /* eslint-disable callback-return */
@@ -107,6 +107,10 @@ export default class XVIZLoaderInterface {
 
   getStreams = () => this.get('streams');
 
+  getBufferRange() {
+    throw new Error('not implemented');
+  }
+
   getLogStartTime = createSelector(this, this.getMetadata, metadata => {
     return metadata && metadata.start_time + getXvizSettings().TIME_WINDOW;
   });
@@ -114,10 +118,6 @@ export default class XVIZLoaderInterface {
   getLogEndTime = createSelector(this, this.getMetadata, metadata => {
     return metadata && metadata.end_time;
   });
-
-  getBufferRange() {
-    throw new Error('not implemented');
-  }
 
   getCurrentFrame = createSelector(
     this,
@@ -131,6 +131,18 @@ export default class XVIZLoaderInterface {
     }
   );
 
+  getTimeDomain = createSelector(
+    this,
+    [this.getLogStartTime, this.getLogEndTime],
+    (logStartTime, logEndTime) => [logStartTime, logEndTime]
+  );
+
+  getTimeSeries = createSelector(
+    this,
+    [this.getMetadata, this.getStreams],
+    (metadata, streams) => getTimeSeries({metadata, streams})
+  );
+
   /* Private actions */
   _setMetadata(metadata) {
     this.set('metadata', metadata);
@@ -139,23 +151,4 @@ export default class XVIZLoaderInterface {
     this.seek(newTimestamp);
   }
 
-  getTimeDomain() {
-    const {metadata} = this;
-    if (metadata) {
-      return [
-        metadata.logStartTime || metadata.start_time,
-        metadata.logEndTime || metadata.end_time
-      ];
-    }
-    return null;
-  }
-
-  getTimeSeries() {
-    const {streamBuffer} = this;
-    if (streamBuffer && streamBuffer.streams) {
-      const streams = streamBuffer.streams;
-      return getTimeSeries(streams);
-    }
-    return null;
-  }
 }

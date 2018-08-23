@@ -1,11 +1,6 @@
-import {getXvizConfig} from '@xviz/parser';
-
 // TODO add documentation and tests
 
-function getTimeSeriesForStream({streamName, stream}) {
-  const {VARIABLE_METADATA} = getXvizConfig();
-  const metadata = VARIABLE_METADATA[streamName];
-
+function getTimeSeriesForStream({metadata, streamName, stream}) {
   // See if we have some metadata for this metric
   if (!metadata || metadata.nograph) {
     return null;
@@ -58,15 +53,20 @@ export function getTimeRange(valueSeries) {
 
 /**
  * Get the time series for given streams
+ * @param metadata {object} log metadata
  * @param streams array of streams data
  * @returns {Array} array of time series data
  */
-export function getTimeSeries(streams) {
+export function getTimeSeries({metadata, streams}) {
   const timeSeries = {};
   for (const streamName in streams) {
     if (streams.hasOwnProperty(streamName)) {
       const stream = streams[streamName];
-      const streamTimeSeries = getTimeSeriesForStream({streamName, stream});
+      const streamTimeSeries = getTimeSeriesForStream({
+        metadata: metadata.streams[streamName],
+        streamName,
+        stream
+      });
       Object.assign(timeSeries, streamTimeSeries);
     }
   }
