@@ -34,6 +34,7 @@
     "promise-retry": "^1.1.1",
     "prop-types": "^15.6.2",
     "react-map-gl": "^3.3.2",
+    "reselect": "^3.0.0",
     "webgl-obj-loader": "^0.1.1"
   },
   "peerDependencies": {

@@ -133,8 +133,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   seek(timestamp) {
     super.seek(timestamp);
 
-    // use clamped timestamp
-    timestamp = this.timestamp;
+    // use clamped/rounded timestamp
+    timestamp = this.getCurrentTime();
 
     const {timestamp: currentTimestamp, duration: currentDuration} = this.requestParams;
 
@@ -242,13 +242,17 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
-        this.logSynchronizer = new StreamSynchronizer(message.start_time, this.streamBuffer);
+        this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
         this._setMetadata(message);
         this.emit('ready', message);
         break;
 
       case LOG_STREAM_MESSAGE.TIMESLICE:
+        const oldVersion = this.streamBuffer.valueOf();
         this.streamBuffer.insert(message);
+        if (this.streamBuffer.valueOf !== oldVersion) {
+          this.set('streams', this.streamBuffer.getStreams());
+        }
         this.emit('update', message);
         break;
 
