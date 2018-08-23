@@ -1,3 +1,5 @@
+export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+
 export const MAP_STYLE = 'mapbox://styles/mapbox/satellite-v9';
 
 // OBJ model width 2073mm, length 4946mm
