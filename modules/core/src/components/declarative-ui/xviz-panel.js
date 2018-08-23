@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import XvizContainer from './xviz-container';
@@ -6,7 +6,7 @@ import XvizMetricComponent from './xviz-metric-component';
 
 // xviz type to component map
 const DEFAULT_COMPONENTS = {
-  container: XvizContainer,
+  container: XvizContainer
   // table
   // tree_table
   metric: XvizMetricComponent
@@ -15,8 +15,8 @@ const DEFAULT_COMPONENTS = {
 };
 
 export default class XvizPanel extends PureComponent {
-
   static propTypes = {
+    log: PropTypes.object,
     components: PropTypes.object
   };
 
@@ -25,7 +25,7 @@ export default class XvizPanel extends PureComponent {
   };
 
   _renderItem = (item, components) => {
-    const { components } = this.props;
+    const {components, log} = this.props;
     const XvizComponent = components[item.type];
 
     if (!XvizComponent) {
@@ -33,17 +33,17 @@ export default class XvizPanel extends PureComponent {
     }
 
     return (
-      <XvizComponent key={item.id} {...item}>
+      <XvizComponent key={item.id} {...item} log={log}>
         {item.children && item.children.map(this._renderItem)}
       </XvizComponent>
     );
-  }
+  };
 
   render() {
-    const { data, style } = this.props;
+    const {data, style} = this.props;
 
     return (
-      <div className="xviz-panel" style={style} >
+      <div className="xviz-panel" style={style}>
         {data.children && data.children.map(this._renderItem)}
       </div>
     );
