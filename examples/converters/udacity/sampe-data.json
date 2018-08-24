@@ -1,0 +1,186 @@
+{
+  "/vehicle/gps/time": {
+    "header": {
+      "seq": 7210,
+      "stamp": {
+        "sec": 1479425842,
+        "nsec": 567362344
+      },
+      "frame_id": ""
+    },
+    "time_ref": {
+      "sec": 1479425842,
+      "nsec": 0
+    },
+    "source": ""
+  },
+  "/vehicle/gps/vel": {
+    "header": {
+      "seq": 7210,
+      "stamp": {
+        "sec": 1479425842,
+        "nsec": 567362344
+      },
+      "frame_id": ""
+    },
+    "twist": {
+      "linear": {
+        "x": 20.40659850076104,
+        "y": -2.5381594068019586,
+        "z": 0
+      },
+      "angular": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    }
+  },
+  "/imu/data": {
+    "header": {
+      "seq": 1745797,
+      "stamp": {
+        "sec": 1479425843,
+        "nsec": 569031000
+      },
+      "frame_id": "/imu"
+    },
+    "orientation": {
+      "x": 0.0011353783225725837,
+      "y": 0.05044455851560143,
+      "z": -0.7871549268671216,
+      "w": 0.6146879161063388
+    },
+    "orientation_covariance": [
+      0.017453292519943295,
+      0,
+      0,
+      0,
+      0.017453292519943295,
+      0,
+      0,
+      0,
+      0.15707963267948966
+    ],
+    "angular_velocity": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "angular_velocity_covariance": [
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1,
+      -1
+    ],
+    "linear_acceleration": {
+      "x": 0.8972901701927185,
+      "y": 0.9379096031188965,
+      "z": 9.09610652923584
+    },
+    "linear_acceleration_covariance": [
+      0.0004,
+      0,
+      0,
+      0,
+      0.0004,
+      0,
+      0,
+      0,
+      0.0004
+    ]
+  },
+  "/vehicle/imu/data_raw": {
+    "header": {
+      "seq": 719419,
+      "stamp": {
+        "sec": 1479425843,
+        "nsec": 565562328
+      },
+      "frame_id": ""
+    },
+    "orientation": {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 0
+    },
+    "orientation_covariance": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "angular_velocity": {
+      "x": 0.003,
+      "y": 0,
+      "z": 0.0956
+    },
+    "angular_velocity_covariance": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "linear_acceleration": {
+      "x": 0.75,
+      "y": 0.75,
+      "z": 9.91
+    },
+    "linear_acceleration_covariance": [
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "/vehicle/gps/fix": {
+    "header": {
+      "seq": 7211,
+      "stamp": {
+        "sec": 1479425843,
+        "nsec": 567388460
+      },
+      "frame_id": ""
+    },
+    "status": {
+      "status": 0,
+      "service": 1
+    },
+    "latitude": 37.492237333333335,
+    "longitude": -122.369728,
+    "altitude": 152.25,
+    "position_covariance": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "position_covariance_type": 0
+  }
+}
