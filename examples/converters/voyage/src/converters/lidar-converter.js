@@ -46,19 +46,18 @@ export default class LidarConverter {
     }
   }
 
-  getMetadata(xvizMetaBuilder) {
-    const xb = xvizMetaBuilder;
-    xb.stream(this.LIDAR_POINTS)
+  getMetadata(xvizMetaBuilder, frameIdToPoseMap) {
+    const streamMetadata = xvizMetaBuilder.stream(this.LIDAR_POINTS)
       .category('primitive')
       .type('point')
       .styleClassDefault({
         fillColor: '#00a',
         radiusPixels: 2
-      })
-      .pose({
-        x: 0,
-        y: 0,
-        z: 1.5
       });
+
+    const pose = (frameIdToPoseMap || {}).velodyne;
+    if (pose) {
+      streamMetadata.pose(pose);
+    }
   }
 }

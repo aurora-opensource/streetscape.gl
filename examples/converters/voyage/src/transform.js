@@ -9,11 +9,15 @@ module.exports = async function main(args) {
 
   deleteDirRecursive(outputDir);
   createDir(outputDir);
-  const converter = new VoyageConverter(disableStreams);
   const bag = new Bag({
     bagPath,
     keyTopic: Topics.CURRENT_POSE,
     topics: Topics.ALL
+  });
+
+  const converter = new VoyageConverter({
+    frameIdToPoseMap: await bag.calculateFrameIdToPoseMap(),
+    disableStreams
   });
 
   console.log(`Converting data at ${bagPath}`); // eslint-disable-line

@@ -21,10 +21,10 @@ const SPRINGFIELD = {
 };
 
 export default class VoyageConverter {
-  constructor(disableStreams) {
+  constructor({frameIdToPoseMap, disableStreams}) {
     this.disableStreams = disableStreams;
     this.converters = [
-      new GPSConverter(VGCC),
+      new GPSConverter(SPRINGFIELD),
       new LidarConverter(),
       new TrackletsConverter(),
       new PerceptionMarkersConverter('/perception/markers'),
@@ -32,7 +32,7 @@ export default class VoyageConverter {
       new RouteConverter()
     ];
 
-    this.xvizMetadataBuilder = this._initMetadataBuilder();
+    this.xvizMetadataBuilder = this._initMetadataBuilder(frameIdToPoseMap);
     this.metadata = this.xvizMetadataBuilder.getMetadata();
   }
 
@@ -51,9 +51,9 @@ export default class VoyageConverter {
     return xvizBuilder.getFrame();
   }
 
-  _initMetadataBuilder() {
+  _initMetadataBuilder(frameIdToPoseMap) {
     const xvizMetadataBuilder = new XVIZMetadataBuilder();
-    this.converters.forEach(c => c.getMetadata(xvizMetadataBuilder));
+    this.converters.forEach(c => c.getMetadata(xvizMetadataBuilder, frameIdToPoseMap));
 
     return xvizMetadataBuilder;
   }
