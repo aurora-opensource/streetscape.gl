@@ -7,6 +7,9 @@ const ACTION_DELETE_ALL = 3;
 
 const NAMESPACE_SEPARATOR = '/';
 
+/**
+ * Handles converting MarkerArray messages
+ */
 export default class MarkerArrayConverter {
   constructor({
     topic, /* Topic to convert */
@@ -15,6 +18,7 @@ export default class MarkerArrayConverter {
   }={}) {
     this.topic = topic;
     this.POLYLINE_STREAM = [xvizNamespace, 'polylines'].join(NAMESPACE_SEPARATOR);
+    this.POLYGON_STREAM = [xvizNamespace, 'polygon'].join(NAMESPACE_SEPARATOR);
     this.acceptMarker = acceptMarker || (() => true);
     this.markersMap = {};
   }
@@ -40,6 +44,15 @@ export default class MarkerArrayConverter {
         fillColor: '#ff0000',
         strokeWidth: 0.2,
         strokeWidthMinPixels: 1
+      })
+
+      .stream(this.POLYGON_STREAM)
+      .coordinate('map_relative')
+      .category('primitive')
+      .type('polygon')
+      .styleClassDefault({
+        extruded: true,
+        height: 0.2
       });
   }
 
@@ -49,6 +62,7 @@ export default class MarkerArrayConverter {
 
     const WRITERS = {
       '0': this._writeArrow,
+      '2': this._writeSphere,
       '4': this._writeLineStrip,
       '5': this._writeLineList
     }
@@ -72,15 +86,31 @@ export default class MarkerArrayConverter {
 
     xvizBuilder
       .stream(this.POLYLINE_STREAM)
-      .color(this._toColor(marker.color))
+      .color(this._toColor(marker))
       .polyline(points)
+      .id(this._getMarkerId(marker));
+  };
+
+  _writeSphere = (marker, xvizBuilder) => {
+    const RADIUS = marker.scale.x / 2;
+    const points = this._mapPoints([
+      {x: -RADIUS, y: -RADIUS, z: 0},
+      {x: RADIUS, y: -RADIUS, z: 0},
+      {x: RADIUS, y: RADIUS, z: 0},
+      {x: -RADIUS, y: RADIUS, z: 0},
+    ], marker.pose);
+
+    xvizBuilder
+      .stream(this.POLYGON_STREAM)
+      .polygon(points)
+      .color(this._toColor(marker))
       .id(this._getMarkerId(marker));
   };
 
   _writeLineStrip = (marker, xvizBuilder) => {
     xvizBuilder
       .stream(this.POLYLINE_STREAM)
-      .color(this._toColor(marker.color))
+      .color(this._toColor(marker))
       .polyline(this._mapPoints(marker.points, marker.pose))
       .id(this._getMarkerId(marker));
   };
@@ -90,14 +120,19 @@ export default class MarkerArrayConverter {
     lines.forEach((line, index) => {
       xvizBuilder
       .stream(this.POLYLINE_STREAM)
-      .color(this._toColor(marker.color))
+      .color(this._toColor(marker))
       .polyline(this._mapPoints(line, marker.pose))
       .id([this._getMarkerId(marker), index].join(NAMESPACE_SEPARATOR));
     });
   };
 
-  _toColor(color) {
-    return [color.r, color.g, color.b, color.a].map((v) => Math.round(v * 255));
+  _toColor(marker) {
+    const color = marker.color || (marker.colors || [])[0];
+    if (color) {
+      return [color.r, color.g, color.b, color.a].map((v) => Math.round(v * 255));
+    }
+
+    return [128, 128, 128, 255]; // default color
   }
 
   _mapPoints(points, pose) {

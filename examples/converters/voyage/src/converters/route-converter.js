@@ -45,7 +45,7 @@ export default class RouteConverter {
       .category('primitive')
       .type('polyline')
       .styleClassDefault({
-        strokeWidth: 1.2,
+        strokeWidth: 0.2,
         strokeWidthMinPixels: 1
       });
   }

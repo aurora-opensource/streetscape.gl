@@ -4,6 +4,7 @@ import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
 import RouteConverter from './route-converter';
 import PerceptionMarkersConverter from './perception-markers-converter';
+import TrajectoryCircleConverter from './trajectory-circle-converter';
 
 import {XVIZMetadataBuilder, XVIZBuilder} from '@xviz/builder';
 
@@ -27,6 +28,7 @@ export default class VoyageConverter {
       new LidarConverter(),
       new TrackletsConverter(),
       new PerceptionMarkersConverter('/perception/markers'),
+      new TrajectoryCircleConverter('/trajectory-circle/markers'),
       new RouteConverter()
     ];
 
