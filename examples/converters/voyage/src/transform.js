@@ -7,7 +7,12 @@ import Bag from './lib/bag';
 module.exports = async function main(args) {
   const {bag: bagPath, outputDir, disableStreams, frameLimit} = args;
 
-  deleteDirRecursive(outputDir);
+  try {
+    deleteDirRecursive(outputDir);
+  }
+  catch (err) {
+    // ignore
+  }
   createDir(outputDir);
   const bag = new Bag({
     bagPath,

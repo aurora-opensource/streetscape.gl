@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "argparse": "^1.0.10",
+    "query-string": "^6.1.0",
     "ws": "^5.2.1"
   }
 }

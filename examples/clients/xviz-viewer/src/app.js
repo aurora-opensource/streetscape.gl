@@ -8,6 +8,8 @@ import {render} from 'react-dom';
 import {XVIZStreamLoader, LogViewer, PlaybackControl, VIEW_MODES} from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
 
+import qs from 'query-string';
+
 import {SETTINGS, MAP_STYLE, CAR} from './constants';
 
 import './main.scss';
@@ -15,7 +17,7 @@ import './main.scss';
 class Example extends PureComponent {
   state = {
     log: new XVIZStreamLoader({
-      logGuid: 'mock',
+      logGuid: this.props.logGuid,
       serverConfig: {
         defaultLogLength: 30000,
         serverUrl: 'ws://localhost:8081',
@@ -69,5 +71,5 @@ class Example extends PureComponent {
 
 const root = document.createElement('div');
 document.body.appendChild(root);
-
-render(<Example />, root);
+const {log} = qs.parse(window.location.search);
+render(<Example logGuid={log}/>, root);

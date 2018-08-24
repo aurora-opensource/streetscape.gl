@@ -4,6 +4,7 @@ const fs = require('fs');
 const WebSocket = require('ws');
 const path = require('path');
 const process = require('process');
+const qs = require('query-string');
 
 const {delta_time_ms, extract_zip_from_file} = require('./serve');
 
@@ -49,7 +50,6 @@ function setupFrameData(data_directory) {
   const frameNames = getFrameName(START_INDEX);
 
   const hasData = frameNames.some(name => {
-    console.log('exists ', path.join(data_directory, name));
     return fs.existsSync(path.join(data_directory, name));
   });
   console.log(' hasData ', hasData);
@@ -286,10 +286,23 @@ class ConnectionContext {
 
 // Comms handling
 
-function setupWebSocketHandling(wss, settings, frames) {
+function setupWebSocketHandling(wss, settings) {
   // Setups initial connection state
-  wss.on('connection', ws => {
-    const context = new ConnectionContext(settings, frames);
+  wss.on('connection', (ws, req) => {
+    const query = qs.parse(req.url.slice(req.url.indexOf('?')));
+    const dataDirectory = path.join(settings.data_directory, query.log);
+    console.log(`Loading frames from ${path.join(dataDirectory, `*${FRAME_DATA_SUFFIX}`)}`);
+    const frames = loadFrames(dataDirectory);
+
+    if (frames.length === 0) {
+      console.error('No frames were found in', dataDirectory);
+    }
+    console.log(`Loaded ${frames.length} frames`);
+
+    const context = new ConnectionContext({
+      ...settings,
+      frame_limit: frames.length
+    }, frames);
     context.onConnection(ws);
   });
 }
@@ -297,21 +310,12 @@ function setupWebSocketHandling(wss, settings, frames) {
 // Main
 
 module.exports = function main(args) {
-  console.log(`Loading frames from ${path.join(args.data_directory, `*${FRAME_DATA_SUFFIX}`)}`);
-  const frames = loadFrames(args.data_directory);
-
-  if (frames.length === 0) {
-    console.error('No frames where loaded, exiting.');
-    process.exit(1);
-  }
-  console.log(`Loaded ${frames.length} frames`);
-
   const settings = {
+    data_directory: args.data_directory,
     send_interval: args.delay,
-    skip_images: args.skip_images,
-    frame_limit: args.frame_limit || frames.length
+    skip_images: args.skip_images
   };
 
   const wss = new WebSocket.Server({port: args.port});
-  setupWebSocketHandling(wss, settings, frames);
+  setupWebSocketHandling(wss, settings);
 };
