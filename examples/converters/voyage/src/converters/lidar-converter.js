@@ -1,7 +1,32 @@
+import _ from 'lodash';
 import {v4 as uuid} from 'uuid';
 import {encodeBinaryXVIZ} from '@xviz/builder';
 import {parseBinaryXVIZ} from '@xviz/parser';
 import {loadProcessedLidarData} from '~/parsers/parse-lidar-points';
+
+/**
+ * This just does a very basic random downsampling based on the ratio of
+ * maxPointsCount and actual points in the point cloud. As such, it is not guaranteed
+ * to exactly cap at maxPointsCount.
+ */
+function downSamplePoints(points, maxPointsCount) {
+  if (points.length <= maxPointsCount) {
+    return points;
+  }
+
+  const chunkSize = 3;
+  const sampleRate = maxPointsCount / points.length;
+  const ret = [];
+  for (let i = 0; i < points.length/chunkSize; i++) {
+    if (Math.random() < sampleRate) {
+      for (let j = 0; j < chunkSize; j++) {
+        ret.push(points[i*chunkSize + j]);
+      }
+    }
+  }
+
+  return Float32Array.from(ret);
+}
 
 // load file
 export default class LidarConverter {
@@ -37,9 +62,10 @@ export default class LidarConverter {
       const tmp_obj = {vertices: positions};
       const bin_tmp_obj = encodeBinaryXVIZ(tmp_obj, {flattenArrays: true});
       const bin_xviz_lidar = parseBinaryXVIZ(bin_tmp_obj);
+
       xvizBuilder
         .stream(this.LIDAR_POINTS)
-        .points(bin_xviz_lidar.vertices)
+        .points(downSamplePoints(bin_xviz_lidar.vertices, 50000))
         .timestamp(timestamp.toDate().getTime())
         .id(uuid())
         .color(color);
