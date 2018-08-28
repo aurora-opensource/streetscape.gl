@@ -53,7 +53,10 @@ export class KittiConverter {
     // The XVIZBuilder provides a fluent-API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
-    const xvizBuilder = new XVIZBuilder(this.metadata, this.disableStreams, {});
+    const xvizBuilder = new XVIZBuilder({
+      metadata: this.metadata,
+      disableStreams: this.disableStreams
+    });
 
     this.converters.forEach(c => c.convertFrame(i, xvizBuilder));
 
