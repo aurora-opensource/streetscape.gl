@@ -1,12 +1,15 @@
 data
 dist
 
+*.glb
+
 node_modules
 .reify-cache
 */**/yarn.lock
 package-lock.json
 yarn-error.log
 npm-debug.log
+
 
 /*.log*
 /.sass-cache

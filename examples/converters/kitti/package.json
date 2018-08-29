@@ -19,12 +19,13 @@
     "xml2json": "^0.11.2"
   },
   "devDependencies": {
-    "reify": "^0.16.4",
     "@babel/cli": "^7.0.0-beta",
     "@babel/core": "^7.0.0-beta",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta",
     "@babel/preset-env": "^7.0.0-beta",
     "@babel/preset-react": "^7.0.0-beta",
-    "@babel/register": "^7.0.0-beta"
+    "@babel/register": "^7.0.0-beta",
+    "loaders.gl": "^0.3.4",
+    "reify": "^0.16.4"
   }
 }
