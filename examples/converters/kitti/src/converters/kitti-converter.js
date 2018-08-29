@@ -2,9 +2,9 @@ const path = require('path');
 
 const {getTimestamps, createDir} = require('../parsers/common');
 
-import {GPSDataSource} from './gps-converter';
-import {LidarDataSource} from './lidar-converter';
-import {TrackletsDataSource} from './tracklets-converter';
+import GPSDataSource from './gps-converter';
+import LidarDataSource from './lidar-converter';
+import TrackletsDataSource from './tracklets-converter';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
@@ -31,14 +31,16 @@ export class KittiConverter {
     // These are the converters for the various data sources.
     // Notice that some data sources are passed to others when a data dependency
     // requires coordination with another data source.
-    this.gps_ds = new GPSDataSource(this.inputDir);
-    this.lidar_ds = new LidarDataSource(this.inputDir);
-    this.tracklet_ds = new TrackletsDataSource(this.inputDir, i => this.gps_ds.getPose(i));
+    const gpsDataSource = new GPSDataSource(this.inputDir);
 
     // Note: order is important due to data deps on the pose
-    this.converters = [this.gps_ds, this.lidar_ds, this.tracklet_ds];
+    this.converters = [
+      gpsDataSource,
+      new TrackletsDataSource(this.inputDir, i => gpsDataSource.getPose(i)),
+      new LidarDataSource(this.inputDir)
+    ];
 
-    this.converters.forEach(c => c.load());
+    this.converters.forEach(converter => converter.load());
 
     this.metadata = this.getMetadata();
   }
@@ -47,10 +49,8 @@ export class KittiConverter {
     return this.numFrames;
   }
 
-  convertFrame(frame_number) {
-    const i = frame_number;
-
-    // The XVIZBuilder provides a fluent-API to construct objects.
+  convertFrame(frameNumber) {
+    // The XVIZBuilder provides a fluent API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
     const xvizBuilder = new XVIZBuilder({
@@ -58,13 +58,13 @@ export class KittiConverter {
       disableStreams: this.disableStreams
     });
 
-    this.converters.forEach(c => c.convertFrame(i, xvizBuilder));
+    this.converters.forEach(converter => converter.convertFrame(frameNumber, xvizBuilder));
 
     return xvizBuilder.getFrame();
   }
 
   getMetadata() {
-    // The XVIZMetadataBuilder provides a fluent-API to collect
+    // The XVIZMetadataBuilder provides a fluent API to collect
     // metadata about the XVIZ streams produced during conversion.
     //
     // This include type, category, and styling information.
@@ -73,7 +73,7 @@ export class KittiConverter {
     const xb = new XVIZMetadataBuilder();
     xb.startTime(this.timestamps[0]).endTime(this.timestamps[this.timestamps.length - 1]);
 
-    this.converters.forEach(c => c.getMetadata(xb));
+    this.converters.forEach(converter => converter.getMetadata(xb));
 
     return xb.getMetadata();
   }

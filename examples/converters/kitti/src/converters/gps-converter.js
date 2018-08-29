@@ -5,7 +5,7 @@ import {generateTrajectoryFrame, getPoseOffset} from './common';
 import {getTimestamps} from '../parsers/common';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
 
-export class GPSDataSource {
+export default class GPSConverter {
   constructor(directory) {
     this.root_dir = directory;
     this.gps_dir = path.join(directory, 'oxts', 'data');
@@ -30,12 +30,12 @@ export class GPSDataSource {
     });
   }
 
-  getPose(frame_number) {
-    return this.poses[frame_number].pose;
+  getPose(frameNumber) {
+    return this.poses[frameNumber].pose;
   }
 
-  convertFrame(frame_number, xvizBuilder) {
-    const i = frame_number;
+  convertFrame(frameNumber, xvizBuilder) {
+    const i = frameNumber;
     const entry = this.poses[i];
     const pose = entry.pose;
     console.log(`processing gps data frame ${i}/${this.timestamps.length}`); // eslint-disable-line
