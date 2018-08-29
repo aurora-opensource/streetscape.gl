@@ -10,7 +10,7 @@ import {getTimestamps} from '../parsers/common';
 import {loadLidarData} from '../parsers/parse-lidar-points';
 
 // load file
-export class LidarDataSource {
+export default class LidarConverter {
   constructor(directory) {
     this.root_dir = directory;
     this.lidar_dir = path.join(directory, 'velodyne_points');
@@ -28,8 +28,8 @@ export class LidarDataSource {
     this.lidar_files = fs.readdirSync(this.lidar_data_dir).sort();
   }
 
-  convertFrame(frame_number, xvizBuilder) {
-    const i = frame_number;
+  convertFrame(frameNumber, xvizBuilder) {
+    const i = frameNumber;
     const fileName = this.lidar_files[i];
     const srcFilePath = path.join(this.lidar_data_dir, fileName);
     const lidar_contents = fs.readFileSync(srcFilePath);
