@@ -9,19 +9,22 @@ export default class ImageConverter extends BaseConverter {
   }
 
   convertFrame(frameNumber, xvizBuilder) {
-    const {timestamp} = this.loadFrame(frameNumber);
-    // const {data, timestamp} = this.loadFrame(frameNumber);
+    const {data, timestamp} = this.loadFrame(frameNumber);
 
     xvizBuilder
-      .stream(this.streamName)
-      // .image(data)
+      .image(this.streamName, nodeBufferToTypedArray(data))
       .timestamp(timestamp);
   }
 
   getMetadata(xvizMetaBuilder) {
     xvizMetaBuilder
-      .stream(this.streamName)
-      .category('image')
+      // .camera(this.streamName, {})
       .type('image');
   }
+}
+
+function nodeBufferToTypedArray(buffer) {
+  // TODO - per docs we should just be able to call buffer.buffer, but there are issues
+  const typedArray = new Uint8Array(buffer);
+  return typedArray;
 }
