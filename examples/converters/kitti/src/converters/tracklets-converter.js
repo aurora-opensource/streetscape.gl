@@ -28,7 +28,7 @@ import {generateTrajectoryFrame} from './common';
 
 import {loadTracklets} from '../parsers/parse-tracklets';
 
-export class TrackletsDataSource {
+export default class TrackletsConverter {
   constructor(directory, getPose) {
     this.root_dir = directory;
     this.tracklet_file = path.join(directory, 'tracklet_labels.xml');
@@ -72,8 +72,8 @@ export class TrackletsDataSource {
     }
   }
 
-  convertFrame(frame_number, xvizBuilder) {
-    const i = frame_number;
+  convertFrame(frameNumber, xvizBuilder) {
+    const i = frameNumber;
     if (i < this.frame_start || i >= this.frame_limit) {
       return;
     }
