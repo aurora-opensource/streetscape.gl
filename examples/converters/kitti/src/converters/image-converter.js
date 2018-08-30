@@ -4,11 +4,10 @@ const path = require('path');
 import {getTimestamps, toArrayBuffer} from '../parsers/common';
 
 function loadImageData(filePath) {
-  const image_buf = fs.readFileSync(filePath);
-  return toArrayBuffer(image_buf);
+  const buf = fs.readFileSync(filePath);
+  return toArrayBuffer(buf);
 }
 
-// load file
 export class ImageDataSource {
   constructor(directory) {
     this.root_dir = directory;
@@ -17,7 +16,7 @@ export class ImageDataSource {
     this.image_data_dirs = [];
     this.timestamps = {};
 
-    this.CAMERAS = {
+    this.IMAGE_STREAMS = {
       '/image/00': {
         dir: 'image_00'
       },
@@ -33,52 +32,51 @@ export class ImageDataSource {
     };
   }
 
+  // load file
   load() {
-    const cameras = Object.keys(this.CAMERAS);
-    cameras.forEach(cameraName => {
-      const camera = this.CAMERAS[cameraName];
-      const timeFilePath = path.join(this.root_dir, camera.dir, 'timestamps.txt');
+    const streams = Object.keys(this.IMAGE_STREAMS);
+    streams.forEach(streamName => {
+      const stream = this.IMAGE_STREAMS[streamName];
+      const timeFilePath = path.join(this.root_dir, stream.dir, 'timestamps.txt');
       // TODO load start and end timestamps if necessary
-      this.timestamps[camera] = getTimestamps(timeFilePath);
+      this.timestamps[streamName] = getTimestamps(timeFilePath);
 
-      const image_data_dir = path.join(this.root_dir, camera.dir, 'data');
-      this.image_data_dirs[cameraName] = image_data_dir;
-      this.image_files[cameraName] = fs.readdirSync(image_data_dir).sort();
+      const image_data_dir = path.join(this.root_dir, stream.dir, 'data');
+      this.image_data_dirs[streamName] = image_data_dir;
+      this.image_files[streamName] = fs.readdirSync(image_data_dir).sort();
     });
   }
 
   convertFrame(frame_number, xvizBuilder) {
     const i = frame_number;
-    const cameras = Object.keys(this.CAMERAS);
-    cameras.forEach(cameraName => {
-      const camera = this.CAMERAS[cameraName];
-
-      const dataDir = this.image_data_dirs[cameraName];
-      const imageFiles = this.image_files[cameraName];
+    const streams = Object.keys(this.IMAGE_STREAMS);
+    streams.forEach(streamName => {
+      const dataDir = this.image_data_dirs[streamName];
+      const imageFiles = this.image_files[streamName];
       const srcFilePath = path.resolve(dataDir, imageFiles[frame_number]);
 
       const image_data = loadImageData(srcFilePath);
 
-      const tmp_obj = {
-        height: 375,
-        width: 1042,
-        format: 'png',
-        data: image_data
-      };
-
-      xvizBuilder.image(cameraName, tmp_obj).timestamp(this.timestamps[camera][i]);
+      xvizBuilder
+        .stream(streamName)
+        .image({
+          heightPixel: 375,
+          widthPixel: 1042,
+          format: 'png',
+          data: image_data
+        })
+        .timestamp(this.timestamps[streamName][i]);
     });
   }
 
   getMetadata(xvizMetaBuilder) {
     const xb = xvizMetaBuilder;
 
-    Object.keys(this.CAMERAS).forEach(cameraName =>
-      xb.camera(cameraName, {
-        height: 375,
-        width: 1042,
-        format: 'png'
-      })
+    Object.keys(this.IMAGE_STREAMS).forEach(streamName =>
+      xb
+        .stream(streamName)
+        .category('primitive')
+        .type('image')
     );
   }
 }
