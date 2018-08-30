@@ -39,7 +39,7 @@ export class KittiConverter {
     // this.image_ds = new ImageDataSource(this.inputDir);
 
     // Note: order is important due to data deps on the pose
-    this.converters = [this.gps_ds, this.tracklet_ds, this.lidar_ds];
+    this.converters = [this.gps_ds, this.lidar_ds, this.tracklet_ds];
 
     this.converters.forEach(c => c.load());
 
