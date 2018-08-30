@@ -262,6 +262,7 @@ export default class XvizLayer extends CompositeLayer {
             ...layerProps,
             id: 'scatterplot',
             data,
+            // `vertices` is used xviz V1 and `center` is used by xviz V2
             getPosition: f => f.vertices || f.center,
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}

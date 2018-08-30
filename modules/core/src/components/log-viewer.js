@@ -144,7 +144,8 @@ class Core3DViewer extends PureComponent {
               style: styleParser.getStylesheet(streamName),
               objectStates: {},
 
-              // Hack: draw extruded polygons last to defeat depth test
+              // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
+              // This is not used by deck.gl, only used in this function to sort the layers
               zIndex: streamMetadata.type === 'polygon' ? 2 : 0,
 
               // Selection props (app defined, not used by deck.gl)
