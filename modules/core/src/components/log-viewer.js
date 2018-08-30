@@ -224,7 +224,8 @@ class Core3DViewer extends PureComponent {
         <StaticMap
           mapboxApiAccessToken={mapboxApiAccessToken}
           mapStyle={mapStyle}
-          visible={!viewMode.firstPerson} />
+          visible={!viewMode.firstPerson}
+        />
       </DeckGL>
     );
   }
