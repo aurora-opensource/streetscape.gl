@@ -614,9 +614,9 @@
     seer "^0.2.4"
     viewport-mercator-project "^5.2.0"
 
-"@deck.gl/experimental-layers@^6.0.0":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@deck.gl/experimental-layers/-/experimental-layers-6.0.3.tgz#f7e771be253934f81f016ba6ad05aa8308dbbbfc"
+"@deck.gl/experimental-layers@^6.0.4":
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/@deck.gl/experimental-layers/-/experimental-layers-6.0.4.tgz#e093b67e930435eb7f4615bb118091cb55eff254"
   dependencies:
     "@deck.gl/core" "^6.0.3"
     "@deck.gl/layers" "^6.0.3"

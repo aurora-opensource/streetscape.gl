@@ -121,7 +121,7 @@ class Core3DViewer extends PureComponent {
           data: CAR_DATA,
           getPosition: d => d,
           getColor: d => [160, 160, 160],
-          getYaw: d => -heading,
+          getYaw: d => heading,
           lightSettings: {},
           updateTriggers: {
             getYaw: heading
@@ -181,7 +181,7 @@ class Core3DViewer extends PureComponent {
       ? {
           longitude: frame.trackPosition[0],
           latitude: frame.trackPosition[1],
-          bearing: 90 - frame.heading
+          bearing: frame.heading
         }
       : null;
 
