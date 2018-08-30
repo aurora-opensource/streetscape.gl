@@ -34,8 +34,18 @@ export class TrackletsDataSource {
     this.tracklet_file = path.join(directory, 'tracklet_labels.xml');
     this.getPose = getPose;
 
+    // laser scanner relative to GPS position
+    // http://www.cvlibs.net/datasets/kitti/setup.php
+    this.FIXTURE_TRANSFORM_POSE = {
+      x: 0.81,
+      y: -0.32,
+      z: 1.73
+    };
+
     this.TRACKLETS = '/tracklets/objects';
     this.TRACKLETS_TRAJECTORY = '/tracklets/trajectory';
+    this.TRACKLETS_TRACKING_POINT = '/tracklets/tracking_point';
+    this.TRACKLETS_LABEL = '/tracklets/label';
   }
 
   load() {
@@ -77,7 +87,16 @@ export class TrackletsDataSource {
         .stream(this.TRACKLETS)
         .polygon(tracklet.vertices)
         .classes([tracklet.objectType])
-        .id(tracklet.id);
+        .id(tracklet.id)
+
+        .stream(this.TRACKLETS_TRACKING_POINT)
+        .circle([tracklet.x, tracklet.y, tracklet.z])
+        .id(tracklet.id)
+
+        .stream(this.TRACKLETS_LABEL)
+        // float above the object
+        .position([tracklet.x, tracklet.y, tracklet.z + 2])
+        .text(tracklet.id.slice(24));
     });
 
     for (let object_id = 0; object_id < this.data.objects.length; object_id++) {
@@ -136,13 +155,25 @@ export class TrackletsDataSource {
         fillColor: '#D6A00080',
         strokeColor: '#D6A000'
       })
-      // laser scanner relative to GPS position
-      // http://www.cvlibs.net/datasets/kitti/setup.php
-      .pose({
-        x: 0.81,
-        y: -0.32,
-        z: 1.73
+      .pose(this.FIXTURE_TRANSFORM_POSE)
+
+      .stream(this.TRACKLETS_TRACKING_POINT)
+      .category('primitive')
+      .type('circle')
+      .styleClassDefault({
+        radius: 0.2,
+        fillColor: '#FFFF00'
       })
+      .pose(this.FIXTURE_TRANSFORM_POSE)
+
+      .stream(this.TRACKLETS_LABEL)
+      .category('primitive')
+      .type('text')
+      .styleClassDefault({
+        size: 18,
+        fillColor: '#0040E0'
+      })
+      .pose(this.FIXTURE_TRANSFORM_POSE)
 
       .stream(this.TRACKLETS_TRAJECTORY)
       .category('primitive')
@@ -152,13 +183,7 @@ export class TrackletsDataSource {
         strokeWidth: 0.3,
         strokeWidthMinPixels: 1
       })
-      // laser scanner relative to GPS position
-      // http://www.cvlibs.net/datasets/kitti/setup.php
-      .pose({
-        x: 0.81,
-        y: -0.32,
-        z: 1.73
-      });
+      .pose(this.FIXTURE_TRANSFORM_POSE);
   }
 
   _convertFrame(frame_index) {

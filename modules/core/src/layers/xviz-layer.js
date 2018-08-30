@@ -19,7 +19,13 @@
 // THE SOFTWARE.
 
 import {CompositeLayer} from '@deck.gl/core';
-import {PointCloudLayer, ScatterplotLayer, PathLayer, PolygonLayer} from '@deck.gl/layers';
+import {
+  PointCloudLayer,
+  ScatterplotLayer,
+  PathLayer,
+  PolygonLayer,
+  TextLayer
+} from '@deck.gl/layers';
 // TODO/ib - Uncomment to enable binary/flat polygon arrays
 // import PathLayer from './binary-path-layer/binary-path-layer';
 // import PolygonLayer from './binary-polygon-layer/binary-polygon-layer';
@@ -42,7 +48,8 @@ const XVIZ_TO_LAYER_TYPE = {
   point: 'pointcloud',
   circle: 'scatterplot',
   polyline: 'path',
-  polygon: 'polygon'
+  polygon: 'polygon',
+  text: 'text'
 };
 
 const STYLE_TO_LAYER_PROP = {
@@ -75,6 +82,14 @@ const STYLE_TO_LAYER_PROP = {
     strokeWidth: 'getLineWidth',
     fillColor: 'getFillColor',
     height: 'getElevation'
+  },
+  text: {
+    opacity: 'opacity',
+    fillColor: 'getColor',
+    size: 'getSize',
+    angle: 'getAngle',
+    textAnchor: 'getTextAnchor',
+    alignmentBaseline: 'getAlignmentBaseline'
   }
 };
 
@@ -222,7 +237,7 @@ export default class XvizLayer extends CompositeLayer {
       const dataType = data.length > 0 && data[0].type;
       type = XVIZ_TO_LAYER_TYPE[dataType];
 
-      if (type === 'scatterplot' && Array.isArray(data[0].vertices[0])) {
+      if (type === 'scatterplot' && data[0].vertices && Array.isArray(data[0].vertices[0])) {
         // is multi point
         data = data.reduce((arr, multiPoints) => {
           multiPoints.vertices.forEach(pt => {
@@ -267,7 +282,8 @@ export default class XvizLayer extends CompositeLayer {
             ...layerProps,
             id: 'scatterplot',
             data,
-            getPosition: f => f.vertices,
+            // `vertices` is used xviz V1 and `center` is used by xviz V2
+            getPosition: f => f.vertices || f.center,
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })
@@ -317,6 +333,20 @@ export default class XvizLayer extends CompositeLayer {
 
         return new PolygonLayer(props);
       }
+
+      case 'text':
+        return new TextLayer(
+          this.getSubLayerProps({
+            ...forwardProps,
+            ...layerProps,
+            id: 'text',
+            data,
+            getText: f => f.text,
+            updateTriggers: deepExtend(updateTriggers, {
+              getColor: {useSemanticColor: this.props.useSemanticColor}
+            })
+          })
+        );
 
       default:
         return null;
