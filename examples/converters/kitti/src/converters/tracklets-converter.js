@@ -60,17 +60,6 @@ export class TrackletsDataSource {
 
     const tracklets = this.tracklet_frames.get(i);
     tracklets.forEach(tracklet => {
-      const vertexCount = tracklet.vertices.length;
-      const centroid = tracklet.vertices.reduce(
-        (c, p) => {
-          c[0] += p[0] / vertexCount;
-          c[1] += p[1] / vertexCount;
-          c[2] += p[2] / vertexCount;
-          return c;
-        },
-        [0, 0, 0]
-      );
-
       // Here you can see how the *classes* are used to tag the object
       // allowing for the *style* information to be shared across
       // categories of objects.
@@ -81,11 +70,12 @@ export class TrackletsDataSource {
         .id(tracklet.id)
 
         .stream(this.TRACKLETS_TRACKING_POINT)
-        .circle(centroid)
+        .circle([tracklet.x, tracklet.y, tracklet.z])
         .id(tracklet.id)
 
         .stream(this.TRACKLETS_LABEL)
-        .position(centroid)
+        // float above the object
+        .position([tracklet.x, tracklet.y, tracklet.z + 2])
         .text(tracklet.id.slice(24));
     });
 
@@ -163,10 +153,7 @@ export class TrackletsDataSource {
         size: 18,
         fillColor: '#0040E0'
       })
-      .pose({
-        ...this.TRANSFORM,
-        z: this.TRANSFORM.z + 2
-      })
+      .pose(this.TRANSFORM)
 
       .stream(this.TRACKLETS_TRAJECTORY)
       .category('primitive')
