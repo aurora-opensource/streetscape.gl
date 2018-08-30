@@ -14,8 +14,18 @@ export class TrackletsDataSource {
     this.tracklet_file = path.join(directory, 'tracklet_labels.xml');
     this.getPose = getPose;
 
+    // laser scanner relative to GPS position
+    // http://www.cvlibs.net/datasets/kitti/setup.php
+    this.TRANSFORM = {
+      x: 0.81,
+      y: -0.32,
+      z: 1.73
+    };
+
     this.TRACKLETS = '/tracklets/objects';
     this.TRACKLETS_TRAJECTORY = '/tracklets/trajectory';
+    this.TRACKLETS_TRACKING_POINT = '/tracklets/tracking_point';
+    this.TRACKLETS_LABEL = '/tracklets/label';
   }
 
   load() {
@@ -50,6 +60,17 @@ export class TrackletsDataSource {
 
     const tracklets = this.tracklet_frames.get(i);
     tracklets.forEach(tracklet => {
+      const vertexCount = tracklet.vertices.length;
+      const centroid = tracklet.vertices.reduce(
+        (c, p) => {
+          c[0] += p[0] / vertexCount;
+          c[1] += p[1] / vertexCount;
+          c[2] += p[2] / vertexCount;
+          return c;
+        },
+        [0, 0, 0]
+      );
+
       // Here you can see how the *classes* are used to tag the object
       // allowing for the *style* information to be shared across
       // categories of objects.
@@ -57,7 +78,15 @@ export class TrackletsDataSource {
         .stream(this.TRACKLETS)
         .polygon(tracklet.vertices)
         .classes([tracklet.objectType])
-        .id(tracklet.id);
+        .id(tracklet.id)
+
+        .stream(this.TRACKLETS_TRACKING_POINT)
+        .circle(centroid)
+        .id(tracklet.id)
+
+        .stream(this.TRACKLETS_LABEL)
+        .position(centroid)
+        .text(tracklet.id.slice(24));
     });
 
     for (let object_id = 0; object_id < this.data.objects.length; object_id++) {
@@ -116,12 +145,27 @@ export class TrackletsDataSource {
         fillColor: '#D6A00080',
         strokeColor: '#D6A000'
       })
-      // laser scanner relative to GPS position
-      // http://www.cvlibs.net/datasets/kitti/setup.php
+      .pose(this.TRANSFORM)
+
+      .stream(this.TRACKLETS_TRACKING_POINT)
+      .category('primitive')
+      .type('circle')
+      .styleClassDefault({
+        radius: 0.2,
+        fillColor: '#FFFF00'
+      })
+      .pose(this.TRANSFORM)
+
+      .stream(this.TRACKLETS_LABEL)
+      .category('primitive')
+      .type('text')
+      .styleClassDefault({
+        size: 18,
+        fillColor: '#0040E0'
+      })
       .pose({
-        x: 0.81,
-        y: -0.32,
-        z: 1.73
+        ...this.TRANSFORM,
+        z: this.TRANSFORM.z + 2
       })
 
       .stream(this.TRACKLETS_TRAJECTORY)
@@ -132,13 +176,7 @@ export class TrackletsDataSource {
         strokeWidth: 0.3,
         strokeWidthMinPixels: 1
       })
-      // laser scanner relative to GPS position
-      // http://www.cvlibs.net/datasets/kitti/setup.php
-      .pose({
-        x: 0.81,
-        y: -0.32,
-        z: 1.73
-      });
+      .pose(this.TRANSFORM);
   }
 
   _convertFrame(frame_index) {

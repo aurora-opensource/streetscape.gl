@@ -106,7 +106,6 @@ class Core3DViewer extends PureComponent {
     const {streams, origin, heading, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
-    // TODO
     return [
       carMesh &&
         new MeshLayer({
@@ -127,42 +126,48 @@ class Core3DViewer extends PureComponent {
             getYaw: heading
           }
         }),
-      Object.keys(streams).map(streamName => {
-        const stream = streams[streamName];
-        const streamMetadata = metadata.streams[streamName];
-        const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
+      Object.keys(streams)
+        .map(streamName => {
+          const stream = streams[streamName];
+          const streamMetadata = metadata.streams[streamName];
+          const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
 
-        if (stream.features && stream.features.length) {
-          return new XvizLayer({
-            id: `xviz-${streamName}`,
-            ...coordinateProps,
+          if (stream.features && stream.features.length) {
+            return new XvizLayer({
+              id: `xviz-${streamName}`,
+              ...coordinateProps,
 
-            pickable: true,
-            lightSettings: LIGHT_SETTINGS,
+              pickable: true,
+              lightSettings: LIGHT_SETTINGS,
 
-            data: stream.features,
-            style: styleParser.getStylesheet(streamName),
-            objectStates: {},
+              data: stream.features,
+              style: styleParser.getStylesheet(streamName),
+              objectStates: {},
 
-            // Selection props (app defined, not used by deck.gl)
-            streamName
-          });
-        }
-        if (stream.pointCloud) {
-          return new PointCloudLayer({
-            id: `xviz-${streamName}`,
-            ...coordinateProps,
-            numInstances: stream.pointCloud.numInstances,
-            instancePositions: stream.pointCloud.positions,
-            instanceNormals: stream.pointCloud.normals,
-            instanceColors: stream.pointCloud.colors,
-            instancePickingColors: stream.pointCloud.colors,
-            radiusPixels: viewMode.firstPerson ? 4 : 1,
-            lightSettings: {}
-          });
-        }
-        return null;
-      })
+              // Hack: draw extruded polygons last to defeat depth test
+              zIndex: streamMetadata.type === 'polygon' ? 2 : 0,
+
+              // Selection props (app defined, not used by deck.gl)
+              streamName
+            });
+          }
+          if (stream.pointCloud) {
+            return new PointCloudLayer({
+              id: `xviz-${streamName}`,
+              ...coordinateProps,
+              numInstances: stream.pointCloud.numInstances,
+              instancePositions: stream.pointCloud.positions,
+              instanceNormals: stream.pointCloud.normals,
+              instanceColors: stream.pointCloud.colors,
+              instancePickingColors: stream.pointCloud.colors,
+              radiusPixels: viewMode.firstPerson ? 4 : 1,
+              lightSettings: {}
+            });
+          }
+          return null;
+        })
+        .filter(Boolean)
+        .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex)
     ];
   }
 
