@@ -5,6 +5,7 @@ const {getTimestamps, createDir} = require('../parsers/common');
 import GPSDataSource from './gps-converter';
 import LidarDataSource from './lidar-converter';
 import TrackletsDataSource from './tracklets-converter';
+import ImageDataSource from './image-converter';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
@@ -37,7 +38,11 @@ export class KittiConverter {
     this.converters = [
       gpsDataSource,
       new TrackletsDataSource(this.inputDir, i => gpsDataSource.getPose(i)),
-      new LidarDataSource(this.inputDir)
+      new LidarDataSource(this.inputDir),
+      new ImageDataSource(this.inputDir, 'image_00'),
+      new ImageDataSource(this.inputDir, 'image_01'),
+      new ImageDataSource(this.inputDir, 'image_02'),
+      new ImageDataSource(this.inputDir, 'image_03')
     ];
 
     this.converters.forEach(converter => converter.load());
