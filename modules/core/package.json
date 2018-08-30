@@ -21,7 +21,7 @@
     "build": "npm run clean && npm run build-es6 && npm run build-esm && npm run build-es5"
   },
   "dependencies": {
-    "@deck.gl/experimental-layers": "^6.0.0",
+    "@deck.gl/experimental-layers": "^6.0.4",
     "@xviz/parser": "./../xviz/modules/parser",
     "color": "^3.0.0",
     "d3-fetch": "^1.1.0",
