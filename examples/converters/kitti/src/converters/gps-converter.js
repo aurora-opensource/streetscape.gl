@@ -5,13 +5,12 @@ import {generateTrajectoryFrame, getPoseOffset} from './common';
 import {getTimestamps} from '../parsers/common';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
 
-export class GPSDataSource {
+export default class GPSConverter {
   constructor(directory) {
     this.root_dir = directory;
     this.gps_dir = path.join(directory, 'oxts', 'data');
 
     // XVIZ stream names produced by this converter
-    this.VEHICLE_POSE = 'vehicle-pose';
     this.VEHICLE_ACCELERATION = '/vehicle/acceleration';
     this.VEHICLE_VELOCITY = '/vehicle/velocity';
     this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
@@ -30,12 +29,12 @@ export class GPSDataSource {
     });
   }
 
-  getPose(frame_number) {
-    return this.poses[frame_number].pose;
+  getPose(frameNumber) {
+    return this.poses[frameNumber].pose;
   }
 
-  convertFrame(frame_number, xvizBuilder) {
-    const i = frame_number;
+  convertFrame(frameNumber, xvizBuilder) {
+    const i = frameNumber;
     const entry = this.poses[i];
     const pose = entry.pose;
     console.log(`processing gps data frame ${i}/${this.timestamps.length}`); // eslint-disable-line
@@ -43,7 +42,7 @@ export class GPSDataSource {
     // Every frame *MUST* have a pose. The pose can be considered
     // the core reference point for other data and usually drives the timing
     // of the system.
-    xvizBuilder.pose(this.VEHICLE_POSE, pose);
+    xvizBuilder.pose(pose);
 
     // This is an example of using the XVIZBuilder to convert your data
     // into XVIZ.
