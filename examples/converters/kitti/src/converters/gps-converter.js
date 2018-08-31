@@ -1,41 +1,40 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-import {generateTrajectoryFrame, getPoseOffset} from './common';
-import {getTimestamps} from '../parsers/common';
+import {generateTrajectoryFrame, getPoseOffset} from './utils';
+import {getTimestamps} from '../parsers/utils';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
 
-export class GPSDataSource {
+export default class GPSConverter {
   constructor(directory) {
-    this.root_dir = directory;
-    this.gps_dir = path.join(directory, 'oxts', 'data');
+    this.rootDir = directory;
+    this.gpsDir = path.join(directory, 'oxts', 'data');
 
     // XVIZ stream names produced by this converter
-    this.VEHICLE_POSE = 'vehicle-pose';
     this.VEHICLE_ACCELERATION = '/vehicle/acceleration';
     this.VEHICLE_VELOCITY = '/vehicle/velocity';
     this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
   }
 
   load() {
-    const timeFilePath = path.join(this.root_dir, 'oxts', 'timestamps.txt');
+    const timeFilePath = path.join(this.rootDir, 'oxts', 'timestamps.txt');
 
     this.timestamps = getTimestamps(timeFilePath);
-    this.gps_files = fs.readdirSync(this.gps_dir).sort();
+    this.gpsFiles = fs.readdirSync(this.gpsDir).sort();
 
     // Load all files because we need them for the trajectory
-    this.poses = this.gps_files.map((fileName, i) => {
-      const srcFilePath = path.join(this.gps_dir, fileName);
+    this.poses = this.gpsFiles.map((fileName, i) => {
+      const srcFilePath = path.join(this.gpsDir, fileName);
       return this._convertPose(srcFilePath, this.timestamps[i]);
     });
   }
 
-  getPose(frame_number) {
-    return this.poses[frame_number].pose;
+  getPose(frameNumber) {
+    return this.poses[frameNumber].pose;
   }
 
-  convertFrame(frame_number, xvizBuilder) {
-    const i = frame_number;
+  convertFrame(frameNumber, xvizBuilder) {
+    const i = frameNumber;
     const entry = this.poses[i];
     const pose = entry.pose;
     console.log(`processing gps data frame ${i}/${this.timestamps.length}`); // eslint-disable-line
@@ -43,7 +42,7 @@ export class GPSDataSource {
     // Every frame *MUST* have a pose. The pose can be considered
     // the core reference point for other data and usually drives the timing
     // of the system.
-    xvizBuilder.pose(this.VEHICLE_POSE, pose);
+    xvizBuilder.pose(pose);
 
     // This is an example of using the XVIZBuilder to convert your data
     // into XVIZ.
@@ -61,13 +60,13 @@ export class GPSDataSource {
     const limit = this.poses.length;
     const getVehiclePose = index => this.poses[index].pose;
 
-    const xviz_trajectory = generateTrajectoryFrame(
+    const xvizTrajectory = generateTrajectoryFrame(
       i,
       limit,
       getVehiclePose,
       this._convertTrajectory
     );
-    xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(xviz_trajectory);
+    xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(xvizTrajectory);
   }
 
   getMetadata(xvizMetaBuilder) {
@@ -102,9 +101,9 @@ export class GPSDataSource {
   }
 
   _convertPose(filePath, timestamp) {
-    const file_content = fs.readFileSync(filePath, 'utf8').split('\n')[0];
+    const fileContent = fs.readFileSync(filePath, 'utf8').split('\n')[0];
 
-    const oxts = loadOxtsPackets(file_content);
+    const oxts = loadOxtsPackets(fileContent);
     return this._convertPoseEntry(oxts, timestamp);
   }
 

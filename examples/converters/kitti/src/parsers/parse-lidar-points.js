@@ -17,7 +17,7 @@ function readBinaryFile(binary) {
   return res;
 }
 
-function loadLidarData(contents) {
+export function loadLidarData(contents) {
   const binary = readBinaryFile(contents);
   const float = new Float32Array(binary);
   const size = Math.round(binary.length / 4);
@@ -34,7 +34,3 @@ function loadLidarData(contents) {
   }
   return {positions, reflectance};
 }
-
-module.exports = {
-  loadLidarData
-};
