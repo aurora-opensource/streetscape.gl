@@ -2,11 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid').v4;
 
-const {encodeBinaryXVIZ} = require('@xviz/builder');
-const {parseBinaryXVIZ} = require('@xviz/parser');
-
 import {getTimestamps} from '../parsers/common';
-
 import {loadLidarData} from '../parsers/parse-lidar-points';
 
 // load file
@@ -41,12 +37,10 @@ export default class LidarConverter {
     // TypedArray, and by unpacking them, they are in a JSON structure that
     // works better with the rest of the conversion.
     const tmp_obj = {vertices: lidar_data.positions};
-    const bin_tmp_obj = encodeBinaryXVIZ(tmp_obj, {flattenArrays: true});
-    const bin_xviz_lidar = parseBinaryXVIZ(bin_tmp_obj);
 
     xvizBuilder
       .stream(this.LIDAR_POINTS)
-      .points(bin_xviz_lidar.vertices)
+      .points(tmp_obj.vertices)
       .timestamp(this.timestamps[i])
       .id(uuid())
       .color([0, 0, 0, 255]);

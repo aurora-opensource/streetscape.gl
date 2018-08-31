@@ -1,6 +1,9 @@
 import BaseConverter from './base-converter';
 
-// Load one image file
+const widthPixel = 1242;
+const heightPixel = 375;
+const format = 'png';
+
 export default class ImageConverter extends BaseConverter {
   constructor(rootDir, camera = 'image_01') {
     super(rootDir, camera);
@@ -12,14 +15,21 @@ export default class ImageConverter extends BaseConverter {
     const {data, timestamp} = this.loadFrame(frameNumber);
 
     xvizBuilder
-      .image(this.streamName, nodeBufferToTypedArray(data))
+      .stream(this.streamName)
+      .image(
+        nodeBufferToTypedArray(data),
+        widthPixel,
+        heightPixel,
+        format
+      )
       .timestamp(timestamp);
   }
 
   getMetadata(xvizMetaBuilder) {
-    xvizMetaBuilder
-      // .camera(this.streamName, {})
-      .type('image');
+    const xb = xvizMetaBuilder;
+    xb.stream(this.streamName)
+      .category('primitive')
+      .type('image')
   }
 }
 
