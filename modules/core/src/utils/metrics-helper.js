@@ -33,21 +33,17 @@ function getTimeSeriesForStream({metadata, streamName, stream}) {
 /**
  * Get the time series for given streams
  * @param logMetadata {object} log metadata
- * @param uiMetadata {object} declare ui metadata
  * @param streams array of streams data
  * @returns {Array} array of time series data
  */
-export function getTimeSeries({logMetadata = {}, uiMetadata = {}, streams}) {
+export function getTimeSeries({metadata = {}, streams}) {
   const timeSeries = {};
   for (const streamName in streams) {
     // if there is ui configuration for this stream
-    if (streams.hasOwnProperty(streamName) && uiMetadata[streamName]) {
+    if (streams.hasOwnProperty(streamName) && metadata.streams && metadata.streams[streamName]) {
       const stream = streams[streamName];
       const streamTimeSeries = getTimeSeriesForStream({
-        metadata: {
-          ...logMetadata.streams[streamName],
-          ...uiMetadata[streamName]
-        },
+        metadata: metadata.streams[streamName],
         streamName,
         stream
       });
@@ -55,5 +51,5 @@ export function getTimeSeries({logMetadata = {}, uiMetadata = {}, streams}) {
     }
   }
 
-  return Object.values(timeSeries);
+  return timeSeries;
 }

@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import XvizContainer from './xviz-container';
 import XvizMetricComponent from './xviz-metric-component';
 
+import connectToLog from '../connect';
+
 // xviz type to component map
 const DEFAULT_COMPONENTS = {
-  container: XvizContainer
+  container: XvizContainer,
   // table
   // tree_table
   metric: XvizMetricComponent
@@ -14,17 +16,18 @@ const DEFAULT_COMPONENTS = {
   // video
 };
 
-export default class XvizPanel extends PureComponent {
+class XvizPanel extends PureComponent {
   static propTypes = {
-    log: PropTypes.object,
-    components: PropTypes.object
+    id: PropTypes.string.isRequired,
+    components: PropTypes.object,
+    style: PropTypes.object
   };
 
   static defaultProps = {
     components: DEFAULT_COMPONENTS
   };
 
-  _renderItem = (item, components) => {
+  _renderItem = (item, i) => {
     const {components, log} = this.props;
     const XvizComponent = components[item.type];
 
@@ -33,19 +36,27 @@ export default class XvizPanel extends PureComponent {
     }
 
     return (
-      <XvizComponent key={item.id} {...item} log={log}>
+      <XvizComponent key={i} {...item} log={log}>
         {item.children && item.children.map(this._renderItem)}
       </XvizComponent>
     );
   };
 
   render() {
-    const {data, style} = this.props;
+    const {metadata, id, style} = this.props;
 
-    return (
+    const data = metadata && metadata.declarativeUI && metadata.declarativeUI[id];
+
+    return data ? (
       <div className="xviz-panel" style={style}>
         {data.children && data.children.map(this._renderItem)}
       </div>
-    );
+    ) : null;
   }
 }
+
+const getLogState = log => ({
+  metadata: log.getMetadata()
+});
+
+export default connectToLog({getLogState, Component: XvizPanel});
