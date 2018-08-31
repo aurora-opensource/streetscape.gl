@@ -16,12 +16,7 @@ export default class ImageConverter extends BaseConverter {
 
     xvizBuilder
       .stream(this.streamName)
-      .image(
-        nodeBufferToTypedArray(data),
-        widthPixel,
-        heightPixel,
-        format
-      )
+      .image(nodeBufferToTypedArray(data), widthPixel, heightPixel, format)
       .timestamp(timestamp);
   }
 
@@ -29,7 +24,7 @@ export default class ImageConverter extends BaseConverter {
     const xb = xvizMetaBuilder;
     xb.stream(this.streamName)
       .category('primitive')
-      .type('image')
+      .type('image');
   }
 }
 

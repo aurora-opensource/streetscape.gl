@@ -182,7 +182,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           ws.binaryType = 'arraybuffer';
 
           ws.onmessage = message => {
-            const parsed = message.data instanceof ArrayBuffer ? parseBinaryXVIZ(message.data) : message.data;
+            const parsed =
+              message.data instanceof ArrayBuffer ? parseBinaryXVIZ(message.data) : message.data;
             return parseStreamMessage({
               message: parsed,
               onResult: this._onWSMessage,
