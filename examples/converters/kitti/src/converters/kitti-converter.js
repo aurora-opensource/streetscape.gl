@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 
 const {getTimestamps, createDir} = require('../parsers/common');
 
@@ -9,7 +9,7 @@ import TrackletsConverter from './tracklets-converter';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
-export class KittiConverter {
+export default class KittiConverter {
   constructor(inputDir, outputDir, disableStreams) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;

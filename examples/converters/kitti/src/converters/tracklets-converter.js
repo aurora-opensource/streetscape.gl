@@ -1,17 +1,14 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import {_Pose as Pose} from 'math.gl';
 
-import {getPoseOffset} from './common';
-const {_Pose: Pose} = require('math.gl');
-
-import {generateTrajectoryFrame} from './common';
-
+import {getPoseOffset, generateTrajectoryFrame} from './utils';
 import {loadTracklets} from '../parsers/parse-tracklets';
 
 export default class TrackletsConverter {
   constructor(directory, getPose) {
-    this.root_dir = directory;
-    this.tracklet_file = path.join(directory, 'tracklet_labels.xml');
+    this.rootDir = directory;
+    this.trackletFile = path.join(directory, 'tracklet_labels.xml');
     this.getPose = getPose;
 
     // laser scanner relative to GPS position
@@ -29,36 +26,36 @@ export default class TrackletsConverter {
   }
 
   load() {
-    const xml = fs.readFileSync(this.tracklet_file, 'utf8');
+    const xml = fs.readFileSync(this.trackletFile, 'utf8');
     this.data = loadTracklets(xml);
 
-    this.frame_start = this.data.objects.reduce((min_frame, obj) => {
-      return Math.min(min_frame, obj.first_frame);
+    this.frameStart = this.data.objects.reduce((minFrame, obj) => {
+      return Math.min(minFrame, obj.firstFrame);
     }, Number.MAX_SAFE_INTEGER);
 
-    this.frame_limit = this.data.objects.reduce((max_frame, obj) => {
-      return Math.max(max_frame, obj.last_frame);
+    this.frameLimit = this.data.objects.reduce((maxFrame, obj) => {
+      return Math.max(maxFrame, obj.lastFrame);
     }, 0);
 
-    if (this.frame_start > this.frame_limit) {
+    if (this.frameStart > this.frameLimit) {
       throw new Error('Invalid frame range');
     }
 
-    this.tracklet_frames = new Map();
+    this.trackletFrames = new Map();
 
     // Convert tracklets upfront to support trajectory
-    for (let i = this.frame_start; i < this.frame_limit; i++) {
-      this.tracklet_frames.set(i, this._convertFrame(i));
+    for (let i = this.frameStart; i < this.frameLimit; i++) {
+      this.trackletFrames.set(i, this._convertFrame(i));
     }
   }
 
   convertFrame(frameNumber, xvizBuilder) {
     const i = frameNumber;
-    if (i < this.frame_start || i >= this.frame_limit) {
+    if (i < this.frameStart || i >= this.frameLimit) {
       return;
     }
 
-    const tracklets = this.tracklet_frames.get(i);
+    const tracklets = this.trackletFrames.get(i);
     tracklets.forEach(tracklet => {
       // Here you can see how the *classes* are used to tag the object
       // allowing for the *style* information to be shared across
@@ -79,26 +76,26 @@ export default class TrackletsConverter {
         .text(tracklet.id.slice(24));
     });
 
-    for (let object_id = 0; object_id < this.data.objects.length; object_id++) {
-      const object = this.data.objects[object_id];
+    for (let objectId = 0; objectId < this.data.objects.length; objectId++) {
+      const object = this.data.objects[objectId];
 
       // object is in this frame
-      if (i >= object.first_frame && i < object.last_frame) {
+      if (i >= object.firstFrame && i < object.lastFrame) {
         const getTrackletsPrimitives = index => {
-          const objects = this.tracklet_frames.get(index);
+          const objects = this.trackletFrames.get(index);
           const tracklet = objects.find(x => x.id === object.properties.id);
           return tracklet;
         };
 
         const getTrajectory = traj => this._convertTrajectory(traj, i, this.getPose);
-        const xviz_trajectory = generateTrajectoryFrame(
+        const xvizTrajectory = generateTrajectoryFrame(
           i,
-          Math.min(object.last_frame, this.frame_limit),
+          Math.min(object.lastFrame, this.frameLimit),
           getTrackletsPrimitives,
           getTrajectory
         );
 
-        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(xviz_trajectory);
+        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(xvizTrajectory);
       }
     }
   }
@@ -166,16 +163,16 @@ export default class TrackletsConverter {
       .pose(this.FIXTURE_TRANSFORM_POSE);
   }
 
-  _convertFrame(frame_index) {
+  _convertFrame(frameIndex) {
     return this.data.objects
       .map(object => {
         // out of bounds, return null
-        if (frame_index < object.first_frame || frame_index >= object.last_frame) {
+        if (frameIndex < object.firstFrame || frameIndex >= object.lastFrame) {
           return null;
         }
 
-        const pose_index = frame_index - object.first_frame;
-        const pose = object.data.poses.item[pose_index];
+        const poseIndex = frameIndex - object.firstFrame;
+        const pose = object.data.poses.item[poseIndex];
 
         const poseProps = {
           x: Number(pose.tx),

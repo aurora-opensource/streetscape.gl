@@ -1,12 +1,12 @@
-const turf = require('@turf/turf');
+import * as turf from '@turf/turf';
 
 const MOTION_PLANNING_STEPS = 50;
 
 export function generateTrajectoryFrame(start, limit, getMotion, getTrajectory) {
   const motions = [];
 
-  const iter_limit = Math.min(start + MOTION_PLANNING_STEPS, limit);
-  for (let i = start; i < iter_limit; i++) {
+  const iterLimit = Math.min(start + MOTION_PLANNING_STEPS, limit);
+  for (let i = start; i < iterLimit; i++) {
     motions.push(getMotion(i));
   }
 

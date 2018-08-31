@@ -40,6 +40,6 @@ module.exports = function getArgs() {
     inputDir,
     outputDir,
     disableStreams,
-    frame_limit: args.frame_limit
+    frameLimit: args.frame_limit
   };
 };

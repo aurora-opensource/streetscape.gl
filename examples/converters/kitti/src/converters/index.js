@@ -1,5 +1,1 @@
-import {KittiConverter} from './kitti-converter';
-
-module.exports = {
-  KittiConverter
-};
+export {default as KittiConverter} from './kitti-converter';

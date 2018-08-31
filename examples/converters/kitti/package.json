@@ -22,10 +22,14 @@
     "@babel/cli": "^7.0.0-beta",
     "@babel/core": "^7.0.0-beta",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0-beta",
     "@babel/preset-react": "^7.0.0-beta",
     "@babel/register": "^7.0.0-beta",
+<<<<<<< HEAD
     "loaders.gl": "^0.3.4",
+=======
+>>>>>>> 617a9db... resolve comments
     "reify": "^0.16.4"
   }
 }
