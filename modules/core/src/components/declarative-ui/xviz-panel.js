@@ -24,12 +24,12 @@ class XvizPanel extends PureComponent {
   };
 
   static defaultProps = {
-    components: DEFAULT_COMPONENTS
+    components: {}
   };
 
   _renderItem = (item, i) => {
     const {components, log} = this.props;
-    const XvizComponent = components[item.type];
+    const XvizComponent = components[item.type] || DEFAULT_COMPONENTS[item.type];
 
     if (!XvizComponent) {
       return null;
