@@ -41,6 +41,8 @@ export {default as LogViewer} from './components/log-viewer';
 export {default as PlaybackControl} from './components/playback-control';
 export {default as PerspectivePopup} from './components/perspective-popup';
 
+export {default as XvizPanel} from './components/declarative-ui/xviz-panel';
+
 // Constants
 export * from './constants';
 

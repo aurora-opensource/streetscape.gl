@@ -29,44 +29,37 @@ test('metricsHelper#getTimeSeries', t => {
     variable: 123
   };
 
-  const logMetadata = {
-    streams: {
-      [streamName]: {}
-    }
+  const metadata = {
+    streams: {}
   };
 
-  let uiMetadata = {};
   const streams = {
     [streamName]: [stream]
   };
 
-  let actual = getTimeSeries({logMetadata, uiMetadata, streams});
+  let actual = getTimeSeries({metadata, streams});
   t.deepEqual(
     actual,
     [],
-    `Should return empty when there is no definition uiMetadata for stream ${streamName}.`
+    `Should return empty when there is no metadata for stream ${streamName}.`
   );
 
-  uiMetadata = {
-    [streamName]: {}
+  metadata.streams[streamName] = {};
+
+  actual = getTimeSeries({metadata, streams});
+  t.equal(actual[streamName].id, streamName);
+  t.equal(actual[streamName].unit, '');
+  t.equal(actual[streamName].title, streamName);
+  t.deepEqual(actual[streamName].valueSeries, [stream]);
+
+  metadata.streams[streamName] = {
+    title: 'Velocity',
+    unit: 'm/s'
   };
 
-  actual = getTimeSeries({logMetadata, uiMetadata, streams});
-  t.equal(actual[0].id, streamName);
-  t.equal(actual[0].unit, '');
-  t.equal(actual[0].title, streamName);
-  t.deepEqual(actual[0].valueSeries, [stream]);
-
-  uiMetadata = {
-    [streamName]: {
-      title: 'Velocity',
-      unit: 'm/s'
-    }
-  };
-
-  actual = getTimeSeries({logMetadata, uiMetadata, streams});
-  t.equal(actual[0].unit, 'm/s');
-  t.equal(actual[0].title, 'Velocity');
+  actual = getTimeSeries({metadata, streams});
+  t.equal(actual[streamName].unit, 'm/s');
+  t.equal(actual[streamName].title, 'Velocity');
 
   t.end();
 });

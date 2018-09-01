@@ -25,7 +25,7 @@ import 'xviz-config';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {XVIZStreamLoader, LogViewer, PlaybackControl, VIEW_MODES} from 'streetscape.gl';
+import {XVIZStreamLoader, LogViewer, PlaybackControl, XvizPanel, VIEW_MODES} from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
 
 import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
@@ -82,6 +82,8 @@ class Example extends PureComponent {
         </div>
         <div id="control-panel">
           <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
+          <hr />
+          <XvizPanel log={log} id="0" />
         </div>
       </div>
     );
