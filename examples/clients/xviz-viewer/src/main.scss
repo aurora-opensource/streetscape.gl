@@ -25,9 +25,19 @@ body {
 }
 #control-panel {
   position: fixed;
-  width: 280px;
-  margin: 20px;
+  width: 320px;
+  margin-top: 20px;
   padding: 12px;
   background: #fff;
   box-shadow: 0 0 8px rgba(0,0,0,0.3);
+
+  hr {
+    margin: 20px 0;
+    border: none;
+    border-top: solid 1px #ccc;
+  }
+
+  .mc-metric-chart {
+    height: 160px !important;
+  }
 }

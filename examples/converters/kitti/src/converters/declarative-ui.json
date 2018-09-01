@@ -1,0 +1,31 @@
+[
+  {
+    "type": "panel",
+    "children": [
+      {
+        "type": "container",
+        "layout": "vertical",
+        "children": [
+          {
+            "title": "Acceleration",
+            "streams": [
+              "/vehicle/acceleration"
+            ],
+            "description": "The acceleration of the vehicle",
+            "type": "metric"
+          },
+          {
+            "title": "Velocity",
+            "streams": [
+              "/vehicle/velocity"
+            ],
+            "description": "The velocity of the vehicle",
+            "type": "metric"
+          }
+        ],
+        "interactions": []
+      }
+    ],
+    "name": "Metrics"
+  }
+]
