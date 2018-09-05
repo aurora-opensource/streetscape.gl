@@ -17,11 +17,14 @@ export default class MarkerArrayConverter {
     acceptMarker, /* Function to filter the markers to use (if not defined, uses all markers) */
   }={}) {
     this.topic = topic;
+    this.acceptMarker = acceptMarker || (() => true);
+
+    this.markersMap = {};
+
     this.POLYLINE_STREAM = [xvizNamespace, 'polylines'].join(NAMESPACE_SEPARATOR);
     this.POLYGON_STREAM = [xvizNamespace, 'polygon'].join(NAMESPACE_SEPARATOR);
     this.CIRCLE_STREAM = [xvizNamespace, 'circle'].join(NAMESPACE_SEPARATOR);
-    this.acceptMarker = acceptMarker || (() => true);
-    this.markersMap = {};
+    this.TEXT_STREAM = [xvizNamespace, 'text'].join(NAMESPACE_SEPARATOR);
   }
 
   convertFrame(frame, xvizBuilder) {
@@ -62,6 +65,14 @@ export default class MarkerArrayConverter {
       .type('circle')
       .styleClassDefault({
         strokeWidth: 0.2
+      })
+
+      .stream(this.TEXT_STREAM)
+      .category('primitive')
+      .type('text')
+      .styleClassDefault({
+        size: 18,
+        fillColor: '#0000FF'
       });
   }
 
@@ -131,7 +142,14 @@ export default class MarkerArrayConverter {
   };
 
   _writeText = (marker, xvizBuilder) => {
-    console.log('text', marker);
+    const points = this._mapPoints([
+      {x: 0, y: 0, z: 2}, // z=2 to float above
+    ], marker.pose);
+
+    xvizBuilder
+      .stream(this.TEXT_STREAM)
+      .position(points[0])
+      .text(marker.text);
   };
 
   _toColor(marker) {
