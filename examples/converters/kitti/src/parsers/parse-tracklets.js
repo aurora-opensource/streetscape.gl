@@ -4,9 +4,9 @@
 const parser = require('xml2json');
 const uuid = require('uuid').v4;
 
-function loadTracklets(tracklets_contents) {
-  const raw_data = JSON.parse(parser.toJson(tracklets_contents));
-  const tracklets = raw_data.boost_serialization.tracklets;
+function loadTracklets(trackletsContents) {
+  const rawData = JSON.parse(parser.toJson(trackletsContents));
+  const tracklets = rawData.boost_serialization.tracklets;
 
   const objects = parseObjectMetadata(tracklets);
 
@@ -31,13 +31,13 @@ function parseObjectMetadata(tracklets) {
       [-item.l / 2, -item.w / 2, 0]
     ];
 
-    const first_frame = Number(item.first_frame);
+    const firstFrame = Number(item.firstFrame);
     const count = Number(item.poses.count);
-    const last_frame = first_frame + count;
+    const lastFrame = firstFrame + count;
     return {
       data: item,
-      first_frame,
-      last_frame,
+      firstFrame,
+      lastFrame,
       count,
       properties,
       bounds

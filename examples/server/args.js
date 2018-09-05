@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 const {ArgumentParser} = require('argparse');
 const path = require('path');
 

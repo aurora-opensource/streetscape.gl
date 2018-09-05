@@ -1,5 +1,5 @@
 /* global console, Buffer, setTimeout */
-/* eslint-disable no-process-exit, no-console */
+/* eslint-disable camelcase, no-process-exit, no-console */
 const fs = require('fs');
 const WebSocket = require('ws');
 const path = require('path');

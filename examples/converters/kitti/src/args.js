@@ -40,6 +40,9 @@ module.exports = function getArgs() {
     inputDir,
     outputDir,
     disableStreams,
-    frameLimit: args.frame_limit
+    frameLimit: args.frame_limit,
+    // DEPRECATED
+    // eslint-disable-next-line
+    frame_limit: args.frame_limit
   };
 };
