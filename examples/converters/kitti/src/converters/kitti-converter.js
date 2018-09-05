@@ -5,17 +5,18 @@ const {getTimestamps, createDir} = require('../parsers/common');
 import GPSConverter from './gps-converter';
 import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
-// import CameraConverter from './camera-converter';
+import CameraConverter from './camera-converter';
 
 // import DECLARATIVE_UI from './declarative-ui.json';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
 export class KittiConverter {
-  constructor(inputDir, outputDir, disableStreams) {
+  constructor(inputDir, outputDir, {disableStreams = null, cameraSources = ['image_00']}) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;
     this.disableStreams = disableStreams;
+    this.cameraSources = cameraSources;
 
     this.numFrames = 0;
     this.metadata = null;
@@ -40,8 +41,8 @@ export class KittiConverter {
     this.converters = [
       gpsConverter,
       new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
-      new LidarConverter(this.inputDir)
-      // new CameraConverter(this.inputDir)
+      new LidarConverter(this.inputDir),
+      new CameraConverter(this.inputDir, this.cameraSources)
     ];
 
     this.converters.forEach(converter => converter.load());

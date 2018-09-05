@@ -70,6 +70,13 @@ $ yarn  # install dependencies
 $ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
 ```
 
+#### Scale Image
+```
+$ cd examples/converters/kitti
+$ yarn  # install dependencies
+$ yarn pre-process -d 2011_09_26/2011_09_26_drive_0005_sync --image_scale=0.25 --camera_sources='image_00,image_01'
+```
+
 To see a full list of options of the converter, run `yarn start --help`.
 
 

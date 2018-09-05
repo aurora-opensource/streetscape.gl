@@ -1,9 +1,11 @@
 import ImageConverter from './image-converter';
 
+const DEFAULT_CAMERAS = ['image_00', 'image_01', 'image_02', 'image_03'];
+
 export default class CameraConverter {
-  constructor(rootDir) {
+  constructor(rootDir, cameraSources = DEFAULT_CAMERAS) {
     this.rootDir = rootDir;
-    this.cameraSources = ['image_00', 'image_01', 'image_02', 'image_03'];
+    this.cameraSources = cameraSources;
     this.imageConverters = [];
   }
 

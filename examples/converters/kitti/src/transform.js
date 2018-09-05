@@ -1,13 +1,14 @@
 /* eslint-disable camelcase */
-import {KittiConverter} from './converters';
 import {XVIZWriter} from '@xviz/builder';
 
+import {KittiConverter} from './converters';
+
 module.exports = function main(args) {
-  const {inputDir, outputDir, disableStreams, frameLimit} = args;
+  const {inputDir, outputDir, disableStreams, frameLimit, cameraSources} = args;
 
   // This object orchestrates any data dependencies between the data sources
   // and delegates to the individual converters
-  const converter = new KittiConverter(inputDir, outputDir, disableStreams);
+  const converter = new KittiConverter(inputDir, outputDir, {cameraSources, disableStreams});
 
   console.log(`Converting KITTI data at ${inputDir}`); // eslint-disable-line
   console.log(`Saving to ${outputDir}`); // eslint-disable-line

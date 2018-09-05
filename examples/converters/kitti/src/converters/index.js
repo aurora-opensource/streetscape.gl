@@ -1,5 +1,2 @@
-import {KittiConverter} from './kitti-converter';
-
-module.exports = {
-  KittiConverter
-};
+export {KittiConverter} from './kitti-converter';
+export {scale} from '../pre-process';

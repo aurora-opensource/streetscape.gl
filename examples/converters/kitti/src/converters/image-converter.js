@@ -1,24 +1,43 @@
-import BaseConverter from './base-converter';
+import path from 'path';
+import fs from 'fs';
 
-const widthPixel = 1242;
-const heightPixel = 375;
-const format = 'png';
+import {getImageMetadata} from '../parsers/process-image';
+import BaseConverter from './base-converter';
 
 export default class ImageConverter extends BaseConverter {
   constructor(rootDir, camera = 'image_00') {
     super(rootDir, camera);
 
     this.streamName = `/camera/${camera}`;
+    this.dataDir = this._getDataDir();
+    this.imageInfo = this._getImageInfo();
+  }
+
+  _getDataDir() {
+    let dataDir = path.join(this.streamDir, 'processed');
+    if (!fs.existsSync(dataDir)) {
+      dataDir = path.join(this.streamDir, 'data');
+    }
+    return dataDir;
+  }
+
+  _getImageInfo() {
+    const files = fs.readdirSync(this.dataDir);
+    if (files) {
+      const imageFile = path.join(this.dataDir, files[0]);
+      return getImageMetadata(imageFile);
+    }
+    return null;
   }
 
   convertFrame(frameNumber, xvizBuilder) {
-    const {data, timestamp} = this.loadFrame(frameNumber);
+    const {data} = this.loadFrame(frameNumber);
+    const {width: widthPixel, height: heightPixel, type: format} = this.imageInfo;
 
     xvizBuilder
       .stream(this.streamName)
       .image(nodeBufferToTypedArray(data), format)
-      .dimensions(widthPixel, heightPixel)
-      .timestamp(timestamp);
+      .dimensions(widthPixel, heightPixel);
   }
 
   getMetadata(xvizMetaBuilder) {
