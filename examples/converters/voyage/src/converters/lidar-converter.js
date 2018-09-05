@@ -1,5 +1,6 @@
 import {v4 as uuid} from 'uuid';
 import {loadProcessedLidarData} from '~/parsers/parse-lidar-points';
+import Converter from './base/converter';
 
 const MAX_POINTS = 100000;
 
@@ -27,10 +28,11 @@ function downSamplePoints(points, maxPointsCount) {
   return Float32Array.from(ret);
 }
 
-// load file
-export default class LidarConverter {
-  constructor() {
-    this.LIDAR_POINTS = '/lidar/points';
+export default class LidarConverter extends Converter {
+  constructor(xvizNamespace) {
+    super();
+
+    this.LIDAR_POINTS = xvizNamespace;
     this.previousData = {};
   }
 

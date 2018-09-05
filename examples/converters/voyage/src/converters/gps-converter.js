@@ -1,31 +1,19 @@
-import LocalCartesian from '~/lib/local-cartesian';
 import {quaternionToEuler} from '~/lib/util';
+import Converter from './base/converter';
 
-export default class GPSConverter {
+export default class GPSConverter extends Converter {
   constructor(origin) {
-    // XVIZ stream names produced by this converter
+    super();
     this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
-    this.localCartesian = new LocalCartesian(origin.latitude, origin.longitude, origin.altitude);
     this.origin = origin;
   }
 
-  async convertFrame(frame, xvizBuilder) {
-    await this._buildPose(frame, xvizBuilder);
+  convertFrame(frame, xvizBuilder) {
+    this._buildPose(frame, xvizBuilder);
     this._buildTrajectory(frame, xvizBuilder);
   }
 
-  // The current xviz-viewer application expects to have
-  // pose in lat, lng.  Manually convert here from reference point
-  async poseToLatLng(position) {
-    const [latitude, longitude, altitude] = await this.localCartesian.reverse(
-      position.x,
-      position.y,
-      position.z
-    );
-    return {latitude, longitude, altitude};
-  }
-
-  async _buildPose(frame, xvizBuilder) {
+  _buildPose(frame, xvizBuilder) {
     const {timestamp, message} = frame.keyTopic;
 
     // Every frame *MUST* have a pose. The pose can be considered

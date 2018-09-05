@@ -1,10 +1,10 @@
 import Promise from 'bluebird';
-import GPSConverter from './gps-converter';
-import LidarConverter from './lidar-converter';
-import TrackletsConverter from './tracklets-converter';
-import RouteConverter from './route-converter';
-import PerceptionMarkersConverter from './perception-markers-converter';
-import TrajectoryCircleConverter from './trajectory-circle-converter';
+import GPSConverter from '~/converters/gps-converter';
+import LidarConverter from '~/converters/lidar-converter';
+import TrackletsConverter from '~/converters/tracklets-converter';
+import RouteConverter from '~/converters/route-converter';
+import PerceptionMarkersConverter from '~/converters/perception-markers-converter';
+import TrajectoryCircleConverter from '~/converters/trajectory-circle-converter';
 
 import {XVIZMetadataBuilder, XVIZBuilder} from '@xviz/builder';
 
@@ -20,16 +20,16 @@ const SPRINGFIELD = {
   altitude: 0
 };
 
-export default class VoyageConverter {
+export default class FrameBuilder {
   constructor({frameIdToPoseMap, disableStreams}) {
     this.disableStreams = disableStreams;
     this.converters = [
       new GPSConverter(SPRINGFIELD),
-      new LidarConverter(),
-      new TrackletsConverter(),
+      new LidarConverter('/lidar/points'),
+      new TrackletsConverter('/tracklets/objects'),
       new PerceptionMarkersConverter('/perception/markers'),
       new TrajectoryCircleConverter('/trajectory-circle/markers'),
-      new RouteConverter()
+      new RouteConverter('/map/route')
     ];
 
     this.xvizMetadataBuilder = this._initMetadataBuilder(frameIdToPoseMap);
@@ -40,12 +40,8 @@ export default class VoyageConverter {
     return this.xvizMetadataBuilder;
   }
 
-  async convertFrame(frame) {
-    // The XVIZBuilder provides a fluent-API to construct objects.
-    // This makes it easier to incrementally build objects that may have
-    // many different options or variant data types supported.
+  async buildFrame(frame) {
     const xvizBuilder = new XVIZBuilder(this.metadata, this.disableStreams, {});
-
     await Promise.map(this.converters, c => c.convertFrame(frame, xvizBuilder));
 
     return xvizBuilder.getFrame();

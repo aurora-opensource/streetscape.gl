@@ -1,8 +1,8 @@
-import {VoyageConverter} from './converters';
 import {XVIZWriter} from '@xviz/builder';
-import {createDir, deleteDirRecursive} from './parsers/common';
+import {createDir, deleteDirRecursive} from '~/lib/util';
 import * as Topics from '~/topics';
-import Bag from './lib/bag';
+import Bag from '~/lib/bag';
+import FrameBuilder from './frame-builder';
 
 module.exports = async function main(args) {
   const {bag: bagPath, outputDir, disableStreams, frameLimit} = args;
@@ -20,7 +20,7 @@ module.exports = async function main(args) {
     topics: Topics.ALL
   });
 
-  const converter = new VoyageConverter({
+  const frameBuilder = new FrameBuilder({
     frameIdToPoseMap: await bag.calculateFrameIdToPoseMap(),
     disableStreams
   });
@@ -43,7 +43,7 @@ module.exports = async function main(args) {
           startTime = endTime;
         }
 
-        const xvizFrame = await converter.convertFrame(frame);
+        const xvizFrame = await frameBuilder.buildFrame(frame);
         xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
         frameNum++;
       }
@@ -54,7 +54,7 @@ module.exports = async function main(args) {
   });
 
   // Write metadata file
-  const xb = converter.getXVIZMetadataBuilder();
+  const xb = frameBuilder.getXVIZMetadataBuilder();
   xb.startTime(startTime.getTime()).endTime(endTime.getTime());
   xvizWriter.writeMetadata(outputDir, xb.getMetadata());
 

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {Vector3} from 'math.gl';
+import Converter from './converter';
 
 const ACTION_ADD = 0;
 const ACTION_DELETE = 2;
@@ -10,12 +11,14 @@ const NAMESPACE_SEPARATOR = '/';
 /**
  * Handles converting MarkerArray messages
  */
-export default class MarkerArrayConverter {
+export default class MarkerArrayConverter extends Converter {
   constructor({
     topic, /* Topic to convert */
     xvizNamespace, /* The top-level xviz namespace to use for this set of marker streams */
     acceptMarker, /* Function to filter the markers to use (if not defined, uses all markers) */
   }={}) {
+    super();
+
     this.topic = topic;
     this.acceptMarker = acceptMarker || (() => true);
 

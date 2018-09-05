@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import {v4 as uuid} from 'uuid';
 import {ROUTE} from '~/topics';
+import Converter from './base/converter';
 
-export default class RouteConverter {
-  constructor() {
-    this.ROUTE = '/map/route';
+export default class RouteConverter extends Converter {
+  constructor(xvizNamespace) {
+    super();
+    this.ROUTE = xvizNamespace;
   }
 
   convertFrame(frame, xvizBuilder) {

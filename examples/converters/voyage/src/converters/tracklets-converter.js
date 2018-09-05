@@ -1,8 +1,10 @@
 import {TRACKS_LIST} from '~/topics';
+import Converter from './base/converter';
 
-export default class TrackletsConverter {
-  constructor() {
-    this.TRACKLETS = '/tracklets/objects';
+export default class TrackletsConverter extends Converter {
+  constructor(xvizNamespace) {
+    super();
+    this.TRACKLETS = xvizNamespace;
   }
 
   convertFrame(frame, xvizBuilder) {

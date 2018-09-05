@@ -10,8 +10,6 @@ const main = require('./transform');
   }
   catch (err) {
     console.error(err); // eslint-disable-line
-    process.exit(1);
+    throw err;
   }
-
-  process.exit(0);
 })();
