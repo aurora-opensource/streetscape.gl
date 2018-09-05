@@ -25,11 +25,6 @@ parser.addArgument(['--frame-limit'], {
   help: 'Limit XVIZ frame generation to this value. Useful for testing conversion quickly'
 });
 
-parser.addArgument(['--camera-sources'], {
-  defaultValue: 'image_00',
-  help: 'Relative camera (image) resources. '
-});
-
 parser.addArgument(['--image-scale'], {
   defaultValue: 1,
   help: 'Image scaling'
@@ -51,7 +46,6 @@ module.exports = function getArgs() {
     outputDir,
     disableStreams,
     imageScale: args.image_scale,
-    cameraSources: args.camera_sources.split(','),
     frameLimit: args.frame_limit
   };
 };

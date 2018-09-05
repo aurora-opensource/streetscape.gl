@@ -12,11 +12,10 @@ import CameraConverter from './camera-converter';
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
 export class KittiConverter {
-  constructor(inputDir, outputDir, {disableStreams = null, cameraSources = ['image_00']}) {
+  constructor(inputDir, outputDir, {disableStreams = null}) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;
     this.disableStreams = disableStreams;
-    this.cameraSources = cameraSources;
 
     this.numFrames = 0;
     this.metadata = null;
@@ -42,7 +41,7 @@ export class KittiConverter {
       gpsConverter,
       new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
       new LidarConverter(this.inputDir),
-      new CameraConverter(this.inputDir, this.cameraSources)
+      new CameraConverter(this.inputDir, this.disableStreams)
     ];
 
     this.converters.forEach(converter => converter.load());
