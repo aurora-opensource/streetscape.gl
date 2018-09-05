@@ -4,7 +4,6 @@ import {quaternionToEuler} from '~/lib/util';
 export default class GPSConverter {
   constructor(origin) {
     // XVIZ stream names produced by this converter
-    this.VEHICLE_POSE = 'vehicle-pose';
     this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
     this.localCartesian = new LocalCartesian(origin.latitude, origin.longitude, origin.altitude);
     this.origin = origin;
@@ -37,7 +36,7 @@ export default class GPSConverter {
     const rotation = quaternionToEuler(message.pose.orientation);
 
     xvizBuilder
-      .pose(this.VEHICLE_POSE, {
+      .pose({
         time: timestamp.toDate().getTime(),
         ...this.origin,
         ...rotation,

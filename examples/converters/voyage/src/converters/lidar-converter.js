@@ -1,7 +1,4 @@
-import _ from 'lodash';
 import {v4 as uuid} from 'uuid';
-import {encodeBinaryXVIZ} from '@xviz/builder';
-import {parseBinaryXVIZ} from '@xviz/parser';
 import {loadProcessedLidarData} from '~/parsers/parse-lidar-points';
 
 /**
@@ -59,13 +56,10 @@ export default class LidarConverter {
     for (const {timestamp, message} of data) {
       const pointsSize = message.data.length / (message.height * message.width);
       const {positions} = loadProcessedLidarData(message.data, pointsSize);
-      const tmp_obj = {vertices: positions};
-      const bin_tmp_obj = encodeBinaryXVIZ(tmp_obj, {flattenArrays: true});
-      const bin_xviz_lidar = parseBinaryXVIZ(bin_tmp_obj);
 
       xvizBuilder
         .stream(this.LIDAR_POINTS)
-        .points(downSamplePoints(bin_xviz_lidar.vertices, 50000))
+        .points(downSamplePoints(positions, 50000))
         .timestamp(timestamp.toDate().getTime())
         .id(uuid())
         .color(color);
