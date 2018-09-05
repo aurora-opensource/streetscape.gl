@@ -25,8 +25,8 @@ const MOTION_PLANNING_STEPS = 50;
 export function generateTrajectoryFrame(start, limit, getMotion, getTrajectory) {
   const motions = [];
 
-  const iter_limit = Math.min(start + MOTION_PLANNING_STEPS, limit);
-  for (let i = start; i < iter_limit; i++) {
+  const iterationLimit = Math.min(start + MOTION_PLANNING_STEPS, limit);
+  for (let i = start; i < iterationLimit; i++) {
     motions.push(getMotion(i));
   }
 

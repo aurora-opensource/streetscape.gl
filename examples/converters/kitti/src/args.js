@@ -26,7 +26,7 @@ const parser = new ArgumentParser({
   description: 'KITTI to XVIZ converter'
 });
 
-parser.addArgument(['-d', '--data_directory'], {
+parser.addArgument(['-d', '--data-directory', '--data_directory'], {
   required: true,
   help: 'Path to raw KITTI data. Relative path will be resolved relative to /data/kitti/'
 });
@@ -60,6 +60,6 @@ module.exports = function getArgs() {
     inputDir,
     outputDir,
     disableStreams,
-    frame_limit: args.frame_limit
+    frameLimit: args.frame_limit
   };
 };

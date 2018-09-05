@@ -28,39 +28,39 @@ import {loadLidarData} from '../parsers/parse-lidar-points';
 // load file
 export default class LidarConverter {
   constructor(directory) {
-    this.root_dir = directory;
-    this.lidar_dir = path.join(directory, 'velodyne_points');
-    this.lidar_data_dir = path.join(this.lidar_dir, 'data');
-    this.lidar_files = [];
+    this.rootDir = directory;
+    this.lidarDir = path.join(directory, 'velodyne_points');
+    this.lidarDataDir = path.join(this.lidarDir, 'data');
+    this.lidarFiles = [];
 
     this.LIDAR_POINTS = '/lidar/points';
   }
 
   load() {
-    const timeFilePath = path.join(this.lidar_dir, 'timestamps.txt');
+    const timeFilePath = path.join(this.lidarDir, 'timestamps.txt');
     // TODO load start and end timestamps if necessary
     this.timestamps = getTimestamps(timeFilePath);
 
-    this.lidar_files = fs.readdirSync(this.lidar_data_dir).sort();
+    this.lidarFiles = fs.readdirSync(this.lidarDataDir).sort();
   }
 
   convertFrame(frameNumber, xvizBuilder) {
     const i = frameNumber;
-    const fileName = this.lidar_files[i];
-    const srcFilePath = path.join(this.lidar_data_dir, fileName);
-    const lidar_contents = fs.readFileSync(srcFilePath);
-    const lidar_data = loadLidarData(lidar_contents);
+    const fileName = this.lidarFiles[i];
+    const srcFilePath = path.join(this.lidarDataDir, fileName);
+    const lidarContents = fs.readFileSync(srcFilePath);
+    const lidarData = loadLidarData(lidarContents);
 
     // This encode/parse is a temporary workaround until we get fine-grain
     // control of which streams should be packed in the binary.
     // By doing this we are able to have the points converted to the appropriate
     // TypedArray, and by unpacking them, they are in a JSON structure that
     // works better with the rest of the conversion.
-    const tmp_obj = {vertices: lidar_data.positions};
+    const temporaryObject = {vertices: lidarData.positions};
 
     xvizBuilder
       .stream(this.LIDAR_POINTS)
-      .points(tmp_obj.vertices)
+      .points(temporaryObject.vertices)
       .timestamp(this.timestamps[i])
       .id(uuid())
       .color([0, 0, 0, 255]);

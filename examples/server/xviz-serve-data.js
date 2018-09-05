@@ -19,13 +19,13 @@
 // THE SOFTWARE.
 
 /* global console, Buffer, setTimeout */
-/* eslint-disable no-process-exit, no-console */
+/* eslint-disable no-process-exit, no-console, camelcase */
 const fs = require('fs');
 const WebSocket = require('ws');
 const path = require('path');
 const process = require('process');
 
-const {delta_time_ms, extract_zip_from_file} = require('./serve');
+const {deltaTimeMs, extractZipFromFile} = require('./serve');
 
 // TODO: auxillary timestamp tracking & images are not handled
 
@@ -76,7 +76,7 @@ function setupFrameData(data_directory) {
 
   if (!hasData) {
     console.log('Checking for archive');
-    const results = extract_zip_from_file(path.join(data_directory, 'frames.tar.gz'));
+    const results = extractZipFromFile(path.join(data_directory, 'frames.tar.gz'));
     if (results.status !== 0) {
       console.log(`Uncompression of data failed.
         CODE: ${results.status}
@@ -296,8 +296,8 @@ class ConnectionContext {
   }
 
   logMsgSent(send_time, index, real_index, tag) {
-    const t_from_start_ms = delta_time_ms(this.t_start_time);
-    const t_msg_send_time_ms = delta_time_ms(send_time);
+    const t_from_start_ms = deltaTimeMs(this.t_start_time);
+    const t_msg_send_time_ms = deltaTimeMs(send_time);
     console.log(
       ` < Frame(${tag}) ${index}:${real_index} in self: ${t_msg_send_time_ms}ms start: ${t_from_start_ms}ms`
     );

@@ -21,22 +21,26 @@
 const {getTimeRange, packGLB} = require('./common');
 
 function getMetadata({startTime, endTime, streams}) {
+  streams = streams.reduce((resMap, stream) => {
+    const {name, category, type, unit} = stream;
+
+    resMap[name] = {category, type};
+    if (unit) {
+      resMap[name].unit = unit;
+    }
+
+    return resMap;
+  }, {});
+
+  /* eslint-disable camelcase */
   return {
     version: '2.0',
     type: 'metadata',
     start_time: startTime,
     end_time: endTime,
-    streams: streams.reduce((resMap, stream) => {
-      const {name, category, type, unit} = stream;
-
-      resMap[name] = {category, type};
-      if (unit) {
-        resMap[name].unit = unit;
-      }
-
-      return resMap;
-    }, {})
+    streams
   };
+  /* eslint-enable camelcase */
 }
 
 function generateMetadata(timeFilePath, metaDataFilePath, streams) {
