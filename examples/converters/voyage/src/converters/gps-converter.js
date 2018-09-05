@@ -2,9 +2,9 @@ import {quaternionToEuler} from '~/lib/util';
 import Converter from './base/converter';
 
 export default class GPSConverter extends Converter {
-  constructor(origin) {
+  constructor(xvizNamespace, origin) {
     super();
-    this.VEHICLE_TRAJECTORY = '/vehicle/trajectory';
+    this.VEHICLE_TRAJECTORY = [xvizNamespace, 'trajectory'].join('/');
     this.origin = origin;
   }
 

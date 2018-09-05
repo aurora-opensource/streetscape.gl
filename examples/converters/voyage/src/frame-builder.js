@@ -8,23 +8,11 @@ import TrajectoryCircleConverter from '~/converters/trajectory-circle-converter'
 
 import {XVIZMetadataBuilder, XVIZBuilder} from '@xviz/builder';
 
-const VGCC = {
-  latitude: 37.290493011474609375,
-  longitude: -121.753868103027343750,
-  altitude: 204.159072875976562500
-};
-
-const SPRINGFIELD = {
-  latitude: 37.3059663,
-  longitude: -121.75191,
-  altitude: 0
-};
-
 export default class FrameBuilder {
-  constructor({frameIdToPoseMap, disableStreams}) {
+  constructor({origin, frameIdToPoseMap, disableStreams}) {
     this.disableStreams = disableStreams;
     this.converters = [
-      new GPSConverter(SPRINGFIELD),
+      new GPSConverter('/vehicle', origin),
       new LidarConverter('/lidar/points'),
       new TrackletsConverter('/tracklets/objects'),
       new PerceptionMarkersConverter('/perception/markers'),

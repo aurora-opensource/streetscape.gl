@@ -1,5 +1,5 @@
-const {ArgumentParser} = require('argparse');
-const path = require('path');
+import {ArgumentParser} from 'argparse';
+import path from 'path';
 
 const parser = new ArgumentParser({
   addHelp: true,
@@ -26,7 +26,7 @@ parser.addArgument(['--frame_limit'], {
 });
 
 // extract args from user input
-module.exports = function getArgs() {
+export default function getArgs() {
   const args = parser.parseArgs();
   const outputDir = path.resolve(
     __dirname,

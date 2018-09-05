@@ -4,7 +4,7 @@ import * as Topics from '~/topics';
 import Bag from '~/lib/bag';
 import FrameBuilder from './frame-builder';
 
-module.exports = async function main(args) {
+export default async function transform(args) {
   const {bag: bagPath, outputDir, disableStreams, frameLimit} = args;
 
   try {
@@ -21,6 +21,7 @@ module.exports = async function main(args) {
   });
 
   const frameBuilder = new FrameBuilder({
+    origin: await bag.calculateOrigin(),
     frameIdToPoseMap: await bag.calculateFrameIdToPoseMap(),
     disableStreams
   });
@@ -52,6 +53,10 @@ module.exports = async function main(args) {
       console.error(err);
     }
   });
+
+  if (!startTime) {
+    throw new Error('No key frames found');
+  }
 
   // Write metadata file
   const xb = frameBuilder.getXVIZMetadataBuilder();

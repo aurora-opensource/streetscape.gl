@@ -1,7 +1,7 @@
 {
-  "name": "jskitti",
+  "name": "xviz-voyage",
   "version": "1.0.0",
-  "description": "Provides a minimal set of tools for working with the KITTI dataset in Javascript",
+  "description": "Provides a minimal set of tools for working with the Voyage dataset in Javascript",
   "scripts": {
     "start": "node ./src/index.js",
     "debug": "node inspect ./src/index.js"
