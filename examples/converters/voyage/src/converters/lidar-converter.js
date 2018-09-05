@@ -1,6 +1,8 @@
 import {v4 as uuid} from 'uuid';
 import {loadProcessedLidarData} from '~/parsers/parse-lidar-points';
 
+const MAX_POINTS = 100000;
+
 /**
  * This just does a very basic random downsampling based on the ratio of
  * maxPointsCount and actual points in the point cloud. As such, it is not guaranteed
@@ -59,7 +61,7 @@ export default class LidarConverter {
 
       xvizBuilder
         .stream(this.LIDAR_POINTS)
-        .points(downSamplePoints(positions, 50000))
+        .points(downSamplePoints(positions, MAX_POINTS))
         .timestamp(timestamp.toDate().getTime())
         .id(uuid())
         .color(color);

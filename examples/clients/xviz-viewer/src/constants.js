@@ -1,4 +1,6 @@
-export const MAP_STYLE = 'mapbox://styles/mapbox/satellite-v9';
+// export const MAP_STYLE = 'mapbox://styles/mapbox/satellite-v9';
+// export const MAP_STYLE = 'mapbox://styles/globetro/cjlpcpzhi80002so2k804gx5x';
+export const MAP_STYLE = 'mapbox://styles/globetro/cjlpcw4jt7kcp2roijuijdlh0';
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 // OBJ model width 2073mm, length 4946mm
