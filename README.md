@@ -38,3 +38,7 @@ $ git clone https://github.com/uber/streetscape.gl.git
 $ cd streetscape.gl
 $ yarn bootstrap
 ```
+
+## Coding Standard
+
+xviz uses a pinned version of the [uber-es2015](https://www.npmjs.com/package/eslint-config-uber-es2015) linter rules.
