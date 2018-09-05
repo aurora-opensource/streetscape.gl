@@ -4,13 +4,11 @@ import 'xviz-config';
 
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
-
-import {XVIZStreamLoader, LogViewer, PlaybackControl, VIEW_MODES} from 'streetscape.gl';
+import qs from 'query-string';
+import {XVIZStreamLoader, LogViewer, PlaybackControl, XvizPanel, VIEW_MODES} from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
 
-import qs from 'query-string';
-
-import {SETTINGS, MAP_STYLE, CAR} from './constants';
+import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
 
 import './main.scss';
 
@@ -49,6 +47,7 @@ class Example extends PureComponent {
         <div id="map-view">
           <LogViewer
             log={log}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
             mapStyle={MAP_STYLE}
             car={CAR}
             viewMode={VIEW_MODES[settings.viewMode]}
@@ -63,6 +62,8 @@ class Example extends PureComponent {
         </div>
         <div id="control-panel">
           <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
+          <hr />
+          <XvizPanel log={log} id="0" />
         </div>
       </div>
     );

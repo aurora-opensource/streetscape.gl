@@ -181,16 +181,19 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           const ws = new this.WebSocketClass(params.url);
           ws.binaryType = 'arraybuffer';
 
-          ws.onmessage = message =>
-            parseStreamMessage({
-              message:
-                message.data instanceof ArrayBuffer ? parseBinaryXVIZ(message.data) : message.data,
+          ws.onmessage = message => {
+            const parsed =
+              message.data instanceof ArrayBuffer ? parseBinaryXVIZ(message.data) : message.data;
+            return parseStreamMessage({
+              message: parsed,
               onResult: this._onWSMessage,
               onError: this._onWSError,
               debug: this._debug.bind('parse_message'),
               worker: params.serverConfig.worker,
               maxConcurrency: params.serverConfig.maxConcurrency
             });
+          };
+
           ws.onerror = this._onWSError;
           ws.onclose = event => {
             this._onWSClose(event);

@@ -36,6 +36,7 @@ class Core3DViewer extends PureComponent {
   static propTypes = {
     frame: PropTypes.object,
     metadata: PropTypes.object,
+    mapboxApiAccessToken: PropTypes.string,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     car: PropTypes.object,
     viewMode: PropTypes.object
@@ -105,7 +106,6 @@ class Core3DViewer extends PureComponent {
     const {streams, origin, heading, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
-    // TODO
     return [
       carMesh &&
         new MeshLayer({
@@ -120,48 +120,55 @@ class Core3DViewer extends PureComponent {
           data: CAR_DATA,
           getPosition: d => d,
           getColor: d => [160, 160, 160],
-          getYaw: d => -heading,
+          getYaw: d => heading,
           lightSettings: {},
           updateTriggers: {
             getYaw: heading
           }
         }),
-      Object.keys(streams).map(streamName => {
-        const stream = streams[streamName];
-        const streamMetadata = metadata.streams[streamName];
-        const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
+      Object.keys(streams)
+        .map(streamName => {
+          const stream = streams[streamName];
+          const streamMetadata = metadata.streams[streamName];
+          const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
 
-        if (stream.features && stream.features.length) {
-          return new XvizLayer({
-            id: `xviz-${streamName}`,
-            ...coordinateProps,
+          if (stream.features && stream.features.length) {
+            return new XvizLayer({
+              id: `xviz-${streamName}`,
+              ...coordinateProps,
 
-            pickable: true,
-            lightSettings: LIGHT_SETTINGS,
+              pickable: true,
+              lightSettings: LIGHT_SETTINGS,
 
-            data: stream.features,
-            style: styleParser.getStylesheet(streamName),
-            objectStates: {},
+              data: stream.features,
+              style: styleParser.getStylesheet(streamName),
+              objectStates: {},
 
-            // Selection props (app defined, not used by deck.gl)
-            streamName
-          });
-        }
-        if (stream.pointCloud) {
-          return new PointCloudLayer({
-            id: `xviz-${streamName}`,
-            ...coordinateProps,
-            numInstances: stream.pointCloud.numInstances,
-            instancePositions: stream.pointCloud.positions,
-            instanceNormals: stream.pointCloud.normals,
-            instanceColors: stream.pointCloud.colors,
-            instancePickingColors: stream.pointCloud.colors,
-            radiusPixels: viewMode.firstPerson ? 4 : 1,
-            lightSettings: {}
-          });
-        }
-        return null;
-      })
+              // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
+              // This is not used by deck.gl, only used in this function to sort the layers
+              zIndex: streamMetadata.type === 'polygon' ? 2 : 0,
+
+              // Selection props (app defined, not used by deck.gl)
+              streamName
+            });
+          }
+          if (stream.pointCloud) {
+            return new PointCloudLayer({
+              id: `xviz-${streamName}`,
+              ...coordinateProps,
+              numInstances: stream.pointCloud.numInstances,
+              instancePositions: stream.pointCloud.positions,
+              instanceNormals: stream.pointCloud.normals,
+              instanceColors: stream.pointCloud.colors,
+              instancePickingColors: stream.pointCloud.colors,
+              radiusPixels: viewMode.firstPerson ? 4 : 1,
+              lightSettings: {}
+            });
+          }
+          return null;
+        })
+        .filter(Boolean)
+        .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex)
     ];
   }
 
@@ -180,7 +187,7 @@ class Core3DViewer extends PureComponent {
       ? {
           longitude: frame.trackPosition[0],
           latitude: frame.trackPosition[1],
-          bearing: 90 - frame.heading
+          bearing: frame.heading
         }
       : null;
 
@@ -188,7 +195,7 @@ class Core3DViewer extends PureComponent {
   }
 
   render() {
-    const {mapStyle, viewMode} = this.props;
+    const {mapboxApiAccessToken, mapStyle, viewMode} = this.props;
 
     return (
       <DeckGL
@@ -200,7 +207,11 @@ class Core3DViewer extends PureComponent {
         layerFilter={this._layerFilter}
         onViewStateChange={this._onViewStateChange}
       >
-        <StaticMap mapStyle={mapStyle} visible={!viewMode.firstPerson} />
+        <StaticMap
+          mapboxApiAccessToken={mapboxApiAccessToken}
+          mapStyle={mapStyle}
+          visible={!viewMode.firstPerson}
+        />
       </DeckGL>
     );
   }
