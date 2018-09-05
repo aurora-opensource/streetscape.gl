@@ -16,6 +16,6 @@ export default class MarkerConverter extends MarkerArrayConverter {
       markers.forEach(this._processMarker);
     }
 
-    this._writeMarkers(xvizBuilder);
+    this.writeMarkers(xvizBuilder);
   }
 }

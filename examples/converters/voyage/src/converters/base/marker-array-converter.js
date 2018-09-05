@@ -19,6 +19,7 @@ export default class MarkerArrayConverter {
     this.topic = topic;
     this.POLYLINE_STREAM = [xvizNamespace, 'polylines'].join(NAMESPACE_SEPARATOR);
     this.POLYGON_STREAM = [xvizNamespace, 'polygon'].join(NAMESPACE_SEPARATOR);
+    this.CIRCLE_STREAM = [xvizNamespace, 'circle'].join(NAMESPACE_SEPARATOR);
     this.acceptMarker = acceptMarker || (() => true);
     this.markersMap = {};
   }
@@ -31,7 +32,7 @@ export default class MarkerArrayConverter {
       }
     }
 
-    this._writeMarkers(xvizBuilder);
+    this.writeMarkers(xvizBuilder);
   }
 
   getMetadata(xvizMetaBuilder) {
@@ -53,18 +54,24 @@ export default class MarkerArrayConverter {
       .styleClassDefault({
         extruded: true,
         height: 0.2
+      })
+
+      .stream(this.CIRCLE_STREAM)
+      .coordinate('map_relative')
+      .category('primitive')
+      .type('circle')
+      .styleClassDefault({
+        strokeWidth: 0.2
       });
   }
 
-  _writeMarkers(xvizBuilder) {
-    // console.log('WRITE MARKERS', this.markersMap);
-    // console.log(_.mapValues(this.markersMap, (m) => JSON.stringify(_.pick(m, ['id', 'ns', 'type', 'color']))));
-
+  writeMarkers(xvizBuilder) {
     const WRITERS = {
       '0': this._writeArrow,
       '2': this._writeSphere,
       '4': this._writeLineStrip,
-      '5': this._writeLineList
+      '5': this._writeLineList,
+      '9': this._writeText
     }
 
     _.forOwn(this.markersMap, (marker) => {
@@ -94,15 +101,12 @@ export default class MarkerArrayConverter {
   _writeSphere = (marker, xvizBuilder) => {
     const RADIUS = marker.scale.x / 2;
     const points = this._mapPoints([
-      {x: -RADIUS, y: -RADIUS, z: 0},
-      {x: RADIUS, y: -RADIUS, z: 0},
-      {x: RADIUS, y: RADIUS, z: 0},
-      {x: -RADIUS, y: RADIUS, z: 0},
+      {x: 0, y: 0, z: 0},
     ], marker.pose);
 
     xvizBuilder
-      .stream(this.POLYGON_STREAM)
-      .polygon(points)
+      .stream(this.CIRCLE_STREAM)
+      .circle(points[0], RADIUS)
       .color(this._toColor(marker))
       .id(this._getMarkerId(marker));
   };
@@ -124,6 +128,10 @@ export default class MarkerArrayConverter {
       .polyline(this._mapPoints(line, marker.pose))
       .id([this._getMarkerId(marker), index].join(NAMESPACE_SEPARATOR));
     });
+  };
+
+  _writeText = (marker, xvizBuilder) => {
+    console.log('text', marker);
   };
 
   _toColor(marker) {
