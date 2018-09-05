@@ -32,6 +32,7 @@ parser.addArgument(['--skip_images'], {
 
 module.exports = function getArgs() {
   const args = parser.parseArgs();
+  // eslint-disable-next-line camelcase
   args.data_directory = path.resolve(__dirname, '../../data/generated/', args.data_directory);
   return args;
 };

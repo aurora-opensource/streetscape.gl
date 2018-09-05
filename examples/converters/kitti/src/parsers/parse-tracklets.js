@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /**
  * Parse tracklets objects (stored in tracklet_labels.xml),
  */
