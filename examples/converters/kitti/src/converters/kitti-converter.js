@@ -27,7 +27,7 @@ import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
 // import CameraConverter from './camera-converter';
 
-import DECLARATIVE_UI from './declarative-ui.json';
+// import DECLARATIVE_UI from './declarative-ui.json';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
@@ -100,7 +100,8 @@ export class KittiConverter {
     this.converters.forEach(converter => converter.getMetadata(xb));
 
     const metadata = xb.getMetadata();
-    metadata.declarativeUI = DECLARATIVE_UI;
+    // TODO(twojtasz): this is broken
+    // metadata.declarativeUI = DECLARATIVE_UI;
 
     return metadata;
   }

@@ -23,7 +23,7 @@ import {KittiConverter} from './converters';
 import {XVIZWriter} from '@xviz/builder';
 
 module.exports = function main(args) {
-  const {inputDir, outputDir, disableStreams, frame_limit} = args;
+  const {inputDir, outputDir, disableStreams, frameLimit} = args;
 
   // This object orchestrates any data dependencies between the data sources
   // and delegates to the individual converters
@@ -43,7 +43,7 @@ module.exports = function main(args) {
 
   const start = Date.now();
 
-  const limit = Math.min(frame_limit, converter.frameCount());
+  const limit = Math.min(frameLimit, converter.frameCount());
   // Convert each frame and write it to a file
   //
   // A *frame* is a point in time, where each frame will contain
