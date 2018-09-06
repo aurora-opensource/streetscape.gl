@@ -1,5 +1,5 @@
 require('@babel/register')({
-  presets: [['@babel/env', {modules: 'commonjs'}]]
+  configFile: './babel.config.js'
 });
 
 const {resolve} = require('path');
