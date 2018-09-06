@@ -55,9 +55,11 @@ CONFIG.cover.plugins = CONFIG.cover.plugins.concat(['istanbul']);
 
 module.exports = function getConfig(api) {
 
+  // eslint-disable-next-line
   var env = api.cache(() => process.env.BABEL_ENV || process.env.NODE_ENV);
 
   const config = CONFIG[env] || CONFIG.default;
+  // Uncomment to debug
   console.error(env, config.plugins);
   return config;
 };
