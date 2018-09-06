@@ -12,13 +12,13 @@
   "scripts": {
     "bootstrap": "scripts/bootstrap.sh",
     "build": "lerna run build",
-    "cover": "NODE_ENV=cover nyc node test/start",
+    "cover": "BABEL_ENV=cover nyc node test/start",
     "lint": "scripts/lint.sh",
     "publish": "scripts/publish.sh",
     "publish-beta": "scripts/publish.sh beta",
     "publish-prod": "scripts/publish.sh prod",
-    "test": "npm run lint && BABEL_ENV=es6 node test/start",
-    "test-fast": "npm run lint fast && BABEL_ENV=es6 node test/start",
+    "test": "npm run lint && node test/start",
+    "test-fast": "npm run lint fast && node test/start",
     "test-browser": "webpack-dev-server --config test/webpack.config.js --hot --open"
   },
   "devDependencies": {
