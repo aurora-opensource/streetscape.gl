@@ -25,9 +25,14 @@ parser.addArgument(['--frame-limit'], {
   help: 'Limit XVIZ frame generation to this value. Useful for testing conversion quickly'
 });
 
-parser.addArgument(['--image-scale'], {
-  defaultValue: 1,
-  help: 'Image scaling'
+parser.addArgument(['--image-max-width'], {
+  defaultValue: Number.MIN_SAFE_INTEGER,
+  help: 'Image max width'
+});
+
+parser.addArgument(['--image-max-height'], {
+  defaultValue: Number.MIN_SAFE_INTEGER,
+  help: 'Image max height'
 });
 
 // extract args from user input
@@ -45,7 +50,8 @@ module.exports = function getArgs() {
     inputDir,
     outputDir,
     disableStreams,
-    imageScale: args.image_scale,
-    frameLimit: args.frame_limit
+    imageMaxWidth: Number(args.image_max_width),
+    imageMaxHeight: Number(args.image_max_height),
+    frameLimit: Number(args.frame_limit)
   };
 };

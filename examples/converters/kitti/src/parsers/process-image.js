@@ -1,47 +1,57 @@
 import fs from 'fs';
-import path from 'path';
 import sharp from 'sharp';
-import sizeOf from 'image-size';
 
-function scaleImage(inputPath, outFilePath, imageScale) {
-  const image = sharp(inputPath);
+function getResizeDimension(width, height, maxWidth, maxHeight) {
+  const ratio = width / height;
 
-  image.metadata().then(metadata => {
-    const width = Math.floor(Number(imageScale) * Number(metadata.width));
-    const height = Math.floor(Number(imageScale) * Number(metadata.height));
-    image
-      .resize(width, height)
-      .toFile(outFilePath)
-      .catch(e => {
-        console.error(e); // eslint-disable-line
-      });
-  });
-}
+  let resizeWidth = null;
+  let resizeHeight = null;
 
-function scale(inputDir, outputDir, imageScale) {
-  const files = fs.readdirSync(inputDir);
-  if (files) {
-    files.forEach(fileName => {
-      const inputFilePath = path.resolve(inputDir, fileName);
-      const outFilePath = path.resolve(outputDir, fileName);
-      scaleImage(inputFilePath, outFilePath, imageScale);
-    });
+  if (maxHeight > 0 && maxWidth > 0) {
+    resizeWidth = Math.min(maxWidth, maxHeight * ratio);
+    resizeHeight = Math.min(maxHeight, maxWidth / ratio);
+  } else if (maxHeight > 0) {
+    resizeWidth = maxHeight * ratio;
+    resizeHeight = maxHeight;
+  } else if (maxWidth > 0) {
+    resizeWidth = maxWidth;
+    resizeHeight = maxWidth / ratio;
+  } else {
+    resizeWidth = width;
+    resizeHeight = height;
   }
+
+  return {
+    resizeWidth: Math.floor(resizeWidth),
+    resizeHeight: Math.floor(resizeHeight)
+  };
 }
 
-export function getImageMetadata(imagePath) {
-  return sizeOf(imagePath);
-}
+// preserve aspect ratio
+export async function resizeImage(filePath, maxWidth, maxHeight) {
+  const metadata = await getImageMetadata(filePath);
+  const {width, height} = metadata;
 
-export function processImage({inputDir, outputDir, cameraSources, imageScale}) {
-  if (imageScale !== 1) {
-    cameraSources.forEach(cameraDir => {
-      const imageInputDir = path.resolve(inputDir, cameraDir, 'data');
-      const imageOutputDir = path.resolve(inputDir, cameraDir, 'processed');
-      if (!fs.existsSync(imageOutputDir)) {
-        fs.mkdirSync(imageOutputDir);
-      }
-      scale(imageInputDir, imageOutputDir, imageScale);
-    });
+  let imageData = null;
+  const {resizeWidth, resizeHeight} = getResizeDimension(width, height, maxWidth, maxHeight);
+
+  if (resizeWidth === width && resizeHeight === height) {
+    imageData = fs.readFileSync(filePath);
+  } else {
+    imageData = await sharp(filePath)
+      .resize(resizeWidth, resizeHeight)
+      .max()
+      .toBuffer()
+      .then(data => data);
   }
+
+  return {
+    width: resizeWidth,
+    height: resizeHeight,
+    data: imageData
+  };
+}
+
+export async function getImageMetadata(filePath) {
+  return await sharp(filePath).metadata();
 }

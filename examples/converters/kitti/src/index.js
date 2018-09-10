@@ -1,6 +1,9 @@
 require('@babel/register');
+require('babel-polyfill');
 
 const parseArgs = require('./args');
-const main = require('./transform');
+const transform = require('./transform');
 
-main(parseArgs());
+(async function main() {
+  await transform(parseArgs());
+})();

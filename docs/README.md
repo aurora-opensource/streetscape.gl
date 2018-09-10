@@ -74,7 +74,7 @@ $ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
 ```
 $ cd examples/converters/kitti
 $ yarn  # install dependencies
-$ yarn pre-process -d 2011_09_26/2011_09_26_drive_0005_sync --image-scale=0.25
+$ yarn pre-process -d 2011_09_26/2011_09_26_drive_0005_sync --image-max-width=200
 ```
 
 To see a full list of options of the converter, run `yarn start --help`.

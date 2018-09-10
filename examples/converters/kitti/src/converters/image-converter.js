@@ -1,43 +1,38 @@
 import path from 'path';
-import fs from 'fs';
 
-import {getImageMetadata} from '../parsers/process-image';
+import {resizeImage} from '../parsers/process-image';
 import BaseConverter from './base-converter';
 
 export default class ImageConverter extends BaseConverter {
-  constructor(rootDir, camera = 'image_00') {
+  constructor(rootDir, camera = 'image_00', options) {
     super(rootDir, camera);
 
     this.streamName = `/camera/${camera}`;
-    this.dataDir = this._getDataDir();
-    this.imageInfo = this._getImageInfo();
+    this.dataDir = path.join(this.streamDir, 'data');
+
+    this.options = options;
   }
 
-  _getDataDir() {
-    let dataDir = path.join(this.streamDir, 'processed');
-    if (!fs.existsSync(dataDir)) {
-      dataDir = path.join(this.streamDir, 'data');
-    }
-    return dataDir;
+  async loadFrame(frameNumber) {
+    // Load the data for this frame
+    const fileName = this.fileNames[frameNumber];
+    const {maxWidth, maxHeight} = this.options;
+    const srcFilePath = path.join(this.dataDir, fileName);
+    const {data, width, height} = await resizeImage(srcFilePath, maxWidth, maxHeight);
+
+    // Get the time stamp
+    const timestamp = this.timestamps[frameNumber];
+
+    return {data, timestamp, width, height};
   }
 
-  _getImageInfo() {
-    const files = fs.readdirSync(this.dataDir);
-    if (files) {
-      const imageFile = path.join(this.dataDir, files[0]);
-      return getImageMetadata(imageFile);
-    }
-    return null;
-  }
-
-  convertFrame(frameNumber, xvizBuilder) {
-    const {data} = this.loadFrame(frameNumber);
-    const {width: widthPixel, height: heightPixel, type: format} = this.imageInfo;
+  async convertFrame(frameNumber, xvizBuilder) {
+    const {data, width, height} = await this.loadFrame(frameNumber);
 
     xvizBuilder
       .stream(this.streamName)
-      .image(nodeBufferToTypedArray(data), format)
-      .dimensions(widthPixel, heightPixel);
+      .image(nodeBufferToTypedArray(data), 'png')
+      .dimensions(width, height);
   }
 
   getMetadata(xvizMetaBuilder) {

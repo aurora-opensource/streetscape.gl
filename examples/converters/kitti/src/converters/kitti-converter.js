@@ -12,10 +12,14 @@ import CameraConverter from './camera-converter';
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
 export class KittiConverter {
-  constructor(inputDir, outputDir, {disableStreams = null}) {
+  constructor(inputDir, outputDir, {disableStreams, imageMaxWidth, imageMaxHeight}) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;
     this.disableStreams = disableStreams;
+    this.imageOptions = {
+      maxWidth: imageMaxWidth,
+      maxHeight: imageMaxHeight
+    };
 
     this.numFrames = 0;
     this.metadata = null;
@@ -41,7 +45,10 @@ export class KittiConverter {
       gpsConverter,
       new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
       new LidarConverter(this.inputDir),
-      new CameraConverter(this.inputDir, this.disableStreams)
+      new CameraConverter(this.inputDir, {
+        disableStreams: this.disableStreams,
+        options: this.imageOptions
+      })
     ];
 
     this.converters.forEach(converter => converter.load());
@@ -53,7 +60,7 @@ export class KittiConverter {
     return this.numFrames;
   }
 
-  convertFrame(frameNumber) {
+  async convertFrame(frameNumber) {
     // The XVIZBuilder provides a fluent API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
@@ -62,7 +69,11 @@ export class KittiConverter {
       disableStreams: this.disableStreams
     });
 
-    this.converters.forEach(converter => converter.convertFrame(frameNumber, xvizBuilder));
+    const promises = this.converters.map(converter =>
+      converter.convertFrame(frameNumber, xvizBuilder)
+    );
+
+    await Promise.all(promises);
 
     return xvizBuilder.getFrame();
   }
