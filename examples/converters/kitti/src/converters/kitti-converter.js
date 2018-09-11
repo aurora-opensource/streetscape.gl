@@ -25,17 +25,21 @@ const {getTimestamps, createDir} = require('../parsers/common');
 import GPSConverter from './gps-converter';
 import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
-// import CameraConverter from './camera-converter';
+import CameraConverter from './camera-converter';
 
 // import DECLARATIVE_UI from './declarative-ui.json';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
 export class KittiConverter {
-  constructor(inputDir, outputDir, disableStreams) {
+  constructor(inputDir, outputDir, {disabledStreams, imageMaxWidth, imageMaxHeight}) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;
-    this.disableStreams = disableStreams;
+    this.disabledStreams = disabledStreams;
+    this.imageOptions = {
+      maxWidth: imageMaxWidth,
+      maxHeight: imageMaxHeight
+    };
 
     this.numFrames = 0;
     this.metadata = null;
@@ -60,8 +64,11 @@ export class KittiConverter {
     this.converters = [
       gpsConverter,
       new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
-      new LidarConverter(this.inputDir)
-      // new CameraConverter(this.inputDir)
+      new LidarConverter(this.inputDir),
+      new CameraConverter(this.inputDir, {
+        disabledStreams: this.disabledStreams,
+        options: this.imageOptions
+      })
     ];
 
     this.converters.forEach(converter => converter.load());
@@ -73,16 +80,20 @@ export class KittiConverter {
     return this.numFrames;
   }
 
-  convertFrame(frameNumber) {
+  async convertFrame(frameNumber) {
     // The XVIZBuilder provides a fluent API to construct objects.
     // This makes it easier to incrementally build objects that may have
     // many different options or variant data types supported.
     const xvizBuilder = new XVIZBuilder({
       metadata: this.metadata,
-      disableStreams: this.disableStreams
+      disabledStreams: this.disabledStreams
     });
 
-    this.converters.forEach(converter => converter.convertFrame(frameNumber, xvizBuilder));
+    const promises = this.converters.map(converter =>
+      converter.convertFrame(frameNumber, xvizBuilder)
+    );
+
+    await Promise.all(promises);
 
     return xvizBuilder.getFrame();
   }

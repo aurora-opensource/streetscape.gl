@@ -74,7 +74,7 @@ export default class TrackletsConverter {
     }
   }
 
-  convertFrame(frameNumber, xvizBuilder) {
+  async convertFrame(frameNumber, xvizBuilder) {
     const i = frameNumber;
     if (i < this.frameStart || i >= this.frameLimit) {
       return;

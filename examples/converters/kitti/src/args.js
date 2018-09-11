@@ -26,7 +26,7 @@ const parser = new ArgumentParser({
   description: 'KITTI to XVIZ converter'
 });
 
-parser.addArgument(['-d', '--data-directory', '--data_directory'], {
+parser.addArgument(['-d', '--data-directory'], {
   required: true,
   help: 'Path to raw KITTI data. Relative path will be resolved relative to /data/kitti/'
 });
@@ -40,9 +40,19 @@ parser.addArgument(['--disable-streams'], {
   help: 'Comma separated stream names to disable'
 });
 
-parser.addArgument(['--frame_limit'], {
+parser.addArgument(['--frame-limit'], {
   defaultValue: Number.MAX_SAFE_INTEGER,
   help: 'Limit XVIZ frame generation to this value. Useful for testing conversion quickly'
+});
+
+parser.addArgument(['--image-max-width'], {
+  defaultValue: Number.MIN_SAFE_INTEGER,
+  help: 'Image max width'
+});
+
+parser.addArgument(['--image-max-height'], {
+  defaultValue: Number.MIN_SAFE_INTEGER,
+  help: 'Image max height'
 });
 
 // extract args from user input
@@ -55,11 +65,13 @@ module.exports = function getArgs() {
     args.out || args.data_directory
   );
   console.log(inputDir, outputDir); // eslint-disable-line
-  const disableStreams = args.disable_streams.split(',');
+  const disabledStreams = args.disable_streams.split(',').filter(Boolean);
   return {
     inputDir,
     outputDir,
-    disableStreams,
-    frameLimit: args.frame_limit
+    disabledStreams,
+    imageMaxWidth: Number(args.image_max_width),
+    imageMaxHeight: Number(args.image_max_height),
+    frameLimit: Number(args.frame_limit)
   };
 };

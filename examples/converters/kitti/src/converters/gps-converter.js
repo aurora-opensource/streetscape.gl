@@ -53,7 +53,7 @@ export default class GPSConverter {
     return this.poses[frameNumber].pose;
   }
 
-  convertFrame(frameNumber, xvizBuilder) {
+  async convertFrame(frameNumber, xvizBuilder) {
     const i = frameNumber;
     const entry = this.poses[i];
     const pose = entry.pose;

@@ -141,8 +141,8 @@ export default class XVIZLoaderInterface {
 
   getCurrentFrame = createSelector(
     this,
-    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime, this.getStreams],
-    (logSynchronizer, metadata, timestamp, streams) => {
+    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime],
+    (logSynchronizer, metadata, timestamp) => {
       if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
         logSynchronizer.setTime(timestamp);
         return logSynchronizer.getCurrentFrame(metadata.streams);
@@ -160,6 +160,44 @@ export default class XVIZLoaderInterface {
   // TODO add declare ui metadata
   getTimeSeries = createSelector(this, [this.getMetadata, this.getStreams], (metadata, streams) =>
     getTimeSeries({metadata, streams})
+  );
+
+  getTimestamps = createSelector(this, this.getStreams, streams => {
+    const vehiclePoses = streams && streams['vehicle-pose'];
+    if (vehiclePoses) {
+      return vehiclePoses.map(pose => pose.time);
+    }
+    return null;
+  });
+
+  getImageStreamNames = createSelector(this, this.getMetadata, metadata => {
+    const streams = metadata && metadata.streams;
+    return (
+      streams && Object.keys(streams).filter(streamName => streams[streamName].type === 'image')
+    );
+  });
+
+  getImageFrames = createSelector(
+    this,
+    [this.getImageStreamNames, this.getStreams, this.getTimestamps],
+    (imageStreamNames, streams, timestamps) => {
+      if (streams && imageStreamNames) {
+        const frames = {};
+        imageStreamNames.forEach(streamName => {
+          frames[streamName] = streams[streamName].map((frame, i) => {
+            const timestamp = timestamps[i];
+            if (frame && frame.images[0]) {
+              // assign timestamp of vehicle pose to image frame
+              Object.assign(frame.images[0], {timestamp: timestamp / 1000});
+            }
+            return frame && frame.images[0];
+          });
+        });
+        return frames;
+      }
+
+      return null;
+    }
   );
 
   /* Private actions */

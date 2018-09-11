@@ -44,7 +44,7 @@ export default class LidarConverter {
     this.lidarFiles = fs.readdirSync(this.lidarDataDir).sort();
   }
 
-  convertFrame(frameNumber, xvizBuilder) {
+  async convertFrame(frameNumber, xvizBuilder) {
     const i = frameNumber;
     const fileName = this.lidarFiles[i];
     const srcFilePath = path.join(this.lidarDataDir, fileName);

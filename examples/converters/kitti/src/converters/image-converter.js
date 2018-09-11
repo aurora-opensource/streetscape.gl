@@ -18,27 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import path from 'path';
+
+import {resizeImage} from '../parsers/process-image';
 import BaseConverter from './base-converter';
 
-const widthPixel = 1242;
-const heightPixel = 375;
-const format = 'png';
-
 export default class ImageConverter extends BaseConverter {
-  constructor(rootDir, camera = 'image_00') {
+  constructor(rootDir, camera = 'image_00', options) {
     super(rootDir, camera);
 
     this.streamName = `/camera/${camera}`;
+    this.dataDir = path.join(this.streamDir, 'data');
+
+    this.options = options;
   }
 
-  convertFrame(frameNumber, xvizBuilder) {
-    const {data, timestamp} = this.loadFrame(frameNumber);
+  async loadFrame(frameNumber) {
+    // Load the data for this frame
+    const fileName = this.fileNames[frameNumber];
+    const {maxWidth, maxHeight} = this.options;
+    const srcFilePath = path.join(this.dataDir, fileName);
+    const {data, width, height} = await resizeImage(srcFilePath, maxWidth, maxHeight);
+
+    // Get the time stamp
+    const timestamp = this.timestamps[frameNumber];
+
+    return {data, timestamp, width, height};
+  }
+
+  async convertFrame(frameNumber, xvizBuilder) {
+    const {data, width, height} = await this.loadFrame(frameNumber);
 
     xvizBuilder
       .stream(this.streamName)
-      .image(nodeBufferToTypedArray(data), format)
-      .dimensions(widthPixel, heightPixel)
-      .timestamp(timestamp);
+      .image(nodeBufferToTypedArray(data), 'png')
+      .dimensions(width, height);
   }
 
   getMetadata(xvizMetaBuilder) {

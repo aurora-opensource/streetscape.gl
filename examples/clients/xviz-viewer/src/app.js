@@ -25,7 +25,14 @@ import 'xviz-config';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {XVIZStreamLoader, LogViewer, PlaybackControl, XvizPanel, VIEW_MODES} from 'streetscape.gl';
+import {
+  XVIZStreamLoader,
+  LogViewer,
+  PlaybackControl,
+  XvizPanel,
+  VideoContainer,
+  VIEW_MODES
+} from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
 
 import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
@@ -85,6 +92,7 @@ class Example extends PureComponent {
           <hr />
           <XvizPanel log={log} id="0" />
         </div>
+        <VideoContainer log={log} />
       </div>
     );
   }
