@@ -21,7 +21,7 @@ export default class BaseConverter {
     this.timestamps = getTimestamps(timeFilePath);
   }
 
-  loadFrame(frameNumber) {
+  async loadFrame(frameNumber) {
     // Load the data for this frame
     const fileName = this.fileNames[frameNumber];
     const srcFilePath = path.join(this.dataDir, fileName);
