@@ -75,7 +75,3 @@ export function loadOxtsPackets(content) {
   // TODO: this should validate the # of fields
   return getOxtsPacket(values);
 }
-
-module.exports = {
-  loadOxtsPackets
-};

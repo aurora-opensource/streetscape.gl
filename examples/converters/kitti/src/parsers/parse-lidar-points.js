@@ -22,10 +22,10 @@
  * Parse LiDar data (stored in velodyne_points dir),
  */
 
-const BinaryParser = require('binary-parser').Parser;
+import {Parser as BinaryParser} from 'binary-parser';
 const parser = new BinaryParser().floatle();
 
-function readBinaryFile(binary) {
+function readBinaryData(binary) {
   const res = [];
   for (let i = 0; i < binary.length; i = i + 4) {
     if (i + 4 > binary.length) {
@@ -37,8 +37,8 @@ function readBinaryFile(binary) {
   return res;
 }
 
-function loadLidarData(contents) {
-  const binary = readBinaryFile(contents);
+export function loadLidarData(data) {
+  const binary = readBinaryData(data);
   const float = new Float32Array(binary);
   const size = Math.round(binary.length / 4);
 
@@ -54,7 +54,3 @@ function loadLidarData(contents) {
   }
   return {positions, reflectance};
 }
-
-module.exports = {
-  loadLidarData
-};

@@ -18,38 +18,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-const fs = require('fs');
-const path = require('path');
-const uuid = require('uuid').v4;
+import uuid from 'uuid/v4';
 
-import {getTimestamps} from '../parsers/common';
+import BaseConverter from './base-converter';
 import {loadLidarData} from '../parsers/parse-lidar-points';
 
 // load file
-export default class LidarConverter {
-  constructor(directory) {
-    this.rootDir = directory;
-    this.lidarDir = path.join(directory, 'velodyne_points');
-    this.lidarDataDir = path.join(this.lidarDir, 'data');
-    this.lidarFiles = [];
+export default class LidarConverter extends BaseConverter {
+  constructor(rootDir, streamDir) {
+    super(rootDir, streamDir);
 
     this.LIDAR_POINTS = '/lidar/points';
   }
 
-  load() {
-    const timeFilePath = path.join(this.lidarDir, 'timestamps.txt');
-    // TODO load start and end timestamps if necessary
-    this.timestamps = getTimestamps(timeFilePath);
-
-    this.lidarFiles = fs.readdirSync(this.lidarDataDir).sort();
-  }
-
   async convertFrame(frameNumber, xvizBuilder) {
-    const i = frameNumber;
-    const fileName = this.lidarFiles[i];
-    const srcFilePath = path.join(this.lidarDataDir, fileName);
-    const lidarContents = fs.readFileSync(srcFilePath);
-    const lidarData = loadLidarData(lidarContents);
+    const {data, timestamp} = await this.loadFrame(frameNumber);
+    const lidarData = loadLidarData(data);
 
     // This encode/parse is a temporary workaround until we get fine-grain
     // control of which streams should be packed in the binary.
@@ -61,7 +45,7 @@ export default class LidarConverter {
     xvizBuilder
       .stream(this.LIDAR_POINTS)
       .points(temporaryObject.vertices)
-      .timestamp(this.timestamps[i])
+      .timestamp(timestamp)
       .id(uuid())
       .color([0, 0, 0, 255]);
   }
