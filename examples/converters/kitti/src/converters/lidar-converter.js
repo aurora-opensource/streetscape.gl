@@ -12,7 +12,7 @@ export default class LidarConverter extends BaseConverter {
   }
 
   async convertFrame(frameNumber, xvizBuilder) {
-    const {data, timestamp} = this.loadFrame(frameNumber);
+    const {data, timestamp} = await this.loadFrame(frameNumber);
     const lidarData = loadLidarData(data);
 
     // This encode/parse is a temporary workaround until we get fine-grain

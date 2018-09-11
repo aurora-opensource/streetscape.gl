@@ -5,7 +5,7 @@
 import {Parser as BinaryParser} from 'binary-parser';
 const parser = new BinaryParser().floatle();
 
-function readBinaryFile(binary) {
+function readBinaryData(binary) {
   const res = [];
   for (let i = 0; i < binary.length; i = i + 4) {
     if (i + 4 > binary.length) {
@@ -17,8 +17,8 @@ function readBinaryFile(binary) {
   return res;
 }
 
-export function loadLidarData(contents) {
-  const binary = readBinaryFile(contents);
+export function loadLidarData(data) {
+  const binary = readBinaryData(data);
   const float = new Float32Array(binary);
   const size = Math.round(binary.length / 4);
 
