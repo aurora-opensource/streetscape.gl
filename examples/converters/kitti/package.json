@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Provides a minimal set of tools for working with the KITTI dataset in Javascript",
   "scripts": {
-    "start": "node ./src/index.js",
-    "pre-process": "node ./src/pre-process.js"
+    "start": "node ./src/index.js"
   },
   "dependencies": {
     "@turf/turf": "^5.1.6",
