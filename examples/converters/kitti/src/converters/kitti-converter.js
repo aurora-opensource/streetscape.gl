@@ -38,13 +38,13 @@ export class KittiConverter {
     // These are the converters for the various data sources.
     // Notice that some data sources are passed to others when a data dependency
     // requires coordination with another data source.
-    const gpsConverter = new GPSConverter(this.inputDir);
+    const gpsConverter = new GPSConverter(this.inputDir, 'oxts');
 
     // Note: order is important due to data deps on the pose
     this.converters = [
       gpsConverter,
       new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
-      new LidarConverter(this.inputDir),
+      new LidarConverter(this.inputDir, 'velodyne_points'),
       new CameraConverter(this.inputDir, {
         disabledStreams: this.disabledStreams,
         options: this.imageOptions

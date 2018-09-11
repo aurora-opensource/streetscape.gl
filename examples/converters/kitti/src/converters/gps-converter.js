@@ -1,14 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
+import BaseConverter from './base-converter';
 import {generateTrajectoryFrame, getPoseOffset} from './common';
-import {getTimestamps} from '../parsers/common';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
 
-export default class GPSConverter {
-  constructor(directory) {
-    this.rootDir = directory;
-    this.gpsDir = path.join(directory, 'oxts', 'data');
+export default class GPSConverter extends BaseConverter {
+  constructor(rootDir, streamDir) {
+    super(rootDir, streamDir);
 
     // XVIZ stream names produced by this converter
     this.VEHICLE_ACCELERATION = '/vehicle/acceleration';
@@ -17,14 +16,11 @@ export default class GPSConverter {
   }
 
   load() {
-    const timeFilePath = path.join(this.rootDir, 'oxts', 'timestamps.txt');
-
-    this.timestamps = getTimestamps(timeFilePath);
-    this.gpsFiles = fs.readdirSync(this.gpsDir).sort();
+    super.load();
 
     // Load all files because we need them for the trajectory
-    this.poses = this.gpsFiles.map((fileName, i) => {
-      const srcFilePath = path.join(this.gpsDir, fileName);
+    this.poses = this.fileNames.map((fileName, i) => {
+      const srcFilePath = path.join(this.dataDir, fileName);
       return this._convertPose(srcFilePath, this.timestamps[i]);
     });
   }
@@ -34,10 +30,10 @@ export default class GPSConverter {
   }
 
   async convertFrame(frameNumber, xvizBuilder) {
-    const i = frameNumber;
-    const entry = this.poses[i];
-    const pose = entry.pose;
-    console.log(`processing gps data frame ${i}/${this.timestamps.length}`); // eslint-disable-line
+    const entry = this.poses[frameNumber];
+
+    const {pose, velocity, acceleration} = entry;
+    console.log(`processing gps data frame ${frameNumber}/${this.timestamps.length}`); // eslint-disable-line
 
     // Every frame *MUST* have a pose. The pose can be considered
     // the core reference point for other data and usually drives the timing
@@ -50,18 +46,18 @@ export default class GPSConverter {
     // The fluent-API makes this construction self-documenting.
     xvizBuilder
       .stream(this.VEHICLE_VELOCITY)
-      .timestamp(entry.velocity.timestamp)
-      .value(entry.velocity['velocity-forward'])
+      .timestamp(velocity.timestamp)
+      .value(velocity['velocity-forward'])
 
       .stream(this.VEHICLE_ACCELERATION)
-      .timestamp(entry.acceleration.timestamp)
-      .value(entry.acceleration['acceleration-forward']);
+      .timestamp(acceleration.timestamp)
+      .value(acceleration['acceleration-forward']);
 
     const limit = this.poses.length;
-    const getVehiclePose = index => this.poses[index].pose;
+    const getVehiclePose = i => this.getPose(i);
 
     const xvizTrajectory = generateTrajectoryFrame(
-      i,
+      frameNumber,
       limit,
       getVehiclePose,
       this._convertTrajectory
