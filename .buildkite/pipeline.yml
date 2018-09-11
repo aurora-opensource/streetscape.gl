@@ -1,0 +1,20 @@
+steps:
+  - name: ":docker:"
+    plugins:
+      docker-compose#v1.5.2:
+        build: streetscape
+        image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
+
+  - wait
+
+  - name: ":node:"
+    command: "yarn test"
+    plugins:
+      docker-compose#v1.5.2:
+        run: streetscape
+
+  - name: ":chrome:"
+    command: "sh /etc/init.d/xvfb && yarn test-browser"
+    plugins:
+      docker-compose#v1.5.2:
+        run: streetscape
