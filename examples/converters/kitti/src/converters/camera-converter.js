@@ -3,9 +3,9 @@ import ImageConverter from './image-converter';
 const CAMERA_SOURCES = ['image_00', 'image_01', 'image_02', 'image_03'];
 
 export default class CameraConverter {
-  constructor(rootDir, {disableStreams = [], options = {}}) {
+  constructor(rootDir, {disabledStreams = [], options = {}}) {
     this.rootDir = rootDir;
-    this.cameraSources = CAMERA_SOURCES.filter(camera => !disableStreams.includes(camera));
+    this.cameraSources = CAMERA_SOURCES.filter(camera => !disabledStreams.includes(camera));
     this.imageConverters = [];
     this.options = options;
   }

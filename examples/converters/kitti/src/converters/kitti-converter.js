@@ -12,10 +12,10 @@ import CameraConverter from './camera-converter';
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
 export class KittiConverter {
-  constructor(inputDir, outputDir, {disableStreams, imageMaxWidth, imageMaxHeight}) {
+  constructor(inputDir, outputDir, {disabledStreams, imageMaxWidth, imageMaxHeight}) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;
-    this.disableStreams = disableStreams;
+    this.disabledStreams = disabledStreams;
     this.imageOptions = {
       maxWidth: imageMaxWidth,
       maxHeight: imageMaxHeight
@@ -46,7 +46,7 @@ export class KittiConverter {
       new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
       new LidarConverter(this.inputDir),
       new CameraConverter(this.inputDir, {
-        disableStreams: this.disableStreams,
+        disabledStreams: this.disabledStreams,
         options: this.imageOptions
       })
     ];
@@ -66,7 +66,7 @@ export class KittiConverter {
     // many different options or variant data types supported.
     const xvizBuilder = new XVIZBuilder({
       metadata: this.metadata,
-      disableStreams: this.disableStreams
+      disabledStreams: this.disabledStreams
     });
 
     const promises = this.converters.map(converter =>

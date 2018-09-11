@@ -45,11 +45,11 @@ module.exports = function getArgs() {
     args.out || args.data_directory
   );
   console.log(inputDir, outputDir); // eslint-disable-line
-  const disableStreams = args.disable_streams.split(',').filter(Boolean);
+  const disabledStreams = args.disable_streams.split(',').filter(Boolean);
   return {
     inputDir,
     outputDir,
-    disableStreams,
+    disabledStreams,
     imageMaxWidth: Number(args.image_max_width),
     imageMaxHeight: Number(args.image_max_height),
     frameLimit: Number(args.frame_limit)

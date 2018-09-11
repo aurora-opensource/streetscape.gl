@@ -7,7 +7,7 @@ module.exports = async function main(args) {
   const {
     inputDir,
     outputDir,
-    disableStreams,
+    disabledStreams,
     frameLimit,
     cameraSources,
     imageMaxWidth,
@@ -18,7 +18,7 @@ module.exports = async function main(args) {
   // and delegates to the individual converters
   const converter = new KittiConverter(inputDir, outputDir, {
     cameraSources,
-    disableStreams,
+    disabledStreams,
     imageMaxWidth,
     imageMaxHeight
   });
