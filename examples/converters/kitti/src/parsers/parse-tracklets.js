@@ -2,10 +2,10 @@
 /**
  * Parse tracklets objects (stored in tracklet_labels.xml),
  */
-const parser = require('xml2json');
-const uuid = require('uuid').v4;
+import parser from 'xml2json';
+import uuid from 'uuid/v4';
 
-function loadTracklets(tracklets_contents) {
+export function loadTracklets(tracklets_contents) {
   const raw_data = JSON.parse(parser.toJson(tracklets_contents));
   const tracklets = raw_data.boost_serialization.tracklets;
 
@@ -45,7 +45,3 @@ function parseObjectMetadata(tracklets) {
     };
   });
 }
-
-module.exports = {
-  loadTracklets
-};
