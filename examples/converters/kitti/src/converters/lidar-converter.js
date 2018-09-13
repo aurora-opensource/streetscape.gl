@@ -12,7 +12,7 @@ export default class LidarConverter extends BaseConverter {
   }
 
   async convertFrame(frameNumber, xvizBuilder) {
-    const {data, timestamp} = await this.loadFrame(frameNumber);
+    const {data} = await this.loadFrame(frameNumber);
     const lidarData = loadLidarData(data);
 
     // This encode/parse is a temporary workaround until we get fine-grain
@@ -25,7 +25,6 @@ export default class LidarConverter extends BaseConverter {
     xvizBuilder
       .stream(this.LIDAR_POINTS)
       .points(temporaryObject.vertices)
-      .timestamp(timestamp)
       .id(uuid())
       .color([0, 0, 0, 255]);
   }
