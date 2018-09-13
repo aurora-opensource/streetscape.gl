@@ -7,8 +7,14 @@ steps:
 
   - wait
 
+  - name: ":eslint:"
+    command: "yarn lint"
+    plugins:
+      docker-compose#v1.5.2:
+        run: streetscape
+
   - name: ":node:"
-    command: "yarn test"
+    command: "node test/start"
     plugins:
       docker-compose#v1.5.2:
         run: streetscape

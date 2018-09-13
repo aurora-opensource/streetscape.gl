@@ -17,10 +17,10 @@ RUN apt-get -y install libxi-dev libgl1-mesa-dev xvfb
 ADD .buildkite/xvfb /etc/init.d/xvfb
 RUN chmod a+x /etc/init.d/xvfb
 
-RUN mkdir /streetscape/streetscape/
-COPY . /streetscape/streetscape/
+COPY . /streetscape/
 
-RUN git clone git@github.com:uber/xviz.git && \
-  cd /streetscape/xviz && yarn bootstrap
+RUN mv /streetscape/xviz /xviz && \
+  cd /xviz && \
+  yarn bootstrap
 
-RUN cd /streetscape/streetscape/ && yarn bootstrap
+RUN cd /streetscape/ && yarn bootstrap
