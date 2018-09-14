@@ -12,9 +12,8 @@ const CONTAINER_STYLE = {
 
 class VideoPanel extends PureComponent {
   static propTypes = {
-    width: PropTypes.number.isRequired,
-    streamFilter: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.func]),
-    timeTolerance: PropTypes.number
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    streamFilter: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.func])
   };
 
   _getVideos() {
@@ -35,7 +34,7 @@ class VideoPanel extends PureComponent {
   }
 
   render() {
-    const {currentTime, width, timeTolerance} = this.props;
+    const {currentTime, width} = this.props;
     const videos = this._getVideos();
 
     if (!currentTime || !videos) {
@@ -50,7 +49,6 @@ class VideoPanel extends PureComponent {
             key={streamName}
             src={frames}
             currentTime={currentTime}
-            tolerance={timeTolerance}
           />
         ))}
       </div>

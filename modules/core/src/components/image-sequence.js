@@ -1,4 +1,5 @@
 // @flow
+import {getXvizSettings} from '@xviz/parser';
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
@@ -56,27 +57,26 @@ export default class ImageSequence extends PureComponent {
   }
 
   _getCurrentFrames(props) {
-    const {currentTime, src, tolerance = Infinity} = props;
+    const {currentTime, src} = props;
 
-    const minBufferTime = currentTime - tolerance * VIDEO_FRAME_BUFFER;
-    const maxBufferTime = currentTime + tolerance * VIDEO_FRAME_BUFFER;
-
-    const buffer = src.filter(
-      (frame, i) =>
-        i === 0 || (frame.timestamp >= minBufferTime && frame.timestamp <= maxBufferTime)
-    );
-
-    let bestDelta = tolerance;
+    let currentFrame = null;
+    let currentFrameIndex = -1;
+    let bestDelta = getXvizSettings().TIME_WINDOW;;
 
     // Find the frame closest to the current timestamp
-    const currentFrame = buffer.reduce((bestMatch, frame) => {
-      const delta = Math.abs(frame.timestamp - currentTime);
-      if (delta < bestDelta) {
+    src.forEach((frame, i) => {
+      const delta = currentTime - frame.timestamp;
+      if (delta >= 0 && delta < bestDelta) {
         bestDelta = delta;
-        return frame;
+        currentFrame = frame;
+        currentFrameIndex = i;
       }
-      return bestMatch;
-    }, null);
+    });
+
+    const buffer = currentFrameIndex >= 0 ?
+      src.slice(Math.max(0, currentFrameIndex - VIDEO_FRAME_BUFFER), currentFrameIndex + VIDEO_FRAME_BUFFER) :
+      // If no frame is matched, still render an invisible placeholder so that the container has size
+      src.slice(0, 1);
 
     return {currentFrame, buffer};
   }
