@@ -168,7 +168,7 @@ export default class XVIZLoaderInterface {
             const timestamp = timestamps[i];
             if (frame && frame.images[0]) {
               // assign timestamp of vehicle pose to image frame
-              Object.assign(frame.images[0], {timestamp: timestamp / 1000});
+              Object.assign(frame.images[0], {timestamp});
             }
             return frame && frame.images[0];
           });

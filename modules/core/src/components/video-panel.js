@@ -1,47 +1,56 @@
 import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 
 import ImageSequence from './image-sequence';
 import connectToLog from './connect';
 
-const DEFAULT_IMAGE_WIDTH = 600;
-const DEFAULT_IMAGE_HEIGHT = 400;
+import {normalizeStreamFilter} from '../utils/stream-utils';
 
-function getImageDimension(imageFrames) {
-  const imageName = Object.keys(imageFrames)[0];
-  const width = imageFrames[imageName][0].width_px || DEFAULT_IMAGE_WIDTH;
-  const height = imageFrames[imageName][0].height_px || DEFAULT_IMAGE_HEIGHT;
-  return {width, height};
-}
-
-function getPanelSize(imageWidth, imageHeight, numImages) {
-  return {width: imageWidth, height: imageHeight * numImages};
-}
+const CONTAINER_STYLE = {
+  background: '#000'
+};
 
 class VideoPanel extends PureComponent {
-  render() {
-    const {imageFrames, currentTime} = this.props;
-    if (!currentTime || !imageFrames) {
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    streamFilter: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.func]),
+    timeTolerance: PropTypes.number
+  };
+
+  _getVideos() {
+    const {imageFrames} = this.props;
+
+    if (!imageFrames) {
       return null;
     }
 
-    const numImages = Object.keys(imageFrames).length;
-    const {width: imageWidth, height: imageHeight} = getImageDimension(imageFrames);
-    const {width, height} = getPanelSize(imageWidth, imageHeight, numImages);
-    const paneStyle = {
-      width,
-      height,
-      overflow: 'hidden'
-    };
+    const streamFilter = normalizeStreamFilter(this.props.streamFilter);
+
+    return Object.keys(imageFrames)
+      .filter(streamFilter)
+      .map(streamName => ({
+        streamName,
+        frames: imageFrames[streamName]
+      }));
+  }
+
+  render() {
+    const {currentTime, width, timeTolerance} = this.props;
+    const videos = this._getVideos();
+
+    if (!currentTime || !videos) {
+      return null;
+    }
 
     return (
-      <div className="vehicle-video-panel" style={paneStyle}>
-        {Object.keys(imageFrames).map(imageName => (
+      <div style={CONTAINER_STYLE}>
+        {videos.map(({streamName, frames}) => (
           <ImageSequence
-            key={imageName}
-            width={imageWidth}
-            height={imageHeight}
-            src={imageFrames[imageName]}
-            currentTime={currentTime / 1000}
+            width={width}
+            key={streamName}
+            src={frames}
+            currentTime={currentTime}
+            tolerance={timeTolerance}
           />
         ))}
       </div>
