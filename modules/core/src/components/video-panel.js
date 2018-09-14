@@ -44,12 +44,7 @@ class VideoPanel extends PureComponent {
     return (
       <div style={CONTAINER_STYLE}>
         {videos.map(({streamName, frames}) => (
-          <ImageSequence
-            width={width}
-            key={streamName}
-            src={frames}
-            currentTime={currentTime}
-          />
+          <ImageSequence width={width} key={streamName} src={frames} currentTime={currentTime} />
         ))}
       </div>
     );

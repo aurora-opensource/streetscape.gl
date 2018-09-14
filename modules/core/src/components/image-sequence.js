@@ -18,9 +18,6 @@ export default class ImageSequence extends PureComponent {
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
-    // The time window within which frames can be attributed to the current timestamp
-    tolerance: PropTypes.number,
-
     // Array of frames to render, in shape of {timestamp, imageUrl}
     src: PropTypes.array, // eslint-disable-line
 
@@ -61,7 +58,7 @@ export default class ImageSequence extends PureComponent {
 
     let currentFrame = null;
     let currentFrameIndex = -1;
-    let bestDelta = getXvizSettings().TIME_WINDOW;;
+    let bestDelta = getXvizSettings().TIME_WINDOW;
 
     // Find the frame closest to the current timestamp
     src.forEach((frame, i) => {
@@ -73,10 +70,14 @@ export default class ImageSequence extends PureComponent {
       }
     });
 
-    const buffer = currentFrameIndex >= 0 ?
-      src.slice(Math.max(0, currentFrameIndex - VIDEO_FRAME_BUFFER), currentFrameIndex + VIDEO_FRAME_BUFFER) :
-      // If no frame is matched, still render an invisible placeholder so that the container has size
-      src.slice(0, 1);
+    const buffer =
+      currentFrameIndex >= 0
+        ? src.slice(
+            Math.max(0, currentFrameIndex - VIDEO_FRAME_BUFFER),
+            currentFrameIndex + VIDEO_FRAME_BUFFER
+          )
+        : // If no frame is matched, still render an invisible placeholder so that the container has size
+          src.slice(0, 1);
 
     return {currentFrame, buffer};
   }
