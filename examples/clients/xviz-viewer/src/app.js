@@ -93,7 +93,7 @@ class Example extends PureComponent {
           <XvizPanel log={log} id="0" />
         </div>
         <div id="video-panel">
-          <VideoPanel log={log} />
+          <VideoPanel log={log} width={400} timeTolerance={100} />
         </div>
       </div>
     );
