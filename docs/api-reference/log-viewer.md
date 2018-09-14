@@ -52,7 +52,7 @@ Specify which streams to render.
  - Function: custom callback that receives a stream name as argument and returns truthy if the stream should be rendered.
  
 
- ##### `customLayers` (Array)
+##### `customLayers` (Array)
 
 A list of additional layers to render.
 
