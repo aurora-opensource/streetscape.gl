@@ -121,7 +121,7 @@ export default class XVIZLoaderInterface {
 
   getCurrentFrame = createSelector(
     this,
-    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime],
+    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime, this.getStreams],
     (logSynchronizer, metadata, timestamp) => {
       if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
         logSynchronizer.setTime(timestamp);
