@@ -14,7 +14,7 @@ function getImageDimension(imageFrames) {
 }
 
 function getPanelSize(imageWidth, imageHeight, numImages) {
-  return {width: imageWidth, height: imageHeight * numImages}
+  return {width: imageWidth, height: imageHeight * numImages};
 }
 
 class VideoPanel extends PureComponent {
@@ -35,15 +35,15 @@ class VideoPanel extends PureComponent {
 
     return (
       <div className="vehicle-video-panel" style={paneStyle}>
-          {Object.keys(imageFrames).map(imageName => (
-            <ImageSequence
-              key={imageName}
-              width={imageWidth}
-              height={imageHeight}
-              src={imageFrames[imageName]}
-              currentTime={currentTime / 1000}
-            />
-          ))}
+        {Object.keys(imageFrames).map(imageName => (
+          <ImageSequence
+            key={imageName}
+            width={imageWidth}
+            height={imageHeight}
+            src={imageFrames[imageName]}
+            currentTime={currentTime / 1000}
+          />
+        ))}
       </div>
     );
   }
