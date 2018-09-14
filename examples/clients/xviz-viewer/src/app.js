@@ -10,7 +10,7 @@ import {
   LogViewer,
   PlaybackControl,
   XvizPanel,
-  VideoContainer,
+  VideoPanel,
   VIEW_MODES
 } from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
@@ -72,7 +72,9 @@ class Example extends PureComponent {
           <hr />
           <XvizPanel log={log} id="0" />
         </div>
-        <VideoContainer log={log} />
+        <div id="video-panel">
+          <VideoPanel log={log} />
+        </div>
       </div>
     );
   }
