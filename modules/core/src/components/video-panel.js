@@ -13,7 +13,7 @@ const CONTAINER_STYLE = {
 class VideoPanel extends PureComponent {
   static propTypes = {
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    streamFilter: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.func])
+    streamFilter: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object, PropTypes.func])
   };
 
   _getVideos() {
