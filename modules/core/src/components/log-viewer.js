@@ -34,6 +34,9 @@ import XvizLayer from '../layers/xviz-layer';
 import {VIEW_MODES} from '../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
 import {resolveCoordinateTransform} from '../utils/transform';
+import {mergeXvizStyles} from '../utils/style';
+import {normalizeStreamFilter} from '../utils/stream-utils';
+
 import connectToLog from './connect';
 
 const CAR_DATA = [[0, 0, 0]];
@@ -54,17 +57,31 @@ const DEFAULT_CAR = {
 
 class Core3DViewer extends PureComponent {
   static propTypes = {
+    // Props from loader
     frame: PropTypes.object,
     metadata: PropTypes.object,
+
+    // Rendering options
     mapboxApiAccessToken: PropTypes.string,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+    xvizStyles: PropTypes.object,
     car: PropTypes.object,
-    viewMode: PropTypes.object
+    viewMode: PropTypes.object,
+    streamFilter: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object, PropTypes.func]),
+    customLayers: PropTypes.array,
+
+    // Optional: to use with external state management (e.g. Redux)
+    viewState: PropTypes.object,
+    viewOffset: PropTypes.object,
+    onViewStateChange: PropTypes.func
   };
 
   static defaultProps = {
     car: DEFAULT_CAR,
-    viewMode: VIEW_MODES.PERSPECTIVE
+    viewMode: VIEW_MODES.PERSPECTIVE,
+    xvizStyles: {},
+    customLayers: [],
+    onViewStateChange: () => {}
   };
 
   constructor(props) {
@@ -86,7 +103,7 @@ class Core3DViewer extends PureComponent {
         y: 0,
         bearing: 0
       },
-      styleParser: props.metadata && new XvizStyleParser(props.metadata.styles),
+      styleParser: this._getStyleParser(props),
       carMesh: null
     };
 
@@ -99,32 +116,54 @@ class Core3DViewer extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
-      this.setState({
-        viewState: {...this.state.viewState, ...nextProps.viewMode.initialProps}
-      });
+      const viewState = {...this.state.viewState, ...nextProps.viewMode.initialProps};
+      let viewOffset = this.state.viewOffset;
+      if (nextProps.viewMode.firstPerson) {
+        // Reset offset if switching to first person mode
+        viewOffset = {
+          x: 0,
+          y: 0,
+          bearing: 0
+        };
+      }
+
+      this.setState({viewState, viewOffset});
+      nextProps.onViewStateChange({viewState, viewOffset});
     }
-    if (this.props.metadata !== nextProps.metadata) {
+    if (
+      this.props.metadata !== nextProps.metadata ||
+      this.props.xvizStyles !== nextProps.xvizStyles
+    ) {
       this.setState({
-        styleParser: new XvizStyleParser(nextProps.metadata.styles)
+        styleParser: this._getStyleParser(nextProps)
       });
     }
   }
 
   _onViewStateChange = ({viewState, oldViewState}) => {
-    this.setState({
+    const viewOffset = getViewStateOffset(
+      oldViewState,
       viewState,
-      viewOffset: getViewStateOffset(oldViewState, viewState, this.state.viewOffset)
-    });
+      this.props.viewOffset || this.state.viewOffset
+    );
+    this.setState({viewState, viewOffset});
+    this.props.onViewStateChange({viewState, viewOffset});
   };
 
+  _getStyleParser({metadata, xvizStyles}) {
+    return new XvizStyleParser(mergeXvizStyles(metadata && metadata.styles, xvizStyles));
+  }
+
   _getLayers() {
-    const {frame, car, viewMode, metadata} = this.props;
+    const {frame, car, viewMode, metadata, customLayers} = this.props;
     if (!frame || !metadata) {
       return [];
     }
 
     const {streams, origin, heading, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
+
+    const streamFilter = normalizeStreamFilter(this.props.streamFilter);
 
     return [
       carMesh &&
@@ -147,6 +186,7 @@ class Core3DViewer extends PureComponent {
           }
         }),
       Object.keys(streams)
+        .filter(streamFilter)
         .map(streamName => {
           const stream = streams[streamName];
           const streamMetadata = metadata.streams[streamName];
@@ -188,7 +228,26 @@ class Core3DViewer extends PureComponent {
           return null;
         })
         .filter(Boolean)
-        .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex)
+        .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex),
+
+      customLayers.map(layer => {
+        // Clone layer props
+        const props = {...layer.props};
+
+        if (props.streamName) {
+          // Use log data
+          const stream = streams[props.streamName];
+          const streamMetadata = metadata.streams[props.streamName];
+          Object.assign(props, resolveCoordinateTransform(frame, streamMetadata), {
+            data: stream && stream.features
+          });
+        } else if (props.coordinate) {
+          // Apply log-specific coordinate props
+          Object.assign(props, resolveCoordinateTransform(frame, props));
+        }
+
+        return layer.clone(props);
+      })
     ];
   }
 
@@ -201,7 +260,10 @@ class Core3DViewer extends PureComponent {
 
   _getViewState() {
     const {viewMode, frame} = this.props;
-    const {viewState, viewOffset} = this.state;
+    // Allow users to override viewState from application
+    // if not specified then use the saved internal state
+    const viewState = this.props.viewState || this.state.viewState;
+    const viewOffset = this.props.viewOffset || this.state.viewOffset;
 
     const trackedPosition = frame
       ? {
