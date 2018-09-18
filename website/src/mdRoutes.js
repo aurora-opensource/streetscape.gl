@@ -8,7 +8,10 @@ export default [{
       markdown: require('../../docs/README.md')
     }, {
       name: 'What\'s New',
-      markdown: require('../../CHANGELOG.md')
+      markdown: require('../../docs/whats-new.md')
+    }, {
+      name: 'Roadmap',
+      markdown: require('../../docs/roadmap.md')
     }, {
       name: 'FAQ',
       markdown: require('../../docs/FAQ.md')
