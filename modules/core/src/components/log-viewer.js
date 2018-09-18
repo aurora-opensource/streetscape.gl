@@ -47,7 +47,12 @@ class Core3DViewer extends PureComponent {
     xvizStyles: PropTypes.object,
     car: PropTypes.object,
     viewMode: PropTypes.object,
-    streamFilter: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object, PropTypes.func]),
+    streamFilter: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+      PropTypes.object,
+      PropTypes.func
+    ]),
     customLayers: PropTypes.array,
 
     // Optional: to use with external state management (e.g. Redux)
