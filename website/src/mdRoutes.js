@@ -14,6 +14,24 @@ export default [{
       markdown: require('../../docs/FAQ.md')
     }]
   }, {
+    name: 'Developer Guide',
+    children: [{
+      name: 'Overview',
+      markdown: require('../../docs/developer-guide/README.md')
+    }, {
+      name: 'Convert Data to XVIZ',
+      markdown: require('../../docs/developer-guide/convert-data-to-xviz.md')
+    }, {
+      name: 'Use Custom deck.gl Layers',
+      markdown: require('../../docs/developer-guide/use-custom-deck-layers.md')
+    }, {
+      name: 'Building Custom Applications',
+      markdown: require('../../docs/developer-guide/build-custom-applications.md')
+    }, {
+      name: 'Advanced',
+      markdown: require('../../docs/developer-guide/advanced.md')
+    }]
+  }, {
     name: 'API Reference',
     children: [{
       name: 'LogViewer',
