@@ -72,8 +72,6 @@ $ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
 
 To see a full list of options of the converter, run `yarn start --help`.
 
-- `--frame-limit`
-- `--disable-streams`
 - `-d, --data-directory` Path to raw KITTI data. Relative path will resolved relative to /data/kitti/
 - `-o, --output` Path to generated data. Relative path will resolved relative to /data/generated/kitti/
 - `--disable-streams` Comma separated stream names to disable
