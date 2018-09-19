@@ -46,12 +46,12 @@ parser.addArgument(['--frame-limit'], {
 });
 
 parser.addArgument(['--image-max-width'], {
-  defaultValue: Number.MIN_SAFE_INTEGER,
+  defaultValue: 400,
   help: 'Image max width'
 });
 
 parser.addArgument(['--image-max-height'], {
-  defaultValue: Number.MIN_SAFE_INTEGER,
+  defaultValue: 300,
   help: 'Image max height'
 });
 

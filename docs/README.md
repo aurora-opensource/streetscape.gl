@@ -72,6 +72,30 @@ $ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
 
 To see a full list of options of the converter, run `yarn start --help`.
 
+- `-d, --data-directory` Path to raw KITTI data. Relative path will resolved relative to /data/kitti/
+- `-o, --output` Path to generated data. Relative path will resolved relative to /data/generated/kitti/
+- `--disable-streams` Comma separated stream names to disable
+- `--frame-limit` Limit XVIZ frame generation to this value. Useful testing conversion quickly
+- `--image-max-width` max width allowed with aspect ratio preserved. Default is 400.
+- `--image-max-height` max height allowed with aspect ratio preserved Default is 300.
+
+#### Image resizing
+
+The converter script also provides image resizing options. `--image-max-width` and `--image-max-height`  
+
+If both `image-max-width` and `image-max-height` are provided, will resize the image as large as possible with ratio preserved.  
+
+
+#### Disable cameras
+
+The converter script option `disable-streams` allows user to select certain cameras to display, by default all the four cameras `image_00`, `image_01`, `image_02`, `image_03` will be converted to xviz format.
+
+example
+```
+$ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync --image-max-width=300 --disable-streams=image_01,image_02
+```
+
+
 
 ### Start Demo Application
 
