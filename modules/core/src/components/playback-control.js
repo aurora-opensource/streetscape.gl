@@ -21,13 +21,13 @@ class PlaybackControl extends PureComponent {
     lastUpdate: -1
   };
 
-  _animationFrame = null;
-
   componentWillUnmount() {
     if (this._animationFrame) {
       window.cancelAnimationFrame(this._animationFrame);
     }
   }
+
+  _animationFrame = null;
 
   _onPlay = () => {
     this.setState({isPlaying: true, lastUpdate: Date.now()});
