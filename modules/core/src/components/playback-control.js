@@ -21,9 +21,17 @@ class PlaybackControl extends PureComponent {
     lastUpdate: -1
   };
 
+  componentWillUnmount() {
+    if (this._animationFrame) {
+      window.cancelAnimationFrame(this._animationFrame);
+    }
+  }
+
+  _animationFrame = null;
+
   _onPlay = () => {
     this.setState({isPlaying: true, lastUpdate: Date.now()});
-    window.requestAnimationFrame(this._animate);
+    this._animationFrame = window.requestAnimationFrame(this._animate);
   };
 
   _onPause = () => {
@@ -59,7 +67,7 @@ class PlaybackControl extends PureComponent {
 
       this.setState({lastUpdate: now});
 
-      window.requestAnimationFrame(this._animate);
+      this._animationFrame = window.requestAnimationFrame(this._animate);
     }
   };
 
