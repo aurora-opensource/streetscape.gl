@@ -25,7 +25,6 @@ import {
   parseStreamMessage,
   LOG_STREAM_MESSAGE,
   XvizStreamBuffer,
-  parseBinaryXVIZ,
   StreamSynchronizer
 } from '@xviz/parser';
 import PromiseRetry from 'promise-retry';
@@ -202,10 +201,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           ws.binaryType = 'arraybuffer';
 
           ws.onmessage = message => {
-            const parsed =
-              message.data instanceof ArrayBuffer ? parseBinaryXVIZ(message.data) : message.data;
             return parseStreamMessage({
-              message: parsed,
+              message: message.data,
               onResult: this._onWSMessage,
               onError: this._onWSError,
               debug: this._debug.bind('parse_message'),
