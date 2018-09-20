@@ -5,12 +5,17 @@
 
 ## Data Format Related Questions
 
-### Coordinate Systems
+### Why are Coordinates specified as arrays instead of objects
 
-It is clearer to a new comer to have an object, but based on my own experience it gets confusing fast when different parts of the code use different conventions. It is so easy to get silent failures in an untyped system like JavaScript.
+Many newcomers feel it would be more intuitive to use `{longitude: , latitude: }` rather than as a "reverse" array `[lng, lat]`.
 
-I'd recommend sticking with this convention (used by GeoJSON, mapbox-gl, deck.gl, ...) but document it carefully in a page about coordinate systems and also add a FAQ entry about it.
+streetscape.gl and XVIZ follow a JavaScript "convention" (used by GeoJSON, mapbox-gl, deck.gl, etc). Following the same convention across all these libraries is valuable as users start to use more functionality from the stack.
 
-We generally support three coordinates as `[longitude(degrees), latitude(degrees), altitude(meters)]`.
+In addition, the array notation does have some advantages:
+
+* It corresponds to `[x, y]` coordinates.
+* It uses standard arrays which works with many math libraries.
+
+Finally note that positions typically support three coordinates as `[longitude(degrees), latitude(degrees), altitude(meters above sea level)]`, with the last value default to `0`.
 
 See [deck.gl](http://deck.gl/#/documentation/developer-guide/coordinate-systems)
