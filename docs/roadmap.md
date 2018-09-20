@@ -1,5 +1,7 @@
 # Roadmap
 
+*Uber Confidential Information*
+
 We are currently focusing on visualizing XVIZ in the browser.
 
 * **Richer Visuals** - Improvements in the underlying WebGL framework stack (deck.gl and luma.gl) are being made in preparation for richer visuals, e.g. support for loading glTF models, animated styling for geometry primitives, postprocessing effects like glow etc.

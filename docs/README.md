@@ -2,127 +2,19 @@
 
 *Uber Confidential Information*
 
-
-## Development
-
-### Dependencies
-
-To build this repository you need:
-
- - Node.js, tested with 8.11.3, compatible with 8.x
- - Yarn, tested with 1.7.0, compatible with 1.x
-
-To install dependencies, run:
-
-```
-# Pull and build XVIZ locally
-# TODO - remove when XVIZ is published to npm
-$ git clone https://github.com/uber/xviz.git
-$ cd xviz
-$ yarn
-$ yarn build
-$ cd ..
-
-# Set up streetscape.gl
-$ git clone https://github.com/uber/streetscape.gl.git
-$ cd streetscape.gl
-$ npm run bootstrap
-```
-
-### Test
-
-Run tests under Node.js:
-
-```
-$ yarn test
-```
-
-Run tests in a browser:
-
-```
-$ yarn test-browser
-```
-
-## Run Demo with the KITTI Dataset
-
-### Download Raw Data
-
-Download raw data from [KITTI website](http://www.cvlibs.net/datasets/kitti/raw_data.php). For each dataset you'll need to download the `synced+rectified data` and the `tracklets` files. Extract to the `data/kitti` directory in this project. It will look like this:
-
-```
-/data/kitti
-    |- 2011_09_26
-        |- 2011_09_26_drive_0005_sync
-            |- tracklet_labels.xml
-            |- image_00
-            |- image_01
-            |- image_02
-            |- image_03
-            |- oxts
-            |- velodyne_points
-```
-
-### Convert KITTI to XVIZ Format
-
-```
-$ cd examples/converters/kitti
-$ yarn  # install dependencies
-$ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
-```
-
-To see a full list of options of the converter, run `yarn start --help`.
-
-- `-d, --data-directory` Path to raw KITTI data. Relative path will resolved relative to /data/kitti/
-- `-o, --output` Path to generated data. Relative path will resolved relative to /data/generated/kitti/
-- `--disable-streams` Comma separated stream names to disable
-- `--frame-limit` Limit XVIZ frame generation to this value. Useful testing conversion quickly
-- `--image-max-width` max width allowed with aspect ratio preserved. Default is 400.
-- `--image-max-height` max height allowed with aspect ratio preserved Default is 300.
-
-#### Image resizing
-
-The converter script also provides image resizing options. `--image-max-width` and `--image-max-height`  
-
-If both `image-max-width` and `image-max-height` are provided, will resize the image as large as possible with ratio preserved.  
+streetscape.gl is a visualization application (and framework) for autonomy and robotics data encoded in the XVIZ protocol. It also supports visualization of local geospatial data such as point clouds, lane graphs and imagery, and it can display the dynamic, streamed XVIZ data with th.
 
 
-#### Disable cameras
+## References
 
-The converter script option `disable-streams` allows user to select certain cameras to display, by default all the four cameras `image_00`, `image_01`, `image_02`, `image_03` will be converted to xviz format.
-
-example
-```
-$ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync --image-max-width=300 --disable-streams=image_01,image_02
-```
+* [XVIZ](http://xviz.org) - Protocol for visualization of autonomy and robotics data.
+* [deck.gl](http://deck.gl) - The geospatial visualization framework that streetscape.gl is built on.
+* [vis.gl](http://vis.gl) - streetscape.gl is part the vis.gl suite of visualization frameworks.
 
 
+## Features
 
-### Start Demo Application
-
-Start a XVIZ stream server:
-
-```
-$ cd examples/server
-$ yarn  # install dependencies
-$ yarn start -d kitti/2011_09_26/2011_09_26_drive_0005_sync
-```
-
-To see a full list of options of the stream server, run `yarn start --help`.
-
-Add an application config file
-```
-$ cd examples/clients/config
-```
-
-- An example is xviz-config-kitti.js, for complete xviz configs, check [xviz-config](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-configuration.md)
-- Config file naming convention: xviz-config-${appName}.js
-
-In another terminal, run the client app:
-
-```
-$ cd examples/clients/xviz-viewer
-$ yarn  # install dependencies
-$ appName=kitti yarn start-local
-```
-
-- `appName` is used for loading the correct configuration file for the client app (default is `kitti`).
+* Visualizes dynamic XVIZ visualization data, enabling you to stream XVIZ data starting from a certain timestamp.
+* Support unlimited time playback and seeking forwards and backwards in time.
+* Supports the XVIZ declarative UI, allowing your backend or on-robot systems include extensive debug data in e.g. tree or tabular format.
+* The sample application is built from a documented set of React UI component, intended to make customization to specific used cases as easy as possible.
