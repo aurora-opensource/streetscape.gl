@@ -128,69 +128,6 @@ Geometry primitives are injected to the XVIZ stream through a variety of builder
   }
 ```
 
-```js
-    xvizMetaBuilder;
-      .stream(this.TRACKLETS)
-      .category('primitive')
-      .type('polygon')
-      .styleClassDefault({
-        extruded: true,
-        wireframe: true,
-        // TODO - use dynamic height
-        height: 1.5,
-        fillColor: '#00000080'
-      })
-      .styleClass('Car', {
-        fillColor: '#7DDDD780',
-        strokeColor: '#7DDDD7'
-      })
-      .styleClass('Cyclist', {
-        fillColor: '#DA70BF80',
-        strokeColor: '#DA70BF'
-      })
-      .styleClass('Pedestrian', {
-        fillColor: '#FEC56480',
-        strokeColor: '#FEC564'
-      })
-      .styleClass('Van', {
-        fillColor: '#267E6380',
-        strokeColor: '#267E63'
-      })
-      .styleClass('Unknown', {
-        fillColor: '#D6A00080',
-        strokeColor: '#D6A000'
-      })
-      .pose(this.FIXTURE_TRANSFORM_POSE)
-
-      .stream(this.TRACKLETS_TRACKING_POINT)
-      .category('primitive')
-      .type('circle')
-      .styleClassDefault({
-        radius: 0.2,
-        fillColor: '#FFFF00'
-      })
-      .pose(this.FIXTURE_TRANSFORM_POSE)
-
-      .stream(this.TRACKLETS_LABEL)
-      .category('primitive')
-      .type('text')
-      .styleClassDefault({
-        size: 18,
-        fillColor: '#0040E0'
-      })
-      .pose(this.FIXTURE_TRANSFORM_POSE)
-
-      .stream(this.TRACKLETS_TRAJECTORY)
-      .category('primitive')
-      .type('polyline')
-      .styleClassDefault({
-        strokeColor: '#FEC557',
-        strokeWidth: 0.3,
-        strokeWidthMinPixels: 1
-      })
-      .pose(this.FIXTURE_TRANSFORM_POSE);
-```
-
 ## Converting Values
 
 Measured values can be stored in the data stream
@@ -200,30 +137,8 @@ Measured values can be stored in the data stream
 
 Many autonomous driving systems generate prediction and planning data in addition to perception data. Visualization of this data is often critical to allow deeper analysis. Unfortunately, the public KITTI data set does not come with prediction data, but for illustration purposes, we can synthesize some of that data since we have access to future frames.
 
-```js
-    for (let objectId = 0; objectId < this.data.objects.length; objectId++) {
-      const object = this.data.objects[objectId];
+See the example for details on how this can be done.
 
-      // object is in this frame
-      if (i >= object.first_frame && i < object.last_frame) {
-        const getTrackletsPrimitives = index => {
-          const objects = this.trackletFrames.get(index);
-          const tracklet = objects.find(x => x.id === object.properties.id);
-          return tracklet;
-        };
-
-        const getTrajectory = traj => this._convertTrajectory(traj, i, this.getPose);
-        const xvizTrajectory = generateTrajectoryFrame(
-          i,
-          Math.min(object.last_frame, this.frameLimit),
-          getTrackletsPrimitives,
-          getTrajectory
-        );
-
-        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(xvizTrajectory);
-      }
-    }
-```
 
 And of course we want to declare the channels in the metdata:
 
@@ -231,16 +146,6 @@ And of course we want to declare the channels in the metdata:
     xvizMetaBuilder
       .stream('vehicle-pose')
       .category('vehicle-pose')
-
-      .stream(this.VEHICLE_ACCELERATION)
-      .category('time_series')
-      .type('float')
-      .unit('m/s^2')
-
-      .stream(this.VEHICLE_VELOCITY)
-      .category('time_series')
-      .type('float')
-      .unit('m/s')
 
       .stream(this.VEHICLE_TRAJECTORY)
       .category('primitive')
