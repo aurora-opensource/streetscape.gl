@@ -27,6 +27,9 @@ export default [{
       name: 'Introduction',
       markdown: require('../../docs/README.md')
     }, {
+      name: 'Overview',
+      markdown: require('../../docs/README.md')
+    }, {
       name: 'What\'s New',
       markdown: require('../../docs/whats-new.md')
     }, {
@@ -35,6 +38,12 @@ export default [{
     }, {
       name: 'FAQ',
       markdown: require('../../docs/FAQ.md')
+    }, {
+      name: 'Running Demos',
+      markdown: require('../../docs/running-demos.md')
+    }, {
+      name: 'Develop/Contribute',
+      markdown: require('../../docs/develop.md')
     }]
   }, {
     name: 'Developer Guide',
