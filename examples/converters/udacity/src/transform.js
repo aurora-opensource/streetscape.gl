@@ -2,8 +2,8 @@
 import fs from 'fs';
 
 import Bag from './bag';
-import UdacityConverter from './converters/udacity-converter';
-import {createDir, deleteDirRecursive} from './parsers/common';
+import UDacityConverter from './converters/udacity-converter';
+import {XVIZWriter, XVIZMetadataBuilder} from '@xviz/builder';
 
 const allTopics = [
   '/can_bus_dbw/can_rx',
@@ -47,10 +47,7 @@ const allTopics = [
 ];
 
 module.exports = async function main(args) {
-  const {bag: bagPath, outputDir} = args;
-
-  deleteDirRecursive(outputDir);
-  createDir(outputDir);
+  const {bag: bagPath, outputDir, disableStreams} = args;
 
   console.log(`Converting data at ${bagPath}`); // eslint-disable-line
   console.log(`Saving to ${outputDir}`); // eslint-disable-line
@@ -73,14 +70,38 @@ module.exports = async function main(args) {
     keyTopic
   });
 
-  const converter = new UdacityConverter({});
+  console.log('All topics are \n', await bag.getAllTopics()); // eslint-disable-line
+
+  const converter = new UDacityConverter(bagPath, outputDir, {disableStreams});
+  converter.initialize();
+
+  const xvizWriter = new XVIZWriter();
+  const timestamps = [];
 
   let frameNum = 0;
   await bag.readFrames(frame => {
-    const converted = converter.convertFrame(frame);
-    fs.writeFileSync(`${outputDir}/${frameNum}.json`, JSON.stringify(converted, null, 2), 'utf8');
+    // const xvizFrame = converter.getRawData(frameNum, frame);
+    const xvizFrame = converter.convertFrame(frameNum, frame);
+
+    if (!xvizFrame.vehicle_pose || !xvizFrame.vehicle_pose.time) {
+      fs.writeFileSync(`${outputDir}/${frameNum}.json`, JSON.stringify(xvizFrame, null, 2), 'utf8');
+    } else {
+      timestamps.push(xvizFrame.vehicle_pose.time);
+      fs.writeFileSync(
+        `${outputDir}/${frameNum}-frame.json`,
+        JSON.stringify(xvizFrame, null, 2),
+        'utf8'
+      );
+      xvizWriter.writeFrame(outputDir, frameNum, xvizFrame);
+    }
     frameNum++;
   });
+
+  // Write metadata file
+  const xvizMetadataBuilder = new XVIZMetadataBuilder();
+  xvizMetadataBuilder.startTime(timestamps[0]).endTime(timestamps[timestamps.length - 1]);
+  const xvizMetadata = converter.getMetadata(xvizMetadataBuilder);
+  xvizWriter.writeMetadata(outputDir, xvizMetadata);
 
   const profileEnd = Date.now();
   console.log(`Generate ${frameNum} frames in ${profileEnd - profileStart}s`); // eslint-disable-line

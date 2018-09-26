@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "argparse": "^1.0.10",
+    "rosbag": "^1.2.1",
     "ws": "^5.2.1"
   }
 }

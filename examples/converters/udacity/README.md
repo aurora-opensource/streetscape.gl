@@ -12,7 +12,7 @@ https://github.com/udacity/self-driving-car/tree/master/datasets
 Put the `*.bag` file in `../../../data/udacity` directory
 
 ```
-yarn start -d HMB_5.bag
+yarn start -b HMB_5.bag
 ```
 
 Generated data will be in `../../../data/generated/udacity` directory
