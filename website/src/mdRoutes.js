@@ -8,7 +8,7 @@ export default [{
       markdown: require('../../docs/README.md')
     }, {
       name: 'Overview',
-      markdown: require('../../docs/README.md')
+      markdown: require('../../docs/overview.md')
     }, {
       name: 'What\'s New',
       markdown: require('../../docs/whats-new.md')
@@ -30,6 +30,9 @@ export default [{
     children: [{
       name: 'Overview',
       markdown: require('../../docs/developer-guide/README.md')
+    }, {
+      name: 'Installing',
+      markdown: require('../../docs/developer-guide/installing.md')
     }, {
       name: 'Convert Data to XVIZ',
       markdown: require('../../docs/developer-guide/convert-data-to-xviz.md')
