@@ -16,6 +16,7 @@ import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
 import {resolveCoordinateTransform} from '../utils/transform';
 import {mergeXvizStyles} from '../utils/style';
 import {normalizeStreamFilter} from '../utils/stream-utils';
+import {setObjectState} from '../utils/object-state';
 
 import connectToLog from './connect';
 
@@ -58,7 +59,9 @@ class Core3DViewer extends PureComponent {
     // Optional: to use with external state management (e.g. Redux)
     viewState: PropTypes.object,
     viewOffset: PropTypes.object,
-    onViewStateChange: PropTypes.func
+    objectStates: PropTypes.object,
+    onViewStateChange: PropTypes.func,
+    onObjectStateChange: PropTypes.func
   };
 
   static defaultProps = {
@@ -66,7 +69,8 @@ class Core3DViewer extends PureComponent {
     viewMode: VIEW_MODES.PERSPECTIVE,
     xvizStyles: {},
     customLayers: [],
-    onViewStateChange: () => {}
+    onViewStateChange: () => {},
+    onObjectStateChange: () => {}
   };
 
   constructor(props) {
@@ -88,6 +92,7 @@ class Core3DViewer extends PureComponent {
         y: 0,
         bearing: 0
       },
+      objectStates: {},
       styleParser: this._getStyleParser(props),
       carMesh: null
     };
@@ -135,6 +140,43 @@ class Core3DViewer extends PureComponent {
     this.props.onViewStateChange({viewState, viewOffset});
   };
 
+  _onLayerHover = info => {
+    const objectId = info && info.object && info.object.id;
+    this.isHovering = Boolean(objectId);
+
+    // TODO: show hover info
+
+    // const showHoverInfo = info && this.props.settings.showInfo;
+    // this.setState({
+    //   hoverInfo: showHoverInfo ? info : null
+    // });
+  };
+
+  _onLayerClick = (info, infos, evt) => {
+    const objectId = info && info.object && info.object.id;
+
+    if (objectId) {
+      const isRightClick = evt.which === 3;
+
+      if (isRightClick) {
+        // TODO: context menu
+      } else {
+        // Select object
+        let {objectStates} = this.state;
+        const isObjectSelected = objectStates.selected && objectStates.selected[objectId];
+
+        objectStates = setObjectState(objectStates, {
+          stateName: 'selected',
+          id: objectId,
+          value: !isObjectSelected
+        });
+
+        this.setState({objectStates});
+        this.props.onObjectStateChange(objectStates);
+      }
+    }
+  };
+
   _getStyleParser({metadata, xvizStyles}) {
     return new XvizStyleParser(mergeXvizStyles(metadata && metadata.styles, xvizStyles));
   }
@@ -148,6 +190,7 @@ class Core3DViewer extends PureComponent {
     const {streams, origin, heading, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
+    const objectStates = this.props.objectStates || this.state.objectStates;
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
 
     return [
@@ -187,7 +230,7 @@ class Core3DViewer extends PureComponent {
 
               data: stream.features,
               style: styleParser.getStylesheet(streamName),
-              objectStates: {},
+              objectStates,
 
               // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
@@ -243,6 +286,10 @@ class Core3DViewer extends PureComponent {
     return true;
   }
 
+  _getCursor = () => {
+    return this.isHovering ? 'pointer' : 'crosshair';
+  };
+
   _getViewState() {
     const {viewMode, frame} = this.props;
     // Allow users to override viewState from application
@@ -272,6 +319,9 @@ class Core3DViewer extends PureComponent {
         viewState={this._getViewState()}
         layers={this._getLayers()}
         layerFilter={this._layerFilter}
+        getCursor={this._getCursor}
+        onLayerHover={this._onLayerHover}
+        onLayerClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
       >
         <StaticMap
