@@ -46,7 +46,9 @@ export default class LidarConverter extends BaseConverter {
       .stream(this.LIDAR_POINTS)
       .points(temporaryObject.vertices)
       .id(uuid())
-      .color([0, 0, 0, 255]);
+      .style({
+        color: [0, 0, 0, 255]
+      });
   }
 
   getMetadata(xvizMetaBuilder) {
