@@ -1,18 +1,17 @@
-const fs = require('fs');
-const path = require('path');
-
-import {getPoseOffset} from './common';
-const {_Pose: Pose} = require('math.gl');
-
-import {generateTrajectoryFrame} from './common';
+import fs from 'fs';
+import path from 'path';
+import {
+  _getObjectTrajectory as getObjectTrajectory,
+  _getRelativeCoordinates as getRelativeCoordinates
+} from '@xviz/builder';
 
 import {loadTracklets} from '../parsers/parse-tracklets';
 
 export default class TrackletsConverter {
-  constructor(directory, getPose) {
+  constructor(directory, getPoses) {
     this.rootDir = directory;
     this.trackletFile = path.join(directory, 'tracklet_labels.xml');
-    this.getPose = getPose;
+    this.getPoses = getPoses;
 
     // laser scanner relative to GPS position
     // http://www.cvlibs.net/datasets/kitti/setup.php
@@ -33,12 +32,12 @@ export default class TrackletsConverter {
     this.data = loadTracklets(xml);
 
     this.frameStart = this.data.objects.reduce(
-      (minFrame, obj) => Math.min(minFrame, obj.first_frame),
+      (minFrame, obj) => Math.min(minFrame, obj.firstFrame),
       Number.MAX_SAFE_INTEGER
     );
 
     this.frameLimit = this.data.objects.reduce(
-      (maxFrame, obj) => Math.max(maxFrame, obj.last_frame),
+      (maxFrame, obj) => Math.max(maxFrame, obj.lastFrame),
       0
     );
 
@@ -50,17 +49,19 @@ export default class TrackletsConverter {
 
     // Convert tracklets upfront to support trajectory
     for (let i = this.frameStart; i < this.frameLimit; i++) {
-      this.trackletFrames.set(i, this._convertFrame(i));
+      this.trackletFrames.set(i, this._convertTrackletsFrame(i));
     }
+
+    // tracklets trajectory is in pose relative coordinate
+    this.poses = this.getPoses();
   }
 
   async convertFrame(frameNumber, xvizBuilder) {
-    const i = frameNumber;
-    if (i < this.frameStart || i >= this.frameLimit) {
+    if (frameNumber < this.frameStart || frameNumber >= this.frameLimit) {
       return;
     }
 
-    const tracklets = this.trackletFrames.get(i);
+    const tracklets = this.trackletFrames.get(frameNumber);
     tracklets.forEach(tracklet => {
       // Here you can see how the *classes* are used to tag the object
       // allowing for the *style* information to be shared across
@@ -84,28 +85,21 @@ export default class TrackletsConverter {
         .text(tracklet.id.slice(24));
     });
 
-    for (let objectId = 0; objectId < this.data.objects.length; objectId++) {
-      const object = this.data.objects[objectId];
+    // object is in this frame
+    this.data.objects
+      .filter(object => frameNumber >= object.firstFrame && frameNumber < object.lastFrame)
+      .forEach(object => {
+        const objectTrajectory = getObjectTrajectory({
+          targetObject: object,
+          objectFrames: this.trackletFrames,
+          poseFrames: this.poses,
+          startFrame: frameNumber,
+          endFrame: Math.min(object.lastFrame, this.frameLimit),
+          steps: 50
+        });
 
-      // object is in this frame
-      if (i >= object.first_frame && i < object.last_frame) {
-        const getTrackletsPrimitives = index => {
-          const objects = this.trackletFrames.get(index);
-          const tracklet = objects.find(x => x.id === object.properties.id);
-          return tracklet;
-        };
-
-        const getTrajectory = traj => this._convertTrajectory(traj, i, this.getPose);
-        const xvizTrajectory = generateTrajectoryFrame(
-          i,
-          Math.min(object.last_frame, this.frameLimit),
-          getTrackletsPrimitives,
-          getTrajectory
-        );
-
-        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(xvizTrajectory);
-      }
-    }
+        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(objectTrajectory);
+      });
   }
 
   getMetadata(xvizMetaBuilder) {
@@ -169,57 +163,28 @@ export default class TrackletsConverter {
       .pose(this.FIXTURE_TRANSFORM_POSE);
   }
 
-  _convertFrame(frameIndex) {
+  _convertTrackletsFrame(frameIndex) {
+    // filter objects exist in given frame
     return this.data.objects
+      .filter(object => frameIndex >= object.firstFrame && frameIndex < object.lastFrame)
       .map(object => {
-        // out of bounds, return null
-        if (frameIndex < object.first_frame || frameIndex >= object.last_frame) {
-          return null;
-        }
-
-        const poseIndex = frameIndex - object.first_frame;
-        const pose = object.data.poses.item[poseIndex];
+        const poseIndex = frameIndex - object.firstFrame;
+        const {tx, ty, tz, rx, ry, rz} = object.data.poses.item[poseIndex];
 
         const poseProps = {
-          x: Number(pose.tx),
-          y: Number(pose.ty),
-          z: Number(pose.tz),
-          roll: Number(pose.rx),
-          pitch: Number(pose.ry),
-          yaw: Number(pose.rz)
+          x: Number(tx),
+          y: Number(ty),
+          z: Number(tz),
+          roll: Number(rx),
+          pitch: Number(ry),
+          yaw: Number(rz)
         };
-
-        const transformMatrix = new Pose(poseProps).getTransformationMatrix();
 
         return {
-          ...object.properties,
+          ...object,
           ...poseProps,
-          vertices: object.bounds.map(p => transformMatrix.transformVector(p))
+          vertices: getRelativeCoordinates(object.bounds, poseProps)
         };
-      })
-      .filter(Boolean);
+      });
   }
-
-  _convertTrajectory = (motions, initialFrame) => {
-    const vertices = [];
-    const initialVehiclePose = this.getPose(initialFrame);
-
-    for (let i = 0; i < motions.length; i++) {
-      const t = motions[i];
-      const currVehiclePose = this.getPose(initialFrame + i);
-
-      const [x, y] = getPoseOffset(initialVehiclePose, currVehiclePose);
-
-      const transformMatrix = new Pose(currVehiclePose).getTransformationMatrixFromPose(
-        new Pose(initialVehiclePose)
-      );
-
-      // tracklets in curr frame are meters offset based on current vehicle pose
-      // need to convert to the coordinate system of the last vehicle pose
-      const p = transformMatrix.transformVector([t.x, t.y, t.z]);
-      vertices.push([p[0] + x, p[1] + y, p[2]]);
-    }
-
-    return vertices;
-  };
 }

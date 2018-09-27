@@ -38,7 +38,7 @@ export class KittiConverter {
     // Note: order is important due to data deps on the pose
     this.converters = [
       gpsConverter,
-      new TrackletsConverter(this.inputDir, i => gpsConverter.getPose(i)),
+      new TrackletsConverter(this.inputDir, () => gpsConverter.getPoses()),
       new LidarConverter(this.inputDir, 'velodyne_points'),
       new CameraConverter(this.inputDir, {
         disabledStreams: this.disabledStreams,
