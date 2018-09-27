@@ -149,3 +149,10 @@ import {LogViewer} from 'streetscape.gl';
     />
 ```
 
+##### `renderObjectLabel` (Function, optional)
+
+A custom function / React component to render the content of the popup for selected objects. Will receive the following props:
+
+- `id` (String) - object id
+- `metadata` (Object) - log metadata
+- `frame` (Object) - current log frame
