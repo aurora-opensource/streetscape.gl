@@ -156,3 +156,7 @@ A custom function / React component to render the content of the popup for selec
 - `id` (String) - object id
 - `metadata` (Object) - log metadata
 - `frame` (Object) - current log frame
+
+Popups will be disabled if this prop is set to `false`.
+
+Default: `(props) => <div>{props.id}</div>`

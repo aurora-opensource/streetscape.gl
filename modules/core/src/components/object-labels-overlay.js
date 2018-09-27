@@ -93,10 +93,10 @@ export default class ObjectLabelsOverlay extends Component {
   };
 
   render() {
-    const {frame} = this.props;
+    const {frame, renderObjectLabel} = this.props;
     const {objectStreamName} = this.state;
 
-    if (!frame || !objectStreamName) {
+    if (!frame || !objectStreamName || !renderObjectLabel) {
       return null;
     }
 
