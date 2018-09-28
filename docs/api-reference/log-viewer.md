@@ -128,3 +128,35 @@ import {LogViewer, VIEW_MODES} from 'streetscape.gl';
     />
 ```
 
+##### `objectStates` (Object, optional)
+
+Override the internal object states. By default, `LogViewer` is a stateful component which stores the latest object states internally. Supply this prop if you wish to use it as a stateless component. See `onObjectStateChange` for more information.
+
+##### `onObjectStateChange` (Function, optional)
+
+Callback when some object state (e.g. whether they are selected) changes.
+
+To use `LogViewer` as a stateless component:
+
+
+```jsx
+import {LogViewer} from 'streetscape.gl';
+
+<LogViewer
+    log={log}
+    objectStates={this.state.objectStates}
+    onViewStateChange={(objectStates) => this.setState({objectStates})}
+    />
+```
+
+##### `renderObjectLabel` (Function, optional)
+
+A custom function / React component to render the content of the popup for selected objects. Will receive the following props:
+
+- `id` (String) - object id
+- `metadata` (Object) - log metadata
+- `frame` (Object) - current log frame
+
+Popups will be disabled if this prop is set to `false`.
+
+Default: `(props) => <div>{props.id}</div>`

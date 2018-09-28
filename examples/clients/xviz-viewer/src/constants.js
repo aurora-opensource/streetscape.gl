@@ -37,3 +37,7 @@ export const SETTINGS = {
     data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
   }
 };
+
+export const XVIZ_STYLE = {
+  '/tracklets/objects': [{class: 'selected', fillColor: '#ff8000aa'}]
+};

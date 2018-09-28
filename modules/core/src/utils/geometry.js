@@ -18,17 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {setXvizSettings, setXvizConfig} from '@xviz/parser';
+// returns the centroid position for an array of points
+export function getCentroid(polygon) {
+  let sx = 0;
+  let sy = 0;
+  let sz = 0;
 
-export const XVIZ_SETTINGS = {
-  TIME_WINDOW: 400
-};
+  // the last vertex is the same as the first, ignore
+  const len = polygon.length - 1;
+  for (let i = 0; i < len; i++) {
+    const point = polygon[i];
+    sx += point[0];
+    sy += point[1];
+    sz += point[2];
+  }
 
-setXvizSettings(XVIZ_SETTINGS);
-
-export const XVIZ_CONFIG = {
-  PRIMARY_POSE_STREAM: 'vehicle-pose',
-  OBJECT_STREAM: '/tracklets/objects'
-};
-
-setXvizConfig(XVIZ_CONFIG);
+  return [sx / len, sy / len, sz / len];
+}

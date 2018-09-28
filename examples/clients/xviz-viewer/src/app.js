@@ -35,7 +35,7 @@ import {
 } from 'streetscape.gl';
 import {Form} from 'monochrome-ui';
 
-import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
+import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
 import './main.scss';
 
@@ -77,6 +77,7 @@ class Example extends PureComponent {
             mapboxApiAccessToken={MAPBOX_TOKEN}
             mapStyle={MAP_STYLE}
             car={CAR}
+            xvizStyles={XVIZ_STYLE}
             viewMode={VIEW_MODES[settings.viewMode]}
           />
         </div>

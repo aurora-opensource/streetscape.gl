@@ -40,6 +40,22 @@ const CONTEXT_TYPES = {
   viewport: PropTypes.object
 };
 
+const STYLES = {
+  TIP_CIRCLE: {
+    position: 'absolute',
+    width: 4,
+    height: 4,
+    margin: -2,
+    borderRadius: 2
+  },
+  TIP_LINE: {
+    position: 'absolute',
+    opacity: 0.25,
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1
+  }
+};
+
 /* Like Popup but deal with z */
 export default class PerspectivePopup extends Popup {
   static get contextTypes() {
@@ -54,13 +70,50 @@ export default class PerspectivePopup extends Popup {
     this._onClose = this._onClose.bind(this);
   }
 
-  _renderTip(anchor, anchorPosition) {
-    const {tipSize} = this.props;
+  _renderTip(anchorPosition) {
+    const {tipSize, tipColor = '#fff'} = this.props;
     const tipStyle = {
       width: tipSize,
-      height: tipSize
+      height: tipSize,
+      position: 'relative'
     };
-    return <div key="tip" className="mapboxgl-popup-tip" style={tipStyle} />;
+    const tipCircleStyle = {...STYLES.TIP_CIRCLE, background: tipColor};
+    const tipLineStyle = {...STYLES.TIP_LINE, borderColor: tipColor};
+
+    switch (anchorPosition.x) {
+      case 0.5:
+        tipCircleStyle.left = '50%';
+        tipLineStyle.left = '50%';
+        break;
+      case 1:
+        tipCircleStyle.right = 0;
+        tipLineStyle.right = 0;
+        break;
+      case 0:
+      default:
+    }
+
+    switch (anchorPosition.y) {
+      case 0.5:
+        tipLineStyle.width = '100%';
+        tipCircleStyle.top = '50%';
+        tipLineStyle.top = '50%';
+        break;
+      case 1:
+        tipCircleStyle.bottom = 0;
+        tipLineStyle.height = '100%';
+        break;
+      case 0:
+      default:
+        tipLineStyle.height = '100%';
+    }
+
+    return (
+      <div key="tip" style={tipStyle}>
+        <div style={tipCircleStyle} />
+        <div style={tipLineStyle} />
+      </div>
+    );
   }
 
   render() {
@@ -96,7 +149,7 @@ export default class PerspectivePopup extends Popup {
         style: containerStyle,
         onClick: closeOnClick ? this._onClose : null
       },
-      [this._renderTip([x, y], anchorPosition), this._renderContent()]
+      [this._renderTip(anchorPosition), this._renderContent()]
     );
   }
 }
