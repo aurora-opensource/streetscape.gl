@@ -910,6 +910,7 @@
     dotty "^0.0.2"
     math.gl "^2.0.0"
     probe.gl "^1.0.0"
+    text-encoding "^0.6.4"
     viewport-mercator-project "^5.0.0"
     webworkify "^1.5.0"
 
@@ -5147,9 +5148,9 @@ moment@^2.6.0:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
-monochrome-ui@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/monochrome-ui/-/monochrome-ui-0.0.2.tgz#5c49e2ed9eaf738d6f378c764639700f9302ea4b"
+monochrome-ui@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/monochrome-ui/-/monochrome-ui-0.0.4.tgz#fdde4495cfb55a8d6ffa6ed8e975e8ae5144a645"
   dependencies:
     classnames "^2.2.5"
     debounce "^1.1.0"
@@ -6099,9 +6100,9 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
-react-map-gl@^3.3.2:
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-3.3.4.tgz#d1d9c971480501e5821f349e38b4a4f250cd2a51"
+react-map-gl@^3.3.5:
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-3.3.5.tgz#c3466da11e40ab1b1334c4dae982493ea7179d71"
   dependencies:
     babel-runtime "^6.23.0"
     bowser "^1.2.0"
@@ -7298,6 +7299,10 @@ test-exclude@^5.0.0:
     minimatch "^3.0.4"
     read-pkg-up "^4.0.0"
     require-main-filename "^1.0.1"
+
+text-encoding@^0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.6.4.tgz#e399a982257a276dae428bb92845cb71bdc26d19"
 
 text-extensions@^1.0.0:
   version "1.7.0"
