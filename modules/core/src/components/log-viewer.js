@@ -18,6 +18,8 @@ import {mergeXvizStyles} from '../utils/style';
 import {normalizeStreamFilter} from '../utils/stream-utils';
 import {setObjectState} from '../utils/object-state';
 
+import ObjectLabelsOverlay from './object-labels-overlay';
+
 import connectToLog from './connect';
 
 const CAR_DATA = [[0, 0, 0]];
@@ -55,6 +57,7 @@ class Core3DViewer extends PureComponent {
       PropTypes.func
     ]),
     customLayers: PropTypes.array,
+    renderObjectLabel: PropTypes.func,
 
     // Optional: to use with external state management (e.g. Redux)
     viewState: PropTypes.object,
@@ -309,7 +312,15 @@ class Core3DViewer extends PureComponent {
   }
 
   render() {
-    const {mapboxApiAccessToken, mapStyle, viewMode} = this.props;
+    const {
+      mapboxApiAccessToken,
+      mapStyle,
+      viewMode,
+      frame,
+      metadata,
+      renderObjectLabel
+    } = this.props;
+    const objectSelection = (this.props.objectStates || this.state.objectStates).selected;
 
     return (
       <DeckGL
@@ -328,6 +339,13 @@ class Core3DViewer extends PureComponent {
           mapboxApiAccessToken={mapboxApiAccessToken}
           mapStyle={mapStyle}
           visible={!viewMode.firstPerson}
+        />
+
+        <ObjectLabelsOverlay
+          objectSelection={objectSelection}
+          frame={frame}
+          metadata={metadata}
+          renderObjectLabel={renderObjectLabel}
         />
       </DeckGL>
     );
