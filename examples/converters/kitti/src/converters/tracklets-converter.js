@@ -89,6 +89,9 @@ export default class TrackletsConverter {
         .stream(this.TRACKLETS)
         .polygon(tracklet.vertices)
         .classes([tracklet.objectType])
+        .style({
+          height: tracklet.height
+        })
         .id(tracklet.id)
 
         .stream(this.TRACKLETS_TRACKING_POINT)
@@ -133,8 +136,6 @@ export default class TrackletsConverter {
       .styleClassDefault({
         extruded: true,
         wireframe: true,
-        // TODO - use dynamic height
-        height: 1.5,
         fillColor: '#00000080'
       })
       .styleClass('Car', {
