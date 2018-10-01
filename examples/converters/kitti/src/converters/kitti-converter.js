@@ -88,7 +88,7 @@ export class KittiConverter {
     this.converters.forEach(converter => converter.getMetadata(xb));
 
     const metadata = xb.getMetadata();
-    // TODO(twojtasz): this is broken
+    // TODO(Xintong): use new MetadataBuilder api to set declarativeUI
     metadata.declarativeUI = getDeclarativeUI();
 
     return metadata;
