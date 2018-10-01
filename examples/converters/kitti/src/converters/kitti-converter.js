@@ -18,18 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-const path = require('path');
+import path from 'path';
+import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 
-const {getTimestamps, createDir} = require('../parsers/common');
-
+import {getTimestamps, createDir} from '../parsers/common';
 import GPSConverter from './gps-converter';
 import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
 import CameraConverter from './camera-converter';
-
-import DECLARATIVE_UI from './declarative-ui.json';
-
-import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
+import {getDeclarativeUI} from './declarative-ui';
 
 export class KittiConverter {
   constructor(inputDir, outputDir, {disabledStreams, imageMaxWidth, imageMaxHeight}) {
@@ -111,8 +108,8 @@ export class KittiConverter {
     this.converters.forEach(converter => converter.getMetadata(xb));
 
     const metadata = xb.getMetadata();
-    // TODO(twojtasz): this is broken
-    metadata.declarativeUI = DECLARATIVE_UI;
+    // TODO(Xintong): use new MetadataBuilder api to set declarativeUI
+    metadata.declarativeUI = getDeclarativeUI();
 
     return metadata;
   }
