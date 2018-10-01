@@ -8,6 +8,6 @@
     "lint": "ocular lint"
   },
   "dependencies": {
-    "ocular": ">=0.6.1"
+    "ocular": ">=0.6.2"
   }
 }
