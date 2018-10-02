@@ -5,6 +5,8 @@ echo 'Bootstrapping streetscape.gl, installing in all directories'
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # install dependencies
 yarn
 
@@ -25,3 +27,17 @@ for D in *; do (
 
 # build the submodules
 npm run build
+
+# setup XVIZ
+(cd "${SCRIPT_DIR}/../../xviz" && yarn bootstrap)
+
+# Setup KITTI converter JS dependencies
+(cd "${SCRIPT_DIR}/../examples/converters/kitti" && yarn)
+
+# Setup XVIZ server JS dependencies
+(cd "${SCRIPT_DIR}/../examples/server" && yarn)
+
+# Setup XVIZ-VIEWER JS dependencies
+(cd "${SCRIPT_DIR}/../examples/clients/xviz-viewer" && yarn)
+
+echo "Done"
