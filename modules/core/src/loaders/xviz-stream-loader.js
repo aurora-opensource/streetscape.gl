@@ -306,6 +306,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
             this.bufferRange
           );
         }
+        // eslint-disable-next-line no-console, no-undef
+        // console.log(message);
         this.emit('update', message);
         break;
 
