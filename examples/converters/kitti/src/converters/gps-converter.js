@@ -50,11 +50,12 @@ export default class GPSConverter extends BaseConverter {
     //
     // The fluent-API makes this construction self-documenting.
     xvizBuilder
-      .stream(this.VEHICLE_VELOCITY)
+      .timeSeries(this.VEHICLE_VELOCITY)
       .timestamp(velocity.timestamp)
-      .value(velocity['velocity-forward'])
+      .value(velocity['velocity-forward']);
 
-      .stream(this.VEHICLE_ACCELERATION)
+    xvizBuilder
+      .timeSeries(this.VEHICLE_ACCELERATION)
       .timestamp(acceleration.timestamp)
       .value(acceleration['acceleration-forward']);
 
@@ -66,7 +67,7 @@ export default class GPSConverter extends BaseConverter {
       endFrame
     });
 
-    xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);
+    xvizBuilder.primitive(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);
   }
 
   getMetadata(xvizMetaBuilder) {

@@ -1,13 +1,14 @@
-import {XvizUIBuilder} from '@xviz/builder';
+import {XVIZUIBuilder} from '@xviz/builder';
 
 export function getDeclarativeUI() {
-  const builder = new XvizUIBuilder({});
+  const builder = new XVIZUIBuilder({});
 
   const panel = builder.panel({
     name: 'Metrics'
   });
 
   const container = builder.container({
+    name: 'Metrics Panel',
     layout: 'vertical'
   });
 

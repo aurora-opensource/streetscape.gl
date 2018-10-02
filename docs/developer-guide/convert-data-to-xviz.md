@@ -48,7 +48,7 @@ You will also want to announce the image channel in your metadata:
 ```js
     const xb = xvizMetaBuilder;
     xb.stream(this.streamName)
-      .category('primitive')
+      .category('primitives')
       .type('image');
 ```
 
@@ -85,7 +85,7 @@ You will also want to declare the channel, where you can add some styling and al
 ```js
     xvizMetaBuilder
       .stream(this.LIDAR_POINTS)
-      .category('primitive')
+      .category('primitives')
       .type('point')
       .styleClassDefault({
         fillColor: '#00a',
@@ -148,7 +148,7 @@ And of course we want to declare the channels in the metdata:
       .category('vehicle-pose')
 
       .stream(this.VEHICLE_TRAJECTORY)
-      .category('primitive')
+      .category('primitives')
       .type('polyline')
 
       // This styling information is applied to *all* objects for this stream.

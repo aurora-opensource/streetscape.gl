@@ -68,19 +68,21 @@ export default class TrackletsConverter {
       // allowing for the *style* information to be shared across
       // categories of objects.
       xvizBuilder
-        .stream(this.TRACKLETS)
+        .primitive(this.TRACKLETS)
         .polygon(tracklet.vertices)
         .classes([tracklet.objectType])
         .style({
           height: tracklet.height
         })
-        .id(tracklet.id)
+        .id(tracklet.id);
 
-        .stream(this.TRACKLETS_TRACKING_POINT)
+      xvizBuilder
+        .primitive(this.TRACKLETS_TRACKING_POINT)
         .circle([tracklet.x, tracklet.y, tracklet.z])
-        .id(tracklet.id)
+        .id(tracklet.id);
 
-        .stream(this.TRACKLETS_LABEL)
+      xvizBuilder
+        .primitive(this.TRACKLETS_LABEL)
         // float above the object
         .position([tracklet.x, tracklet.y, tracklet.z + 2])
         .text(tracklet.id.slice(24));
@@ -98,7 +100,7 @@ export default class TrackletsConverter {
           endFrame: Math.min(frameNumber + MOTION_PLANNING_STEPS, object.lastFrame, this.frameLimit)
         });
 
-        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(objectTrajectory);
+        xvizBuilder.primitive(this.TRACKLETS_TRAJECTORY).polyline(objectTrajectory);
       });
   }
 

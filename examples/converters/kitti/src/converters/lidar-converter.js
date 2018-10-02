@@ -23,7 +23,7 @@ export default class LidarConverter extends BaseConverter {
     const temporaryObject = {vertices: lidarData.positions};
 
     xvizBuilder
-      .stream(this.LIDAR_POINTS)
+      .primitive(this.LIDAR_POINTS)
       .points(temporaryObject.vertices)
       .id(uuid())
       .style({
