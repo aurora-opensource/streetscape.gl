@@ -66,11 +66,11 @@ export class KittiConverter {
       disabledStreams: this.disabledStreams
     });
 
-    const promises = this.converters.map(converter =>
-      converter.convertFrame(frameNumber, xvizBuilder)
-    );
-
-    await Promise.all(promises);
+    // As builder instance is shared across all the converters, to avoid race conditions',
+    // Need wait for each converter to finish
+    for (let i = 0; i < this.converters.length; i++) {
+      await this.converters[i].convertFrame(frameNumber, xvizBuilder);
+    }
 
     return xvizBuilder.getFrame();
   }
