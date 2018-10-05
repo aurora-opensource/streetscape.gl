@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import {_getPoseTrajectory} from '@xviz/builder';
+
 import BaseConverter from './base-converter';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
+import {MOTION_PLANNING_STEPS} from './constant';
 
 export default class GPSConverter extends BaseConverter {
   constructor(rootDir, streamDir) {
@@ -56,13 +58,12 @@ export default class GPSConverter extends BaseConverter {
       .timestamp(acceleration.timestamp)
       .value(acceleration['acceleration-forward']);
 
-    const limit = this.poses.length;
+    const endFrame = Math.min(frameNumber + MOTION_PLANNING_STEPS, this.poses.length);
 
     const poseTrajectory = _getPoseTrajectory({
       poses: this.poses,
       startFrame: frameNumber,
-      endFrame: limit,
-      steps: 50
+      endFrame
     });
 
     xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);

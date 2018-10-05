@@ -6,6 +6,7 @@ import {
 } from '@xviz/builder';
 
 import {loadTracklets} from '../parsers/parse-tracklets';
+import {MOTION_PLANNING_STEPS} from './constant';
 
 export default class TrackletsConverter {
   constructor(directory, getPoses) {
@@ -94,8 +95,7 @@ export default class TrackletsConverter {
           objectFrames: this.trackletFrames,
           poseFrames: this.poses,
           startFrame: frameNumber,
-          endFrame: Math.min(object.lastFrame, this.frameLimit),
-          steps: 50
+          endFrame: Math.min(frameNumber + MOTION_PLANNING_STEPS, object.lastFrame, this.frameLimit)
         });
 
         xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(objectTrajectory);
