@@ -52,15 +52,16 @@ function parseObjectMetadata(tracklets) {
       [-item.l / 2, -item.w / 2, 0]
     ];
 
-    const first_frame = Number(item.first_frame);
+    const firstFrame = Number(item.first_frame);
     const count = Number(item.poses.count);
-    const last_frame = first_frame + count;
+    const lastFrame = firstFrame + count;
+
     return {
       data: item,
-      first_frame,
-      last_frame,
+      firstFrame,
+      lastFrame,
       count,
-      properties,
+      ...properties,
       bounds
     };
   });
