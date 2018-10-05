@@ -20,8 +20,6 @@ export class KittiConverter {
 
     this.numFrames = 0;
     this.metadata = null;
-
-    this.initialize();
   }
 
   initialize() {
