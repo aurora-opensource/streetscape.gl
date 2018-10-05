@@ -1,9 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import {_getPoseTrajectory} from '@xviz/builder';
 
 import BaseConverter from './base-converter';
-import {generateTrajectoryFrame, getPoseOffset} from './common';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
+import {MOTION_PLANNING_STEPS} from './constant';
 
 export default class GPSConverter extends BaseConverter {
   constructor(rootDir, streamDir) {
@@ -27,6 +28,10 @@ export default class GPSConverter extends BaseConverter {
 
   getPose(frameNumber) {
     return this.poses[frameNumber].pose;
+  }
+
+  getPoses() {
+    return this.poses;
   }
 
   async convertFrame(frameNumber, xvizBuilder) {
@@ -53,16 +58,15 @@ export default class GPSConverter extends BaseConverter {
       .timestamp(acceleration.timestamp)
       .value(acceleration['acceleration-forward']);
 
-    const limit = this.poses.length;
-    const getVehiclePose = i => this.getPose(i);
+    const endFrame = Math.min(frameNumber + MOTION_PLANNING_STEPS, this.poses.length);
 
-    const xvizTrajectory = generateTrajectoryFrame(
-      frameNumber,
-      limit,
-      getVehiclePose,
-      this._convertTrajectory
-    );
-    xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(xvizTrajectory);
+    const poseTrajectory = _getPoseTrajectory({
+      poses: this.poses,
+      startFrame: frameNumber,
+      endFrame
+    });
+
+    xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);
   }
 
   getMetadata(xvizMetaBuilder) {
@@ -170,12 +174,4 @@ export default class GPSConverter extends BaseConverter {
 
     return resMap;
   }
-
-  _convertTrajectory = motions => {
-    const vertices = motions.map((m, i) => {
-      return getPoseOffset(motions[0], m);
-    });
-
-    return vertices;
-  };
 }
