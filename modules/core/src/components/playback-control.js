@@ -7,6 +7,11 @@ import {getXvizSettings} from '@xviz/parser';
 
 import connectToLog from './connect';
 
+const MARKER_STYLE = {
+  height: 3,
+  background: '#ccc'
+};
+
 class PlaybackControl extends PureComponent {
   static propTypes = {
     timeScale: PropTypes.number
@@ -83,17 +88,32 @@ class PlaybackControl extends PureComponent {
   };
 
   render() {
-    const {startTime, endTime, timestamp, formatTick, formatTimestamp, ...otherProps} = this.props;
+    const {
+      startTime,
+      endTime,
+      timestamp,
+      formatTick,
+      formatTimestamp,
+      bufferRange,
+      ...otherProps
+    } = this.props;
 
     if (!Number.isFinite(timestamp)) {
       return null;
     }
 
-    // TODO - markers
+    const markers = bufferRange && [
+      {
+        startTime: Math.max(bufferRange.start, startTime),
+        endTime: Math.min(bufferRange.end, endTime),
+        style: MARKER_STYLE
+      }
+    ];
 
     return (
       <MonochromePlaybackControl
         {...otherProps}
+        markers={markers}
         currentTime={timestamp}
         startTime={startTime}
         endTime={endTime}
@@ -111,7 +131,8 @@ class PlaybackControl extends PureComponent {
 const getLogState = log => ({
   timestamp: log.getCurrentTime(),
   startTime: log.getLogStartTime(),
-  endTime: log.getLogEndTime()
+  endTime: log.getLogEndTime(),
+  bufferRange: log.getBufferRange()
 });
 
 export default connectToLog({getLogState, Component: PlaybackControl});
