@@ -16,7 +16,13 @@ const DEFAULT_LOG_PROFILE = 'default';
 const DEFAULT_RETRY_ATTEMPTS = 3;
 
 function getSocketRequestParams(options) {
-  const {logGuid, logProfile = DEFAULT_LOG_PROFILE, timestamp, serverConfig} = options;
+  const {
+    logGuid,
+    logProfile = DEFAULT_LOG_PROFILE,
+    timestamp,
+    serverConfig,
+    bufferLength = null
+  } = options;
 
   // set duration overrides & defaults
   const duration = options.duration || serverConfig.defaultLogLength;
@@ -42,6 +48,7 @@ function getSocketRequestParams(options) {
     logProfile,
     duration,
     timestamp,
+    bufferLength,
     retryAttempts,
     serverConfig
   };
@@ -49,25 +56,32 @@ function getSocketRequestParams(options) {
 
 // Determine timestamp & duration to reconnect after an interrupted connection.
 // Calculate based on current XVIZStreamBuffer data
-//
-// TODO: This needs revisited when we randomly access data
-function updateSocketRequestParams(initalRequestParams, streamBuffer) {
-  const {duration: initalDuration, timestamp: initialTimestamp} = initalRequestParams;
+function updateSocketRequestParams(timestamp, initalRequestParams, streamBuffer) {
+  const {duration: initalDuration, timestamp: initialTimestamp, bufferLength} = initalRequestParams;
+  const loadedRange = streamBuffer.getLoadedTimeRange();
 
-  let timestamp = initialTimestamp;
-  let duration = initalDuration;
+  let start = Number.isFinite(timestamp) ? timestamp : initialTimestamp;
+  let end = bufferLength ? start + bufferLength : initialTimestamp + initalDuration;
 
-  if (streamBuffer instanceof XvizStreamBuffer) {
-    const loadedRange = streamBuffer.getLoadedTimeRange();
-    if (loadedRange) {
-      timestamp = loadedRange.end;
+  if (loadedRange) {
+    if (loadedRange.start < end && loadedRange.end >= end) {
+      // end falls inside loaded range
+      end = loadedRange.start;
     }
-    if (initalDuration && initialTimestamp) {
-      duration = initialTimestamp + initalDuration - timestamp;
+    if (loadedRange.end > start && loadedRange.start <= start) {
+      // start falls inside loaded range
+      start = loadedRange.end;
     }
   }
-
-  return getSocketRequestParams({...initalRequestParams, timestamp, duration});
+  if (initalDuration && initialTimestamp) {
+    start = Math.max(start, initialTimestamp);
+    end = Math.min(end, initialTimestamp + initalDuration);
+  }
+  return {
+    ...initalRequestParams,
+    timestamp: start,
+    duration: Math.max(0, end - start)
+  };
 }
 
 // WebSocket constants used since WebSocket is not defined on Node
@@ -100,6 +114,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
    * @params logProfile {string, optional}
    * @params duration {number, optional}
    * @params timestamp {number, optional}
+   * @params bufferLength {number, optional}
    */
   constructor(options = {}) {
     super(options);
@@ -108,6 +123,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     // Construct websocket connection details from parameters
     this.requestParams = getSocketRequestParams(options);
+    this.lastRequest = null;
     this.retrySettings = {
       retries: this.requestParams.retryAttempts,
       minTimeout: 500,
@@ -118,7 +134,18 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // Note: needs to be last due to member dependencies
     this.WebSocketClass = options.WebSocketClass || WebSocket;
 
-    this.streamBuffer = new XvizStreamBuffer();
+    const {bufferLength, duration} = this.requestParams;
+    if (bufferLength && bufferLength < duration) {
+      // bufferLength is used as the chunk size for each request
+      // max buffer length is actually bufferLength * 2
+      // This is so that the moving buffer always covers the current chunk
+      this.streamBuffer = new XvizStreamBuffer({
+        offsetStart: -bufferLength,
+        offsetEnd: bufferLength
+      });
+    } else {
+      this.streamBuffer = new XvizStreamBuffer();
+    }
   }
 
   isOpen() {
@@ -135,7 +162,14 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // use clamped/rounded timestamp
     timestamp = this.getCurrentTime();
 
-    const {timestamp: currentTimestamp, duration: currentDuration} = this.requestParams;
+    // prune buffer
+    const oldVersion = this.streamBuffer.valueOf();
+    this.streamBuffer.setCurrentTime(timestamp);
+    if (this.streamBuffer.valueOf() !== oldVersion) {
+      this.set('streams', this.streamBuffer.getStreams());
+    }
+
+    const {timestamp: currentTimestamp, duration: currentDuration} = this.lastRequest;
 
     if (timestamp >= currentTimestamp && timestamp < currentTimestamp + currentDuration) {
       // within range
@@ -145,13 +179,13 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // TODO - get from options
     const cancelPrevious = false;
 
-    this.requestParams = getSocketRequestParams({
-      ...this.requestParams,
-      timestamp
-    });
+    const params = updateSocketRequestParams(timestamp, this.requestParams, this.streamBuffer);
+    this.lastRequest = params;
 
     if (this.isOpen() && !cancelPrevious) {
-      this.xvizHandler.play(this.requestParams);
+      if (params.duration) {
+        this.xvizHandler.play(params);
+      }
     } else {
       this.close();
       this.socket = null;
@@ -173,7 +207,12 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // Wrap retry logic around connection
     return PromiseRetry(retry => {
       // Continue from where we disconnected
-      const params = updateSocketRequestParams(this.requestParams, this.streamBuffer);
+      const params = updateSocketRequestParams(
+        this.getCurrentTime(),
+        this.requestParams,
+        this.streamBuffer
+      );
+      this.lastRequest = params;
 
       return new Promise((resolve, reject) => {
         try {
@@ -250,7 +289,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
       case LOG_STREAM_MESSAGE.TIMESLICE:
         const oldVersion = this.streamBuffer.valueOf();
         this.streamBuffer.insert(message);
-        if (this.streamBuffer.valueOf !== oldVersion) {
+        if (this.streamBuffer.valueOf() !== oldVersion) {
           this.set('streams', this.streamBuffer.getStreams());
         }
         this.emit('update', message);

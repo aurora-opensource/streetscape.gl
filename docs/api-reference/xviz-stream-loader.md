@@ -33,4 +33,5 @@ new XVIZStreamLoader({
 - `logProfile` (String, optional) - Name of the profile to load the log with
 - `duration` (Number, optional) - Length of the log
 - `timestamp` (Number, optional) - the timestamp to start loading at
+- `bufferLength` (Number, optional) - the length of the buffer to keep in memory. Uses the same unit as timestamp. If specified, older frames may be discarded during playback, to avoid crashes due to excessive memory usage.
 
