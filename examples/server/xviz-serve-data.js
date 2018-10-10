@@ -302,7 +302,7 @@ class ConnectionContext {
       this.ws.send(JSON.stringify({type: 'done'}), () => {
         this.logMsgSent(frame_send_time, -1, frame_index, 'json');
       });
-      this.ws.close();
+      // this.ws.close();
       return;
     }
 

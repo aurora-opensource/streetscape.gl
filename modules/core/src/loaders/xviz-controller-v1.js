@@ -32,6 +32,7 @@ export class XVIZControllerV1 {
       openLogMsg.timestamp = timestamp;
     }
 
+    console.log(openLogMsg);
     this.socket.send(JSON.stringify(openLogMsg));
   }
 }

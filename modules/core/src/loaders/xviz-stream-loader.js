@@ -3,6 +3,7 @@
 import assert from 'assert';
 import {
   parseStreamMessage,
+  getXvizSettings,
   LOG_STREAM_MESSAGE,
   XvizStreamBuffer,
   StreamSynchronizer
@@ -57,25 +58,37 @@ function getSocketRequestParams(options) {
 // Determine timestamp & duration to reconnect after an interrupted connection.
 // Calculate based on current XVIZStreamBuffer data
 function updateSocketRequestParams(timestamp, initalRequestParams, streamBuffer) {
-  const {duration: initalDuration, timestamp: initialTimestamp, bufferLength} = initalRequestParams;
-  const loadedRange = streamBuffer.getLoadedTimeRange();
+  const {duration: totalDuration, timestamp: initialTimestamp, bufferLength} = initalRequestParams;
 
+  if (!Number.isFinite(timestamp) && !Number.isFinite(initialTimestamp)) {
+    return {
+      ...initalRequestParams,
+      duration: bufferLength ? Math.min(totalDuration, bufferLength) : totalDuration
+    };
+  }
+
+  const loadedRange = streamBuffer.getLoadedTimeRange();
   let start = Number.isFinite(timestamp) ? timestamp : initialTimestamp;
-  let end = bufferLength ? start + bufferLength : initialTimestamp + initalDuration;
+  let end = bufferLength ? start + bufferLength : initialTimestamp + totalDuration;
 
   if (loadedRange) {
-    if (loadedRange.start < end && loadedRange.end >= end) {
+    if (loadedRange.start <= start && loadedRange.end >= end) {
+      // ls -- s -- e --le
+      // new range falls inside loaded range
+      end = start;
+    } else if (loadedRange.start < end && loadedRange.end >= end) {
+      // s -- ls -- e --le
       // end falls inside loaded range
       end = loadedRange.start;
-    }
-    if (loadedRange.end > start && loadedRange.start <= start) {
+    } else if (loadedRange.end > start && loadedRange.start <= start) {
+      // ls -- s --le -- e
       // start falls inside loaded range
       start = loadedRange.end;
     }
   }
-  if (initalDuration && initialTimestamp) {
+  if (totalDuration && initialTimestamp) {
     start = Math.max(start, initialTimestamp);
-    end = Math.min(end, initialTimestamp + initalDuration);
+    end = Math.min(end, initialTimestamp + totalDuration);
   }
   return {
     ...initalRequestParams,
@@ -140,8 +153,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
       // max buffer length is actually bufferLength * 2
       // This is so that the moving buffer always covers the current chunk
       this.streamBuffer = new XvizStreamBuffer({
-        offsetStart: -bufferLength,
-        offsetEnd: bufferLength
+        startOffset: -bufferLength,
+        endOffset: bufferLength
       });
     } else {
       this.streamBuffer = new XvizStreamBuffer();
@@ -161,6 +174,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     // use clamped/rounded timestamp
     timestamp = this.getCurrentTime();
+    const bufferStartTime = timestamp - getXvizSettings().TIME_WINDOW;
 
     // prune buffer
     const oldVersion = this.streamBuffer.valueOf();
@@ -171,7 +185,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     const {timestamp: currentTimestamp, duration: currentDuration} = this.lastRequest;
 
-    if (timestamp >= currentTimestamp && timestamp < currentTimestamp + currentDuration) {
+    if (bufferStartTime >= currentTimestamp && timestamp <= currentTimestamp + currentDuration) {
       // within range
       return;
     }
@@ -179,13 +193,15 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // TODO - get from options
     const cancelPrevious = false;
 
-    const params = updateSocketRequestParams(timestamp, this.requestParams, this.streamBuffer);
+    const params = updateSocketRequestParams(bufferStartTime, this.requestParams, this.streamBuffer);
     this.lastRequest = params;
 
+    if (!params.duration) {
+      return;
+    }
+
     if (this.isOpen() && !cancelPrevious) {
-      if (params.duration) {
-        this.xvizHandler.play(params);
-      }
+      this.xvizHandler.play(params);
     } else {
       this.close();
       this.socket = null;
@@ -282,6 +298,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
         this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
+        Object.assign(this.lastRequest, {timestamp: message.start_time});
         this._setMetadata(message);
         this.emit('ready', message);
         break;
@@ -309,6 +326,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   };
 
   _onWSClose = event => {
+    console.log('socket closed');
     // Only called on connection closure, which would be an error case
     this._debug('socket_closed', event);
   };
