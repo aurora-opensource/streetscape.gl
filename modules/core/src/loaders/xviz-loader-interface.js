@@ -145,9 +145,9 @@ export default class XVIZLoaderInterface {
   );
 
   getTimestamps = createSelector(this, this.getStreams, streams => {
-    const vehiclePoses = streams && streams['vehicle-pose'];
+    const vehiclePoses = streams && streams['/vehicle-pose'];
     if (vehiclePoses) {
-      return vehiclePoses.map(pose => pose.time);
+      return vehiclePoses.map(pose => pose.timestamp || pose.time);
     }
     return null;
   });

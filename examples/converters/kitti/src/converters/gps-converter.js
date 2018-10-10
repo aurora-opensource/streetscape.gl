@@ -4,7 +4,7 @@ import {_getPoseTrajectory} from '@xviz/builder';
 
 import BaseConverter from './base-converter';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
-import {MOTION_PLANNING_STEPS} from './constant';
+import {MOTION_PLANNING_STEPS, PRIMARY_POSE_STREAM} from './constant';
 
 export default class GPSConverter extends BaseConverter {
   constructor(rootDir, streamDir) {
@@ -43,7 +43,11 @@ export default class GPSConverter extends BaseConverter {
     // Every frame *MUST* have a pose. The pose can be considered
     // the core reference point for other data and usually drives the timing
     // of the system.
-    xvizBuilder.pose(pose);
+    xvizBuilder
+      .pose(PRIMARY_POSE_STREAM)
+      .timestamp(pose.timestamp)
+      .mapOrigin(pose.longitude, pose.latitude, pose.altitude)
+      .orientation(pose.roll, pose.pitch, pose.yaw);
 
     // This is an example of using the XVIZBuilder to convert your data
     // into XVIZ.
@@ -59,12 +63,10 @@ export default class GPSConverter extends BaseConverter {
       .timestamp(acceleration.timestamp)
       .value(acceleration['acceleration-forward']);
 
-    const endFrame = Math.min(frameNumber + MOTION_PLANNING_STEPS, this.poses.length);
-
     const poseTrajectory = _getPoseTrajectory({
       poses: this.poses,
       startFrame: frameNumber,
-      endFrame
+      endFrame: Math.min(frameNumber + MOTION_PLANNING_STEPS, this.poses.length)
     });
 
     xvizBuilder.primitive(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);
@@ -75,7 +77,7 @@ export default class GPSConverter extends BaseConverter {
     // This helps validate data consistency and has automatic
     // behavior tied to the viewer.
     const xb = xvizMetaBuilder;
-    xb.stream('vehicle-pose')
+    xb.stream(PRIMARY_POSE_STREAM)
       .category('vehicle-pose')
 
       .stream(this.VEHICLE_ACCELERATION)
@@ -139,7 +141,7 @@ export default class GPSConverter extends BaseConverter {
     const resMap = {};
 
     resMap.pose = {
-      time: timestamp,
+      timestamp,
       latitude: Number(lat),
       longitude: Number(lon),
       altitude: Number(alt),
