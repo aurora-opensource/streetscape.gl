@@ -17,12 +17,20 @@ parser.addArgument(['--port'], {
 });
 
 parser.addArgument(['--frame_limit'], {
+  type: Number,
   help: 'Reduce or extend the number of frames to send'
 });
 
 parser.addArgument(['--delay'], {
   defaultValue: 50,
+  type: Number,
   help: 'Message send interval, 50ms as default'
+});
+
+parser.addArgument(['--duration'], {
+  defaultValue: 30000,
+  type: Number,
+  help: 'Set duration of log data if not specified, 30 seconds default'
 });
 
 parser.addArgument(['--skip_images'], {
