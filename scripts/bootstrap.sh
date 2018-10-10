@@ -28,6 +28,9 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# setup XVIZ first!
+(cd "${SCRIPT_DIR}/../../xviz" && yarn bootstrap)
+
 # install dependencies
 yarn
 
@@ -48,9 +51,6 @@ for D in *; do (
 
 # build the submodules
 npm run build
-
-# setup XVIZ
-(cd "${SCRIPT_DIR}/../../xviz" && yarn bootstrap)
 
 # Setup KITTI converter JS dependencies
 (cd "${SCRIPT_DIR}/../examples/converters/kitti" && yarn)
