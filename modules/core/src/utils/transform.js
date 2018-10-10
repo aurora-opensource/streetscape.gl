@@ -1,11 +1,11 @@
 import {COORDINATE_SYSTEM} from 'deck.gl';
-import {_Pose as Pose, Matrix4} from 'math.gl';
+import {Matrix4} from 'math.gl';
 
 import {COORDINATES} from '../constants';
 
 export function resolveCoordinateTransform(vehiclePose, streamMetadata = {}) {
   const {origin, transforms = {}, vehicleRelativeTransform} = vehiclePose;
-  const {coordinate, pose} = streamMetadata;
+  const {coordinate, transform} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
   let modelMatrix = vehicleRelativeTransform;
@@ -25,8 +25,8 @@ export function resolveCoordinateTransform(vehiclePose, streamMetadata = {}) {
       }
   }
 
-  if (pose) {
-    modelMatrix = new Matrix4(modelMatrix).multiplyRight(new Pose(pose).getTransformationMatrix());
+  if (transform) {
+    modelMatrix = new Matrix4(modelMatrix).multiplyRight(transform);
   }
 
   return {
