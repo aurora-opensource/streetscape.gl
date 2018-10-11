@@ -55,21 +55,26 @@ function getSocketRequestParams(options) {
   };
 }
 
+/* eslint-disable complexity */
 // Determine timestamp & duration to reconnect after an interrupted connection.
 // Calculate based on current XVIZStreamBuffer data
 function updateSocketRequestParams(timestamp, initalRequestParams, streamBuffer) {
   const {duration: totalDuration, timestamp: initialTimestamp, bufferLength} = initalRequestParams;
+  const chunkSize = bufferLength
+    ? Math.min(totalDuration, bufferLength + getXvizSettings().TIME_WINDOW)
+    : totalDuration;
 
   if (!Number.isFinite(timestamp) && !Number.isFinite(initialTimestamp)) {
     return {
       ...initalRequestParams,
-      duration: bufferLength ? Math.min(totalDuration, bufferLength) : totalDuration
+      duration: chunkSize,
+      chunkSize
     };
   }
 
   const loadedRange = streamBuffer.getLoadedTimeRange();
   let start = Number.isFinite(timestamp) ? timestamp : initialTimestamp;
-  let end = bufferLength ? start + bufferLength : initialTimestamp + totalDuration;
+  let end = start + chunkSize;
 
   if (loadedRange) {
     if (loadedRange.start <= start && loadedRange.end >= end) {
@@ -93,12 +98,14 @@ function updateSocketRequestParams(timestamp, initalRequestParams, streamBuffer)
   return {
     ...initalRequestParams,
     timestamp: start,
-    duration: Math.max(0, end - start)
+    duration: Math.max(0, end - start),
+    chunkSize
   };
 }
+/* eslint-enable complexity */
 
 // WebSocket constants used since WebSocket is not defined on Node
-const WEB_SOCKET_OPEN_STATE = 1;
+// const WEB_SOCKET_OPEN_STATE = 1;
 
 /*
  * Handle connecting to XVIZ socket and negotiation of the XVIZ protocol version
@@ -162,7 +169,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   }
 
   isOpen() {
-    return this.socket && this.socket.readyState === WEB_SOCKET_OPEN_STATE;
+    return this.socket; // && this.socket.readyState === WEB_SOCKET_OPEN_STATE;
   }
 
   getBufferRange() {
@@ -183,9 +190,12 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
       this.set('streams', this.streamBuffer.getStreams());
     }
 
-    const {timestamp: currentTimestamp, duration: currentDuration} = this.lastRequest;
+    const {timestamp: lastRequestedTimestamp, chunkSize} = this.lastRequest;
 
-    if (bufferStartTime >= currentTimestamp && timestamp <= currentTimestamp + currentDuration) {
+    if (
+      bufferStartTime >= lastRequestedTimestamp &&
+      timestamp <= lastRequestedTimestamp + chunkSize
+    ) {
       // within range
       return;
     }
@@ -193,19 +203,22 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // TODO - get from options
     const cancelPrevious = false;
 
-    const params = updateSocketRequestParams(bufferStartTime, this.requestParams, this.streamBuffer);
-    this.lastRequest = params;
-
+    const params = updateSocketRequestParams(
+      bufferStartTime,
+      this.requestParams,
+      this.streamBuffer
+    );
     if (!params.duration) {
       return;
     }
+
+    this.lastRequest = {...params, timestamp: bufferStartTime};
 
     if (this.isOpen() && !cancelPrevious) {
       this.xvizHandler.play(params);
     } else {
       this.close();
-      this.socket = null;
-      this.connect();
+      this.connect(params);
     }
   }
 
@@ -215,7 +228,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
    * @params {Object} xvizStreamParams - XVIZ log params and options
    * @returns {Promise} WebSocket connection
    */
-  connect() {
+  connect(params) {
     assert(this.socket === null, 'Socket Manager still connected');
 
     this._debug('stream_start');
@@ -223,11 +236,9 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // Wrap retry logic around connection
     return PromiseRetry(retry => {
       // Continue from where we disconnected
-      const params = updateSocketRequestParams(
-        this.getCurrentTime(),
-        this.requestParams,
-        this.streamBuffer
-      );
+      params =
+        params ||
+        updateSocketRequestParams(this.getCurrentTime(), this.requestParams, this.streamBuffer);
       this.lastRequest = params;
 
       return new Promise((resolve, reject) => {
@@ -274,8 +285,9 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   }
 
   close() {
-    if (this.isOpen()) {
+    if (this.socket) {
       this.socket.close();
+      this.socket = null;
     }
   }
 
@@ -297,6 +309,10 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
+        if (this.get('metadata')) {
+          // already has metadata
+          return;
+        }
         this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
         Object.assign(this.lastRequest, {timestamp: message.start_time});
         this._setMetadata(message);
@@ -326,7 +342,6 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   };
 
   _onWSClose = event => {
-    console.log('socket closed');
     // Only called on connection closure, which would be an error case
     this._debug('socket_closed', event);
   };

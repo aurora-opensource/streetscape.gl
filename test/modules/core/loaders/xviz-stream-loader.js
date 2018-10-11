@@ -1,44 +1,41 @@
 /* global setTimeout */
 import test from 'tape-catch';
 
+import {getXvizSettings, setXvizSettings} from '@xviz/parser';
 import {XVIZStreamLoader} from 'streetscape.gl';
 
 const TEST_TIMESLICES = [
   {
     id: 'TS-1',
-    timestamp: 1002,
-    channels: {A: 2, B: 0}
-  },
-  {
-    id: 'TS-2',
-    timestamp: 1001,
+    timestamp: 1006,
     channels: {A: 1, C: 1}
   },
   {
+    id: 'TS-2',
+    timestamp: 1007,
+    channels: {A: 2, B: 0}
+  },
+  {
     id: 'TS-3',
-    timestamp: 1005,
+    timestamp: 1008,
     channels: {A: 5}
   },
   {
     id: 'TS-4',
-    timestamp: 1003,
+    timestamp: 1009,
     channels: {A: 3}
   },
   {
     id: 'TS-5',
-    timestamp: 1004,
+    timestamp: 1010,
     channels: {A: 4, B: -1}
   },
   {
     id: 'TS-6',
-    timestamp: 1001,
+    timestamp: 1011,
     channels: {A: 1.1}
   }
 ];
-
-const TEST_TIMESLICES_SORTED = TEST_TIMESLICES.slice(0, 5).sort(
-  (ts1, ts2) => ts1.timestamp - ts2.timestamp
-);
 
 class MockSocket {
   constructor(url) {
@@ -80,6 +77,11 @@ test('XvizStreamLoader#connect, seek', t => {
     bufferLength: 10
   });
 
+  const oldSettings = getXvizSettings();
+  setXvizSettings({
+    TIME_WINDOW: 1
+  });
+
   loader.connect().then(() => {
     t.ok(loader.isOpen(), 'socket connected');
     const {socket} = loader;
@@ -90,28 +92,29 @@ test('XvizStreamLoader#connect, seek', t => {
     );
     t.deepEquals(
       socket.lastMessage(),
-      {type: 'open_log', duration: 10, timestamp: 1000},
+      {type: 'open_log', duration: 11, timestamp: 1000},
       'initial hand shake'
     );
 
     loader.seek(1005);
     t.notOk(socket.lastMessage(), 'seek: no socket updates');
 
-    loader.seek(1010);
+    loader.seek(1011.1);
     t.deepEquals(
       socket.lastMessage(),
-      {type: 'open_log', duration: 10, timestamp: 1010},
+      {type: 'open_log', duration: 11, timestamp: 1010.1},
       'seek: update with correct parameters'
     );
 
-    loader.streamBuffer.timeslices = TEST_TIMESLICES_SORTED.slice();
+    loader.streamBuffer.timeslices = TEST_TIMESLICES;
     loader.seek(1001);
     t.deepEquals(
       socket.lastMessage(),
-      {type: 'open_log', duration: 6, timestamp: 1005},
+      {type: 'open_log', duration: 6, timestamp: 1000},
       'seek: update with correct parameters'
     );
 
+    setXvizSettings(oldSettings);
     t.end();
   });
 });
