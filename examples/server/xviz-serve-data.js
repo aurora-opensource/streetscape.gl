@@ -176,22 +176,46 @@ function getTimestamp(xviz_data) {
   return timestamp;
 }
 
-// Connection State
+// Global counter to help debug
+let _connectionCounter = 1;
 
+function connectionId() {
+  const id = _connectionCounter;
+  _connectionCounter++;
+
+  return id;
+}
+
+// Connection State
 class ConnectionContext {
   constructor(settings, frames, frameTiming) {
-    this.frames = frames;
-    this.frames_timing = frameTiming;
+    this.metadata = frames[0];
+    this.metadata_timing = frameTiming[0];
+
+    this.connectionId = connectionId();
+
+    // Remove metadata so we only deal with data frames
+    this.frames = frames.slice(1);
+    this.frames_timing = frameTiming.slice(1);
+
     this.settings = settings;
     this.t_start_time = null;
 
+    // Only send metadata once
+    this.sentMetadata = false;
+
+    // Used to manage changing an inflight request
+    this.replaceFrameRequest = null;
+    this.inflight = false;
+
     this.onConnection.bind(this);
+    this.onClose.bind(this);
     this.onMessage.bind(this);
     this.sendFrame.bind(this);
   }
 
   onConnection(ws) {
-    console.log('>  Connection from Client.');
+    this.log('> Connection from Client.');
 
     this.t_start_time = process.hrtime();
     this.ws = ws;
@@ -200,22 +224,33 @@ class ConnectionContext {
     ws.on('message', msg => this.onMessage(msg));
   }
 
+  onClose(event) {
+    this.log(`> Connection Closed. Code: ${event.code} Reason: ${event.reason}`);
+  }
+
   onMessage(message) {
     const msg = JSON.parse(message);
 
-    console.log(`>  Message ${msg.type} from Client`);
+    this.log(`> Message ${msg.type} from Client`);
 
     switch (msg.type) {
+      case 'open':
+        this.sendOpenResp(msg);
+        break;
+      case 'play':
+        this.sendPlayResp(msg);
+        break;
+      case 'metadata':
+        this.sendMetadata();
+        break;
       case 'open_log': {
-        console.log(`>> ts: ${msg.timestamp} duration: ${msg.duration}`);
-        const frameRequest = this.setupFrameRequest(msg);
-        if (frameRequest) {
-          this.sendNextFrame(frameRequest);
-        }
+        this.log(`| ts: ${msg.timestamp} duration: ${msg.duration}`);
+        this.sendMetadataResp();
+        this.sendPlayResp(msg);
         break;
       }
       default:
-        console.log('>  Unknown message', msg);
+        this.log(`|  Unknown message ${msg}`);
     }
   }
 
@@ -228,12 +263,12 @@ class ConnectionContext {
     const {frame_limit, duration: default_duration} = this.settings;
 
     //  log time bounds
-    const log_time_start = frames_timing[1];
+    const log_time_start = frames_timing[0];
     const log_time_end = frames_timing[frames_timing.length - 1];
 
     // default values
     if (!timestamp) {
-      timestamp = frames_timing[1];
+      timestamp = frames_timing[0];
     }
 
     if (!duration) {
@@ -269,8 +304,55 @@ class ConnectionContext {
     };
   }
 
+  // Open establishes the resource to load
+  sendOpenResp(clientMessage) {
+    this.ws.send(JSON.stringify({type: 'ack'}));
+  }
+
+  sendMetadataResp(clientMessage) {
+    if (!this.sentMetadata) {
+      this.sentMetadata = true;
+      this.sendMetadata();
+    }
+  }
+
+  sendPlayResp(clientMessage) {
+    const frameRequest = this.setupFrameRequest(clientMessage);
+    if (frameRequest) {
+      if (this.inflight) {
+        this.replaceFrameRequest = frameRequest;
+      } else {
+        this.inflight = true;
+        this.sendNextFrame(frameRequest);
+      }
+    }
+  }
+
+  sendMetadata() {
+    const frame = getFrameData(this.metadata);
+    const isBuffer = frame instanceof Buffer;
+
+    const frame_send_time = process.hrtime();
+
+    // Send data
+    if (isBuffer) {
+      this.ws.send(frame);
+    } else {
+      this.ws.send(frame, {compress: true});
+    }
+
+    this.logMsgSent(frame_send_time, 1, 1, 'metadata');
+  }
+
   // Setup interval for sending frame data
   sendNextFrame(frameRequest) {
+    if (this.replaceFrameRequest) {
+      frameRequest = this.replaceFrameRequest;
+      this.log(`| Replacing inflight request.`);
+      this.ws.send(JSON.stringify({type: 'cancelled'}));
+      this.replaceFrameRequest = null;
+    }
+
     frameRequest.sendInterval = setTimeout(
       () => this.sendFrame(frameRequest),
       this.settings.send_interval
@@ -299,10 +381,11 @@ class ConnectionContext {
     // End case
     if (ii >= last_index) {
       // When last_index reached send 'done' message
-      this.ws.send(JSON.stringify({type: 'done'}), () => {
+      this.ws.send(JSON.stringify({type: 'done'}), {}, () => {
         this.logMsgSent(frame_send_time, -1, frame_index, 'json');
       });
-      // this.ws.close();
+
+      this.inflight = false;
       return;
     }
 
@@ -321,7 +404,7 @@ class ConnectionContext {
 
       // Send data
       if (isBuffer) {
-        this.ws.send(frame, () => {
+        this.ws.send(frame, {}, () => {
           this.logMsgSent(frame_send_time, ii, frame_index, 'binary', next_ts);
           this.sendNextFrame(frameRequest);
         });
@@ -334,10 +417,15 @@ class ConnectionContext {
     }
   }
 
+  log(msg) {
+    const prefix = `[id:${this.connectionId}]`;
+    console.log(`${prefix} ${msg}`);
+  }
+
   logMsgSent(send_time, index, real_index, tag, ts = 0) {
     const t_from_start_ms = deltaTimeMs(this.t_start_time);
     const t_msg_send_time_ms = deltaTimeMs(send_time);
-    console.log(
+    this.log(
       ` < Frame(${tag}) ${index}:${real_index} ts:${ts} in self: ${t_msg_send_time_ms}ms start: ${t_from_start_ms}ms`
     );
   }
