@@ -11,7 +11,8 @@ module.exports = async function main(args) {
     frameLimit,
     cameraSources,
     imageMaxWidth,
-    imageMaxHeight
+    imageMaxHeight,
+    writeJson
   } = args;
 
   // This object orchestrates any data dependencies between the data sources
@@ -30,10 +31,11 @@ module.exports = async function main(args) {
 
   // This abstracts the details of the filenames expected by our server
   const xvizWriter = new XVIZWriter();
+  const writerOptions = {writeBinary: !writeJson, writeJson};
 
   // Write metadata file
   const xvizMetadata = converter.getMetadata();
-  xvizWriter.writeMetadata(outputDir, xvizMetadata);
+  xvizWriter.writeMetadata(outputDir, xvizMetadata, writerOptions);
 
   const start = Date.now();
 
@@ -50,7 +52,7 @@ module.exports = async function main(args) {
   // any unnecessary complications
   for (let i = 0; i < limit; i++) {
     const xvizFrame = await converter.convertFrame(i);
-    xvizWriter.writeFrame(outputDir, i, xvizFrame);
+    xvizWriter.writeFrame(outputDir, i, xvizFrame, writerOptions);
   }
 
   const end = Date.now();

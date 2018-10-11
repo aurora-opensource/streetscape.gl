@@ -6,10 +6,12 @@ const path = require('path');
 const process = require('process');
 
 const {deltaTimeMs, extractZipFromFile} = require('./serve');
+const {parseBinaryXVIZ} = require('@xviz/parser');
 
 // TODO: auxillary timestamp tracking & images are not handled
 
 const FRAME_DATA_SUFFIX = '-frame.glb';
+const FRAME_DATA_JSON_SUFFIX = '-frame.json';
 
 // Misc utils
 
@@ -49,10 +51,9 @@ function setupFrameData(data_directory) {
   const frameNames = getFrameName(START_INDEX);
 
   const hasData = frameNames.some(name => {
-    console.log('exists ', path.join(data_directory, name));
+    console.log('Checking for files: ', path.join(data_directory, name));
     return fs.existsSync(path.join(data_directory, name));
   });
-  console.log(' hasData ', hasData);
 
   if (!hasData) {
     console.log('Checking for archive');
@@ -68,7 +69,12 @@ function setupFrameData(data_directory) {
 
 // Support various formatted frame names
 function getFrameName(index) {
-  return [`${index}${FRAME_DATA_SUFFIX}`, `${zeroPaddedPrefix(index)}${FRAME_DATA_SUFFIX}`];
+  return [
+    `${index}${FRAME_DATA_SUFFIX}`,
+    `${zeroPaddedPrefix(index)}${FRAME_DATA_SUFFIX}`,
+    `${index}${FRAME_DATA_JSON_SUFFIX}`,
+    `${zeroPaddedPrefix(index)}${FRAME_DATA_JSON_SUFFIX}`
+  ];
 }
 
 function getFrameMetadata(index, data_directory) {
@@ -109,6 +115,28 @@ function loadFrames(data_directory) {
   return frames;
 }
 
+function loadFrameTimings(frames) {
+  let lastTime = 0;
+  return frames.map(frame => {
+    const data = getFrameData(frame);
+    let jsonFrame = null;
+    if (data instanceof Buffer) {
+      jsonFrame = parseBinaryXVIZ(
+        data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength)
+      );
+    } else if (typeof data === 'string') {
+      jsonFrame = JSON.parse(data);
+    }
+
+    const ts = getTimestamp(jsonFrame);
+    if (Number.isFinite(ts)) {
+      lastTime = ts;
+    }
+
+    return lastTime;
+  });
+}
+
 // Determine the actual index into frames when looping over data repeatedly
 // Happens when frame_limit > framesLength
 function getFrameIndex(index, framesLength) {
@@ -132,10 +160,12 @@ function getFrameIndex(index, framesLength) {
 // Return either the vehicle_pose timestamp, or max
 // of timestamps in state_updates.
 function getTimestamp(xviz_data) {
-  const {vehicle_pose, state_updates} = xviz_data;
+  const {start_time, vehicle_pose, state_updates} = xviz_data;
 
   let timestamp;
-  if (vehicle_pose) {
+  if (start_time) {
+    timestamp = start_time;
+  } else if (vehicle_pose) {
     timestamp = vehicle_pose.time;
   } else if (state_updates) {
     timestamp = state_updates.reduce((t, stateUpdate) => {
@@ -146,37 +176,14 @@ function getTimestamp(xviz_data) {
   return timestamp;
 }
 
-// TODO: auxillary timestamp tracking.
-// Right now you have to restart the server after a session with frame_limit
-// > frames.length, because I mutate what should be immutable. Need to fix this.
-//
-function updateTimestamp(xviz_data, ts) {
-  const {vehicle_pose, state_updates} = xviz_data;
-
-  if (vehicle_pose) {
-    vehicle_pose.time = ts;
-  } else if (state_updates && state_updates.length > 0) {
-    // Since AV Web Platform uses the max of any timestamp, we just set the first one
-    state_updates[0].timestamp = ts;
-  }
-}
-
 // Connection State
 
-const FRAME_TRACKING_DEFAULTS = {
-  timestamp: 0,
-  i: 0,
-  sendInterval: 0
-};
-
 class ConnectionContext {
-  constructor(settings, frames) {
+  constructor(settings, frames, frameTiming) {
     this.frames = frames;
+    this.frames_timing = frameTiming;
     this.settings = settings;
     this.t_start_time = null;
-
-    // Per connection settings
-    this.frame_tracking = {...FRAME_TRACKING_DEFAULTS};
 
     this.onConnection.bind(this);
     this.onMessage.bind(this);
@@ -200,7 +207,11 @@ class ConnectionContext {
 
     switch (msg.type) {
       case 'open_log': {
-        this.sendNextFrame();
+        console.log(`>> ts: ${msg.timestamp} duration: ${msg.duration}`);
+        const frameRequest = this.setupFrameRequest(msg);
+        if (frameRequest) {
+          this.sendNextFrame(frameRequest);
+        }
         break;
       }
       default:
@@ -208,35 +219,95 @@ class ConnectionContext {
     }
   }
 
+  /* Setup frameRequest to control subset of frames to send
+   *
+   * @returns frameRequest object or null
+   */
+  setupFrameRequest({timestamp, duration}) {
+    const {frames, frames_timing} = this;
+    const {frame_limit, duration: default_duration} = this.settings;
+
+    //  log time bounds
+    const log_time_start = frames_timing[1];
+    const log_time_end = frames_timing[frames_timing.length - 1];
+
+    // default values
+    if (!timestamp) {
+      timestamp = frames_timing[1];
+    }
+
+    if (!duration) {
+      duration = default_duration;
+    }
+
+    // bounds checking
+    const timestampStart = timestamp;
+    const timestampEnd = timestamp + duration;
+
+    if (timestampStart > log_time_end || timestampEnd < log_time_start) {
+      return null;
+    }
+
+    let start = frames_timing.findIndex(ts => ts >= timestampStart);
+    if (start === -1) {
+      start = 1;
+    }
+
+    let end = frames_timing.findIndex(ts => ts >= timestampEnd);
+    if (end === -1) {
+      end = frames.length;
+    }
+
+    if (end > frame_limit) {
+      end = frame_limit;
+    }
+
+    return {
+      start,
+      end,
+      index: start
+    };
+  }
+
   // Setup interval for sending frame data
-  sendNextFrame() {
-    this.frame_tracking.sendInterval = setTimeout(
-      () => this.sendFrame(),
+  sendNextFrame(frameRequest) {
+    frameRequest.sendInterval = setTimeout(
+      () => this.sendFrame(frameRequest),
       this.settings.send_interval
     );
   }
 
   // Send an individual frame of data
-  sendFrame() {
-    const ii = this.frame_tracking.i;
-    const {frame_limit, skip_images, send_interval} = this.settings;
+  sendFrame(frameRequest) {
+    const ii = frameRequest.index;
+    const last_index = frameRequest.end;
+
+    const {skip_images} = this.settings;
     const frame_send_time = process.hrtime();
     const frames = this.frames;
+    const frames_timing = this.frames_timing;
+
     // get frame info
     const frame_index = getFrameIndex(ii, frames.length);
     const frame = getFrameData(frames[frame_index]);
+
+    // TODO images are not supported here, but glb data is
+    // old image had a binary header
     const isBuffer = frame instanceof Buffer;
     const skipSending = isBuffer && skip_images;
 
     // End case
-    if (ii >= frame_limit) {
-      // When frame_limit reached send 'done' message
+    if (ii >= last_index) {
+      // When last_index reached send 'done' message
       this.ws.send(JSON.stringify({type: 'done'}), () => {
-        this.logMsgSent(frame_send_time, this.frame_tracking.i, frame_index, 'json');
+        this.logMsgSent(frame_send_time, -1, frame_index, 'json');
       });
       this.ws.close();
       return;
     }
+
+    // Advance frame
+    frameRequest.index += 1;
 
     // NOTE: currently if we are skipping images we don't find the
     //       next non-image frame, we just let it cycle so sending can be
@@ -244,52 +315,40 @@ class ConnectionContext {
     //
     // Are we sending this frame?
     if (skipSending) {
-      this.sendNextFrame();
+      this.sendNextFrame(frameRequest);
     } else {
-      // Determine next timestamp, used if looping beyond actual frames
-      let next_ts = getTimestamp(frame);
-
-      if (ii > frames.length && next_ts < this.frame_tracking.timestamp) {
-        // timestamp increment is based on delay, even if sending at
-        // that rate is not accurate, could be different but fine for now.
-        next_ts = this.frame_tracking.timestamp + send_interval / 1000;
-        updateTimestamp(frame, this.frame_tracking.timestamp);
-      }
-
-      this.frame_tracking.timestamp = next_ts;
+      const next_ts = frames_timing[frame_index];
 
       // Send data
       if (isBuffer) {
         this.ws.send(frame, () => {
-          this.logMsgSent(frame_send_time, ii, frame_index, 'img');
-          this.sendNextFrame();
+          this.logMsgSent(frame_send_time, ii, frame_index, 'binary', next_ts);
+          this.sendNextFrame(frameRequest);
         });
       } else {
         this.ws.send(frame, {compress: true}, () => {
-          this.logMsgSent(frame_send_time, ii, frame_index, 'json');
-          this.sendNextFrame();
+          this.logMsgSent(frame_send_time, ii, frame_index, 'json', next_ts);
+          this.sendNextFrame(frameRequest);
         });
       }
     }
-
-    this.frame_tracking.i++;
   }
 
-  logMsgSent(send_time, index, real_index, tag) {
+  logMsgSent(send_time, index, real_index, tag, ts = 0) {
     const t_from_start_ms = deltaTimeMs(this.t_start_time);
     const t_msg_send_time_ms = deltaTimeMs(send_time);
     console.log(
-      ` < Frame(${tag}) ${index}:${real_index} in self: ${t_msg_send_time_ms}ms start: ${t_from_start_ms}ms`
+      ` < Frame(${tag}) ${index}:${real_index} ts:${ts} in self: ${t_msg_send_time_ms}ms start: ${t_from_start_ms}ms`
     );
   }
 }
 
 // Comms handling
 
-function setupWebSocketHandling(wss, settings, frames) {
+function setupWebSocketHandling(wss, settings, frames, frameTiming) {
   // Setups initial connection state
   wss.on('connection', ws => {
-    const context = new ConnectionContext(settings, frames);
+    const context = new ConnectionContext(settings, frames, frameTiming);
     context.onConnection(ws);
   });
 }
@@ -297,21 +356,24 @@ function setupWebSocketHandling(wss, settings, frames) {
 // Main
 
 module.exports = function main(args) {
-  console.log(`Loading frames from ${path.join(args.data_directory, `*${FRAME_DATA_SUFFIX}`)}`);
+  console.log(`Loading frames from ${args.data_directory}`);
   const frames = loadFrames(args.data_directory);
 
   if (frames.length === 0) {
     console.error('No frames where loaded, exiting.');
     process.exit(1);
   }
+
+  const frameTiming = loadFrameTimings(frames);
   console.log(`Loaded ${frames.length} frames`);
 
   const settings = {
+    duration: args.duration,
     send_interval: args.delay,
     skip_images: args.skip_images,
     frame_limit: args.frame_limit || frames.length
   };
 
   const wss = new WebSocket.Server({port: args.port});
-  setupWebSocketHandling(wss, settings, frames);
+  setupWebSocketHandling(wss, settings, frames, frameTiming);
 };
