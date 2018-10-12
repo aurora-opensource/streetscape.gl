@@ -1,7 +1,7 @@
 /* global setTimeout */
 import test from 'tape-catch';
 
-import {getXvizSettings, setXvizSettings} from '@xviz/parser';
+import {setXvizConfig, getXvizSettings, setXvizSettings, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {XVIZStreamLoader} from 'streetscape.gl';
 
 const TEST_TIMESLICES = [
@@ -37,6 +37,7 @@ const TEST_TIMESLICES = [
   }
 ];
 
+/* eslint-disable camelcase */
 class MockSocket {
   constructor(url) {
     this.url = url;
@@ -50,13 +51,13 @@ class MockSocket {
     }, 0);
   }
   send(message) {
+    message = JSON.parse(message);
     this.messages.push(message);
   }
-  lastMessage() {
-    if (this.messages.length === 0) {
-      return null;
-    }
-    return JSON.parse(this.messages.pop());
+  flush() {
+    const messages = this.messages;
+    this.messages = [];
+    return messages;
   }
   close() {
     if (this.onclose) {
@@ -66,13 +67,14 @@ class MockSocket {
 }
 
 test('XvizStreamLoader#connect, seek', t => {
+  setXvizConfig({});
+
   const loader = new XVIZStreamLoader({
     WebSocketClass: MockSocket,
     serverConfig: {
       serverUrl: 'http://localhost:3000'
     },
     logGuid: 'test_log',
-    timestamp: 1000,
     duration: 30,
     bufferLength: 10
   });
@@ -91,26 +93,34 @@ test('XvizStreamLoader#connect, seek', t => {
       'socket connected to correct url'
     );
     t.deepEquals(
-      socket.lastMessage(),
-      {type: 'open_log', duration: 11, timestamp: 1000},
+      socket.flush(),
+      [{type: 'open', duration: 30}, {type: 'metadata'}],
       'initial hand shake'
     );
 
+    // Mock metadata
+    loader._onWSMessage({type: LOG_STREAM_MESSAGE.METADATA, start_time: 1000, end_time: 1030});
+    t.deepEquals(
+      socket.flush(),
+      [{type: 'play', duration: 11, timestamp: 1000}],
+      'seek: update with correct parameters'
+    );
+
     loader.seek(1005);
-    t.notOk(socket.lastMessage(), 'seek: no socket updates');
+    t.deepEquals(socket.flush(), [], 'seek: no socket updates');
 
     loader.seek(1011.1);
     t.deepEquals(
-      socket.lastMessage(),
-      {type: 'open_log', duration: 11, timestamp: 1010.1},
+      socket.flush(),
+      [{type: 'play', duration: 11, timestamp: 1010.1}],
       'seek: update with correct parameters'
     );
 
     loader.streamBuffer.timeslices = TEST_TIMESLICES;
     loader.seek(1001);
     t.deepEquals(
-      socket.lastMessage(),
-      {type: 'open_log', duration: 6, timestamp: 1000},
+      socket.flush(),
+      [{type: 'play', duration: 6, timestamp: 1000}],
       'seek: update with correct parameters'
     );
 
