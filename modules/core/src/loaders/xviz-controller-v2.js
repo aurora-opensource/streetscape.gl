@@ -16,18 +16,31 @@ import assert from 'assert';
  *
  * XVIZ v1 handler that opens the log on connetion and closes when 'done' is received.
  */
-export default class XVIZControllerV1 {
+export default class XVIZControllerV2 {
   constructor(socket) {
     assert(socket, 'XVIZ socket');
     this.socket = socket;
   }
 
-  open({timestamp, duration}) {
-    const openLogMsg = {type: 'open_log', duration};
-    if (timestamp) {
-      openLogMsg.timestamp = timestamp;
-    }
+  _send(message) {
+    this.socket.send(JSON.stringify(message));
+  }
 
-    this.socket.send(JSON.stringify(openLogMsg));
+  open({timestamp, duration}) {
+    const msg = {type: 'open', duration};
+    if (timestamp) {
+      msg.timestamp = timestamp;
+    }
+    this._send(msg);
+  }
+
+  metadata() {
+    const msg = {type: 'metadata'};
+    this._send(msg);
+  }
+
+  play({timestamp, duration}) {
+    const msg = {type: 'play', timestamp, duration};
+    this._send(msg);
   }
 }
