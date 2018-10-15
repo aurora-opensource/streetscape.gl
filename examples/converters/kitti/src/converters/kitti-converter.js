@@ -59,7 +59,7 @@ export class KittiConverter {
     this.converters = [
       gpsConverter,
       new TrackletsConverter(this.inputDir, () => gpsConverter.getPoses()),
-      new LidarConverter(this.inputDir, 'velodyne_points'),
+      new LidarConverter(this.inputDir, 'velodyne_points', {disabledStreams: this.disabledStreams}),
       new CameraConverter(this.inputDir, {
         disabledStreams: this.disabledStreams,
         options: this.imageOptions

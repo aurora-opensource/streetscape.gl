@@ -25,13 +25,21 @@ import {loadLidarData} from '../parsers/parse-lidar-points';
 
 // load file
 export default class LidarConverter extends BaseConverter {
-  constructor(rootDir, streamDir) {
+  constructor(rootDir, streamDir, {disabledStreams = []} = {}) {
     super(rootDir, streamDir);
 
     this.LIDAR_POINTS = '/lidar/points';
+
+    this.disabled = disabledStreams
+      .map(pattern => RegExp(pattern).test(this.LIDAR_POINTS))
+      .some(x => x === true);
   }
 
   async convertFrame(frameNumber, xvizBuilder) {
+    if (this.disabled) {
+      return;
+    }
+
     const {data} = await this.loadFrame(frameNumber);
     const lidarData = loadLidarData(data);
 

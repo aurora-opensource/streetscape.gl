@@ -35,6 +35,11 @@ parser.addArgument(['-o', '--output'], {
   help: 'Path to generated data. Relative path will be resolved relative to /data/generated/kitti/'
 });
 
+parser.addArgument('--json', {
+  action: 'storeTrue',
+  help: 'Generate JSON XVIZ output instead of the binary file format'
+});
+
 parser.addArgument(['--disable-streams'], {
   defaultValue: '',
   help: 'Comma separated stream names to disable'
@@ -72,6 +77,7 @@ module.exports = function getArgs() {
     disabledStreams,
     imageMaxWidth: Number(args.image_max_width),
     imageMaxHeight: Number(args.image_max_height),
-    frameLimit: Number(args.frame_limit)
+    frameLimit: Number(args.frame_limit),
+    writeJson: Number(args.json)
   };
 };
