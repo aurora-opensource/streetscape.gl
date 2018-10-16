@@ -24,39 +24,6 @@ import test from 'tape-catch';
 import {setXvizConfig, getXvizSettings, setXvizSettings, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {XVIZStreamLoader} from 'streetscape.gl';
 
-const TEST_TIMESLICES = [
-  {
-    id: 'TS-1',
-    timestamp: 1006,
-    channels: {A: 1, C: 1}
-  },
-  {
-    id: 'TS-2',
-    timestamp: 1007,
-    channels: {A: 2, B: 0}
-  },
-  {
-    id: 'TS-3',
-    timestamp: 1008,
-    channels: {A: 5}
-  },
-  {
-    id: 'TS-4',
-    timestamp: 1009,
-    channels: {A: 3}
-  },
-  {
-    id: 'TS-5',
-    timestamp: 1010,
-    channels: {A: 4, B: -1}
-  },
-  {
-    id: 'TS-6',
-    timestamp: 1011,
-    channels: {A: 1.1}
-  }
-];
-
 /* eslint-disable camelcase */
 class MockSocket {
   constructor(url) {
@@ -122,25 +89,29 @@ test('XvizStreamLoader#connect, seek', t => {
     loader._onWSMessage({type: LOG_STREAM_MESSAGE.METADATA, start_time: 1000, end_time: 1030});
     t.deepEquals(
       socket.flush(),
-      [{type: 'play', duration: 11, timestamp: 1000}],
+      [{type: 'play', duration: 10, timestamp: 1000}],
       'seek: update with correct parameters'
     );
 
     loader.seek(1005);
     t.deepEquals(socket.flush(), [], 'seek: no socket updates');
 
-    loader.seek(1011.1);
+    loader.seek(1012);
     t.deepEquals(
       socket.flush(),
-      [{type: 'play', duration: 11, timestamp: 1010.1}],
+      [{type: 'play', duration: 10, timestamp: 1007}],
       'seek: update with correct parameters'
     );
 
-    loader.streamBuffer.timeslices = TEST_TIMESLICES;
+    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
+    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1008});
+    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1009});
+    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1010});
+
     loader.seek(1001);
     t.deepEquals(
       socket.flush(),
-      [{type: 'play', duration: 6, timestamp: 1000}],
+      [{type: 'play', duration: 7, timestamp: 1000}],
       'seek: update with correct parameters'
     );
 

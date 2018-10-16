@@ -122,13 +122,11 @@ class PlaybackControl extends PureComponent {
       return null;
     }
 
-    const markers = bufferRange && [
-      {
-        startTime: Math.max(bufferRange.start, startTime),
-        endTime: Math.min(bufferRange.end, endTime),
-        style: MARKER_STYLE
-      }
-    ];
+    const markers = bufferRange.map(r => ({
+      startTime: Math.max(r[0], startTime),
+      endTime: Math.min(r[1], endTime),
+      style: MARKER_STYLE
+    }));
 
     return (
       <MonochromePlaybackControl
