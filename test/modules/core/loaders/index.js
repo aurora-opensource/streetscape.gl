@@ -1,1 +1,1 @@
-import './xviz-stream-loader';
+import './xviz-stream-loader.spec';

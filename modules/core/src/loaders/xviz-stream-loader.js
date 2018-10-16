@@ -12,6 +12,7 @@ import PromiseRetry from 'promise-retry';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
 import XVIZController from './xviz-controller-v2';
+import * as rangeUtils from '../utils/buffer-range';
 
 const DEFAULT_LOG_PROFILE = 'default';
 const DEFAULT_RETRY_ATTEMPTS = 3;
@@ -55,50 +56,41 @@ function getSocketRequestParams(options) {
   };
 }
 
-/* eslint-disable complexity */
 // Determine timestamp & duration to reconnect after an interrupted connection.
 // Calculate based on current XVIZStreamBuffer data
-function updateSocketRequestParams(timestamp, initalRequestParams, streamBuffer) {
-  const {duration: totalDuration, timestamp: initialTimestamp, bufferLength} = initalRequestParams;
-  const chunkSize = bufferLength
-    ? Math.min(totalDuration, bufferLength + getXvizSettings().TIME_WINDOW)
-    : totalDuration;
+// Returns null if update is not needed
+export function updateSocketRequestParams(timestamp, metadata, bufferLength, bufferRange) {
+  const {start_time: logStartTime, end_time: logEndTime} = metadata;
+  const totalDuration = logEndTime - logStartTime;
+  const chunkSize = bufferLength || totalDuration;
 
-  if (!Number.isFinite(timestamp) && !Number.isFinite(initialTimestamp)) {
+  if (chunkSize >= totalDuration) {
+    // Unlimited buffer
     return {
-      ...initalRequestParams,
-      duration: chunkSize,
-      chunkSize
+      timestamp: logStartTime,
+      duration: logEndTime - logStartTime,
+      bufferStart: logStartTime,
+      bufferEnd: logEndTime
     };
   }
 
-  const loadedRange = streamBuffer.getLoadedTimeRange();
-  let start = Number.isFinite(timestamp) ? timestamp : initialTimestamp;
-  let end = start + chunkSize;
+  const bufferStart = Math.max(timestamp - chunkSize / 2, logStartTime);
+  const bufferEnd = Math.min(bufferStart + chunkSize, logEndTime);
+  const newBufferRange = rangeUtils.subtract([bufferStart, bufferEnd], bufferRange);
 
-  if (loadedRange) {
-    if (loadedRange.start <= start && loadedRange.end > start) {
-      // ls -- s -- le
-      // start falls inside loaded range
-      end = start;
-    } else if (loadedRange.start < end && loadedRange.end >= end) {
-      // s -- ls -- e --le
-      // end falls inside loaded range
-      end = loadedRange.start;
-    }
+  if (newBufferRange.length === 0) {
+    return null;
   }
-  if (totalDuration && initialTimestamp) {
-    start = Math.max(start, initialTimestamp);
-    end = Math.min(end, initialTimestamp + totalDuration);
-  }
+  const start = newBufferRange[0][0];
+  const end = newBufferRange[newBufferRange.length - 1][1];
+
   return {
-    ...initalRequestParams,
     timestamp: start,
-    duration: Math.max(0, end - start),
-    chunkSize
+    duration: end - start,
+    bufferStart,
+    bufferEnd
   };
 }
-/* eslint-enable complexity */
 
 // WebSocket constants used since WebSocket is not defined on Node
 // const WEB_SOCKET_OPEN_STATE = 1;
@@ -149,19 +141,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // Handler object for the websocket events
     // Note: needs to be last due to member dependencies
     this.WebSocketClass = options.WebSocketClass || WebSocket;
-
-    const {bufferLength, duration} = this.requestParams;
-    if (bufferLength && bufferLength < duration) {
-      // bufferLength is used as the chunk size for each request
-      // max buffer length is actually bufferLength * 2
-      // This is so that the moving buffer always covers the current chunk
-      this.streamBuffer = new XvizStreamBuffer({
-        startOffset: -bufferLength,
-        endOffset: bufferLength
-      });
-    } else {
-      this.streamBuffer = new XvizStreamBuffer();
-    }
+    this.streamBuffer = new XvizStreamBuffer();
+    this.bufferRange = rangeUtils.empty();
   }
 
   isOpen() {
@@ -169,7 +150,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   }
 
   getBufferRange() {
-    return this.streamBuffer.getLoadedTimeRange();
+    return this.bufferRange;
   }
 
   seek(timestamp) {
@@ -177,48 +158,47 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     // use clamped/rounded timestamp
     timestamp = this.getCurrentTime();
-    const bufferStartTime = timestamp - getXvizSettings().TIME_WINDOW;
+
+    if (
+      this.lastRequest &&
+      this.streamBuffer.isInBufferRange(timestamp - getXvizSettings().TIME_WINDOW)
+    ) {
+      // Already loading
+      return;
+    }
+
+    const metadata = this.getMetadata();
+    if (!metadata) {
+      return;
+    }
+
+    const params = updateSocketRequestParams(
+      timestamp,
+      metadata,
+      this.requestParams.bufferLength,
+      this.bufferRange
+    );
+    if (!params) {
+      return;
+    }
+
+    this.lastRequest = params;
 
     // prune buffer
     const oldVersion = this.streamBuffer.valueOf();
-    this.streamBuffer.setCurrentTime(timestamp);
+    this.streamBuffer.updateFixedBuffer(params.bufferStart, params.bufferEnd);
     if (this.streamBuffer.valueOf() !== oldVersion) {
       this.set('streams', this.streamBuffer.getStreams());
     }
-
-    if (!this.lastRequest) {
-      return;
-    }
-
-    const {timestamp: lastRequestedTimestamp, chunkSize} = this.lastRequest;
-
-    if (
-      bufferStartTime >= lastRequestedTimestamp &&
-      timestamp <= lastRequestedTimestamp + chunkSize
-    ) {
-      // within range
-      return;
-    }
-
-    // TODO - get from options
-    const cancelPrevious = false;
-
-    const params = updateSocketRequestParams(
-      bufferStartTime,
-      this.requestParams,
-      this.streamBuffer
+    this.bufferRange = rangeUtils.intersect(
+      [params.bufferStart, params.bufferEnd],
+      this.bufferRange
     );
-    if (!params.duration) {
-      return;
-    }
 
-    this.lastRequest = {...params, timestamp: bufferStartTime};
-
-    if (this.isOpen() && !cancelPrevious) {
+    if (this.isOpen()) {
       this.xvizHandler.play(params);
     } else {
-      this.close();
-      this.connect();
+      // Wait for socket to connect
     }
   }
 
@@ -309,15 +289,6 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           return;
         }
         this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
-
-        const params = updateSocketRequestParams(
-          message.start_time,
-          this.requestParams,
-          this.streamBuffer
-        );
-        this.lastRequest = params;
-        this.xvizHandler.play(params);
-
         this._setMetadata(message);
         this.emit('ready', message);
 
@@ -328,7 +299,10 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
         this.streamBuffer.insert(message);
         if (this.streamBuffer.valueOf() !== oldVersion) {
           this.set('streams', this.streamBuffer.getStreams());
-          this.get('logSynchronizer')._streamsByReverseTime = null;
+          this.bufferRange = rangeUtils.add(
+            [this.lastRequest.timestamp, message.timestamp],
+            this.bufferRange
+          );
         }
         this.emit('update', message);
         break;
