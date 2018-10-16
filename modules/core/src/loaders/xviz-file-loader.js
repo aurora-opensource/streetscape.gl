@@ -2,7 +2,6 @@ import assert from 'assert';
 import {json, buffer} from 'd3-fetch';
 import {
   LOG_STREAM_MESSAGE,
-  parseBinaryXVIZ,
   parseStreamMessage,
   StreamSynchronizer,
   XvizStreamBuffer
@@ -10,24 +9,25 @@ import {
 
 import XVIZLoaderInterface from './xviz-loader-interface';
 
+const DEFUALT_BATCH_SIZE = 4;
+
 function getParams(options) {
   const {timestamp, serverConfig} = options;
 
+  assert(serverConfig.numberOfFrames && serverConfig.getFilePath);
+
   return {
     timestamp,
+    numberOfFrames: serverConfig.numberOfFrames,
+    getFilePath: serverConfig.getFilePath,
+    batchSize: serverConfig.batchSize || DEFUALT_BATCH_SIZE,
     serverConfig
   };
 }
 
-const DEFUALT_BATCH_SIZE = 4;
-
 export default class XVIZFileLoader extends XVIZLoaderInterface {
   constructor(options) {
     super(options);
-
-    assert(options.getFileInfo);
-    this._getFileInfo = options.getFileInfo;
-    this._batchSize = options.batchSize || DEFUALT_BATCH_SIZE;
 
     this.requestParams = getParams(options);
     this.streamBuffer = new XvizStreamBuffer();
@@ -49,7 +49,11 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   }
 
   getBufferRange() {
-    return this.streamBuffer.getLoadedTimeRange();
+    const range = this.streamBuffer.getLoadedTimeRange();
+    if (range) {
+      return [[range.start, range.end]];
+    }
+    return [];
   }
 
   seek(timestamp) {
@@ -62,66 +66,51 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       return;
     }
 
-    const promises = [];
-    let isLastFrame = false;
-
-    for (let i = 0; i < this._batchSize && !isLastFrame; i++) {
-      const fileInfo = this._getFileInfo(startFrame + i);
-      // if there is more file to load
-      if (!fileInfo) {
-        isLastFrame = true;
-      } else {
-        promises.push(this._loadFile(fileInfo));
-      }
-    }
-
-    if (isLastFrame) {
+    const params = this.requestParams;
+    if (startFrame >= params.numberOfFrames) {
       return;
     }
 
-    // if there are more frames need to fetch
-    if (promises.length > 0) {
-      Promise.all(promises.filter(Boolean)).then(() => {
-        this._loadNextBatch(startFrame + this._batchSize);
-      });
+    const promises = [];
+    for (let i = 0; i < params.batchSize && startFrame + i < params.numberOfFrames; i++) {
+      const filePath = params.getFilePath(startFrame + i);
+      assert(filePath);
+      promises.push(this._loadFile(filePath));
     }
+
+    // if there are more frames need to fetch
+    Promise.all(promises.filter(Boolean)).then(() => {
+      this._loadNextBatch(startFrame + params.batchSize);
+    });
   }
 
-  _loadFile({filePath, fileFormat}) {
+  _loadFile(filePath) {
     const params = this.requestParams;
+    const fileFormat = filePath.toLowerCase().match(/[^\.]*$/)[0];
+
+    let fetch;
     switch (fileFormat) {
       case 'glb':
-        return buffer(filePath)
-          .then(data => {
-            parseStreamMessage({
-              message: parseBinaryXVIZ(data),
-              onResult: this._onMessage,
-              onError: this._onError,
-              worker: params.serverConfig.worker,
-              maxConcurrency: params.serverConfig.maxConcurrency
-            });
-          })
-          .catch(error => {
-            this.emit('error', error);
-          });
+        fetch = buffer(filePath);
+        break;
 
       case 'json':
-        return json(filePath).then(data => {
-          parseStreamMessage({
-            message: data,
-            onResult: this._onMessage,
-            onError: this._onError,
-            worker: params.serverConfig.worker,
-            maxConcurrency: params.serverConfig.maxConcurrency
-          }).catch(error => {
-            this.emit('error', error);
-          });
-        });
+        fetch = json(filePath);
+        break;
 
       default:
-        this.emit('error', 'Invalid file format.');
-        return null;
+        return Promise.reject('Unknown file format');
     }
+
+    return fetch.then(data =>
+      parseStreamMessage({
+        message: data,
+        onResult: this._onMessage,
+        onError: this._onError,
+        worker: params.serverConfig.worker,
+        maxConcurrency: params.serverConfig.maxConcurrency
+      })
+    );
   }
 
   _onMessage = message => {
