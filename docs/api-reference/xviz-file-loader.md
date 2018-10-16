@@ -11,24 +11,13 @@ const MAX_FRAMES = 100;
 const DATA_DIR = './data';
 
 const log = new XVIZFileLoader({
-  getFileInfo: (frame) => {
-    if (frame < MAX_FRAMES) {
-      return {
-        filePath: `${DATA_DIR}/${frame}-frame.glb`,
-        fileFormat: 'glb'
-      }
-    }
-    return null;
-  },
-  logGuid: 'mock'
+  numberOfFrames: 100,
+  getFilePath: (frameIndex) => `${DATA_DIR}/${frameIndex}-frame.glb`
 });
 ```
 
 **Options**
-- `getFileInfo` (Function, required)
-  + Given required frame sequence, return filePath and fileFormat of that frame.
-  + Supported fileFormats are `glb` and `json`
-- `serverConfig` (Object)
-  +  `serverConfig.defaultLogLength` (Number, optional) - fallback value if the `duration` option is not specified.
-  +  `serverConfig.worker` (String|Function, optional) - the worker script to use for message processing. (more documentation needed)
-  +  `serverConfig.maxConcurrency` (Number, optional) - the maximum number of worker threads to spawn. Default `3`.
+- `numberOfFrames` (Number, required) - number of frames to load
+- `getFilePath` (Function, required) - Given a frame index, return the url to the file of that frame. Supported fileFormats are `glb` and `json`
+- `worker` (String|Function, optional) - the worker script to use for message processing. (more documentation needed)
+- `maxConcurrency` (Number, optional) - the maximum number of worker threads to spawn. Default `3`.
