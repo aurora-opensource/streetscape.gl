@@ -12,7 +12,6 @@ const DATA_DIR = './data';
 
 const log = new XVIZFileLoader({
   numberOfFrames: 100,
-  batchSize: 4,
   getFilePath: (frameIndex) => `${DATA_DIR}/${frameIndex}-frame.glb`
 });
 ```
