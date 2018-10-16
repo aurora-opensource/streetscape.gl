@@ -116,8 +116,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
    *   - serverConfig.defaultLogLength {number, optional} - default 30
    *   - serverConfig.queryParams {object, optional}
    *   - serverConfig.retryAttempts {number, optional} - default 3
-   *   - serverConfig.worker {string|function, optional}
-   *   - serverConfig.maxConcurrency {number, optional} - default 3
+   * @params worker {string|function, optional}
+   * @params maxConcurrency {number, optional} - default 3
    * @params logGuid {string}
    * @params logProfile {string, optional}
    * @params duration {number, optional}
@@ -211,7 +211,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     assert(this.socket === null, 'Socket Manager still connected');
 
     this._debug('stream_start');
-    const {url, serverConfig} = this.requestParams;
+    const {url} = this.requestParams;
 
     // Wrap retry logic around connection
     return PromiseRetry(retry => {
@@ -226,8 +226,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
               onResult: this._onWSMessage,
               onError: this._onWSError,
               debug: this._debug.bind('parse_message'),
-              worker: serverConfig.worker,
-              maxConcurrency: serverConfig.maxConcurrency
+              worker: this.options.worker,
+              maxConcurrency: this.options.maxConcurrency
             });
           };
 

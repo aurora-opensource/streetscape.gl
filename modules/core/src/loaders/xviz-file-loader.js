@@ -11,25 +11,16 @@ import XVIZLoaderInterface from './xviz-loader-interface';
 
 const DEFUALT_BATCH_SIZE = 4;
 
-function getParams(options) {
-  const {timestamp, serverConfig} = options;
-
-  assert(serverConfig.numberOfFrames && serverConfig.getFilePath);
-
-  return {
-    timestamp,
-    numberOfFrames: serverConfig.numberOfFrames,
-    getFilePath: serverConfig.getFilePath,
-    batchSize: serverConfig.batchSize || DEFUALT_BATCH_SIZE,
-    serverConfig
-  };
-}
-
 export default class XVIZFileLoader extends XVIZLoaderInterface {
   constructor(options) {
     super(options);
 
-    this.requestParams = getParams(options);
+    assert(options.numberOfFrames && options.getFilePath);
+
+    this._numberOfFrames = options.numberOfFrames;
+    this._getFilePath = options.getFilePath;
+    this._batchSize = options.maxConcurrency || DEFUALT_BATCH_SIZE;
+
     this.streamBuffer = new XvizStreamBuffer();
     this._isOpen = false;
   }
@@ -66,26 +57,24 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       return;
     }
 
-    const params = this.requestParams;
-    if (startFrame >= params.numberOfFrames) {
+    if (startFrame >= this._numberOfFrames) {
       return;
     }
 
     const promises = [];
-    for (let i = 0; i < params.batchSize && startFrame + i < params.numberOfFrames; i++) {
-      const filePath = params.getFilePath(startFrame + i);
+    for (let i = 0; i < this._batchSize && startFrame + i < this._numberOfFrames; i++) {
+      const filePath = this._getFilePath(startFrame + i);
       assert(filePath);
       promises.push(this._loadFile(filePath));
     }
 
     // if there are more frames need to fetch
     Promise.all(promises.filter(Boolean)).then(() => {
-      this._loadNextBatch(startFrame + params.batchSize);
+      this._loadNextBatch(startFrame + this._batchSize);
     });
   }
 
   _loadFile(filePath) {
-    const params = this.requestParams;
     const fileFormat = filePath.toLowerCase().match(/[^\.]*$/)[0];
 
     let fetch;
@@ -107,8 +96,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
         message: data,
         onResult: this._onMessage,
         onError: this._onError,
-        worker: params.serverConfig.worker,
-        maxConcurrency: params.serverConfig.maxConcurrency
+        worker: this.options.worker,
+        maxConcurrency: this.options.maxConcurrency
       })
     );
   }
