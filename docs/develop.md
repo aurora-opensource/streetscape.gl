@@ -41,6 +41,28 @@ Run tests in a browser:
 $ yarn test-browser
 ```
 
+## Dependency setup for Local Development
+
+To improve the development flow while working on both XVIZ and Streetscape.gl it is useful to directly link the dependencies rather than use packages.
+
+We have some utility script to use yarn linking between XVIZ
+
+### Setup yarn link
+
+Assumes your environment is already setup following the *Quick Start* sequence.
+
+```
+$ ./scripts/dev-link-dependencies.sh link
+```
+
+### Remove yarn link
+
+This will remove the yarn link, then run yarn again to make sure your packages correctly installed.
+
+```
+$ ./scripts/dev-link-dependencies.sh link
+$ yarn bootstrap
+```
 
 ## Contributions
 
