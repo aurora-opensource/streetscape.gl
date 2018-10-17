@@ -5148,16 +5148,16 @@ moment@^2.6.0:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
-monochrome-ui@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/monochrome-ui/-/monochrome-ui-0.0.4.tgz#fdde4495cfb55a8d6ffa6ed8e975e8ae5144a645"
+monochrome-ui@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/monochrome-ui/-/monochrome-ui-0.0.6.tgz#48c16e7f7d5f17a5c58cf58f099065536d428dec"
   dependencies:
     classnames "^2.2.5"
     debounce "^1.1.0"
     popper.js "^1.11.1"
     prop-types "^15.5.10"
     react-virtualized "^9.18.5"
-    react-vis "^1.8.1"
+    react-vis "^1.11.2"
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -6132,9 +6132,9 @@ react-virtualized@^9.18.5:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react-vis@^1.8.1:
-  version "1.10.8"
-  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.10.8.tgz#d633c1aba0bf9b9653f13361ad1c7e17f1ffa167"
+react-vis@^1.11.2:
+  version "1.11.3"
+  resolved "https://registry.yarnpkg.com/react-vis/-/react-vis-1.11.3.tgz#fb984c42ca2402941e0cefbe1635be84a281016b"
   dependencies:
     d3-array "^1.2.0"
     d3-collection "^1.0.3"

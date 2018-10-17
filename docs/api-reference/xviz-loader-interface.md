@@ -23,6 +23,10 @@ Terminate all connections.
 
 Seek to a given timestamp.
 
+##### `updateStreamSettings(settings)`
+
+Update stream settings. The `settings` object is a stream name to value map and will be merged with the existing settings.
+
 ##### `on(eventType, callback)`
 
 Listen to an event.
