@@ -27,10 +27,10 @@ new XVIZStreamLoader({
   +  `serverConfig.queryParams` (Object, optional) - additional query parameters to use when connecting to the server
   +  `serverConfig.defaultLogLength` (Number, optional) - fallback value if the `duration` option is not specified.
   +  `serverConfig.retryAttempts` (Number, optional) - number of retries if a connection error is encountered. Default `3`.
-  +  `serverConfig.worker` (String|Function, optional) - the worker script to use for message processing. (more documentation needed)
-  +  `serverConfig.maxConcurrency` (Number, optional) - the maximum number of worker threads to spawn. Default `3`.
 - `logGuid` (String) - Id of the log to load
 - `logProfile` (String, optional) - Name of the profile to load the log with
 - `duration` (Number, optional) - Length of the log
 - `timestamp` (Number, optional) - the timestamp to start loading at
-
+- `bufferLength` (Number, optional) - the length of the buffer to keep in memory. Uses the same unit as timestamp. If specified, older frames may be discarded during playback, to avoid crashes due to excessive memory usage.
+- `worker` (String|Function, optional) - the worker script to use for message processing. (more documentation needed)
+- `maxConcurrency` (Number, optional) - the maximum number of worker threads to spawn. Default `3`.

@@ -39,7 +39,8 @@ exit_script() {
 trap exit_script SIGINT SIGTERM
 
 # Run KITTI XVIZ conversion
-if [ "$force_xviz_conversion" = "true" ] || [ ! -f "${SCRIPT_DIR}/../data/generated/kitti/2011_09_26/2011_09_26_drive_0005_sync/1-frame.glb" ]; then
+# check for both json & glb files
+if [ "$force_xviz_conversion" = "true" ] || ([ ! -f "${SCRIPT_DIR}/../data/generated/kitti/2011_09_26/2011_09_26_drive_0005_sync/1-frame.json" ] && [ ! -f "${SCRIPT_DIR}/../data/generated/kitti/2011_09_26/2011_09_26_drive_0005_sync/1-frame.glb" ]) ; then
   echo "Generating default KITTI XVIZ data"
   (cd "${SCRIPT_DIR}/../examples/converters/kitti" && yarn start -d 2011_09_26/2011_09_26_drive_0005_sync)
 fi

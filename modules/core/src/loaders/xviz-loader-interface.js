@@ -93,6 +93,11 @@ export default class XVIZLoaderInterface {
     this.set('timestamp', timestamp);
   }
 
+  updateStreamSettings(settings) {
+    const streamSettings = this.get('streamSettings');
+    this.set('streamSettings', {...streamSettings, ...settings});
+  }
+
   close() {
     throw new Error('not implemented');
   }
@@ -102,6 +107,8 @@ export default class XVIZLoaderInterface {
   getCurrentTime = () => this.get('timestamp');
 
   getMetadata = () => this.get('metadata');
+
+  getStreamSettings = () => this.get('streamSettings');
 
   getLogSynchronizer = () => this.get('logSynchronizer');
 
@@ -186,6 +193,7 @@ export default class XVIZLoaderInterface {
   /* Private actions */
   _setMetadata(metadata) {
     this.set('metadata', metadata);
+    this.set('streamSettings', metadata.streams);
     const timestamp = this.get('timestamp');
     const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
     this.seek(newTimestamp);

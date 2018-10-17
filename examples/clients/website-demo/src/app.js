@@ -6,28 +6,25 @@ import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
 import {
-  XVIZStreamLoader,
+  XVIZFileLoader,
   LogViewer,
   PlaybackControl,
-  XvizPanel,
-  VideoPanel,
+  StreamSettingsPanel,
+  // XvizPanel,
+  // VideoPanel,
   VIEW_MODES
 } from 'streetscape.gl';
-import {Form} from 'monochrome-ui';
+// import {Form} from 'monochrome-ui';
 
-import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
 import './main.scss';
 
 class Example extends PureComponent {
   state = {
-    log: new XVIZStreamLoader({
-      logGuid: 'mock',
-      // bufferLength: 15000,
-      serverConfig: {
-        defaultLogLength: 30000,
-        serverUrl: 'ws://localhost:8081'
-      },
+    log: new XVIZFileLoader({
+      numberOfFrames: 155,
+      getFilePath: index => `/kitti/2011_09_26/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
       worker: require.resolve('./stream-data-worker'),
       maxConcurrency: 4
     }).on('error', console.error), // eslint-disable-line
@@ -70,12 +67,7 @@ class Example extends PureComponent {
           />
         </div>
         <div id="control-panel">
-          <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
-          <hr />
-          <XvizPanel log={log} id="0" />
-        </div>
-        <div id="video-panel">
-          <VideoPanel log={log} width={400} timeTolerance={100} />
+          <StreamSettingsPanel log={log} />
         </div>
       </div>
     );

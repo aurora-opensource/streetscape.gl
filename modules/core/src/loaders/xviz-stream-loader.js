@@ -3,6 +3,7 @@
 import assert from 'assert';
 import {
   parseStreamMessage,
+  getXvizSettings,
   LOG_STREAM_MESSAGE,
   XvizStreamBuffer,
   StreamSynchronizer
@@ -10,13 +11,20 @@ import {
 import PromiseRetry from 'promise-retry';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
-import {XVIZControllerV1} from './xviz-controller-v1';
+import XVIZController from './xviz-controller-v2';
+import * as rangeUtils from '../utils/buffer-range';
 
 const DEFAULT_LOG_PROFILE = 'default';
 const DEFAULT_RETRY_ATTEMPTS = 3;
 
 function getSocketRequestParams(options) {
-  const {logGuid, logProfile = DEFAULT_LOG_PROFILE, timestamp, serverConfig} = options;
+  const {
+    logGuid,
+    logProfile = DEFAULT_LOG_PROFILE,
+    timestamp,
+    serverConfig,
+    bufferLength = null
+  } = options;
 
   // set duration overrides & defaults
   const duration = options.duration || serverConfig.defaultLogLength;
@@ -42,6 +50,7 @@ function getSocketRequestParams(options) {
     logProfile,
     duration,
     timestamp,
+    bufferLength,
     retryAttempts,
     serverConfig
   };
@@ -49,29 +58,42 @@ function getSocketRequestParams(options) {
 
 // Determine timestamp & duration to reconnect after an interrupted connection.
 // Calculate based on current XVIZStreamBuffer data
-//
-// TODO: This needs revisited when we randomly access data
-function updateSocketRequestParams(initalRequestParams, streamBuffer) {
-  const {duration: initalDuration, timestamp: initialTimestamp} = initalRequestParams;
+// Returns null if update is not needed
+export function updateSocketRequestParams(timestamp, metadata, bufferLength, bufferRange) {
+  const {start_time: logStartTime, end_time: logEndTime} = metadata;
+  const totalDuration = logEndTime - logStartTime;
+  const chunkSize = bufferLength || totalDuration;
 
-  let timestamp = initialTimestamp;
-  let duration = initalDuration;
-
-  if (streamBuffer instanceof XvizStreamBuffer) {
-    const loadedRange = streamBuffer.getLoadedTimeRange();
-    if (loadedRange) {
-      timestamp = loadedRange.end;
-    }
-    if (initalDuration && initialTimestamp) {
-      duration = initialTimestamp + initalDuration - timestamp;
-    }
+  if (chunkSize >= totalDuration) {
+    // Unlimited buffer
+    return {
+      timestamp: logStartTime,
+      duration: logEndTime - logStartTime,
+      bufferStart: logStartTime,
+      bufferEnd: logEndTime
+    };
   }
 
-  return getSocketRequestParams({...initalRequestParams, timestamp, duration});
+  const bufferStart = Math.max(timestamp - chunkSize / 2, logStartTime);
+  const bufferEnd = Math.min(bufferStart + chunkSize, logEndTime);
+  const newBufferRange = rangeUtils.subtract([bufferStart, bufferEnd], bufferRange);
+
+  if (newBufferRange.length === 0) {
+    return null;
+  }
+  const start = newBufferRange[0][0];
+  const end = newBufferRange[newBufferRange.length - 1][1];
+
+  return {
+    timestamp: start,
+    duration: end - start,
+    bufferStart,
+    bufferEnd
+  };
 }
 
 // WebSocket constants used since WebSocket is not defined on Node
-const WEB_SOCKET_OPEN_STATE = 1;
+// const WEB_SOCKET_OPEN_STATE = 1;
 
 /*
  * Handle connecting to XVIZ socket and negotiation of the XVIZ protocol version
@@ -94,12 +116,13 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
    *   - serverConfig.defaultLogLength {number, optional} - default 30
    *   - serverConfig.queryParams {object, optional}
    *   - serverConfig.retryAttempts {number, optional} - default 3
-   *   - serverConfig.worker {string|function, optional}
-   *   - serverConfig.maxConcurrency {number, optional} - default 3
+   * @params worker {string|function, optional}
+   * @params maxConcurrency {number, optional} - default 3
    * @params logGuid {string}
    * @params logProfile {string, optional}
    * @params duration {number, optional}
    * @params timestamp {number, optional}
+   * @params bufferLength {number, optional}
    */
   constructor(options = {}) {
     super(options);
@@ -108,6 +131,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     // Construct websocket connection details from parameters
     this.requestParams = getSocketRequestParams(options);
+    this.lastRequest = null;
     this.retrySettings = {
       retries: this.requestParams.retryAttempts,
       minTimeout: 500,
@@ -117,16 +141,16 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // Handler object for the websocket events
     // Note: needs to be last due to member dependencies
     this.WebSocketClass = options.WebSocketClass || WebSocket;
-
     this.streamBuffer = new XvizStreamBuffer();
+    this.bufferRange = rangeUtils.empty();
   }
 
   isOpen() {
-    return this.socket && this.socket.readyState === WEB_SOCKET_OPEN_STATE;
+    return this.socket; // && this.socket.readyState === WEB_SOCKET_OPEN_STATE;
   }
 
   getBufferRange() {
-    return this.streamBuffer.getLoadedTimeRange();
+    return this.bufferRange;
   }
 
   seek(timestamp) {
@@ -135,49 +159,65 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // use clamped/rounded timestamp
     timestamp = this.getCurrentTime();
 
-    const {timestamp: currentTimestamp, duration: currentDuration} = this.requestParams;
-
-    if (timestamp >= currentTimestamp && timestamp < currentTimestamp + currentDuration) {
-      // within range
+    if (
+      this.lastRequest &&
+      this.streamBuffer.isInBufferRange(timestamp - getXvizSettings().TIME_WINDOW)
+    ) {
+      // Already loading
       return;
     }
 
-    // TODO - get from options
-    const cancelPrevious = false;
+    const metadata = this.getMetadata();
+    if (!metadata) {
+      return;
+    }
 
-    this.requestParams = getSocketRequestParams({
-      ...this.requestParams,
-      timestamp
-    });
+    const params = updateSocketRequestParams(
+      timestamp,
+      metadata,
+      this.requestParams.bufferLength,
+      this.bufferRange
+    );
+    if (!params) {
+      return;
+    }
 
-    if (this.isOpen() && !cancelPrevious) {
-      this.xvizHandler.play(this.requestParams);
+    this.lastRequest = params;
+
+    // prune buffer
+    const oldVersion = this.streamBuffer.valueOf();
+    this.streamBuffer.updateFixedBuffer(params.bufferStart, params.bufferEnd);
+    if (this.streamBuffer.valueOf() !== oldVersion) {
+      this.set('streams', this.streamBuffer.getStreams());
+    }
+    this.bufferRange = rangeUtils.intersect(
+      [params.bufferStart, params.bufferEnd],
+      this.bufferRange
+    );
+
+    if (this.isOpen()) {
+      this.xvizHandler.play(params);
     } else {
-      this.close();
-      this.socket = null;
-      this.connect();
+      // Wait for socket to connect
     }
   }
 
   /**
    * Open an XVIZ socket connection with automatic retry
    *
-   * @params {Object} xvizStreamParams - XVIZ log params and options
    * @returns {Promise} WebSocket connection
    */
   connect() {
     assert(this.socket === null, 'Socket Manager still connected');
 
     this._debug('stream_start');
+    const {url} = this.requestParams;
 
     // Wrap retry logic around connection
     return PromiseRetry(retry => {
-      // Continue from where we disconnected
-      const params = updateSocketRequestParams(this.requestParams, this.streamBuffer);
-
       return new Promise((resolve, reject) => {
         try {
-          const ws = new this.WebSocketClass(params.url);
+          const ws = new this.WebSocketClass(url);
           ws.binaryType = 'arraybuffer';
 
           ws.onmessage = message => {
@@ -186,8 +226,8 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
               onResult: this._onWSMessage,
               onError: this._onWSError,
               debug: this._debug.bind('parse_message'),
-              worker: params.serverConfig.worker,
-              maxConcurrency: params.serverConfig.maxConcurrency
+              worker: this.options.worker,
+              maxConcurrency: this.options.maxConcurrency
             });
           };
 
@@ -200,7 +240,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           // On success, resolve the promise with the now ready socket
           ws.onopen = () => {
             this.socket = ws;
-            this._onWSOpen(params);
+            this._onWSOpen();
             resolve(ws);
           };
         } catch (err) {
@@ -219,39 +259,50 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   }
 
   close() {
-    if (this.isOpen()) {
+    if (this.socket) {
       this.socket.close();
+      this.socket = null;
     }
   }
 
   // Notifications and metric reporting
-  _onWSOpen = params => {
+  _onWSOpen = () => {
     // Immediately send request for data.
     // TODO - protocol negotiation
-    this.xvizHandler = new XVIZControllerV1(this.socket);
-    this.xvizHandler.play(params);
-    this._debug('socket_open', params);
+    this.xvizHandler = new XVIZController(this.socket);
+    this.xvizHandler.open(this.requestParams);
+    this._debug('socket_open', this.requestParams);
+
+    if (this.lastRequest) {
+      this.xvizHandler.play(this.lastRequest);
+    } else {
+      this.xvizHandler.metadata();
+    }
   };
 
   // Handle dispatching events, triggering probes, and delegating to the XVIZ handler
   _onWSMessage = message => {
-    // Let the handler know and respond
-    if (this.xvizHandler) {
-      this.xvizHandler.onMessage(message);
-    }
-
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
+        if (this.get('metadata')) {
+          // already has metadata
+          return;
+        }
         this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
         this._setMetadata(message);
         this.emit('ready', message);
+
         break;
 
       case LOG_STREAM_MESSAGE.TIMESLICE:
         const oldVersion = this.streamBuffer.valueOf();
         this.streamBuffer.insert(message);
-        if (this.streamBuffer.valueOf !== oldVersion) {
+        if (this.streamBuffer.valueOf() !== oldVersion) {
           this.set('streams', this.streamBuffer.getStreams());
+          this.bufferRange = rangeUtils.add(
+            [this.lastRequest.timestamp, message.timestamp],
+            this.bufferRange
+          );
         }
         this.emit('update', message);
         break;

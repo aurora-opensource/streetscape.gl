@@ -1,5 +1,8 @@
 #!/bin/sh
 # Script to bootstrap repo for development
+# NOTE: the 'yarn --check-files' is to force yarn to install dependencies
+#       that my not be present.  This is to handle changes in @xviz package
+#       installations come from yarn link in dev-link-dependencies.sh.
 
 echo 'Bootstrapping streetscape.gl, installing in all directories'
 
@@ -7,8 +10,11 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# setup XVIZ first!
+(cd "${SCRIPT_DIR}/../../xviz" && yarn bootstrap)
+
 # install dependencies
-yarn
+yarn --check-files
 
 ROOT_NODE_MODULES_DIR=`pwd`/node_modules
 
@@ -28,16 +34,13 @@ for D in *; do (
 # build the submodules
 npm run build
 
-# setup XVIZ
-(cd "${SCRIPT_DIR}/../../xviz" && yarn bootstrap)
-
 # Setup KITTI converter JS dependencies
-(cd "${SCRIPT_DIR}/../examples/converters/kitti" && yarn)
+(cd "${SCRIPT_DIR}/../examples/converters/kitti" && yarn --check-files)
 
 # Setup XVIZ server JS dependencies
-(cd "${SCRIPT_DIR}/../examples/server" && yarn)
+(cd "${SCRIPT_DIR}/../examples/server" && yarn --check-files)
 
 # Setup XVIZ-VIEWER JS dependencies
-(cd "${SCRIPT_DIR}/../examples/clients/xviz-viewer" && yarn)
+(cd "${SCRIPT_DIR}/../examples/clients/xviz-viewer" && yarn --check-files)
 
 echo "Done"

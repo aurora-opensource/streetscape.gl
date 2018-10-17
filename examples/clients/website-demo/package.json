@@ -1,6 +1,6 @@
 {
-  "name": "streetscape.gl-kitti-demo",
-  "description": "A demo of streetscape.gl with KITTI data",
+  "name": "streetscape.gl-website-demo",
+  "description": "A demo of streetscape.gl",
   "version": "0.0.1",
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
@@ -26,7 +26,6 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^0.28.11",
-    "html-webpack-plugin": "^3.0.7",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "source-map-loader": "^0.2.3",

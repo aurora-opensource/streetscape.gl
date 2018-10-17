@@ -1,14 +1,15 @@
 # Run Demo with the KITTI Dataset
 
-*Uber Confidential Information*
+**Uber Confidential Information**
 
-This article describes how to visualize the KITTI data set. You will need to:
+This article describes details to visualize the KITTI data set. You will need to:
 
 * Download the KITTI data
 * Convert it to XVIZ format
 * Start a streaming server
-* build and start the streetscape.gl UI application.
+* Build and start the streetscape.gl UI application.
 
+These steps are handled for you if you have used the **Quick Start** steps. Here we will go into additonal detail and cover some available options.
 
 # Download Raw Data
 
