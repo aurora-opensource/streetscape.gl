@@ -9,6 +9,7 @@ import {
   XVIZFileLoader,
   LogViewer,
   PlaybackControl,
+  StreamSettingsPanel,
   // XvizPanel,
   // VideoPanel,
   VIEW_MODES
@@ -22,13 +23,10 @@ import './main.scss';
 class Example extends PureComponent {
   state = {
     log: new XVIZFileLoader({
-      logGuid: 'mock',
-      serverConfig: {
-        numberOfFrames: 155,
-        getFilePath: index => `/kitti/2011_09_26/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
-        worker: require.resolve('./stream-data-worker'),
-        maxConcurrency: 4
-      }
+      numberOfFrames: 155,
+      getFilePath: index => `/kitti/2011_09_26/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
+      worker: require.resolve('./stream-data-worker'),
+      maxConcurrency: 4
     }).on('error', console.error), // eslint-disable-line
 
     settings: {
@@ -67,6 +65,9 @@ class Example extends PureComponent {
             log={log}
             formatTimestamp={x => new Date(x).toUTCString()}
           />
+        </div>
+        <div id="control-panel">
+          <StreamSettingsPanel log={log} />
         </div>
       </div>
     );
