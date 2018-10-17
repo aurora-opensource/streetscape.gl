@@ -37,10 +37,13 @@ export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
 
 // COMPONENTS
 
+export {default as connectToLog} from './components/connect';
+
 export {default as LogViewer} from './components/log-viewer';
 export {default as PlaybackControl} from './components/playback-control';
 export {default as PerspectivePopup} from './components/perspective-popup';
 export {default as VideoPanel} from './components/video-panel';
+export {default as StreamSettingsPanel} from './components/stream-settings-panel';
 
 export {default as XvizPanel} from './components/declarative-ui/xviz-panel';
 

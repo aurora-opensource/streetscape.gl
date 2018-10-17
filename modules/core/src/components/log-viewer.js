@@ -205,7 +205,7 @@ class Core3DViewer extends PureComponent {
   }
 
   _getLayers() {
-    const {frame, car, viewMode, metadata, customLayers} = this.props;
+    const {frame, car, viewMode, metadata, customLayers, streamSettings} = this.props;
     if (!frame || !metadata) {
       return [];
     }
@@ -237,7 +237,7 @@ class Core3DViewer extends PureComponent {
           }
         }),
       Object.keys(streams)
-        .filter(streamFilter)
+        .filter(streamName => streamFilter(streamName) && streamSettings[streamName])
         .map(streamName => {
           const stream = streams[streamName];
           const streamMetadata = metadata.streams[streamName];
@@ -374,7 +374,8 @@ class Core3DViewer extends PureComponent {
 
 const getLogState = log => ({
   frame: log.getCurrentFrame(),
-  metadata: log.getMetadata()
+  metadata: log.getMetadata(),
+  streamSettings: log.getStreamSettings()
 });
 
 export default connectToLog({getLogState, Component: Core3DViewer});
