@@ -18,7 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// Deep merges two XVIZ style objects
+/**
+ * Deep merges two XVIZ style objects.
+ * The primary style stream rules will take precedence over the secondary rules.
+ *
+ * @param style1 {object} Secondary stylesheet
+ * @param style2 {object} Primary stylesheet
+ * @returns {object} Merged styleheet with Primary rules taking precedence
+ */
 export function mergeXvizStyles(style1, style2) {
   if (!style1) {
     return style2 || {};
@@ -31,19 +38,12 @@ export function mergeXvizStyles(style1, style2) {
 
   for (const streamName in style2) {
     if (mergedStyles[streamName]) {
-      const rules1 = normalizeXvizStyleRules(style1[streamName]);
-      const rules2 = normalizeXvizStyleRules(style2[streamName]);
+      const rules1 = style1[streamName];
+      const rules2 = style2[streamName];
       mergedStyles[streamName] = rules1.concat(rules2);
     } else {
       mergedStyles[streamName] = style2[streamName];
     }
   }
   return mergedStyles;
-}
-
-function normalizeXvizStyleRules(rules) {
-  return Array.isArray(rules)
-    ? rules
-    : // Backward compatibility - support classname to style map
-      Object.keys(rules).map(classname => ({...rules[classname], class: classname}));
 }

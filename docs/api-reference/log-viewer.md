@@ -28,7 +28,7 @@ A [Mapbox style](https://www.mapbox.com/mapbox-gl-js/api/#map) to render the bas
 
 ##### `xvizStyles` (Object, optional)
 
-Overrie the XVIZ styles. If supplied, will be deep-merged with the styles in the log metadata.
+Override the XVIZ styles. If supplied, will be deep-merged with the styles in the log metadata.
 
 For more information, see [XVIZ styling specification](https://github.com/uber/xviz/blob/master/docs/protocol-schema/style-specification.md).
 
