@@ -149,6 +149,16 @@ import {LogViewer} from 'streetscape.gl';
     />
 ```
 
+##### `getTransformMatrix` (Function, optional)
+
+A custom function that is called if a stream's `coordinate` is `DYNAMIC`. Will receive the following props:
+
+- `streamName` (String)
+- `context` (Object) - the current frame
+
+Default: `() => null`
+
+
 ##### `renderObjectLabel` (Function, optional)
 
 A custom function / React component to render the content of the popup for selected objects. Will receive the following props:

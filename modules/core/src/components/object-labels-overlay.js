@@ -18,7 +18,8 @@ export default class ObjectLabelsOverlay extends Component {
     frame: PropTypes.object,
     metadata: PropTypes.object,
 
-    renderObjectLabel: PropTypes.func
+    renderObjectLabel: PropTypes.func,
+    getTransformMatrix: PropTypes.func
   };
 
   static defaultProps = {
@@ -39,7 +40,7 @@ export default class ObjectLabelsOverlay extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {frame, metadata} = nextProps;
+    const {frame, metadata, getTransformMatrix} = nextProps;
 
     if (frame && frame !== this.props.frame) {
       const objectStreamName = this._findObjectGeometryStream(frame.streams);
@@ -47,7 +48,12 @@ export default class ObjectLabelsOverlay extends Component {
 
       if (objectStreamName) {
         const streamMetadata = metadata.streams[objectStreamName];
-        const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
+        const coordinateProps = resolveCoordinateTransform(
+          frame,
+          streamMetadata,
+          objectStreamName,
+          getTransformMatrix
+        );
         this.setState({coordinateProps});
       }
     }

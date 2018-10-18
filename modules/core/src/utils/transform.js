@@ -3,26 +3,33 @@ import {_Pose as Pose, Matrix4} from 'math.gl';
 
 import {COORDINATES} from '../constants';
 
-export function resolveCoordinateTransform(vehiclePose, streamMetadata = {}) {
-  const {origin, transforms = {}, vehicleRelativeTransform} = vehiclePose;
+export function resolveCoordinateTransform(
+  frame,
+  streamMetadata = {},
+  streamName,
+  getTransformMatrix
+) {
+  const {origin, vehicleRelativeTransform} = frame;
   const {coordinate, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
-  let modelMatrix = vehicleRelativeTransform;
+  let modelMatrix;
 
   switch (coordinate) {
     case COORDINATES.GEOGRAPHIC:
       coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
       break;
 
-    case COORDINATES.VEHICLE_RELATIVE:
-      modelMatrix = vehicleRelativeTransform;
+    case COORDINATES.IDENTITY:
+      modelMatrix = null;
+      break;
+
+    case COORDINATES.DYNAMIC:
+      modelMatrix = getTransformMatrix(streamName, frame);
       break;
 
     default:
-      if (coordinate) {
-        modelMatrix = transforms[coordinate];
-      }
+      modelMatrix = vehicleRelativeTransform;
   }
 
   if (pose) {
