@@ -10,10 +10,10 @@ export function resolveCoordinateTransform(
   getTransformMatrix
 ) {
   const {origin, vehicleRelativeTransform} = frame;
-  const {coordinate, pose} = streamMetadata;
+  const {coordinate, transform, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
-  let modelMatrix;
+  let modelMatrix = null;
 
   switch (coordinate) {
     case COORDINATES.GEOGRAPHIC:
@@ -21,7 +21,6 @@ export function resolveCoordinateTransform(
       break;
 
     case COORDINATES.IDENTITY:
-      modelMatrix = null;
       break;
 
     case COORDINATES.DYNAMIC:
@@ -32,8 +31,15 @@ export function resolveCoordinateTransform(
       modelMatrix = vehicleRelativeTransform;
   }
 
+  let streamTransform = transform;
   if (pose) {
-    modelMatrix = new Matrix4(modelMatrix).multiplyRight(new Pose(pose).getTransformationMatrix());
+    // TODO - remove when builder updates
+    streamTransform = new Pose(pose).getTransformationMatrix();
+  }
+  if (streamTransform) {
+    modelMatrix = modelMatrix
+      ? new Matrix4(modelMatrix).multiplyRight(streamTransform)
+      : streamTransform;
   }
 
   return {
