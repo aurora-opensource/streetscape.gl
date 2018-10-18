@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "math.gl": "^2.0.0",
-    "monochrome-ui": "^0.0.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "streetscape.gl": "^0.0.1",
