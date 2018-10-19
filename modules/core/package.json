@@ -29,7 +29,7 @@
     "deep-extend": "^0.6.0",
     "earcut": "^2.1.3",
     "http-status-codes": "^1.3.0",
-    "monochrome-ui": "^0.0.6",
+    "monochrome-ui": "^0.0.7",
     "promise-retry": "^1.1.1",
     "prop-types": "^15.6.2",
     "react-map-gl": "^4.0.0-beta.1",

@@ -1,0 +1,75 @@
+#control-panel {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  top: 40px;
+  bottom: 40px;
+  background: rgba($background, 0.8);
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+
+  header, footer {
+    flex: 0 0 auto;
+    background: $background-alt;
+    padding: $spacing-tiny $spacing-normal;
+    text-align: center;
+  }
+  main {
+    flex: 1 1 auto;
+    padding: $spacing-normal;
+  }
+  footer {
+    text-align: right;
+  }
+
+  .mc-checkbox {
+    &.on {
+      .mc-checkbox--icon:before {
+        content: 'visibility';
+      }
+    }
+    &.off {
+      .mc-checkbox--icon:before {
+        opacity: 0.3;
+        content: 'visibility_off';
+      }
+    }
+    &.indeterminate {
+      .mc-checkbox--icon:before {
+        opacity: 0.3;
+        content: 'visibility';
+      }
+    }
+  }
+
+}
+
+.stream-settings-panel--badge {
+  font-family: 'Material Icons';
+  font-size: 16px;
+  float: right;
+  padding: 0 $spacing-small;
+  opacity: 0.7;
+
+  &[data-type="point"]:before {
+    content: 'grain';
+  }
+  &[data-type="circle"]:before {
+    content: 'scatter_plot';
+  }
+  &[data-type="image"]:before {
+    content: 'photo';
+  }
+  &[data-type="polyline"]:before {
+    content: 'show_chart';
+  }
+  &[data-type="polygon"]:before {
+    content: 'panorama_fish_eye';
+  }
+  &[data-type="float"]:before {
+    content: 'looks_two';
+  }
+  &[data-type="text"]:before {
+    content: 'text_fields';
+  }
+}
