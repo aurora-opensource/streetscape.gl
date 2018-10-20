@@ -78,6 +78,7 @@ class Core3DViewer extends PureComponent {
     ]),
     customLayers: PropTypes.array,
     renderObjectLabel: PropTypes.func,
+    getTransformMatrix: PropTypes.func,
 
     // Optional: to use with external state management (e.g. Redux)
     viewState: PropTypes.object,
@@ -93,7 +94,8 @@ class Core3DViewer extends PureComponent {
     xvizStyles: {},
     customLayers: [],
     onViewStateChange: () => {},
-    onObjectStateChange: () => {}
+    onObjectStateChange: () => {},
+    getTransformMatrix: (streamName, context) => null
   };
 
   constructor(props) {
@@ -205,7 +207,15 @@ class Core3DViewer extends PureComponent {
   }
 
   _getLayers() {
-    const {frame, car, viewMode, metadata, customLayers, streamSettings} = this.props;
+    const {
+      frame,
+      car,
+      viewMode,
+      metadata,
+      customLayers,
+      streamSettings,
+      getTransformMatrix
+    } = this.props;
     if (!frame || !metadata) {
       return [];
     }
@@ -241,7 +251,11 @@ class Core3DViewer extends PureComponent {
         .map(streamName => {
           const stream = streams[streamName];
           const streamMetadata = metadata.streams[streamName];
-          const coordinateProps = resolveCoordinateTransform(frame, streamMetadata);
+          const coordinateProps = resolveCoordinateTransform(
+            frame,
+            streamMetadata,
+            getTransformMatrix
+          );
 
           if (stream.features && stream.features.length) {
             return new XvizLayer({
@@ -289,12 +303,16 @@ class Core3DViewer extends PureComponent {
           // Use log data
           const stream = streams[props.streamName];
           const streamMetadata = metadata.streams[props.streamName];
-          Object.assign(props, resolveCoordinateTransform(frame, streamMetadata), {
-            data: stream && stream.features
-          });
+          Object.assign(
+            props,
+            resolveCoordinateTransform(frame, streamMetadata, getTransformMatrix),
+            {
+              data: stream && stream.features
+            }
+          );
         } else if (props.coordinate) {
           // Apply log-specific coordinate props
-          Object.assign(props, resolveCoordinateTransform(frame, props));
+          Object.assign(props, resolveCoordinateTransform(frame, props, getTransformMatrix));
         }
 
         return layer.clone(props);
@@ -338,7 +356,8 @@ class Core3DViewer extends PureComponent {
       viewMode,
       frame,
       metadata,
-      renderObjectLabel
+      renderObjectLabel,
+      getTransformMatrix
     } = this.props;
     const objectSelection = (this.props.objectStates || this.state.objectStates).selected;
 
@@ -366,6 +385,7 @@ class Core3DViewer extends PureComponent {
           frame={frame}
           metadata={metadata}
           renderObjectLabel={renderObjectLabel}
+          getTransformMatrix={getTransformMatrix}
         />
       </DeckGL>
     );

@@ -23,30 +23,42 @@ import {_Pose as Pose, Matrix4} from 'math.gl';
 
 import {COORDINATES} from '../constants';
 
-export function resolveCoordinateTransform(vehiclePose, streamMetadata = {}) {
-  const {origin, transforms = {}, vehicleRelativeTransform} = vehiclePose;
-  const {coordinate, pose} = streamMetadata;
+export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransformMatrix) {
+  const {origin, transforms = {}, vehicleRelativeTransform} = frame;
+  const {coordinate, transform, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
-  let modelMatrix = vehicleRelativeTransform;
+  let modelMatrix = null;
+  let streamTransform = transform;
 
   switch (coordinate) {
     case COORDINATES.GEOGRAPHIC:
       coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
       break;
 
-    case COORDINATES.VEHICLE_RELATIVE:
-      modelMatrix = vehicleRelativeTransform;
+    case COORDINATES.IDENTITY:
+      break;
+
+    case COORDINATES.DYNAMIC:
+      // cache calculated transform matrix for each frame
+      transforms[transform] = transforms[transform] || getTransformMatrix(transform, frame);
+      modelMatrix = transforms[transform];
+      frame.transforms = transforms;
+      streamTransform = null;
       break;
 
     default:
-      if (coordinate) {
-        modelMatrix = transforms[coordinate];
-      }
+      modelMatrix = vehicleRelativeTransform;
   }
 
   if (pose) {
-    modelMatrix = new Matrix4(modelMatrix).multiplyRight(new Pose(pose).getTransformationMatrix());
+    // TODO - remove when builder updates
+    streamTransform = new Pose(pose).getTransformationMatrix();
+  }
+  if (streamTransform) {
+    modelMatrix = modelMatrix
+      ? new Matrix4(modelMatrix).multiplyRight(streamTransform)
+      : streamTransform;
   }
 
   return {

@@ -21,7 +21,8 @@
 export const COORDINATES = {
   GEOGRAPHIC: 'geographic',
   VEHICLE_RELATIVE: 'vehicle_relative',
-  CUSTOM: 'custom'
+  IDENTITY: 'identity',
+  DYNAMIC: 'dynamic'
 };
 
 export const VIEW_MODES = {
