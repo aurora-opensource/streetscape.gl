@@ -1,0 +1,33 @@
+/* monochrome theme */
+
+/* Colors */
+$background: #101010;
+$background-alt: #222222;
+
+$color-control-subtle: #404042;
+$color-control-disabled: #636364;
+$color-control-inactive: #A5A5A6;
+$color-control-hover: #F8F8F9;
+$color-control-active: #11939A;
+
+$color-text-primary: #F8F8F9;
+$color-text-secondary: #D0D0D1;
+$color-text-subtle: #717172;
+$color-text-invert: #1B1B1C;
+
+/* Typography */
+$font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif;
+
+/* Borders */
+$border-thin: solid 1px;
+$border-strong: solid 2px;
+
+/* Shadows */
+$shadow-small: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+
+/* Layout */
+$spacing-tiny: 4px;
+$spacing-small: 8px;
+$spacing-normal: 12px;
+$spacing-large: 24px;
+$spacing-huge: 48px;

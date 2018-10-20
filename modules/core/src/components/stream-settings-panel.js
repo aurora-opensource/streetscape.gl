@@ -24,15 +24,7 @@ import {Form, CheckBox} from 'monochrome-ui';
 
 import connectToLog from './connect';
 
-const BADGE_STYLE = {
-  float: 'right',
-  opacity: 0.6
-};
-const Badge = props => (
-  <div className="stream-settings-panel--badge" style={BADGE_STYLE}>
-    {props.children}
-  </div>
-);
+const Badge = props => <div className="stream-settings-panel--badge" data-type={props.type} />;
 
 function getParentKey(streamName) {
   const i = streamName.indexOf('/', 1);
@@ -73,7 +65,7 @@ export function createFormData(metadata) {
 
     siblings[streamName] = {
       type: 'checkbox',
-      badge: <Badge>{metadata[streamName].type}</Badge>,
+      badge: <Badge type={metadata[streamName].type} />,
       title: streamName.replace(parentKey, '')
     };
   }
