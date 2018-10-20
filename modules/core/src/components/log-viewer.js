@@ -234,7 +234,6 @@ class Core3DViewer extends PureComponent {
           const coordinateProps = resolveCoordinateTransform(
             frame,
             streamMetadata,
-            streamName,
             getTransformMatrix
           );
 
@@ -286,14 +285,14 @@ class Core3DViewer extends PureComponent {
           const streamMetadata = metadata.streams[props.streamName];
           Object.assign(
             props,
-            resolveCoordinateTransform(frame, streamMetadata, props.streamName, getTransformMatrix),
+            resolveCoordinateTransform(frame, streamMetadata, getTransformMatrix),
             {
               data: stream && stream.features
             }
           );
         } else if (props.coordinate) {
           // Apply log-specific coordinate props
-          Object.assign(props, resolveCoordinateTransform(frame, props, null, getTransformMatrix));
+          Object.assign(props, resolveCoordinateTransform(frame, props, getTransformMatrix));
         }
 
         return layer.clone(props);

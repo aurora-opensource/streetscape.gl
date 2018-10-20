@@ -51,7 +51,6 @@ export default class ObjectLabelsOverlay extends Component {
         const coordinateProps = resolveCoordinateTransform(
           frame,
           streamMetadata,
-          objectStreamName,
           getTransformMatrix
         );
         this.setState({coordinateProps});

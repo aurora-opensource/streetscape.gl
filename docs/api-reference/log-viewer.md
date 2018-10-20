@@ -153,7 +153,7 @@ import {LogViewer} from 'streetscape.gl';
 
 A custom function that is called if a stream's `coordinate` is `DYNAMIC`. Will receive the following props:
 
-- `streamName` (String)
+- `key` (String) - key of the transform, as specified in the stream's metadata
 - `context` (Object) - the current frame
 
 Default: `() => null`

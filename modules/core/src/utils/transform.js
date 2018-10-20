@@ -3,17 +3,13 @@ import {_Pose as Pose, Matrix4} from 'math.gl';
 
 import {COORDINATES} from '../constants';
 
-export function resolveCoordinateTransform(
-  frame,
-  streamMetadata = {},
-  streamName,
-  getTransformMatrix
-) {
-  const {origin, vehicleRelativeTransform} = frame;
+export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransformMatrix) {
+  const {origin, transforms = {}, vehicleRelativeTransform} = frame;
   const {coordinate, transform, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
   let modelMatrix = null;
+  let streamTransform = transform;
 
   switch (coordinate) {
     case COORDINATES.GEOGRAPHIC:
@@ -24,14 +20,17 @@ export function resolveCoordinateTransform(
       break;
 
     case COORDINATES.DYNAMIC:
-      modelMatrix = getTransformMatrix(streamName, frame);
+      // cache calculated transform matrix for each frame
+      transforms[transform] = transforms[transform] || getTransformMatrix(transform, frame);
+      modelMatrix = transforms[transform];
+      frame.transforms = transforms;
+      streamTransform = null;
       break;
 
     default:
       modelMatrix = vehicleRelativeTransform;
   }
 
-  let streamTransform = transform;
   if (pose) {
     // TODO - remove when builder updates
     streamTransform = new Pose(pose).getTransformationMatrix();
