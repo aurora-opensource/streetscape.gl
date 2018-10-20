@@ -2,7 +2,6 @@
 /* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Otherwise modules imported from outside this directory does not compile.
 // Also needed if modules from this directory were imported elsewhere
@@ -74,7 +73,6 @@ const CONFIG = {
     }
   },
   plugins: [
-    new HtmlWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]

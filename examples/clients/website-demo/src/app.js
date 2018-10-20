@@ -9,16 +9,17 @@ import {
   XVIZFileLoader,
   LogViewer,
   PlaybackControl,
-  StreamSettingsPanel,
   // XvizPanel,
   // VideoPanel,
   VIEW_MODES
 } from 'streetscape.gl';
-// import {Form} from 'monochrome-ui';
+
+import ControlPanel from './control-panel';
+import Toolbar from './toolbar';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
-import './main.scss';
+import './stylesheets/main.scss';
 
 class Example extends PureComponent {
   state = {
@@ -49,26 +50,27 @@ class Example extends PureComponent {
 
     return (
       <div id="container">
-        <div id="map-view">
-          <LogViewer
-            log={log}
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            mapStyle={MAP_STYLE}
-            car={CAR}
-            xvizStyles={XVIZ_STYLE}
-            viewMode={VIEW_MODES[settings.viewMode]}
-          />
-        </div>
+        <LogViewer
+          log={log}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+          mapStyle={MAP_STYLE}
+          car={CAR}
+          xvizStyles={XVIZ_STYLE}
+          viewMode={VIEW_MODES[settings.viewMode]}
+        />
+
         <div id="timeline">
           <PlaybackControl
+            padding={{top: 12, bottom: 12, left: 48, right: 24}}
             width="100%"
             log={log}
             formatTimestamp={x => new Date(x).toUTCString()}
           />
         </div>
-        <div id="control-panel">
-          <StreamSettingsPanel log={log} />
-        </div>
+
+        <ControlPanel log={log} />
+
+        <Toolbar />
       </div>
     );
   }
