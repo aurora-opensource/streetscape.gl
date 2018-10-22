@@ -71,7 +71,8 @@ void main(void) {
     render3D
   );
 
-  gl_Position = project_position_to_clipspace(instancePositions + rotationMatrix * vertex, instancePositions64xyLow, vec3(0.0));
+  vec3 offset = project_scale(rotationMatrix * vertex);
+  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, offset);
 
   vTextureCoords = mix(
     instanceIconFrames.xy,
