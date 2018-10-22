@@ -19,5 +19,5 @@ export const SETTINGS = {
 };
 
 export const XVIZ_STYLE = {
-  '/tracklets/objects': [{class: 'selected', fillColor: '#ff8000aa'}]
+  '/tracklets/objects': [{name: 'selected', style: {fillColor: '#ff8000aa'}}]
 };

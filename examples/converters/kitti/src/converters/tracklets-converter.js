@@ -109,7 +109,7 @@ export default class TrackletsConverter {
     xb.stream(this.TRACKLETS)
       .category('primitive')
       .type('polygon')
-      .styleClassDefault({
+      .streamStyle({
         extruded: true,
         wireframe: true,
         fillColor: '#00000080'
@@ -139,7 +139,7 @@ export default class TrackletsConverter {
       .stream(this.TRACKLETS_TRACKING_POINT)
       .category('primitive')
       .type('circle')
-      .styleClassDefault({
+      .streamStyle({
         radius: 0.2,
         fillColor: '#FFFF00'
       })
@@ -148,7 +148,7 @@ export default class TrackletsConverter {
       .stream(this.TRACKLETS_LABEL)
       .category('primitive')
       .type('text')
-      .styleClassDefault({
+      .streamStyle({
         size: 18,
         fillColor: '#0040E0'
       })
@@ -157,7 +157,7 @@ export default class TrackletsConverter {
       .stream(this.TRACKLETS_TRAJECTORY)
       .category('primitive')
       .type('polyline')
-      .styleClassDefault({
+      .streamStyle({
         strokeColor: '#FEC557',
         strokeWidth: 0.3,
         strokeWidthMinPixels: 1

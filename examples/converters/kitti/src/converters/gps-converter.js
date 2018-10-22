@@ -96,7 +96,7 @@ export default class GPSConverter extends BaseConverter {
 
       // This styling information is applied to *all* objects for this stream.
       // It is possible to apply inline styling on individual objects.
-      .styleClassDefault({
+      .streamStyle({
         strokeColor: '#57AD57AA',
         strokeWidth: 1.4,
         strokeWidthMinPixels: 1

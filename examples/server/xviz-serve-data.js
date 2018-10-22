@@ -157,10 +157,13 @@ function getFrameIndex(index, framesLength) {
 
 // Data Handling
 
-// Return either the vehicle_pose timestamp, or max
-// of timestamps in state_updates.
-function getTimestamp(xviz_data) {
+function getTimestampV1(xviz_data) {
   const {start_time, vehicle_pose, state_updates} = xviz_data;
+
+  if (!start_time && !vehicle_pose) {
+    // Not XVIZ v1
+    return null;
+  }
 
   let timestamp;
   if (start_time) {
@@ -174,6 +177,41 @@ function getTimestamp(xviz_data) {
   }
 
   return timestamp;
+}
+
+function getTimestampV2(xviz_data) {
+  const {log_info, updates} = xviz_data;
+  const {start_time} = log_info || {};
+  const state_updates = (updates && updates[0] && updates[0].state_updates) || [];
+  let vehicle_pose = null;
+
+  if (state_updates && state_updates[0] && state_updates[0].poses) {
+    vehicle_pose = state_updates[0].poses['/vehicle_pose'];
+  }
+
+  let timestamp;
+  if (start_time) {
+    timestamp = start_time;
+  } else if (vehicle_pose) {
+    timestamp = vehicle_pose.timestamp;
+  } else if (state_updates) {
+    timestamp = state_updates.reduce((t, stateUpdate) => {
+      return Math.max(t, stateUpdate.timestamp);
+    }, 0);
+  }
+
+  return timestamp;
+}
+
+// Return either the vehicle_pose timestamp, or max
+// of timestamps in state_updates.
+function getTimestamp(xviz_data) {
+  let result = getTimestampV1(xviz_data);
+  if (!result) {
+    result = getTimestampV2(xviz_data);
+  }
+
+  return result;
 }
 
 // Global counter to help debug
