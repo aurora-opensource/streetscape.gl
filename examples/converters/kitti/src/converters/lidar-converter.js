@@ -44,7 +44,7 @@ export default class LidarConverter extends BaseConverter {
     xb.stream(this.LIDAR_POINTS)
       .category('primitive')
       .type('point')
-      .styleClassDefault({
+      .streamStyle({
         fillColor: '#00a',
         radiusPixels: 2
       })
