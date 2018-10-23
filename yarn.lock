@@ -5159,9 +5159,9 @@ moment@^2.6.0:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
 
-monochrome-ui@^0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/monochrome-ui/-/monochrome-ui-0.0.7.tgz#76ca94adc8e91d14d2d6c0e6ebce4773cc68aef6"
+monochrome-ui@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/monochrome-ui/-/monochrome-ui-0.0.8.tgz#b9685ce0a096f1be0823af821bbaa9db297685ea"
   dependencies:
     classnames "^2.2.5"
     debounce "^1.1.0"
