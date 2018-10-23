@@ -1,4 +1,4 @@
-# Run Demo with the KITTI Dataset
+# Run Example with the KITTI Dataset
 
 **Uber Confidential Information**
 
@@ -63,7 +63,7 @@ $ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync --image-max-width=300 --di
 
 
 
-# Start Demo Application
+# Start Example Application
 
 Start a XVIZ stream server:
 

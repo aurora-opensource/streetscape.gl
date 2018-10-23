@@ -5,7 +5,7 @@ set -e
 MODE=$1
 
 case $MODE in
-  "fast")
+  "pre-commit")
     echo "Running prettier & eslint..."
 
     # only check changed files
