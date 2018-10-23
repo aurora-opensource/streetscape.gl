@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import uuid from 'uuid/v4';
 
 import BaseConverter from './base-converter';
@@ -45,8 +46,8 @@ export default class LidarConverter extends BaseConverter {
       .category('primitive')
       .type('point')
       .streamStyle({
-        fillColor: '#00a',
-        radiusPixels: 2
+        fill_color: '#00a',
+        radius_pixels: 2
       })
       // laser scanner relative to GPS position
       // http://www.cvlibs.net/datasets/kitti/setup.php

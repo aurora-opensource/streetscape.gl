@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import test from 'tape';
 
 import {mergeXvizStyles} from 'streetscape.gl/utils/style';
@@ -8,7 +9,7 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'one',
         style: {
-          color: '#111111'
+          fill_color: '#111111'
         }
       }
     ],
@@ -16,7 +17,7 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'two',
         style: {
-          color: '#222222'
+          fill_color: '#222222'
         }
       }
     ]
@@ -27,7 +28,7 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'one',
         style: {
-          color: '#333333',
+          fill_color: '#333333',
           fill: true
         }
       }
@@ -36,7 +37,7 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'two',
         style: {
-          color: '#444444',
+          fill_color: '#444444',
           fill: true
         }
       }
@@ -45,7 +46,7 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'three',
         style: {
-          color: '#555555',
+          fill_color: '#555555',
           fill: true
         }
       }
@@ -63,13 +64,13 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'one',
         style: {
-          color: '#111111'
+          fill_color: '#111111'
         }
       },
       {
         name: 'one',
         style: {
-          color: '#333333',
+          fill_color: '#333333',
           fill: true
         }
       }
@@ -78,13 +79,13 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'two',
         style: {
-          color: '#222222'
+          fill_color: '#222222'
         }
       },
       {
         name: 'two',
         style: {
-          color: '#444444',
+          fill_color: '#444444',
           fill: true
         }
       }
@@ -93,7 +94,7 @@ test('style#mergeXvizStyles precedence order', t => {
       {
         name: 'three',
         style: {
-          color: '#555555',
+          fill_color: '#555555',
           fill: true
         }
       }
