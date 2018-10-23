@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import fs from 'fs';
 import path from 'path';
 import {_getPoseTrajectory} from '@xviz/builder';
@@ -97,9 +98,9 @@ export default class GPSConverter extends BaseConverter {
       // This styling information is applied to *all* objects for this stream.
       // It is possible to apply inline styling on individual objects.
       .streamStyle({
-        strokeColor: '#57AD57AA',
-        strokeWidth: 1.4,
-        strokeWidthMinPixels: 1
+        stroke_color: '#57AD57AA',
+        stroke_width: 1.4,
+        stroke_width_min_pixels: 1
       });
   }
 
