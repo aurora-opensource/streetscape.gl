@@ -27,11 +27,6 @@ import {getXvizSettings} from '@xviz/parser';
 
 import connectToLog from './connect';
 
-const MARKER_STYLE = {
-  height: 3,
-  background: '#ccc'
-};
-
 class PlaybackControl extends PureComponent {
   static propTypes = {
     timeScale: PropTypes.number
@@ -122,16 +117,15 @@ class PlaybackControl extends PureComponent {
       return null;
     }
 
-    const markers = bufferRange.map(r => ({
+    const buffers = bufferRange.map(r => ({
       startTime: Math.max(r[0], startTime),
-      endTime: Math.min(r[1], endTime),
-      style: MARKER_STYLE
+      endTime: Math.min(r[1], endTime)
     }));
 
     return (
       <MonochromePlaybackControl
         {...otherProps}
-        markers={markers}
+        bufferRange={buffers}
         currentTime={timestamp}
         startTime={startTime}
         endTime={endTime}
