@@ -163,7 +163,8 @@ export default class XVIZLoaderInterface {
   getImageStreamNames = createSelector(this, this.getMetadata, metadata => {
     const streams = metadata && metadata.streams;
     return (
-      streams && Object.keys(streams).filter(streamName => streams[streamName].type === 'image')
+      streams &&
+      Object.keys(streams).filter(streamName => streams[streamName].stream_type === 'image')
     );
   });
 

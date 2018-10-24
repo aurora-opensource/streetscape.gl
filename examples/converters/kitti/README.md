@@ -42,7 +42,7 @@ yarn start -d 2011_09_26/2011_09_26_drive_0005_sync
 ## Available Streams in KITTI data sets
 
 ```
-  vehicle-pose
+  /vehicle_pose
   /vehicle/velocity
   /vehicle/acceleration
   /vehicle/trajectory

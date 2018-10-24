@@ -144,8 +144,8 @@ And of course we want to declare the channels in the metdata:
 
 ```js
     xvizMetaBuilder
-      .stream('vehicle-pose')
-      .category('vehicle-pose')
+      .stream('/vehicle_pose')
+      .category('/vehicle_pose')
 
       .stream(this.VEHICLE_TRAJECTORY)
       .category('primitives')
