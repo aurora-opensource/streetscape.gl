@@ -80,7 +80,9 @@ function ensureFinite(value, fallback) {
   return Number.isFinite(value) ? value : fallback;
 }
 
-const getInlineProperty = (context, propertyName, objectState) => objectState[propertyName];
+// Access V1 and V2 style properties
+const getInlineProperty = (context, propertyName, objectState) =>
+  objectState[propertyName] || (objectState.style && objectState.style[propertyName]);
 const getStylesheetProperty = (context, propertyName, objectState) =>
   context.style.getProperty(propertyName, objectState);
 

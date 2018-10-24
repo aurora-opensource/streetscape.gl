@@ -79,7 +79,7 @@ export default class GPSConverter extends BaseConverter {
     // behavior tied to the viewer.
     const xb = xvizMetaBuilder;
     xb.stream(PRIMARY_POSE_STREAM)
-      .category('vehicle-pose')
+      .category('pose')
 
       .stream(this.VEHICLE_ACCELERATION)
       .category('time_series')
