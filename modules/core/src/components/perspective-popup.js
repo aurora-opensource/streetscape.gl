@@ -37,7 +37,8 @@ export default class PerspectivePopup extends Popup {
     const tipStyle = {
       width: tipSize,
       height: tipSize,
-      position: 'relative'
+      position: 'relative',
+      border: 'none'
     };
     const tipCircleStyle = {...STYLES.TIP_CIRCLE, background: tipColor};
     const tipLineStyle = {...STYLES.TIP_LINE, borderColor: tipColor};
@@ -71,7 +72,7 @@ export default class PerspectivePopup extends Popup {
     }
 
     return (
-      <div key="tip" style={tipStyle}>
+      <div key="tip" className="mapboxgl-popup-tip" style={tipStyle}>
         <div style={tipCircleStyle} />
         <div style={tipLineStyle} />
       </div>

@@ -92,7 +92,7 @@ export default class ObjectLabelsOverlay extends Component {
         latitude={trackingPoint[1]}
         altitude={trackingPoint[2]}
         anchor="bottom-left"
-        dynamicPosition={false}
+        dynamicPosition={true}
         tipSize={30}
         sortByDepth={true}
         closeButton={false}
