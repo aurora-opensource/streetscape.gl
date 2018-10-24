@@ -33,15 +33,15 @@ const STYLES = {
 export default class PerspectivePopup extends Popup {
   _renderTip(positionType) {
     const anchorPosition = ANCHOR_POSITION[positionType];
-    const {tipSize, tipColor = '#fff'} = this.props;
+    const {tipSize, color} = this.props;
     const tipStyle = {
       width: tipSize,
       height: tipSize,
       position: 'relative',
       border: 'none'
     };
-    const tipCircleStyle = {...STYLES.TIP_CIRCLE, background: tipColor};
-    const tipLineStyle = {...STYLES.TIP_LINE, borderColor: tipColor};
+    const tipCircleStyle = {...STYLES.TIP_CIRCLE, background: color};
+    const tipLineStyle = {...STYLES.TIP_LINE, borderColor: color};
 
     switch (anchorPosition.x) {
       case 0.5:
@@ -75,6 +75,21 @@ export default class PerspectivePopup extends Popup {
       <div key="tip" className="mapboxgl-popup-tip" style={tipStyle}>
         <div style={tipCircleStyle} />
         <div style={tipLineStyle} />
+      </div>
+    );
+  }
+
+  _renderContent() {
+    const {color} = this.props;
+
+    return (
+      <div
+        key="content"
+        ref={this._contentLoaded}
+        className="mapboxgl-popup-content object-label--content"
+        style={{background: color}}
+      >
+        {this.props.children}
       </div>
     );
   }
