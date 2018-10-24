@@ -700,9 +700,9 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@deck.gl/core@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-6.2.0.tgz#07b057db58d50fa14e9433268addfbe6880bfb34"
+"@deck.gl/core@^6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-6.2.1.tgz#b964b345e4d1ac99c139af5e7c646979de9140ab"
   dependencies:
     luma.gl "^6.2.0"
     math.gl "^2.1.0"
@@ -711,26 +711,26 @@
     seer "^0.2.4"
     viewport-mercator-project "^6.0.0"
 
-"@deck.gl/experimental-layers@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@deck.gl/experimental-layers/-/experimental-layers-6.2.0.tgz#c622af2b3c37600ca2ec666cc3941f908f83a9dd"
+"@deck.gl/experimental-layers@^6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@deck.gl/experimental-layers/-/experimental-layers-6.2.1.tgz#c2ec363761845fa7dfdcd625971772191cf1226e"
   dependencies:
-    "@deck.gl/core" "^6.2.0"
-    "@deck.gl/layers" "^6.2.0"
+    "@deck.gl/core" "^6.2.1"
+    "@deck.gl/layers" "^6.2.1"
 
-"@deck.gl/layers@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.2.0.tgz#f59c93f2140e3f9a36e5c14d66f21fdc11093ef5"
+"@deck.gl/layers@^6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.2.1.tgz#b140792185a3637b2e87ee14ee2dac518184ee31"
   dependencies:
-    "@deck.gl/core" "^6.2.0"
+    "@deck.gl/core" "^6.2.1"
     d3-hexbin "^0.2.1"
     earcut "^2.0.6"
 
-"@deck.gl/react@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-6.2.0.tgz#326a59cac8f18158b96e092a74f7ee9105a19346"
+"@deck.gl/react@^6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-6.2.1.tgz#f60ec62cc88c5f0fce9ccaa2a0577393edad83dc"
   dependencies:
-    "@deck.gl/core" "^6.2.0"
+    "@deck.gl/core" "^6.2.1"
     prop-types "^15.6.0"
 
 "@mapbox/geojson-area@0.2.2":
@@ -1401,10 +1401,6 @@ boom@2.x.x:
   resolved "https://registry.yarnpkg.com/boom/-/boom-2.10.1.tgz#39c8918ceff5799f83f9492a848f625add0c766f"
   dependencies:
     hoek "2.x.x"
-
-bowser@^1.2.0:
-  version "1.9.4"
-  resolved "https://registry.yarnpkg.com/bowser/-/bowser-1.9.4.tgz#890c58a2813a9d3243704334fa81b96a5c150c9a"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -2393,13 +2389,13 @@ decamelize@^2.0.0:
   dependencies:
     xregexp "4.0.0"
 
-deck.gl@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-6.2.0.tgz#835988b801f12a0366d5127d0091055a6e0490d4"
+deck.gl@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-6.2.1.tgz#1e08a41cc4c3710cb1343a0c20a09e059f1256a5"
   dependencies:
-    "@deck.gl/core" "^6.2.0"
-    "@deck.gl/layers" "^6.2.0"
-    "@deck.gl/react" "^6.2.0"
+    "@deck.gl/core" "^6.2.1"
+    "@deck.gl/layers" "^6.2.1"
+    "@deck.gl/react" "^6.2.1"
 
 decode-uri-component@^0.2.0:
   version "0.2.0"
@@ -5134,9 +5130,9 @@ mjolnir.js@^1.0.0:
   dependencies:
     hammerjs "^2.0.8"
 
-mjolnir.js@^2.0.0-alpha.1:
-  version "2.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.0.0-alpha.1.tgz#5721f7864cf33d3e2aa5828659a28fcd1b2f8197"
+mjolnir.js@^2.0.0-alpha.2:
+  version "2.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.0.0-alpha.2.tgz#bf1eaa457bbca254ef2a12afa761de6f1e84da33"
   dependencies:
     "@babel/runtime" "^7.0.0"
     hammerjs "^2.0.8"
@@ -6125,15 +6121,14 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
-react-map-gl@^4.0.0-beta.1:
-  version "4.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-4.0.0-beta.1.tgz#7ec2644aa356dec39e6c69581f6de6ae128edd80"
+react-map-gl@^4.0.0-beta.3:
+  version "4.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-4.0.0-beta.3.tgz#20f6b79cef79a6bcb991b1b30be714b3efb30275"
   dependencies:
     "@babel/runtime" "^7.0.0"
-    bowser "^1.2.0"
     mapbox-gl "~0.50.0"
     math.gl "^2.0.0"
-    mjolnir.js "^2.0.0-alpha.1"
+    mjolnir.js "^2.0.0-alpha.2"
     prop-types "^15.5.7"
     react-virtualized-auto-sizer "^1.0.2"
     viewport-mercator-project "^6.0.0"

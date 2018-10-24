@@ -355,6 +355,7 @@ class Core3DViewer extends PureComponent {
         onViewStateChange={this._onViewStateChange}
       >
         <StaticMap
+          reuseMap={true}
           mapboxApiAccessToken={mapboxApiAccessToken}
           mapStyle={mapStyle}
           visible={!viewMode.firstPerson}

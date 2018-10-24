@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import {getXvizConfig} from '@xviz/parser';
+import {experimental} from 'react-map-gl';
+const {MapContext} = experimental;
 
 import PerspectivePopup from './perspective-popup';
 
@@ -13,7 +15,6 @@ const renderDefaultObjectLabel = ({id}) => <div>ID: {id}</div>;
 
 export default class ObjectLabelsOverlay extends Component {
   static propTypes = {
-    viewport: PropTypes.object,
     objectSelection: PropTypes.object,
     frame: PropTypes.object,
     metadata: PropTypes.object,
@@ -27,35 +28,39 @@ export default class ObjectLabelsOverlay extends Component {
     renderObjectLabel: renderDefaultObjectLabel
   };
 
-  static childContextTypes = {
-    viewport: PropTypes.object
-  };
-
-  state = {};
-
-  getChildContext() {
-    return {
-      viewport: this.props.viewport
+  constructor(props) {
+    super(props);
+    this.state = {
+      ...this._getCoordinateProps(props)
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    const {frame, metadata, getTransformMatrix} = nextProps;
+    const {frame} = nextProps;
 
     if (frame && frame !== this.props.frame) {
+      this.setState(this._getCoordinateProps(nextProps));
+    }
+  }
+
+  _getCoordinateProps(props) {
+    const {frame, metadata, getTransformMatrix} = props;
+
+    if (frame) {
       const objectStreamName = this._findObjectGeometryStream(frame.streams);
-      this.setState({objectStreamName});
+      const result = {objectStreamName};
 
       if (objectStreamName) {
         const streamMetadata = metadata.streams[objectStreamName];
-        const coordinateProps = resolveCoordinateTransform(
+        result.coordinateProps = resolveCoordinateTransform(
           frame,
           streamMetadata,
           getTransformMatrix
         );
-        this.setState({coordinateProps});
       }
+      return result;
     }
+    return null;
   }
 
   _findObjectGeometryStream(streams) {
@@ -66,7 +71,7 @@ export default class ObjectLabelsOverlay extends Component {
 
   _getTrackingPoint(object) {
     const point = object.center || getCentroid(object.vertices);
-    return positionToLngLat(point, this.props.viewport, this.state.coordinateProps);
+    return positionToLngLat(point, this.state.coordinateProps);
   }
 
   _renderPerspectivePopup = object => {
@@ -87,8 +92,9 @@ export default class ObjectLabelsOverlay extends Component {
         latitude={trackingPoint[1]}
         altitude={trackingPoint[2]}
         anchor="bottom-left"
-        dynamicPosition={true}
+        dynamicPosition={false}
         tipSize={30}
+        sortByDepth={true}
         closeButton={false}
         closeOnClick={false}
       >
@@ -98,7 +104,7 @@ export default class ObjectLabelsOverlay extends Component {
   };
 
   render() {
-    const {frame, renderObjectLabel} = this.props;
+    const {frame, viewport, renderObjectLabel} = this.props;
     const {objectStreamName} = this.state;
 
     if (!frame || !objectStreamName || !renderObjectLabel) {
@@ -107,6 +113,10 @@ export default class ObjectLabelsOverlay extends Component {
 
     const objects = frame.streams[objectStreamName].features;
 
-    return <div>{objects.map(this._renderPerspectivePopup)}</div>;
+    return (
+      <MapContext.Provider value={{viewport}}>
+        {objects.map(this._renderPerspectivePopup)}
+      </MapContext.Provider>
+    );
   }
 }
