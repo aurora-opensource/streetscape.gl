@@ -31,15 +31,7 @@ body {
   transform: translateX(-50%);
 }
 
-#toolbar {
-  padding: 0 $spacing-normal;
-  background: $background-alt;
-  position: fixed;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  font-size: 24px;
-}
-
 @import 'inputs';
 @import 'control-panel';
+@import 'toolbar';
+@import 'object-label';
