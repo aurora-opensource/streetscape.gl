@@ -45,6 +45,21 @@ class Example extends PureComponent {
     });
   };
 
+  _onViewStateChange = ({viewOffset}) => {
+    this._onSettingsChange({viewOffset});
+  };
+
+  _renderObjectLabel = ({id, object}) => {
+    return (
+      <div>
+        <div>
+          <b>id: {id.slice(-12)}</b>
+        </div>
+        <div>{object.classes.join(' ')}</div>
+      </div>
+    );
+  };
+
   render() {
     const {log, settings} = this.state;
 
@@ -57,6 +72,10 @@ class Example extends PureComponent {
           car={CAR}
           xvizStyles={XVIZ_STYLE}
           viewMode={VIEW_MODES[settings.viewMode]}
+          viewOffset={settings.viewOffset}
+          onViewStateChange={this._onViewStateChange}
+          renderObjectLabel={this._renderObjectLabel}
+          objectLabelColor="#fff"
         />
 
         <div id="timeline">
@@ -70,7 +89,7 @@ class Example extends PureComponent {
 
         <ControlPanel log={log} />
 
-        <Toolbar />
+        <Toolbar onChange={this._onSettingsChange} />
       </div>
     );
   }
