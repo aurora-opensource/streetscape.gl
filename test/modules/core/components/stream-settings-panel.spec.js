@@ -30,7 +30,7 @@ import {
 
 const TEST_STREAMS = {
   '/vehicle_pose': {
-    type: 'vehicle-pose'
+    type: '/vehicle_pose'
   },
   '/vehicle/velocity': {
     unit: 'm/s',

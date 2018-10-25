@@ -48,7 +48,7 @@ You will also want to announce the image channel in your metadata:
 ```js
     const xb = xvizMetaBuilder;
     xb.stream(this.streamName)
-      .category('primitive')
+      .category('primitives')
       .type('image');
 ```
 
@@ -76,7 +76,7 @@ First the points need to be loaded
       .stream(this.LIDAR_POINTS)
       .points(temporaryObject.vertices)
       .id(uuid())
-      .color([0, 0, 0, 255]);
+      .style({fill_color: [0, 0, 0, 255]});
   }
 ```
 
@@ -85,11 +85,11 @@ You will also want to declare the channel, where you can add some styling and al
 ```js
     xvizMetaBuilder
       .stream(this.LIDAR_POINTS)
-      .category('primitive')
+      .category('primitives')
       .type('point')
-      .styleClassDefault({
-        fillColor: '#00a',
-        radiusPixels: 2
+      .streamStyle({
+        fill_color: '#00a',
+        radius_pixels: 2
       })
       // laser scanner relative to GPS position
       // http://www.cvlibs.net/datasets/kitti/setup.php
@@ -144,19 +144,19 @@ And of course we want to declare the channels in the metdata:
 
 ```js
     xvizMetaBuilder
-      .stream('vehicle-pose')
-      .category('vehicle-pose')
+      .stream('/vehicle_pose')
+      .category('/vehicle_pose')
 
       .stream(this.VEHICLE_TRAJECTORY)
-      .category('primitive')
+      .category('primitives')
       .type('polyline')
 
       // This styling information is applied to *all* objects for this stream.
       // It is possible to apply inline styling on individual objects.
-      .styleClassDefault({
-        strokeColor: '#57AD57AA',
-        strokeWidth: 1.4,
-        strokeWidthMinPixels: 1
+      .streamStyle({
+        stroke_color: '#57AD57AA',
+        stroke_width: 1.4,
+        stroke_width_min_pixels: 1
       });
 ```
 

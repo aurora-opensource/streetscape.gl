@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {getXvizSettings} from '@xviz/parser';
+import {getXvizSettings, getXvizConfig} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
@@ -172,9 +172,10 @@ export default class XVIZLoaderInterface {
   );
 
   getTimestamps = createSelector(this, this.getStreams, streams => {
-    const vehiclePoses = streams && streams['vehicle-pose'];
+    const {PRIMARY_POSE_STREAM, version} = getXvizConfig();
+    const vehiclePoses = streams && streams[PRIMARY_POSE_STREAM];
     if (vehiclePoses) {
-      return vehiclePoses.map(pose => pose.time);
+      return vehiclePoses.map(pose => (version === 2 ? pose.timestamp : pose.time));
     }
     return null;
   });

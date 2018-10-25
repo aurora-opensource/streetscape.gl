@@ -27,7 +27,7 @@ export const XVIZ_SETTINGS = {
 setXvizSettings(XVIZ_SETTINGS);
 
 export const XVIZ_CONFIG = {
-  PRIMARY_POSE_STREAM: 'vehicle-pose',
+  PRIMARY_POSE_STREAM: '/vehicle_pose',
   OBJECT_STREAM: '/tracklets/objects'
 };
 

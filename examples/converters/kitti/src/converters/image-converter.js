@@ -50,7 +50,7 @@ export default class ImageConverter extends BaseConverter {
     const {data, width, height} = await this.loadFrame(frameNumber);
 
     xvizBuilder
-      .stream(this.streamName)
+      .primitive(this.streamName)
       .image(nodeBufferToTypedArray(data), 'png')
       .dimensions(width, height);
   }
