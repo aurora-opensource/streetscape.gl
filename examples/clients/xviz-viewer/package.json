@@ -1,7 +1,7 @@
 {
   "name": "streetscape.gl-kitti-demo",
   "description": "A demo of streetscape.gl with KITTI data",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
     "start": "webpack-dev-server --progress --hot --open",

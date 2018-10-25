@@ -1,5 +1,6 @@
 {
   "name": "xviz-demo-server",
+  "version": "0.1.0",
   "scripts": {
     "start": "node ./index.js"
   },
