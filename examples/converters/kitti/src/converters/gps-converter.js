@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 import fs from 'fs';
 import path from 'path';
 import {_getPoseTrajectory} from '@xviz/builder';
 
 import BaseConverter from './base-converter';
 import {loadOxtsPackets} from '../parsers/parse-gps-data';
-import {MOTION_PLANNING_STEPS} from './constant';
+import {MOTION_PLANNING_STEPS, PRIMARY_POSE_STREAM} from './constant';
 
 export default class GPSConverter extends BaseConverter {
   constructor(rootDir, streamDir) {
@@ -43,30 +44,33 @@ export default class GPSConverter extends BaseConverter {
     // Every frame *MUST* have a pose. The pose can be considered
     // the core reference point for other data and usually drives the timing
     // of the system.
-    xvizBuilder.pose(pose);
+    xvizBuilder
+      .pose(PRIMARY_POSE_STREAM)
+      .timestamp(pose.timestamp)
+      .mapOrigin(pose.longitude, pose.latitude, pose.altitude)
+      .orientation(pose.roll, pose.pitch, pose.yaw);
 
     // This is an example of using the XVIZBuilder to convert your data
     // into XVIZ.
     //
     // The fluent-API makes this construction self-documenting.
     xvizBuilder
-      .stream(this.VEHICLE_VELOCITY)
+      .timeSeries(this.VEHICLE_VELOCITY)
       .timestamp(velocity.timestamp)
-      .value(velocity['velocity-forward'])
+      .value(velocity['velocity-forward']);
 
-      .stream(this.VEHICLE_ACCELERATION)
+    xvizBuilder
+      .timeSeries(this.VEHICLE_ACCELERATION)
       .timestamp(acceleration.timestamp)
       .value(acceleration['acceleration-forward']);
-
-    const endFrame = Math.min(frameNumber + MOTION_PLANNING_STEPS, this.poses.length);
 
     const poseTrajectory = _getPoseTrajectory({
       poses: this.poses,
       startFrame: frameNumber,
-      endFrame
+      endFrame: Math.min(frameNumber + MOTION_PLANNING_STEPS, this.poses.length)
     });
 
-    xvizBuilder.stream(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);
+    xvizBuilder.primitive(this.VEHICLE_TRAJECTORY).polyline(poseTrajectory);
   }
 
   getMetadata(xvizMetaBuilder) {
@@ -74,8 +78,8 @@ export default class GPSConverter extends BaseConverter {
     // This helps validate data consistency and has automatic
     // behavior tied to the viewer.
     const xb = xvizMetaBuilder;
-    xb.stream('vehicle-pose')
-      .category('vehicle-pose')
+    xb.stream(PRIMARY_POSE_STREAM)
+      .category('pose')
 
       .stream(this.VEHICLE_ACCELERATION)
       .category('time_series')
@@ -93,10 +97,10 @@ export default class GPSConverter extends BaseConverter {
 
       // This styling information is applied to *all* objects for this stream.
       // It is possible to apply inline styling on individual objects.
-      .styleClassDefault({
-        strokeColor: '#57AD57AA',
-        strokeWidth: 1.4,
-        strokeWidthMinPixels: 1
+      .streamStyle({
+        stroke_color: '#57AD57AA',
+        stroke_width: 1.4,
+        stroke_width_min_pixels: 1
       });
   }
 
@@ -138,7 +142,7 @@ export default class GPSConverter extends BaseConverter {
     const resMap = {};
 
     resMap.pose = {
-      time: timestamp,
+      timestamp,
       latitude: Number(lat),
       longitude: Number(lon),
       altitude: Number(alt),

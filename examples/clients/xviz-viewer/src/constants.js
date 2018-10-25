@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 export const MAP_STYLE = 'https://d3dt5tsgfu6lcf.cloudfront.net/style/tools/web?mode=light';
@@ -19,5 +20,5 @@ export const SETTINGS = {
 };
 
 export const XVIZ_STYLE = {
-  '/tracklets/objects': [{class: 'selected', fillColor: '#ff8000aa'}]
+  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
 };

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {CompositeLayer} from '@deck.gl/core';
 import {
   PointCloudLayer,
@@ -35,22 +36,22 @@ const XVIZ_TO_LAYER_TYPE = {
 const STYLE_TO_LAYER_PROP = {
   scatterplot: {
     opacity: 'opacity',
-    radiusMinPixels: 'radiusMinPixels',
-    radiusMaxPixels: 'radiusMaxPixels',
+    radius_min_pixels: 'radiusMinPixels',
+    radius_max_pixels: 'radiusMaxPixels',
     radius: 'getRadius',
-    fillColor: 'getColor'
+    fill_color: 'getColor'
   },
   pointcloud: {
     opacity: 'opacity',
-    radiusPixels: 'radiusPixels',
-    fillColor: 'getColor'
+    radius_pixels: 'radiusPixels',
+    fill_color: 'getColor'
   },
   path: {
     opacity: 'opacity',
-    strokeWidthMinPixels: 'widthMinPixels',
-    strokeWidthMaxPixels: 'widthMaxPixels',
-    strokeColor: 'getColor',
-    strokeWidth: 'getWidth'
+    stroke_width_min_pixels: 'widthMinPixels',
+    stroke_width_max_pixels: 'widthMaxPixels',
+    stroke_color: 'getColor',
+    stroke_width: 'getWidth'
   },
   polygon: {
     opacity: 'opacity',
@@ -58,18 +59,18 @@ const STYLE_TO_LAYER_PROP = {
     filled: 'filled',
     extruded: 'extruded',
     wireframe: 'wireframe',
-    strokeColor: 'getLineColor',
-    strokeWidth: 'getLineWidth',
-    fillColor: 'getFillColor',
+    stroke_color: 'getLineColor',
+    stroke_width: 'getLineWidth',
+    fill_color: 'getFillColor',
     height: 'getElevation'
   },
   text: {
     opacity: 'opacity',
-    fillColor: 'getColor',
+    fill_color: 'getColor',
     size: 'getSize',
     angle: 'getAngle',
-    textAnchor: 'getTextAnchor',
-    alignmentBaseline: 'getAlignmentBaseline'
+    text_anchor: 'getTextAnchor',
+    alignment_baseline: 'getAlignmentBaseline'
   }
 };
 
@@ -79,7 +80,9 @@ function ensureFinite(value, fallback) {
   return Number.isFinite(value) ? value : fallback;
 }
 
-const getInlineProperty = (context, propertyName, objectState) => objectState[propertyName];
+// Access V1 and V2 style properties
+const getInlineProperty = (context, propertyName, objectState) =>
+  objectState[propertyName] || (objectState.style && objectState.style[propertyName]);
 const getStylesheetProperty = (context, propertyName, objectState) =>
   context.style.getProperty(propertyName, objectState);
 
@@ -102,8 +105,8 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   // differs from current OCS colors.  In XVIZ v2 we should be aligned.
   if (context.useSemanticColor) {
     switch (propertyName) {
-      case 'strokeColor':
-      case 'fillColor':
+      case 'stroke_color':
+      case 'fill_color':
         objectState = XvizObject.get(f.id) || f;
         break;
 
@@ -118,11 +121,11 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   let propertyValidation = null;
 
   switch (propertyName) {
-    case 'strokeColor':
-    case 'fillColor':
+    case 'stroke_color':
+    case 'fill_color':
       altPropertyName = 'color';
       break;
-    case 'strokeWidth':
+    case 'stroke_width':
       altPropertyName = 'thickness';
       propertyValidation = ensureFinite;
       break;

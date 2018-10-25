@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import fs from 'fs';
 import path from 'path';
 import {
@@ -68,19 +69,21 @@ export default class TrackletsConverter {
       // allowing for the *style* information to be shared across
       // categories of objects.
       xvizBuilder
-        .stream(this.TRACKLETS)
+        .primitive(this.TRACKLETS)
         .polygon(tracklet.vertices)
         .classes([tracklet.objectType])
         .style({
           height: tracklet.height
         })
-        .id(tracklet.id)
+        .id(tracklet.id);
 
-        .stream(this.TRACKLETS_TRACKING_POINT)
+      xvizBuilder
+        .primitive(this.TRACKLETS_TRACKING_POINT)
         .circle([tracklet.x, tracklet.y, tracklet.z])
-        .id(tracklet.id)
+        .id(tracklet.id);
 
-        .stream(this.TRACKLETS_LABEL)
+      xvizBuilder
+        .primitive(this.TRACKLETS_LABEL)
         // float above the object
         .position([tracklet.x, tracklet.y, tracklet.z + 2])
         .text(tracklet.id.slice(24));
@@ -98,7 +101,7 @@ export default class TrackletsConverter {
           endFrame: Math.min(frameNumber + MOTION_PLANNING_STEPS, object.lastFrame, this.frameLimit)
         });
 
-        xvizBuilder.stream(this.TRACKLETS_TRAJECTORY).polyline(objectTrajectory);
+        xvizBuilder.primitive(this.TRACKLETS_TRAJECTORY).polyline(objectTrajectory);
       });
   }
 
@@ -107,58 +110,58 @@ export default class TrackletsConverter {
     xb.stream(this.TRACKLETS)
       .category('primitive')
       .type('polygon')
-      .styleClassDefault({
+      .streamStyle({
         extruded: true,
         wireframe: true,
-        fillColor: '#00000080'
+        fill_color: '#00000080'
       })
       .styleClass('Car', {
-        fillColor: '#7DDDD780',
-        strokeColor: '#7DDDD7'
+        fill_color: '#7DDDD780',
+        stroke_color: '#7DDDD7'
       })
       .styleClass('Cyclist', {
-        fillColor: '#DA70BF80',
-        strokeColor: '#DA70BF'
+        fill_color: '#DA70BF80',
+        stroke_color: '#DA70BF'
       })
       .styleClass('Pedestrian', {
-        fillColor: '#FEC56480',
-        strokeColor: '#FEC564'
+        fill_color: '#FEC56480',
+        stroke_color: '#FEC564'
       })
       .styleClass('Van', {
-        fillColor: '#267E6380',
-        strokeColor: '#267E63'
+        fill_color: '#267E6380',
+        stroke_color: '#267E63'
       })
       .styleClass('Unknown', {
-        fillColor: '#D6A00080',
-        strokeColor: '#D6A000'
+        fill_color: '#D6A00080',
+        stroke_color: '#D6A000'
       })
       .pose(this.FIXTURE_TRANSFORM_POSE)
 
       .stream(this.TRACKLETS_TRACKING_POINT)
       .category('primitive')
       .type('circle')
-      .styleClassDefault({
+      .streamStyle({
         radius: 0.2,
-        fillColor: '#FFFF00'
+        fill_color: '#FFFF00'
       })
       .pose(this.FIXTURE_TRANSFORM_POSE)
 
       .stream(this.TRACKLETS_LABEL)
       .category('primitive')
       .type('text')
-      .styleClassDefault({
+      .streamStyle({
         size: 18,
-        fillColor: '#0040E0'
+        fill_color: '#0040E0'
       })
       .pose(this.FIXTURE_TRANSFORM_POSE)
 
       .stream(this.TRACKLETS_TRAJECTORY)
       .category('primitive')
       .type('polyline')
-      .styleClassDefault({
-        strokeColor: '#FEC557',
-        strokeWidth: 0.3,
-        strokeWidthMinPixels: 1
+      .streamStyle({
+        stroke_color: '#FEC557',
+        stroke_width: 0.3,
+        stroke_width_min_pixels: 1
       })
       .pose(this.FIXTURE_TRANSFORM_POSE);
   }

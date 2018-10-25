@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import uuid from 'uuid/v4';
 
 import BaseConverter from './base-converter';
@@ -31,7 +32,7 @@ export default class LidarConverter extends BaseConverter {
     const temporaryObject = {vertices: lidarData.positions};
 
     xvizBuilder
-      .stream(this.LIDAR_POINTS)
+      .primitive(this.LIDAR_POINTS)
       .points(temporaryObject.vertices)
       .id(uuid())
       .style({
@@ -44,9 +45,9 @@ export default class LidarConverter extends BaseConverter {
     xb.stream(this.LIDAR_POINTS)
       .category('primitive')
       .type('point')
-      .styleClassDefault({
-        fillColor: '#00a',
-        radiusPixels: 2
+      .streamStyle({
+        fill_color: '#00a',
+        radius_pixels: 2
       })
       // laser scanner relative to GPS position
       // http://www.cvlibs.net/datasets/kitti/setup.php

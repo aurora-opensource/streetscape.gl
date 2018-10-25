@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import test from 'tape';
 
 import {mergeXvizStyles} from 'streetscape.gl/utils/style';
@@ -6,14 +7,18 @@ test('style#mergeXvizStyles precedence order', t => {
   const style1 = {
     '/foo': [
       {
-        class: 'one',
-        color: '#111111'
+        name: 'one',
+        style: {
+          fill_color: '#111111'
+        }
       }
     ],
     '/bar': [
       {
-        class: 'two',
-        color: '#222222'
+        name: 'two',
+        style: {
+          fill_color: '#222222'
+        }
       }
     ]
   };
@@ -21,23 +26,29 @@ test('style#mergeXvizStyles precedence order', t => {
   const style2 = {
     '/foo': [
       {
-        class: 'one',
-        color: '#333333',
-        fill: true
+        name: 'one',
+        style: {
+          fill_color: '#333333',
+          fill: true
+        }
       }
     ],
     '/bar': [
       {
-        class: 'two',
-        color: '#444444',
-        fill: true
+        name: 'two',
+        style: {
+          fill_color: '#444444',
+          fill: true
+        }
       }
     ],
     '/baz': [
       {
-        class: 'three',
-        color: '#555555',
-        fill: true
+        name: 'three',
+        style: {
+          fill_color: '#555555',
+          fill: true
+        }
       }
     ]
   };
@@ -51,31 +62,41 @@ test('style#mergeXvizStyles precedence order', t => {
   const expected = {
     '/foo': [
       {
-        class: 'one',
-        color: '#111111'
+        name: 'one',
+        style: {
+          fill_color: '#111111'
+        }
       },
       {
-        class: 'one',
-        color: '#333333',
-        fill: true
+        name: 'one',
+        style: {
+          fill_color: '#333333',
+          fill: true
+        }
       }
     ],
     '/bar': [
       {
-        class: 'two',
-        color: '#222222'
+        name: 'two',
+        style: {
+          fill_color: '#222222'
+        }
       },
       {
-        class: 'two',
-        color: '#444444',
-        fill: true
+        name: 'two',
+        style: {
+          fill_color: '#444444',
+          fill: true
+        }
       }
     ],
     '/baz': [
       {
-        class: 'three',
-        color: '#555555',
-        fill: true
+        name: 'three',
+        style: {
+          fill_color: '#555555',
+          fill: true
+        }
       }
     ]
   };
