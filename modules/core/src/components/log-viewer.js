@@ -357,6 +357,7 @@ class Core3DViewer extends PureComponent {
       frame,
       metadata,
       renderObjectLabel,
+      objectLabelColor,
       getTransformMatrix
     } = this.props;
     const objectSelection = (this.props.objectStates || this.state.objectStates).selected;
@@ -375,6 +376,7 @@ class Core3DViewer extends PureComponent {
         onViewStateChange={this._onViewStateChange}
       >
         <StaticMap
+          reuseMap={true}
           mapboxApiAccessToken={mapboxApiAccessToken}
           mapStyle={mapStyle}
           visible={!viewMode.firstPerson}
@@ -385,6 +387,7 @@ class Core3DViewer extends PureComponent {
           frame={frame}
           metadata={metadata}
           renderObjectLabel={renderObjectLabel}
+          objectLabelColor={objectLabelColor}
           getTransformMatrix={getTransformMatrix}
         />
       </DeckGL>

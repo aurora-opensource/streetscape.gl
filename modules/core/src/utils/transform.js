@@ -20,6 +20,7 @@
 
 import {COORDINATE_SYSTEM} from 'deck.gl';
 import {_Pose as Pose, Matrix4} from 'math.gl';
+import {addMetersToLngLat} from 'viewport-mercator-project';
 
 import {COORDINATES} from '../constants';
 
@@ -68,18 +69,14 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
   };
 }
 
-export function positionToLngLat(
-  [x, y, z],
-  viewport,
-  {coordinateSystem, coordinateOrigin, modelMatrix}
-) {
+export function positionToLngLat([x, y, z], {coordinateSystem, coordinateOrigin, modelMatrix}) {
   if (modelMatrix) {
     [x, y, z] = new Matrix4(modelMatrix).transformVector([x, y, z, 1]);
   }
 
   switch (coordinateSystem) {
     case COORDINATE_SYSTEM.METER_OFFSETS:
-      return viewport.addMetersToLngLat(coordinateOrigin, [x, y, z]);
+      return addMetersToLngLat(coordinateOrigin, [x, y, z]);
 
     case COORDINATE_SYSTEM.LNGLAT:
     default:
