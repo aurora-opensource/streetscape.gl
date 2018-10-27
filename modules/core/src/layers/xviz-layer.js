@@ -80,7 +80,7 @@ const EMPTY_OBJECT = {};
 const getInlineProperty = (context, propertyName, objectState) => {
   let inlineProp = objectState[propertyName];
   if (inlineProp === undefined) {
-    inlineProp = objectState.style && objectState.style[propertyName];
+    inlineProp = objectState.base && objectState.base.style && objectState.base.style[propertyName];
   }
   return inlineProp === undefined ? null : inlineProp;
 };
