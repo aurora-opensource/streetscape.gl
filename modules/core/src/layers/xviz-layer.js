@@ -96,13 +96,14 @@ const STYLE_TO_LAYER_PROP = {
 
 const EMPTY_OBJECT = {};
 
-function ensureFinite(value, fallback) {
-  return Number.isFinite(value) ? value : fallback;
-}
-
 // Access V1 and V2 style properties
-const getInlineProperty = (context, propertyName, objectState) =>
-  objectState[propertyName] || (objectState.style && objectState.style[propertyName]);
+const getInlineProperty = (context, propertyName, objectState) => {
+  let inlineProp = objectState[propertyName];
+  if (inlineProp === undefined) {
+    inlineProp = objectState.base && objectState.base.style && objectState.base.style[propertyName];
+  }
+  return inlineProp === undefined ? null : inlineProp;
+};
 const getStylesheetProperty = (context, propertyName, objectState) =>
   context.style.getProperty(propertyName, objectState);
 
@@ -138,7 +139,6 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   // Handle XVIZ v1 style property name mismatches and
   // setup validation function based on property name.
   let altPropertyName = null;
-  let propertyValidation = null;
 
   switch (propertyName) {
     case 'stroke_color':
@@ -147,37 +147,37 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
       break;
     case 'stroke_width':
       altPropertyName = 'thickness';
-      propertyValidation = ensureFinite;
       break;
     case 'radius':
-      propertyValidation = ensureFinite;
       break;
     default:
       break;
   }
 
   // 1a. Property from stylesheet
-  // 1b. Alt property from stylesheet
-  // 2a. Property from inline style
-  // 2b. Alt property from inline style
-  // 3. Property from default style
-  const defaultValue = context.style.getPropertyDefault(propertyName);
+  let property = getStylesheetProperty(context, propertyName, objectState);
 
-  const propertyAccessors = [getStylesheetProperty, getInlineProperty];
-  if (context.disableInlineStyling) {
-    propertyAccessors.splice(1, 1);
+  // 1b. Alt property from stylesheet
+  if (property === null && altPropertyName) {
+    property = getStylesheetProperty(context, altPropertyName, objectState);
   }
 
-  for (const fetchProperty of propertyAccessors) {
-    for (const propName of [propertyName, altPropertyName].filter(Boolean)) {
-      const property = fetchProperty(context, propName, objectState);
-      if (property !== null && property !== undefined) {
-        return propertyValidation ? propertyValidation(property, defaultValue) : property;
-      }
+  if (property === null && !context.disableInlineStyling) {
+    // 2a. Property from inline style
+    property = getInlineProperty(context, propertyName, objectState);
+
+    // 2b. Alt property from inline style
+    if (property === null && altPropertyName) {
+      property = getInlineProperty(context, altPropertyName, objectState);
     }
   }
 
-  return defaultValue;
+  // 3. Property from default style
+  if (property === null) {
+    property = context.style.getPropertyDefault(propertyName);
+  }
+
+  return property;
 }
 /* eslint-enable complexity */
 
