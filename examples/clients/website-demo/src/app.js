@@ -5,16 +5,10 @@ import 'xviz-config';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {
-  XVIZFileLoader,
-  LogViewer,
-  PlaybackControl,
-  // XvizPanel,
-  // VideoPanel,
-  VIEW_MODES
-} from 'streetscape.gl';
+import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODES} from 'streetscape.gl';
 
 import ControlPanel from './control-panel';
+import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
@@ -55,7 +49,7 @@ class Example extends PureComponent {
         <div>
           <b>id: {id.slice(-12)}</b>
         </div>
-        <div>{object.classes.join(' ')}</div>
+        <div>{object.base.classes.join(' ')}</div>
       </div>
     );
   };
@@ -90,6 +84,8 @@ class Example extends PureComponent {
         <ControlPanel log={log} />
 
         <Toolbar onChange={this._onSettingsChange} />
+
+        <CameraPanel log={log} />
       </div>
     );
   }
