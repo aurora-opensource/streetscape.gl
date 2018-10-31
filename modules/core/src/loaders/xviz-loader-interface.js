@@ -172,10 +172,11 @@ export default class XVIZLoaderInterface {
   );
 
   getTimestamps = createSelector(this, this.getStreams, streams => {
-    const {PRIMARY_POSE_STREAM, version} = getXvizConfig();
+    const {PRIMARY_POSE_STREAM} = getXvizConfig();
     const vehiclePoses = streams && streams[PRIMARY_POSE_STREAM];
     if (vehiclePoses) {
-      return vehiclePoses.map(pose => (version === 2 ? pose.timestamp : pose.time));
+      // TODO(twojtasz): normalize 'time' vs 'timestamp' in parsing
+      return vehiclePoses.map(pose => pose.time || pose.timestamp);
     }
     return null;
   });
