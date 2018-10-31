@@ -29,6 +29,10 @@ function getParentValue(children, values) {
 
 // Created 1-level nested form structure
 export function createFormData(metadata) {
+  if (!metadata) {
+    return null;
+  }
+
   const root = {};
 
   for (const streamName in metadata) {
@@ -54,6 +58,10 @@ export function createFormData(metadata) {
 }
 
 export function settingsToFormValues(data, settings) {
+  if (!data || !settings) {
+    return null;
+  }
+
   const values = {};
   for (const key in data) {
     const {children} = data[key];
@@ -108,10 +116,13 @@ class StreamSettingsPanel extends PureComponent {
     onSettingsChange: () => {}
   };
 
-  state = {
-    data: null,
-    values: null
-  };
+  constructor(props) {
+    super(props);
+
+    const data = createFormData(props.streamMetadata);
+    const values = settingsToFormValues(data, props.streamSettings);
+    this.state = {data, values};
+  }
 
   componentWillReceiveProps(nextProps) {
     let {data, values} = this.state;

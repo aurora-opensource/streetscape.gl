@@ -25,7 +25,7 @@ export default function connectToLog({getLogState, Component}) {
     }
 
     componentWillUnmount() {
-      this.props.log.subscribe(this._update);
+      this.props.log.unsubscribe(this._update);
     }
 
     _update = logVersion => {
