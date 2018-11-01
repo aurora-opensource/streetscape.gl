@@ -1,3 +1,7 @@
 dist/** -diff
 dist-demo/** -diff
 yarn.lock -diff
+*.eot binary
+*.svg binary
+*.ttf binary
+*.eot binary
