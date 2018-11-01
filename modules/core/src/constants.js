@@ -18,14 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-export const COORDINATES = {
-  GEOGRAPHIC: 'geographic',
-  VEHICLE_RELATIVE: 'vehicle_relative',
-  IDENTITY: 'identity',
-  DYNAMIC: 'dynamic'
+export const COORDINATE = {
+  GEOGRAPHIC: 'GEOGRAPHIC',
+  VEHICLE_RELATIVE: 'VEHICLE_RELATIVE',
+  IDENTITY: 'IDENTITY',
+  DYNAMIC: 'DYNAMIC'
 };
 
-export const VIEW_MODES = {
+export const VIEW_MODE = {
   TOP_DOWN: {
     name: 'map',
     initialProps: {

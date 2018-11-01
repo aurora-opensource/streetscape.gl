@@ -31,7 +31,7 @@ import {XvizStyleParser} from '@xviz/parser';
 import {loadOBJMesh} from '../loaders/obj-loader';
 import XvizLayer from '../layers/xviz-layer';
 
-import {VIEW_MODES} from '../constants';
+import {VIEW_MODE} from '../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
 import {resolveCoordinateTransform} from '../utils/transform';
 import {mergeXvizStyles} from '../utils/style';
@@ -90,7 +90,7 @@ class Core3DViewer extends PureComponent {
 
   static defaultProps = {
     car: DEFAULT_CAR,
-    viewMode: VIEW_MODES.PERSPECTIVE,
+    viewMode: VIEW_MODE.PERSPECTIVE,
     xvizStyles: {},
     customLayers: [],
     onViewStateChange: () => {},

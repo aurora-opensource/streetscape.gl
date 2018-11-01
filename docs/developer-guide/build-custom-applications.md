@@ -11,6 +11,6 @@ streetscape.gl builds on reusable React components from the [monochrome](https:/
 The 3D world view can be included as a component in a bigger application through the instantiation of a single React component.
 
 ```jsx
-<LogViewer log={log} viewMode={VIEW_MODES.TOP_DOWN} />
+<LogViewer log={log} viewMode={VIEW_MODE.TOP_DOWN} />
 ```
 

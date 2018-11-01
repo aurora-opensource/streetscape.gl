@@ -22,7 +22,7 @@ import {COORDINATE_SYSTEM} from 'deck.gl';
 import {_Pose as Pose, Matrix4} from 'math.gl';
 import {addMetersToLngLat} from 'viewport-mercator-project';
 
-import {COORDINATES} from '../constants';
+import {COORDINATE} from '../constants';
 
 export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransformMatrix) {
   const {origin, transforms = {}, vehicleRelativeTransform} = frame;
@@ -33,14 +33,14 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
   let streamTransform = transform;
 
   switch (coordinate) {
-    case COORDINATES.GEOGRAPHIC:
+    case COORDINATE.GEOGRAPHIC:
       coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
       break;
 
-    case COORDINATES.IDENTITY:
+    case COORDINATE.IDENTITY:
       break;
 
-    case COORDINATES.DYNAMIC:
+    case COORDINATE.DYNAMIC:
       // cache calculated transform matrix for each frame
       transforms[transform] = transforms[transform] || getTransformMatrix(transform, frame);
       modelMatrix = transforms[transform];
@@ -48,6 +48,7 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
       streamTransform = null;
       break;
 
+    case COORDINATE.VEHICLE_RELATIVE:
     default:
       modelMatrix = vehicleRelativeTransform;
   }
