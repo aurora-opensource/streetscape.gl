@@ -11,7 +11,7 @@ import {
   PlaybackControl,
   // XvizPanel,
   // VideoPanel,
-  VIEW_MODES
+  VIEW_MODE
 } from 'streetscape.gl';
 
 import ControlPanel from './control-panel';
@@ -71,7 +71,7 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           xvizStyles={XVIZ_STYLE}
-          viewMode={VIEW_MODES[settings.viewMode]}
+          viewMode={VIEW_MODE[settings.viewMode]}
           viewOffset={settings.viewOffset}
           onViewStateChange={this._onViewStateChange}
           renderObjectLabel={this._renderObjectLabel}

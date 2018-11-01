@@ -6,9 +6,9 @@
 Renders a 3D view of a XVIZ log.
 
 ```jsx
-import {LogViewer, VIEW_MODES} from 'streetscape.gl';
+import {LogViewer, VIEW_MODE} from 'streetscape.gl';
 
-<LogViewer log={log} viewMode={VIEW_MODES.TOP_DOWN} />
+<LogViewer log={log} viewMode={VIEW_MODE.TOP_DOWN} />
 
 ```
 
@@ -92,15 +92,15 @@ See XVIZ's stream metadata spec for details.
 
 ##### `viewMode` (Enum, optional)
 
-A value of the `VIEW_MODES` enum.
+A value of the `VIEW_MODE` enum.
 
 ```
-import {VIEW_MODES} from 'streetscape.gl';
+import {VIEW_MODE} from 'streetscape.gl';
 ```
 
-- `VIEW_MODES.TOP_DOWN` - orthographic view at the car from the top.
-- `VIEW_MODES.PERSPECTIVE` - perspective view at the car. Users can freely pan and rotate.
-- `VIEW_MODES.DRIVER` - perspective view from the car.
+- `VIEW_MODE.TOP_DOWN` - orthographic view at the car from the top.
+- `VIEW_MODE.PERSPECTIVE` - perspective view at the car. Users can freely pan and rotate.
+- `VIEW_MODE.DRIVER` - perspective view from the car.
 
 ##### `viewState` (Object, optional)
 
@@ -117,11 +117,11 @@ To use `LogViewer` as a stateless component:
 
 
 ```jsx
-import {LogViewer, VIEW_MODES} from 'streetscape.gl';
+import {LogViewer, VIEW_MODE} from 'streetscape.gl';
 
 <LogViewer
     log={log}
-    viewMode={VIEW_MODES.TOP_DOWN}
+    viewMode={VIEW_MODE.TOP_DOWN}
     viewState={this.state.viewState}
     viewOffset={this.state.viewOffset}
     onViewStateChange={({viewState, viewOffset}) => this.setState({viewState, viewOffset})}
