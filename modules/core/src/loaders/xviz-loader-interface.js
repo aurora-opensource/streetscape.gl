@@ -68,6 +68,7 @@ export default class XVIZLoaderInterface {
   set(key, value) {
     if (this.state[key] !== value) {
       this.state[key] = value;
+      this._version++;
       if (!this._updateTimer) {
         /* global requestAnimationFrame */
         this._updateTimer = requestAnimationFrame(this._update);
@@ -197,7 +198,6 @@ export default class XVIZLoaderInterface {
   /* Private actions */
   _update = () => {
     this._updateTimer = null;
-    this._version++;
     this.listeners.forEach(o => o(this._version));
   };
 
