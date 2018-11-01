@@ -75,7 +75,7 @@ export function getViewStates({viewState, trackedPosition, viewMode, offset}) {
 
   if (firstPerson) {
     if (trackedPosition) {
-      const bearing = 90 - trackedPosition.bearing;
+      const bearing = trackedPosition.bearing;
       viewState = {
         ...viewState,
         ...firstPerson,
