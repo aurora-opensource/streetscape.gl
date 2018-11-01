@@ -19,47 +19,31 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
+import {connectToLog} from 'streetscape.gl';
 
-import XVIZLoaderInterface from '../loaders/xviz-loader-interface';
+class MetadataPanel extends PureComponent {
+  render() {
+    const {metadata} = this.props;
 
-export default function connectToLog({getLogState, Component}) {
-  class WrappedComponent extends PureComponent {
-    static propTypes = {
-      log: PropTypes.instanceOf(XVIZLoaderInterface).isRequired
-    };
-
-    state = {
-      logVersion: -1
-    };
-
-    componentDidMount() {
-      this.props.log.subscribe(this._update);
+    if (!metadata) {
+      return null;
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (this.props.log !== nextProps.log) {
-        this.props.log.unsubscribe(this._update);
-        nextProps.log.subscribe(this._update);
-      }
-    }
-
-    componentWillUnmount() {
-      this.props.log.unsubscribe(this._update);
-    }
-
-    _update = logVersion => {
-      this.setState({logVersion});
-    };
-
-    render() {
-      const {log, ...otherProps} = this.props;
-
-      const logState = getLogState(log);
-
-      return <Component {...otherProps} {...logState} log={log} />;
-    }
+    return (
+      <div>
+        <h5>Version</h5>
+        <p>{metadata.version}</p>
+        <h5>Log Start Time</h5>
+        <p>{new Date(metadata.start_time).toJSON()}</p>
+        <h5>Log End Time</h5>
+        <p>{new Date(metadata.end_time).toJSON()}</p>
+      </div>
+    );
   }
-
-  return WrappedComponent;
 }
+
+const getLogState = log => ({
+  metadata: log.getMetadata()
+});
+
+export default connectToLog({getLogState, Component: MetadataPanel});

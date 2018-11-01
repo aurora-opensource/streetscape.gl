@@ -342,7 +342,7 @@ class Core3DViewer extends PureComponent {
       ? {
           longitude: frame.trackPosition[0],
           latitude: frame.trackPosition[1],
-          bearing: frame.heading
+          bearing: 90 - frame.heading
         }
       : null;
 
