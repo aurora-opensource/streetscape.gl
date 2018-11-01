@@ -1,17 +1,17 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('assets/fonts/streetscape.eot?6px3w1');
-  src:  url('assets/fonts/streetscape.eot?6px3w1#iefix') format('embedded-opentype'),
-    url('assets/fonts/streetscape.ttf?6px3w1') format('truetype'),
-    url('assets/fonts/streetscape.woff?6px3w1') format('woff'),
-    url('assets/fonts/streetscape.svg?6px3w1#icomoon') format('svg');
+  font-family: 'streetscape';
+  src:  url('assets/fonts/streetscape.eot?pufm17');
+  src:  url('assets/fonts/streetscape.eot?pufm17#iefix') format('embedded-opentype'),
+    url('assets/fonts/streetscape.ttf?pufm17') format('truetype'),
+    url('assets/fonts/streetscape.woff?pufm17') format('woff'),
+    url('assets/fonts/streetscape.svg?pufm17#streetscape') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: 'streetscape' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
