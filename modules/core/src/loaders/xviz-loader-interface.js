@@ -14,6 +14,7 @@ export default class XVIZLoaderInterface {
     this.listeners = [];
     this.state = {};
     this._version = 0;
+    this._updateTimer = null;
     this.timestamp = null;
   }
 
@@ -68,7 +69,10 @@ export default class XVIZLoaderInterface {
     if (this.state[key] !== value) {
       this.state[key] = value;
       this._version++;
-      this.listeners.forEach(o => o(this._version));
+      if (!this._updateTimer) {
+        /* global requestAnimationFrame */
+        this._updateTimer = requestAnimationFrame(this._update);
+      }
     }
   }
 
@@ -192,6 +196,11 @@ export default class XVIZLoaderInterface {
   );
 
   /* Private actions */
+  _update = () => {
+    this._updateTimer = null;
+    this.listeners.forEach(o => o(this._version));
+  };
+
   _setMetadata(metadata) {
     this.set('metadata', metadata);
     this.set('streamSettings', metadata.streams);
