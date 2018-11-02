@@ -20,7 +20,11 @@ const CONFIG = {
     app: resolve('./src/app.js')
   },
   devServer: {
-    contentBase: [resolve(__dirname, '../../../data/generated'), resolve(__dirname)]
+    contentBase: [
+      resolve(__dirname, '../../../data/generated'),
+      resolve(__dirname, '../../../website'),
+      resolve(__dirname)
+    ]
   },
   devtool: 'source-map',
   output: {

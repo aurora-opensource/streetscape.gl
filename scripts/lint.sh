@@ -19,7 +19,7 @@ case $MODE in
           if [ -e $f ]; then
             npx prettier --write $f --loglevel warn
             eslint $f
-           fi
+          fi
       done
     fi
 
