@@ -14,13 +14,15 @@ const BABEL_CONFIG = {
 
 const appName = process.env.appName || 'kitti';
 
+const websiteDir = resolve(__dirname, '../../../website');
+
 const CONFIG = {
   mode: 'development',
   entry: {
     app: resolve('./src/app.js')
   },
   devServer: {
-    contentBase: [resolve(__dirname, '../../../data/generated'), resolve(__dirname)]
+    contentBase: [resolve(__dirname, '../../../data/generated'), websiteDir, resolve(__dirname)]
   },
   devtool: 'source-map',
   output: {
@@ -48,26 +50,12 @@ const CONFIG = {
             loader: 'style-loader'
           },
           {
-            loader: 'css-loader',
-            options: {
-              includePaths: ['website/styles']
-            }
+            loader: 'css-loader'
           },
           {
             loader: 'sass-loader',
             options: {
               includePaths: ['./node_modules', '.']
-            }
-          }
-        ]
-      },
-      {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              includePaths: ['website/assets']
             }
           }
         ]

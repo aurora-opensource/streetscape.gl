@@ -25,7 +25,6 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^0.28.11",
-    "file-loader": "^2.0.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "source-map-loader": "^0.2.3",

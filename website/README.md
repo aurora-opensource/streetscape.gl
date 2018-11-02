@@ -9,40 +9,28 @@ Landing page for Streetscape.gl
 
 1. Include the css and font loader in webpack config.
 
-
 Check `examples/website-demo/webpack.config.js`. 
 
 ```js
-// for css
-      {
-        test: /\.s?css$/,
-        use: [
-          {
-            loader: 'css-loader',
-            options: {
-              includePaths: ['website/styles']
-            }
-          },
-          ...
-        ]
-      }
-      
-// for fonts      
-      {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              includePaths: ['website/assets']
-          }
-          },
-          ...
-        ]
-      }
+  devServer: {
+    contentBase: [
+      resolve(__dirname, '../../../data/generated'),
+      resolve(__dirname, '../../../website'), // path to website dir
+      resolve(__dirname)
+    ]
+  }
 ```
 
-2. Access the icon by classname, check `styles/style.css` for supported icons.
+2. Add the style file in `index.html`
+
+```js
+  <head>
+    ...
+    <link rel="stylesheet" href="styles/style.css">
+  </head>
+```
+
+3. Access the icon by classname, check `styles/style.css` for supported icons.
 
 ```js
 // react jsx
