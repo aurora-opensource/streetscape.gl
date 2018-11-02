@@ -19,13 +19,12 @@
 // THE SOFTWARE.
 
 /* global document */
-/* eslint-disable no-console */
 import 'xviz-config';
 
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODES} from 'streetscape.gl';
+import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
@@ -36,6 +35,7 @@ import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 import './stylesheets/main.scss';
 
 class Example extends PureComponent {
+  /* eslint-disable no-console */
   state = {
     log: new XVIZFileLoader({
       numberOfFrames: 155,
@@ -48,6 +48,7 @@ class Example extends PureComponent {
       viewMode: 'PERSPECTIVE'
     }
   };
+  /* eslint-enable no-console */
 
   componentDidMount() {
     this.state.log.connect();
