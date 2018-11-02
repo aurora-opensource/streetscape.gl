@@ -24,20 +24,11 @@ export default class LidarConverter extends BaseConverter {
     const {data} = await this.loadFrame(frameNumber);
     const lidarData = loadLidarData(data);
 
-    // This encode/parse is a temporary workaround until we get fine-grain
-    // control of which streams should be packed in the binary.
-    // By doing this we are able to have the points converted to the appropriate
-    // TypedArray, and by unpacking them, they are in a JSON structure that
-    // works better with the rest of the conversion.
-    const temporaryObject = {vertices: lidarData.positions};
-
     xvizBuilder
       .primitive(this.LIDAR_POINTS)
-      .points(temporaryObject.vertices)
-      .id(uuid())
-      .style({
-        color: [0, 0, 0, 255]
-      });
+      .points(lidarData.positions)
+      .colors(lidarData.colors)
+      .id(uuid());
   }
 
   getMetadata(xvizMetaBuilder) {
