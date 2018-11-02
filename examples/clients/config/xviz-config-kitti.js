@@ -1,6 +1,7 @@
 import {setXvizSettings, setXvizConfig} from '@xviz/parser';
 
 export const XVIZ_SETTINGS = {
+  currentMajorVersion: 2,
   TIME_WINDOW: 400
 };
 
