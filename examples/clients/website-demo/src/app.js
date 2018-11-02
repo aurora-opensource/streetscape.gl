@@ -13,6 +13,7 @@ import Toolbar from './toolbar';
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
 import './stylesheets/main.scss';
+import 'website/styles/style.css';
 
 class Example extends PureComponent {
   /* eslint-disable no-console */

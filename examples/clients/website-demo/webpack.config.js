@@ -48,12 +48,26 @@ const CONFIG = {
             loader: 'style-loader'
           },
           {
-            loader: 'css-loader'
+            loader: 'css-loader',
+            options: {
+              includePaths: ['website/styles']
+            }
           },
           {
             loader: 'sass-loader',
             options: {
               includePaths: ['./node_modules', '.']
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              includePaths: ['website/assets']
             }
           }
         ]
@@ -68,6 +82,7 @@ const CONFIG = {
   },
   resolve: {
     alias: {
+      website: resolve(__dirname, '../../../website'),
       'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`),
       webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
     }

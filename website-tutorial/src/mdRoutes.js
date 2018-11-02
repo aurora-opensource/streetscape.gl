@@ -24,7 +24,7 @@ export default [
           },
           {
             name: 'FAQ',
-            markdown: require('../../docs/FAQ.md')
+            markdown: require('../../docs/faq.md')
           },
           {
             name: 'Develop/Contribute',

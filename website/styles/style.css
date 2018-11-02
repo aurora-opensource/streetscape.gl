@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'streetscape';
-  src:  url('assets/fonts/streetscape.eot?z9nfiq');
-  src:  url('assets/fonts/streetscape.eot?z9nfiq#iefix') format('embedded-opentype'),
-    url('assets/fonts/streetscape.ttf?z9nfiq') format('truetype'),
-    url('assets/fonts/streetscape.woff?z9nfiq') format('woff'),
-    url('assets/fonts/streetscape.svg?z9nfiq#streetscape') format('svg');
+  src:  url('../assets/fonts/streetscape.eot?pufm17');
+  src:  url('../assets/fonts/streetscape.eot?pufm17#iefix') format('embedded-opentype'),
+    url('../assets/fonts/streetscape.ttf?pufm17') format('truetype'),
+    url('../assets/fonts/streetscape.woff?pufm17') format('woff'),
+    url('../assets/fonts/streetscape.svg?pufm17#streetscape') format('svg');
   font-weight: normal;
   font-style: normal;
 }
