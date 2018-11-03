@@ -45,7 +45,7 @@ class XvizPanel extends PureComponent {
   render() {
     const {metadata, id, style} = this.props;
 
-    const data = metadata && metadata.declarativeUI && metadata.declarativeUI[id];
+    const data = metadata && metadata.ui_config && metadata.ui_config[id];
 
     return data ? (
       <div className="xviz-panel" style={style}>
