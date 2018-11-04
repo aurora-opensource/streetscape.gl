@@ -910,8 +910,9 @@
     long "^3.2.0"
 
 "@xviz/parser@./../xviz/modules/parser":
-  version "0.0.1"
+  version "0.1.0"
   dependencies:
+    base64-js "^1.3.0"
     color "^3.0.0"
     dotty "^0.0.2"
     math.gl "^2.0.0"
@@ -5130,9 +5131,9 @@ mjolnir.js@^1.0.0:
   dependencies:
     hammerjs "^2.0.8"
 
-mjolnir.js@^2.0.0-alpha.2:
-  version "2.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.0.0-alpha.2.tgz#bf1eaa457bbca254ef2a12afa761de6f1e84da33"
+mjolnir.js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.0.0.tgz#8475d2fb3b09780dbff122f245c6b3ddc46fc41e"
   dependencies:
     "@babel/runtime" "^7.0.0"
     hammerjs "^2.0.8"
@@ -6121,14 +6122,14 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
-react-map-gl@^4.0.0-beta.3:
-  version "4.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-4.0.0-beta.3.tgz#20f6b79cef79a6bcb991b1b30be714b3efb30275"
+react-map-gl@^4.0.0-beta.6:
+  version "4.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-4.0.0-beta.6.tgz#28326dbd89053fb84645b4cfc9ae18152dbd6a6f"
   dependencies:
     "@babel/runtime" "^7.0.0"
     mapbox-gl "~0.50.0"
     math.gl "^2.0.0"
-    mjolnir.js "^2.0.0-alpha.2"
+    mjolnir.js "^2.0.0"
     prop-types "^15.5.7"
     react-virtualized-auto-sizer "^1.0.2"
     viewport-mercator-project "^6.0.0"
