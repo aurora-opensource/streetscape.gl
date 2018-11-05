@@ -104,11 +104,8 @@ export class KittiConverter {
     xb.startTime(this.timestamps[0]).endTime(this.timestamps[this.timestamps.length - 1]);
 
     this.converters.forEach(converter => converter.getMetadata(xb));
+    xb.ui(getDeclarativeUI());
 
-    const metadata = xb.getMetadata();
-    // TODO(Xintong): use new MetadataBuilder api to set declarativeUI
-    metadata.declarativeUI = getDeclarativeUI();
-
-    return metadata;
+    return xb.getMetadata();
   }
 }

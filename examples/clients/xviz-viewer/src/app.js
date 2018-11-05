@@ -92,7 +92,7 @@ class Example extends PureComponent {
         <div id="control-panel">
           <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
           <hr />
-          <XvizPanel log={log} id="0" />
+          <XvizPanel log={log} id="Metrics" />
         </div>
         <div id="video-panel">
           <VideoPanel log={log} width={400} timeTolerance={100} />

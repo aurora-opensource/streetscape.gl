@@ -48,5 +48,5 @@ export function getDeclarativeUI() {
   panel.child(container);
   builder.child(panel);
 
-  return builder.getUI();
+  return builder;
 }
