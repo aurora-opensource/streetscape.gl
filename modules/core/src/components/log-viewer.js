@@ -287,7 +287,11 @@ class Core3DViewer extends PureComponent {
               instanceColors: stream.pointCloud.colors,
               instancePickingColors: stream.pointCloud.colors,
               radiusPixels: viewMode.firstPerson ? 4 : 1,
-              lightSettings: {}
+              lightSettings: {},
+
+              // Hack: draw point clouds before polygons to defeat depth test when rendering translucent objects
+              // This is not used by deck.gl, only used in this function to sort the layers
+              zIndex: 1
             });
           }
           return null;
