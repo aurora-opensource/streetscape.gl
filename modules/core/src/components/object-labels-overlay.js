@@ -23,8 +23,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import {getXvizConfig} from '@xviz/parser';
-import {experimental} from 'react-map-gl';
-const {MapContext} = experimental;
+import {_MapContext as MapContext} from 'react-map-gl';
 
 import PerspectivePopup from './perspective-popup';
 
