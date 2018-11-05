@@ -43,8 +43,37 @@ function zeroPaddedPrefix(frame_index) {
 }
 
 // Frame Data Utillities
-
+const TIMING_INDEX = 0;
 const START_INDEX = 1;
+
+// Return an array with the max timestamp for each frame file
+//
+// Input index file structure
+// {
+//   startTime, endTime, timing:[ [update_min_timestamp, update_max_timestamp], ...]
+// }
+function loadTimingIndex(data_directory) {
+  console.log('Checking for index file');
+  const timingName = getFrameName(TIMING_INDEX).find(filename => {
+    const filepath = path.join(data_directory, filename);
+    return fs.existsSync(filepath);
+  });
+
+  if (timingName) {
+    const filepath = path.join(data_directory, timingName);
+    const timingBuffer = getFrameData({path: filepath});
+    const timingData = JSON.parse(timingBuffer);
+
+    if (timingData && timingData.timing) {
+      // return just the max timestamp for each frame
+      return timingData.timing.map(x => x[1]);
+    }
+
+    console.log('Timing index file is missing the "timing" entry');
+  }
+
+  return null;
+}
 
 // Check for data files or tar.gz and extract as necessary
 function setupFrameData(data_directory) {
@@ -97,6 +126,7 @@ function getFrameData({path: filepath}) {
 }
 
 // Read all frame data ('*-frame.glb' files) from the `data_directory`.
+// return {metadata, frames}
 function loadFrames(data_directory) {
   const frames = [];
 
@@ -112,12 +142,13 @@ function loadFrames(data_directory) {
     }
   }
 
-  return frames;
+  return {metadata: frames[0], frames: frames.slice(1)};
 }
 
+// Load frame timestamps by opening every frame to extract
 function loadFrameTimings(frames) {
   let lastTime = 0;
-  return frames.map(frame => {
+  const timings = frames.map(frame => {
     const data = getFrameData(frame);
     let jsonFrame = null;
     if (data instanceof Buffer) {
@@ -135,6 +166,9 @@ function loadFrameTimings(frames) {
 
     return lastTime;
   });
+
+  // Remove metadata timing
+  return timings;
 }
 
 // Determine the actual index into frames when looping over data repeatedly
@@ -225,15 +259,14 @@ function connectionId() {
 
 // Connection State
 class ConnectionContext {
-  constructor(settings, frames, frameTiming) {
-    this.metadata = frames[0];
-    this.metadata_timing = frameTiming[0];
+  constructor(settings, metadata, frames, frameTiming) {
+    this.metadata = metadata;
 
     this.connectionId = connectionId();
 
     // Remove metadata so we only deal with data frames
-    this.frames = frames.slice(1);
-    this.frames_timing = frameTiming.slice(1);
+    this.frames = frames;
+    this.frames_timing = frameTiming;
 
     this.settings = settings;
     this.t_start_time = null;
@@ -469,10 +502,10 @@ class ConnectionContext {
 
 // Comms handling
 
-function setupWebSocketHandling(wss, settings, frames, frameTiming) {
+function setupWebSocketHandling(wss, settings, metadata, frames, frameTiming) {
   // Setups initial connection state
   wss.on('connection', ws => {
-    const context = new ConnectionContext(settings, frames, frameTiming);
+    const context = new ConnectionContext(settings, metadata, frames, frameTiming);
     context.onConnection(ws);
   });
 }
@@ -483,13 +516,24 @@ module.exports = function main(args) {
   console.log(`Loading frames from ${args.data_directory}`);
   const frames = loadFrames(args.data_directory);
 
-  if (frames.length === 0) {
+  if (frames.frames.length === 0) {
     console.error('No frames where loaded, exiting.');
     process.exit(1);
   }
 
-  const frameTiming = loadFrameTimings(frames);
-  console.log(`Loaded ${frames.length} frames`);
+  // Try to load from and timing index
+  let frameTiming = loadTimingIndex(args.data_directory);
+  if (!frameTiming) {
+    // else load manually
+    frameTiming = loadFrameTimings(frames.frames);
+  }
+
+  if (frameTiming.length !== frames.frames.length) {
+    console.error('Timestamp index does not match the number of frame files found.');
+    process.exit(1);
+  }
+
+  console.log(`Loaded ${frames.frames.length} frames`);
 
   const settings = {
     duration: args.duration,
@@ -499,5 +543,5 @@ module.exports = function main(args) {
   };
 
   const wss = new WebSocket.Server({port: args.port});
-  setupWebSocketHandling(wss, settings, frames, frameTiming);
+  setupWebSocketHandling(wss, settings, frames.metadata, frames.frames, frameTiming);
 };
