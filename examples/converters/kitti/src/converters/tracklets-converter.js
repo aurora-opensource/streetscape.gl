@@ -160,7 +160,7 @@ export default class TrackletsConverter {
       .type('polyline')
       .streamStyle({
         stroke_color: '#FEC557',
-        stroke_width: 0.3,
+        stroke_width: 0.1,
         stroke_width_min_pixels: 1
       })
       .pose(this.FIXTURE_TRANSFORM_POSE);
