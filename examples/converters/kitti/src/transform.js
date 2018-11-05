@@ -75,6 +75,8 @@ module.exports = async function main(args) {
     xvizWriter.writeFrame(outputDir, i, xvizFrame, writerOptions);
   }
 
+  xvizWriter.writeFrameIndex(outputDir);
+
   const end = Date.now();
   console.log(`Generate ${limit} frames in ${end - start}s`); // eslint-disable-line
 };
