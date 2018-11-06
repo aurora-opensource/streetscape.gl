@@ -37,10 +37,10 @@ case $MODE in
     if [ ! -z "${FILES}" ]; then
       for f in $FILES
         do
-          if [ -e $f ]; then
-            npx prettier --write $f --loglevel warn
+          if [ -e "${f}" ]; then
+            prettier --write $f --loglevel warn
             eslint $f
-           fi
+          fi
       done
     fi
 
