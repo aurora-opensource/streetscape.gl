@@ -7,4 +7,6 @@ yarn.lock -diff
 *.ttf -diff
 *.woff -diff
 
+*.png -diff
+
 website/styles/Streetscape.json -diff

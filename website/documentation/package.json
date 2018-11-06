@@ -1,72 +1,13 @@
 {
-  "name": "streetscape.gl",
-  "description": "Website for streetscape.gl",
-  "license": "MIT",
-  "main": "dist/index.js",
-  "version": "0.0.1",
-  "engines": {
-    "node": ">=8.0.0",
-    "npm": ">=5.4.2",
-    "yarn": ">=0.27.5"
-  },
+  "private": true,
+  "license": "private",
+  "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --env.local --progress --open",
-    "build-clean": "rm -rf ./dist && mkdir dist",
-    "build-static": "cp -r ./src/static/* dist && cd `git rev-parse --show-toplevel`",
-    "build-script": "webpack -p --env.prod",
-    "build": "npm run build-clean && npm run build-static && npm run build-script",
-    "lint": "eslint src"
+    "start": "ocular start open",
+    "build": "ocular build",
+    "lint": "ocular lint"
   },
   "dependencies": {
-    "d3-fetch": "^1.1.2",
-    "global": "^4.3.2",
-    "prop-types": "^15.6.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^4.4.5",
-    "react-router": "^3.0.5",
-    "react-router-redux": "^4.0.8",
-    "react-share": "^2.3.1",
-    "react-swipeable-views": "^0.13.0",
-    "react-waypoint": "^8.0.3",
-    "redux": "^3.0.4",
-    "redux-actions": "^1.2.0",
-    "redux-thunk": "^2.3.0",
-    "styled-components": "^4.0.2",
-    "math.gl": "^2.0.0",
-    "streetscape.gl": "^0.0.1",
-    "webworkify-webpack": "^2.1.2"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
-    "@babel/plugin-proposal-decorators": "^7.1.2",
-    "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.0",
-    "css-loader": "^0.28.11",
-    "eslint": "^3.0.0",
-    "eslint-config-prettier": "^2.4.0",
-    "eslint-config-uber-es2015": "^3.0.0",
-    "eslint-config-uber-jsx": "^3.0.0",
-    "eslint-plugin-babel": "^4.1.2",
-    "eslint-plugin-prettier": "^2.2.0",
-    "eslint-plugin-react": "^6.0.0",
-    "file-loader": "^2.0.0",
-    "node-sass": "^4.9.0",
-    "prettier": "^1.7.0",
-    "sass-loader": "^7.0.1",
-    "source-map-loader": "^0.2.3",
-    "style-loader": "^0.21.0",
-    "url-loader": "^0.5.9",
-    "webpack": "^4.20.0",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.1"
-  },
-  "peerDependencies": {
-    "react": "0.14.x - 16.x",
-    "react-dom": "0.14.x - 16.x"
+    "ocular": ">=0.6.2"
   }
 }
