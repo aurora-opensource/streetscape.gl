@@ -8,27 +8,27 @@ export default [
         children: [
           {
             name: 'Introduction',
-            markdown: require('../../docs/README.md')
+            markdown: require('../../../docs/README.md')
           },
           {
             name: 'Overview',
-            markdown: require('../../docs/overview.md')
+            markdown: require('../../../docs/overview.md')
           },
           {
             name: "What's New",
-            markdown: require('../../docs/whats-new.md')
+            markdown: require('../../../docs/whats-new.md')
           },
           {
             name: 'Roadmap',
-            markdown: require('../../docs/roadmap.md')
+            markdown: require('../../../docs/roadmap.md')
           },
           {
             name: 'FAQ',
-            markdown: require('../../docs/FAQ.md')
+            markdown: require('../../../docs/faq.md')
           },
           {
             name: 'Develop/Contribute',
-            markdown: require('../../docs/develop.md')
+            markdown: require('../../../docs/develop.md')
           }
         ]
       },
@@ -37,15 +37,15 @@ export default [
         children: [
           {
             name: 'Overview',
-            markdown: require('../../docs/example-guide/README.md')
+            markdown: require('../../../docs/example-guide/README.md')
           },
           {
             name: 'Running the Example',
-            markdown: require('../../docs/example-guide/running-the-example.md')
+            markdown: require('../../../docs/example-guide/running-the-example.md')
           },
           {
             name: 'Convert Data to XVIZ',
-            markdown: require('../../docs/example-guide/convert-data-to-xviz.md')
+            markdown: require('../../../docs/example-guide/convert-data-to-xviz.md')
           }
         ]
       },
@@ -54,23 +54,23 @@ export default [
         children: [
           {
             name: 'Overview',
-            markdown: require('../../docs/developer-guide/README.md')
+            markdown: require('../../../docs/developer-guide/README.md')
           },
           {
             name: 'Installing',
-            markdown: require('../../docs/developer-guide/installing.md')
+            markdown: require('../../../docs/developer-guide/installing.md')
           },
           {
             name: 'Use Custom deck.gl Layers',
-            markdown: require('../../docs/developer-guide/use-custom-deck-layers.md')
+            markdown: require('../../../docs/developer-guide/use-custom-deck-layers.md')
           },
           {
             name: 'Building Custom Applications',
-            markdown: require('../../docs/developer-guide/build-custom-applications.md')
+            markdown: require('../../../docs/developer-guide/build-custom-applications.md')
           },
           {
             name: 'Advanced',
-            markdown: require('../../docs/developer-guide/advanced.md')
+            markdown: require('../../../docs/developer-guide/advanced.md')
           }
         ]
       },
@@ -79,15 +79,15 @@ export default [
         children: [
           {
             name: 'LogViewer',
-            markdown: require('../../docs/api-reference/log-viewer.md')
+            markdown: require('../../../docs/api-reference/log-viewer.md')
           },
           {
             name: 'XVIZLoaderInterface',
-            markdown: require('../../docs/api-reference/xviz-loader-interface.md')
+            markdown: require('../../../docs/api-reference/xviz-loader-interface.md')
           },
           {
             name: 'XVIZStreamLoader',
-            markdown: require('../../docs/api-reference/xviz-stream-loader.md')
+            markdown: require('../../../docs/api-reference/xviz-stream-loader.md')
           }
         ]
       }
