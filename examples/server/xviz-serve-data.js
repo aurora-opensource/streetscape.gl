@@ -36,12 +36,6 @@ function readFile(filePath) {
   return undefined;
 }
 
-// return zero padded 3-digit number as string
-function zeroPaddedPrefix(frame_index) {
-  const zp = `000${frame_index.toString()}`;
-  return zp.substr(-3);
-}
-
 // Frame Data Utillities
 const TIMING_INDEX = 0;
 const START_INDEX = 1;
@@ -98,12 +92,7 @@ function setupFrameData(data_directory) {
 
 // Support various formatted frame names
 function getFrameName(index) {
-  return [
-    `${index}${FRAME_DATA_SUFFIX}`,
-    `${zeroPaddedPrefix(index)}${FRAME_DATA_SUFFIX}`,
-    `${index}${FRAME_DATA_JSON_SUFFIX}`,
-    `${zeroPaddedPrefix(index)}${FRAME_DATA_JSON_SUFFIX}`
-  ];
+  return [`${index}${FRAME_DATA_SUFFIX}`, `${index}${FRAME_DATA_JSON_SUFFIX}`];
 }
 
 function getFrameMetadata(index, data_directory) {
@@ -523,14 +512,16 @@ module.exports = function main(args) {
 
   // Try to load from and timing index
   let frameTiming = loadTimingIndex(args.data_directory);
-  if (!frameTiming) {
-    // else load manually
-    frameTiming = loadFrameTimings(frames.frames);
-  }
+  const frameTimingValue = frameTiming.length === frames.frames.length;
 
-  if (frameTiming.length !== frames.frames.length) {
-    console.error('Timestamp index does not match the number of frame files found.');
-    process.exit(1);
+  if (!frameTiming || !frameTimingValue) {
+    if (!frameTimingValue) {
+      console.log(
+        '-- Warning: The number of entries in the 0-frame.json do not match the number of frame files found. Loading timestamps from frames directly.'
+      );
+    }
+
+    frameTiming = loadFrameTimings(frames.frames);
   }
 
   console.log(`Loaded ${frames.frames.length} frames`);
