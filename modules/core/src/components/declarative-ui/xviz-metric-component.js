@@ -1,16 +1,16 @@
 import React, {PureComponent} from 'react';
 import {MetricCard, MetricChart} from 'monochrome-ui';
 
+import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
-
-const DEFAULT_HEIGHT = 200;
-const DEFAULT_MARGIN = {left: 45, right: 10, top: 10, bottom: 20};
-const DEFAULT_COLORS = ['#12939A', '#DDB27C', '#88572C', '#FF991F', '#F15C17', '#223F9A'];
 
 class XvizMetricComponent extends PureComponent {
   static defaultProps = {
     timeSeries: {},
-    timeDomain: []
+    timeDomain: [],
+    height: 160,
+    margin: {left: 45, right: 10, top: 10, bottom: 20},
+    getColor: DEFAULT_COLOR_SERIES
   };
 
   _onClick = x => {
@@ -21,14 +21,12 @@ class XvizMetricComponent extends PureComponent {
     const {streams, timeSeries} = this.props;
 
     const data = {};
-    const getColor = {};
     let sampleSeries = null;
     streams.forEach((streamName, i) => {
       const dataSeries = timeSeries[streamName];
       if (dataSeries) {
         sampleSeries = dataSeries;
         data[streamName] = dataSeries.valueSeries;
-        getColor[streamName] = DEFAULT_COLORS[i % DEFAULT_COLORS.length];
       }
     });
 
@@ -37,7 +35,6 @@ class XvizMetricComponent extends PureComponent {
           getX: sampleSeries.getX,
           getY: sampleSeries.getY,
           unit: sampleSeries.unit,
-          getColor,
           data
         }
       : {
@@ -46,15 +43,16 @@ class XvizMetricComponent extends PureComponent {
   }
 
   render() {
-    const {title, description, timeDomain, currentTime} = this.props;
+    const {title, description, timeDomain, currentTime, height, margin, getColor} = this.props;
 
     return (
       <MetricCard title={title} description={description}>
         <MetricChart
           {...this._extractDataProps()}
+          getColor={getColor}
           highlightX={currentTime}
-          height={DEFAULT_HEIGHT}
-          margin={DEFAULT_MARGIN}
+          height={height}
+          margin={margin}
           xTicks={0}
           yTicks={3}
           xDomain={timeDomain}
