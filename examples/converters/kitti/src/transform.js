@@ -8,6 +8,7 @@ module.exports = async function main(args) {
     inputDir,
     outputDir,
     disabledStreams,
+    fakeStreams,
     frameLimit,
     cameraSources,
     imageMaxWidth,
@@ -20,6 +21,7 @@ module.exports = async function main(args) {
   const converter = new KittiConverter(inputDir, outputDir, {
     cameraSources,
     disabledStreams,
+    fakeStreams,
     imageMaxWidth,
     imageMaxHeight
   });
