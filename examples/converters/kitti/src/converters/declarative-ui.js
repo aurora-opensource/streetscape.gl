@@ -23,6 +23,13 @@ import {XVIZUIBuilder} from '@xviz/builder';
 export function getDeclarativeUI() {
   const builder = new XVIZUIBuilder({});
 
+  builder.child(getMetricsPanel(builder));
+  builder.child(getPlotPanel(builder));
+
+  return builder;
+}
+
+function getMetricsPanel(builder) {
   const panel = builder.panel({
     name: 'Metrics'
   });
@@ -46,7 +53,27 @@ export function getDeclarativeUI() {
 
   container.child(metricAcceleration).child(metricVelocity);
   panel.child(container);
-  builder.child(panel);
 
-  return builder;
+  return panel;
+}
+
+function getPlotPanel(builder) {
+  const panel = builder.panel({
+    name: 'Planning'
+  });
+
+  const plot = builder.plot({
+    title: 'Cost',
+    description: 'Costs considered in planning the vehicle trajectory',
+    independentVariable: '/motion_planning/time',
+    dependentVariable: [
+      '/motion_planning/trajectory/cost/cost1',
+      '/motion_planning/trajectory/cost/cost2',
+      '/motion_planning/trajectory/cost/cost3'
+    ]
+  });
+
+  panel.child(plot);
+
+  return panel;
 }
