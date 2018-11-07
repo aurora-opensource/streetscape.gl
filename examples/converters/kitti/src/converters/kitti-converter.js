@@ -6,13 +6,15 @@ import GPSConverter from './gps-converter';
 import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
 import CameraConverter from './camera-converter';
+import RandomDataGenerator from './random-data-generator';
 import {getDeclarativeUI} from './declarative-ui';
 
 export class KittiConverter {
-  constructor(inputDir, outputDir, {disabledStreams, imageMaxWidth, imageMaxHeight}) {
+  constructor(inputDir, outputDir, {disabledStreams, fakeStreams, imageMaxWidth, imageMaxHeight}) {
     this.inputDir = inputDir;
     this.outputDir = outputDir;
     this.disabledStreams = disabledStreams;
+    this.fakeStreams = fakeStreams;
     this.imageOptions = {
       maxWidth: imageMaxWidth,
       maxHeight: imageMaxHeight
@@ -45,6 +47,10 @@ export class KittiConverter {
         options: this.imageOptions
       })
     ];
+
+    if (this.fakeStreams) {
+      this.converters.push(new RandomDataGenerator());
+    }
 
     this.converters.forEach(converter => converter.load());
 
