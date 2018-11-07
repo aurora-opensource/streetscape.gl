@@ -1,10 +1,9 @@
 import React, {PureComponent} from 'react';
-import {connectToLog, VideoPanel} from 'streetscape.gl';
+import {XvizPanel} from 'streetscape.gl';
 import {FloatPanel} from 'monochrome-ui';
 
-class CameraPanel extends PureComponent {
+export default class CameraPanel extends PureComponent {
   state = {
-    stream: '/camera/image_02',
     panelState: {
       x: 400,
       y: 50,
@@ -20,25 +19,20 @@ class CameraPanel extends PureComponent {
 
   render() {
     const {log} = this.props;
-    const {panelState, stream} = this.state;
+    const {panelState} = this.state;
 
     return (
       <FloatPanel
         {...panelState}
         title="Camera"
+        className="camera-panel"
         movable={true}
         minimizable={true}
         resizable={true}
         onUpdate={this._onUpdate}
       >
-        <VideoPanel log={log} streamFilter={stream} width={panelState.width} timeTolerance={100} />
+        <XvizPanel log={log} id="Camera" />
       </FloatPanel>
     );
   }
 }
-
-const getLogState = log => ({
-  imageStreamNames: log.getImageStreamNames()
-});
-
-export default connectToLog({getLogState, Component: CameraPanel});
