@@ -26,14 +26,12 @@ import store from './reducers';
 
 import App from './components/app';
 import Home from './components/home';
-import Demo from './components/demo';
 
 // eslint-disable-next-line react/display-name
 export default () => (
   <Router history={syncHistoryWithStore(hashHistory, store)}>
     <Route path="/" component={App}>
       <IndexRoute component={Home} />
-      <Route path="demo(/:id)" component={Demo}/>
     </Route>
   </Router>
 );

@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
-import { ELEMENTS } from '../content';
-import { media } from '../styles';
-import { LinkButton, CenteredContent } from './common/styled-components';
+import {ELEMENTS} from '../content';
+import {media} from '../styles';
+import {LinkButton, CenteredContent} from './common/styled-components';
 import Carousel from './common/carousel';
 
 const CarouselContainer = styled.div`
@@ -86,32 +86,36 @@ const NavItem = styled.div`
 
 const NavIcon = styled.span`
   display: block;
-  font-size: ${props => props.isActive ? 36 : 20}px;
-  color: ${props => props.isActive ? '#000' : '#9BA0A5'};
+  font-size: ${props => (props.isActive ? 36 : 20)}px;
+  color: ${props => (props.isActive ? '#000' : '#9BA0A5')};
 
-  border-radius: ${props => props.isActive ? 6 : 5}px;
+  border-radius: ${props => (props.isActive ? 6 : 5)}px;
 `;
 
 const Title = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   text-transform: 'uppercase';
   font-size: 20px;
-  font-weight: 500; 
+  font-weight: 500;
 `;
 
 const Description = styled.div`
-  color: #5B5F62;
+  color: #5b5f62;
 `;
 
-const Nav = ({ items, selectedIndex, onClick }) => {
+const Nav = ({items, selectedIndex, onClick}) => {
   const activeItem = items[selectedIndex];
-  const { title, description, icon } = activeItem;
+  const {title, description, icon} = activeItem;
 
   return (
     <NavContainer>
       <NavItems>
-        <NavItem isActive={true} onClick={() => onClick(i)}>
-          <Title> {title}
-            <NavIcon isActive={true} key={`${icon}-i`} className={`icon-${icon}`}/>
+        <NavItem isActive={true}>
+          <Title>
+            {title}
+            <NavIcon isActive={true} key={`${icon}`} className={`icon-${icon}`} />
           </Title>
           <Description>{description}</Description>
         </NavItem>
@@ -133,12 +137,15 @@ class Elements extends PureComponent {
         <CarouselContainer>
           <Carousel
             selectedIndex={selectedIndex}
-            onChange={i => this.setState({ selectedIndex: i })}
+            onChange={i => this.setState({selectedIndex: i})}
             getTransform={({index, isVisible}) => {
               const xOffset = 45;
               const zOffset = 60;
               const yRotate = -25;
-              const translateX = isVisible ? (index - ELEMENTS.length / 2 + (selectedIndex - ELEMENTS / 2 > 0 ? 1 : 0.5)) * xOffset : 0;
+              const translateX = isVisible
+                ? (index - ELEMENTS.length / 2 + (selectedIndex - ELEMENTS / 2 > 0 ? 1 : 0.5)) *
+                  xOffset
+                : 0;
               const translateZ = -Math.abs(index - selectedIndex) * zOffset;
               const rotateY = Math.sign(index - selectedIndex) * yRotate;
               return `
@@ -149,15 +156,15 @@ class Elements extends PureComponent {
             `;
             }}
           >
-            {ELEMENTS.map(({ title, description, image, icon }, i) => (
-              <Image key={`image-${i}`} src={image}/>
+            {ELEMENTS.map(({title, description, image, icon}, i) => (
+              <Image key={`image-${i}`} src={image} />
             ))}
           </Carousel>
         </CarouselContainer>
         <Nav
           items={ELEMENTS}
           selectedIndex={this.state.selectedIndex}
-          onClick={i => this.setState({ selectedIndex: i })}
+          onClick={i => this.setState({selectedIndex: i})}
         />
         <CenteredContent>
           <LinkButton outline large href="https://github.com/uber/streetscape.gl">
