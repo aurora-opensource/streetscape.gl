@@ -165,20 +165,17 @@ export default class XVIZLoaderInterface {
     return null;
   });
 
-  getImageStreamNames = createSelector(this, this.getMetadata, metadata => {
-    const streams = metadata && metadata.streams;
-    return (
-      streams && Object.keys(streams).filter(streamName => streams[streamName].type === 'image')
-    );
-  });
-
   getImageFrames = createSelector(
     this,
-    [this.getImageStreamNames, this.getStreams, this.getTimestamps],
-    (imageStreamNames, streams, timestamps) => {
-      if (streams && imageStreamNames) {
+    [this.getMetadata, this.getStreams, this.getTimestamps],
+    (metadata, streams, timestamps) => {
+      if (streams && metadata) {
         const frames = {};
-        imageStreamNames.forEach(streamName => {
+        Object.keys(streams).forEach(streamName => {
+          const streamMetadata = metadata.streams[streamName];
+          if (!streamMetadata || streamMetadata.type !== 'image') {
+            return;
+          }
           frames[streamName] = streams[streamName].map((frame, i) => {
             const timestamp = timestamps[i];
             if (frame && frame.images[0]) {

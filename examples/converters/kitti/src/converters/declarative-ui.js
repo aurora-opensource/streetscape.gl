@@ -5,6 +5,7 @@ export function getDeclarativeUI() {
 
   builder.child(getMetricsPanel(builder));
   builder.child(getPlotPanel(builder));
+  builder.child(getVideoPanel(builder));
 
   return builder;
 }
@@ -54,6 +55,20 @@ function getPlotPanel(builder) {
   });
 
   panel.child(plot);
+
+  return panel;
+}
+
+function getVideoPanel(builder) {
+  const panel = builder.panel({
+    name: 'Camera'
+  });
+
+  const video = builder.video({
+    cameras: ['/camera/image_00', '/camera/image_01', '/camera/image_02', '/camera/image_03']
+  });
+
+  panel.child(video);
 
   return panel;
 }
