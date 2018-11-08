@@ -1,5 +1,17 @@
 Landing page for Streetscape.gl
 
+## Start website app
+
+```bash
+# install dependencies
+cd website
+yarn
+
+# buid and start website app
+yarn build
+# export MpaboxAccessToken if needed
+yarn start-local
+```
 
 ## Development
 

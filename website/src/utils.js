@@ -19,5 +19,9 @@
 // THE SOFTWARE.
 
 export function getImageUrl(filename) {
-  return `assets/images/${filename}`;
+  return `./images/${filename}`;
+}
+
+export function getDemoLink() {
+  return `./demo/index.html`;
 }

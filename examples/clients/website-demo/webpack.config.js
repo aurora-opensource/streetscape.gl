@@ -22,7 +22,7 @@ const CONFIG = {
   devServer: {
     contentBase: [
       resolve(__dirname, '../../../data/generated'),
-      resolve(__dirname, '../../../website'),
+      resolve(__dirname, '../../../website/src/static'),
       resolve(__dirname)
     ]
   },
