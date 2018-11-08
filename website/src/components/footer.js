@@ -18,18 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import styled from 'styled-components';
-import {
-  FacebookIcon,
-  FacebookShareButton,
-  TwitterIcon,
-  TwitterShareButton
-} from 'react-share';
+import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton} from 'react-share';
 
-import { LinkButton } from './common/styled-components';
-import { media } from '../styles';
+import {LinkButton} from './common/styled-components';
+import {media} from '../styles';
 import MapboxLogo from './mapbox-logo';
+import {UBER_LOGO, VIS_LOGO} from '../content';
 
 const Container = styled.div`
   background: #242730;
@@ -148,41 +144,31 @@ export default class Footer extends PureComponent {
 
         <SocialContainer>
           <FacebookShareButton url="https://uber.github.io/streetscape.gl/">
-            <FacebookIcon size={32}/>
-          </FacebookShareButton>
-          {' '}
-          <TwitterShareButton url="https://uber.github.io/streetscape.gl/" hashtags={['streetscapegl']}>
-            <TwitterIcon size={32}/>
+            <FacebookIcon size={32} />
+          </FacebookShareButton>{' '}
+          <TwitterShareButton
+            url="https://uber.github.io/streetscape.gl/"
+            hashtags={['streetscapegl']}
+          >
+            <TwitterIcon size={32} />
           </TwitterShareButton>
         </SocialContainer>
 
         <LogosContainer>
-          <SectionText>
-            partnership with
-          </SectionText>
+          <SectionText>partnership with</SectionText>
           <StyledLogo>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://voyage.auto/"
-            >
-              <VoyageLogo className="icon-voyage"/>
+            <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
+              <VoyageLogo className="icon-voyage" />
             </a>
           </StyledLogo>
-          <MapboxLogo/>
+          <MapboxLogo />
         </LogosContainer>
 
         <BrandingContainer>
-          <img src={'uber-logo.png'}/>
-          <SectionText>
-            created by
-          </SectionText>
-          <VisGLLogo logo={'viz_logo_bw.png'}>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="http://vis.gl"
-            >
+          <img src={UBER_LOGO} />
+          <SectionText>created by</SectionText>
+          <VisGLLogo logo={VIS_LOGO}>
+            <a target="_blank" rel="noopener noreferrer" href="http://vis.gl">
               VIS.GL
             </a>
           </VisGLLogo>

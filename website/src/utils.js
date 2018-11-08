@@ -18,11 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import * as d3 from 'd3-fetch';
-
-export function loadImage(path) {
-  path = `assets/${path}`;
-  d3.image(path).then(data => {
-    return data;
-  });
+export function getImageUrl(filename) {
+  return `assets/${filename}`;
 }
