@@ -61,14 +61,14 @@ const SectionText = styled.div`
   justify-content: center;
   letter-spacing: 0.5px;
   line-height: 14px;
-  width: 100%;
   z-index: 101;
 `;
 
-const StyledLogo = styled.span`
+const StyledLogo = styled.div`
+  display: inline-flex;
   margin-left: 0.8rem;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 4px;
   position: relative;
   margin-top: 0;
@@ -109,10 +109,6 @@ const ButtonContainer = styled.div`
       width: 50%;
     }
   `};
-`;
-
-const VoyageLogo = styled.span`
-  font-size: 20px;
 `;
 
 const SocialContainer = styled.div`
@@ -158,7 +154,7 @@ export default class Footer extends PureComponent {
           <SectionText>partnership with</SectionText>
           <StyledLogo>
             <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
-              <VoyageLogo className="icon-voyage" />
+              Voyage Auto
             </a>
           </StyledLogo>
           <MapboxLogo />
