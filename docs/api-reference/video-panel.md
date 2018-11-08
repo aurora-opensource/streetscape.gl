@@ -22,7 +22,7 @@ The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md
 
 The width of each video. Can be a number (pixels) or a CSS string.
 
-##### `streamFilter` (Array|String|Object|Function)
+##### `cameras` (Array|String|Object|Function)
 
 Specify which streams to render.
 

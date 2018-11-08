@@ -29,6 +29,7 @@ const VIDEO_FRAME_BUFFER = 10;
 
 const CONTAINER_STYLE = {
   position: 'relative',
+  background: '#000',
   lineHeight: 0
 };
 

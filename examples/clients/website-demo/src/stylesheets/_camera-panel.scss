@@ -1,0 +1,12 @@
+.camera-panel {
+  .mc-dropdown--wrapper {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: rgba($background-alt, 0.9);
+
+    select {
+      border-color: transparent;
+    }
+  }
+}
