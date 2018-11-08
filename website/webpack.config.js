@@ -22,7 +22,7 @@ const CONFIG = {
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: [resolve(__dirname, '../data/generated'), resolve(__dirname)]
+    contentBase: [resolve(__dirname)]
   },
   module: {
     noParse: /(mapbox-gl)\.js$/,

@@ -96,42 +96,42 @@ export const FEATURES = [
   {
     title: 'Camera',
     images: [getImageUrl('ui-camera.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'Tree',
     images: [getImageUrl('ui-treetable.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'Metric',
     images: [getImageUrl('ui-metric.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'Obj Markers',
     images: [getImageUrl('ui-obj-markers.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'Telemetry',
     images: [getImageUrl('ui-telemetry.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'Plot',
     images: [getImageUrl('ui-plot.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'HUD',
     images: [getImageUrl('ui-hud.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   },
   {
     title: 'Playback',
     images: [getImageUrl('ui-playbackcontrol.png')],
-    icon: 'solid-polygon'
+    icon: 'solid_polygon'
   }
 ];
 
@@ -140,32 +140,32 @@ export const ELEMENTS = [
     title: 'Maps',
     description: 'Persistent Geo-Spatial elements like traffic lights, stop, signs...',
     image: getImageUrl('data-map.png'),
-    icon: 'data-icon-map'
+    icon: 'data_icon_map'
   },
   {
     title: 'Lidar',
     description: 'Use to reconstruct 3D world with more precision',
     image: getImageUrl('data-lidar.png'),
-    icon: 'data-icon-lidar'
+    icon: 'data_icon_lidar'
   },
   {
     title: 'ML',
     description: 'AI helps detect lane lines and identify cyclists.',
     image: getImageUrl('data-ML.png'),
-    icon: 'data-icon-ML'
+    icon: 'data_icon_ML'
   },
   {
     title: 'Camera',
     description:
       'Discover things like lane lines on the highway, speed signs, and traffic lights...',
     image: getImageUrl('data-videocamera.png'),
-    icon: 'data-icon-videocamera'
+    icon: 'data_icon_videocamera'
   },
   {
     title: 'Radar',
     description: 'Spot big metallic objects-other vehicles.',
     image: getImageUrl('data-radar.png'),
-    icon: 'data-icon-radar'
+    icon: 'data_icon_radar'
   }
 ];
 

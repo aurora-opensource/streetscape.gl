@@ -19,5 +19,5 @@
 // THE SOFTWARE.
 
 export function getImageUrl(filename) {
-  return `assets/${filename}`;
+  return `assets/images/${filename}`;
 }
