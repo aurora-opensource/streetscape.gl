@@ -22,13 +22,15 @@ class XvizMetricComponent extends PureComponent {
 
     const data = {};
     let sampleSeries = null;
-    streams.forEach((streamName, i) => {
-      const dataSeries = timeSeries[streamName];
-      if (dataSeries) {
-        sampleSeries = dataSeries;
-        data[streamName] = dataSeries.valueSeries;
-      }
-    });
+    if (streams) {
+      Object.keys(streams).forEach((streamName, i) => {
+        const dataSeries = timeSeries[streamName];
+        if (dataSeries) {
+          sampleSeries = dataSeries;
+          data[streamName] = dataSeries.valueSeries;
+        }
+      });
+    }
 
     return sampleSeries
       ? {
@@ -66,6 +68,7 @@ class XvizMetricComponent extends PureComponent {
 }
 
 const getLogState = log => ({
+  streams: log.getStreams(),
   currentTime: log.getCurrentTime(),
   timeSeries: log.getTimeSeries(),
   timeDomain: log.getTimeDomain()
