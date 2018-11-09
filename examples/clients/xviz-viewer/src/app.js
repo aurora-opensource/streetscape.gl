@@ -65,10 +65,10 @@ class Example extends PureComponent {
         <div id="control-panel">
           <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
           <hr />
-          <XVIZPanel log={log} id="Metrics" />
+          <XVIZPanel log={log} name="Perception" />
         </div>
         <div id="video-panel">
-          <XVIZPanel log={log} id="Camera" />
+          <XVIZPanel log={log} name="Camera" />
         </div>
       </div>
     );

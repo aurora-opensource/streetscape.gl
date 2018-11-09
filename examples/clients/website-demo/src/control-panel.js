@@ -21,7 +21,7 @@ export default class ControlPanel extends PureComponent {
         return <StreamSettingsPanel log={log} />;
 
       case 'charts':
-        return <XVIZPanel log={log} id="Metrics" />;
+        return <XVIZPanel log={log} name="Metrics" />;
 
       case 'metadata':
         return <MetadataPanel log={log} />;
