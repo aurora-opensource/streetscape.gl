@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import XvizContainer from './xviz-container';
 import XvizMetricComponent from './xviz-metric-component';
 import XvizPlotComponent from './xviz-plot-component';
+import XvizTableComponent from './xviz-table-component';
 import XvizVideoComponent from './xviz-video-component';
 
 import connectToLog from '../connect';
@@ -35,7 +36,9 @@ const DEFAULT_COMPONENTS = {
   // tree_table
   metric: XvizMetricComponent,
   plot: XvizPlotComponent,
-  video: XvizVideoComponent
+  video: XvizVideoComponent,
+  table: XvizTableComponent,
+  treetable: XvizTableComponent
 };
 
 class XvizPanel extends PureComponent {
