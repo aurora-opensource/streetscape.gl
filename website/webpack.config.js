@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 /* eslint-disable no-process-env */
-/* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
 
@@ -43,11 +42,7 @@ const CONFIG = {
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: [
-      resolve(__dirname, '../data/generated'),
-      resolve(__dirname, 'assets'),
-      resolve(__dirname),
-    ]
+    contentBase: [resolve(__dirname)]
   },
   module: {
     noParse: /(mapbox-gl)\.js$/,

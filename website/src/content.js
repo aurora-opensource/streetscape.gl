@@ -38,6 +38,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import {getImageUrl} from './utils';
+
 export const SECTIONS = [
   {
     id: 'walkthrough',
@@ -53,8 +55,7 @@ export const SECTIONS = [
   {
     id: 'features',
     title: 'Suite of Controls',
-    description:
-      'Streamline your workflow with reusable components.',
+    description: 'Streamline your workflow with reusable components.',
     background: '#F8F8F9'
   },
   {
@@ -72,16 +73,16 @@ export const SECTIONS = [
 ];
 
 export const HERO_IMAGES = [
-  'example-demoapp.png',
-  'example-mapping.png',
-  'example-remoteassist.png'
+  getImageUrl('example-demoapp.png'),
+  getImageUrl('example-mapping.png'),
+  getImageUrl('example-remoteassist.png')
 ];
 
 // TODO replace with scaled images
 export const HERO_IMAGES_SCALED = [
-  'example-demoapp.png',
-  'example-mapping.png',
-  'example-remoteassist.png'
+  getImageUrl('example-demoapp.png'),
+  getImageUrl('example-mapping.png'),
+  getImageUrl('example-remoteassist.png')
 ];
 
 export const HEADER_NAVS = [
@@ -99,58 +100,58 @@ export const HEADER_NAVS = [
 export const SHOWCASE_ITEMS = [
   {
     text: 'Kitty',
-    image: 'example-demoapp.png'
+    image: getImageUrl('example-demoapp.png')
   },
   {
     text: 'Voyage',
-    image: 'example-mapping.png'
+    image: getImageUrl('example-mapping.png')
   },
   {
     text: 'Uber',
-    image: 'example-remoteassist.png'
+    image: getImageUrl('example-remoteassist.png')
   }
 ];
 
 export const FEATURES = [
   {
     title: 'Camera',
-    images: ['ui-camera.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-camera.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'Tree',
-    images: ['ui-treetable.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-treetable.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'Metric',
-    images: ['ui-metric.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-metric.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'Obj Markers',
-    images: ['ui-obj-markers.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-obj-markers.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'Telemetry',
-    images: ['ui-telemetry.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-telemetry.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'Plot',
-    images: ['ui-plot.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-plot.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'HUD',
-    images: ['ui-hud.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-hud.png')],
+    icon: 'solid_polygon'
   },
   {
     title: 'Playback',
-    images: ['ui-playbackcontrol.png'],
-    icon: 'solid-polygon'
+    images: [getImageUrl('ui-playbackcontrol.png')],
+    icon: 'solid_polygon'
   }
 ];
 
@@ -158,47 +159,48 @@ export const ELEMENTS = [
   {
     title: 'Maps',
     description: 'Persistent Geo-Spatial elements like traffic lights, stop, signs...',
-    image: 'data-map.png',
-    icon: 'data-icon-map'
+    image: getImageUrl('data-map.png'),
+    icon: 'data_icon_map'
   },
   {
     title: 'Lidar',
     description: 'Use to reconstruct 3D world with more precision',
-    image: 'data-lidar.png',
-    icon: 'data-icon-lidar'
+    image: getImageUrl('data-lidar.png'),
+    icon: 'data_icon_lidar'
   },
   {
     title: 'ML',
     description: 'AI helps detect lane lines and identify cyclists.',
-    image: 'data-ML.png',
-    icon: 'data-icon-ML'
+    image: getImageUrl('data-ML.png'),
+    icon: 'data_icon_ML'
   },
   {
     title: 'Camera',
-    description: 'Discover things like lane lines on the highway, speed signs, and traffic lights...',
-    image: 'data-videocamera.png',
-    icon: 'data-icon-videocamera'
+    description:
+      'Discover things like lane lines on the highway, speed signs, and traffic lights...',
+    image: getImageUrl('data-videocamera.png'),
+    icon: 'data_icon_videocamera'
   },
   {
     title: 'Radar',
     description: 'Spot big metallic objects-other vehicles.',
-    image: 'data-radar.png',
-    icon: 'data-icon-radar'
+    image: getImageUrl('data-radar.png'),
+    icon: 'data_icon_radar'
   }
 ];
 
 export const TUTORIALS = [
   {
     text: 'Traffic Lights',
-    image: 'vis-trafficlights.png'
+    image: getImageUrl('vis-trafficlights.png')
   },
   {
     text: 'Perception data - actors the car sees',
-    image: 'vis-objects.png'
+    image: getImageUrl('vis-objects.png')
   },
   {
     text: 'Trajectory',
-    image: 'vis-trajectory.png'
+    image: getImageUrl('vis-trajectory.png')
   }
 ];
 
@@ -213,7 +215,8 @@ export const STEPS = [
   },
   {
     title: 'Visualize',
-    description: 'Render your converted data using streetscape.gl APIs. Lorem sit amet, consectetur.',
+    description:
+      'Render your converted data using streetscape.gl APIs. Lorem sit amet, consectetur.',
     link: {
       title: 'Explore OSS',
       url: 'https://github.com/uber/streetscape.gl'
@@ -228,3 +231,8 @@ export const STEPS = [
     }
   }
 ];
+
+export const VIS_LOGO = getImageUrl('viz_logo_bw.png');
+export const UBER_LOGO = getImageUrl('uber-logo.png');
+export const STREETSCAPE_GL_LOGO = getImageUrl('logo.png');
+export const HERO_BACKGROUND = getImageUrl('hero-background.png');
