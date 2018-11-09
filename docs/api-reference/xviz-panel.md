@@ -1,4 +1,4 @@
-# XvizPanel (React Component)
+# XVIZPanel (React Component)
 
 *Uber Confidential Information*
 
@@ -6,9 +6,9 @@
 Renders a XVIZ panel from a [Declarative UI]() definition.
 
 ```jsx
-import {XvizPanel} from 'streetscape.gl';
+import {XVIZPanel} from 'streetscape.gl';
 
-<XvizPanel log={log} id="00000000-0000-0000-0000-000000000000" />
+<XVIZPanel log={log} id="00000000-0000-0000-0000-000000000000" />
 
 ```
 
@@ -36,7 +36,7 @@ const myCustomComponents = {
     text: props => <div style={{color: props.color}}>{props.text}</div>
 };
 
-<XvizPanel
+<XVIZPanel
     log={log}
     id="00000000-0000-0000-0000-000000000000"
     components={myCustomComponents} />

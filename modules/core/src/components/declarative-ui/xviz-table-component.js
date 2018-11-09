@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import connectToLog from '../connect';
 
-class XvizTableComponent extends PureComponent {
+class XVIZTableComponent extends PureComponent {
   static propTypes = {
     columns: PropTypes.array,
     nodes: PropTypes.array
@@ -85,4 +85,4 @@ const getLogState = (log, ownProps) => {
   return data && data.treetable;
 };
 
-export default connectToLog({getLogState, Component: XvizTableComponent});
+export default connectToLog({getLogState, Component: XVIZTableComponent});

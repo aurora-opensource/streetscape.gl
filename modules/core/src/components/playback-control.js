@@ -3,7 +3,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import {PlaybackControl as MonochromePlaybackControl} from 'monochrome-ui';
-import {getXvizSettings} from '@xviz/parser';
+import {getXVIZSettings} from '@xviz/parser';
 
 import connectToLog from './connect';
 
@@ -46,7 +46,7 @@ class PlaybackControl extends PureComponent {
   };
 
   _animate = () => {
-    const {hiTimeResolution} = getXvizSettings();
+    const {hiTimeResolution} = getXVIZSettings();
 
     if (this.state.isPlaying) {
       const now = Date.now();

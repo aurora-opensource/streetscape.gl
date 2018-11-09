@@ -7,7 +7,7 @@ import connectToLog from '../connect';
 
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 
-class XvizVideoComponent extends PureComponent {
+class XVIZVideoComponent extends PureComponent {
   static propTypes = {
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     cameras: PropTypes.oneOfType([
@@ -104,4 +104,4 @@ const getLogState = log => ({
   imageFrames: log.getImageFrames()
 });
 
-export default connectToLog({getLogState, Component: XvizVideoComponent});
+export default connectToLog({getLogState, Component: XVIZVideoComponent});

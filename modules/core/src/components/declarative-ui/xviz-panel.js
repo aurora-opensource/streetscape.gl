@@ -1,27 +1,27 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import XvizContainer from './xviz-container';
-import XvizMetricComponent from './xviz-metric-component';
-import XvizPlotComponent from './xviz-plot-component';
-import XvizTableComponent from './xviz-table-component';
-import XvizVideoComponent from './xviz-video-component';
+import XVIZContainer from './xviz-container';
+import XVIZMetricComponent from './xviz-metric-component';
+import XVIZPlotComponent from './xviz-plot-component';
+import XVIZTableComponent from './xviz-table-component';
+import XVIZVideoComponent from './xviz-video-component';
 
 import connectToLog from '../connect';
 
 // xviz type to component map
 const DEFAULT_COMPONENTS = {
-  container: XvizContainer,
+  container: XVIZContainer,
   // table
   // tree_table
-  metric: XvizMetricComponent,
-  plot: XvizPlotComponent,
-  video: XvizVideoComponent,
-  table: XvizTableComponent,
-  treetable: XvizTableComponent
+  metric: XVIZMetricComponent,
+  plot: XVIZPlotComponent,
+  video: XVIZVideoComponent,
+  table: XVIZTableComponent,
+  treetable: XVIZTableComponent
 };
 
-class XvizPanel extends PureComponent {
+class XVIZPanel extends PureComponent {
   static propTypes = {
     id: PropTypes.string.isRequired,
     components: PropTypes.object,
@@ -34,16 +34,16 @@ class XvizPanel extends PureComponent {
 
   _renderItem = (item, i) => {
     const {components, log} = this.props;
-    const XvizComponent = components[item.type] || DEFAULT_COMPONENTS[item.type];
+    const XVIZComponent = components[item.type] || DEFAULT_COMPONENTS[item.type];
 
-    if (!XvizComponent) {
+    if (!XVIZComponent) {
       return null;
     }
 
     return (
-      <XvizComponent key={i} {...item} log={log}>
+      <XVIZComponent key={i} {...item} log={log}>
         {item.children && item.children.map(this._renderItem)}
-      </XvizComponent>
+      </XVIZComponent>
     );
   };
 
@@ -64,4 +64,4 @@ const getLogState = log => ({
   metadata: log.getMetadata()
 });
 
-export default connectToLog({getLogState, Component: XvizPanel});
+export default connectToLog({getLogState, Component: XVIZPanel});

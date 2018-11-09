@@ -4,7 +4,7 @@ import {MetricCard, MetricChart} from 'monochrome-ui';
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
 
-class XvizMetricComponent extends PureComponent {
+class XVIZMetricComponent extends PureComponent {
   static defaultProps = {
     timeSeries: {},
     timeDomain: [],
@@ -71,4 +71,4 @@ const getLogState = log => ({
   timeDomain: log.getTimeDomain()
 });
 
-export default connectToLog({getLogState, Component: XvizMetricComponent});
+export default connectToLog({getLogState, Component: XVIZMetricComponent});

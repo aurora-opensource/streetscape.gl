@@ -8,7 +8,7 @@ const GET_X = d => d[0];
 const GET_Y = d => d[1];
 const DATA_LOADING = {isLoading: true};
 
-class XvizPlotComponent extends PureComponent {
+class XVIZPlotComponent extends PureComponent {
   static defaultProps = {
     variables: {},
     height: 300,
@@ -141,4 +141,4 @@ const getLogState = log => {
   };
 };
 
-export default connectToLog({getLogState, Component: XvizPlotComponent});
+export default connectToLog({getLogState, Component: XVIZPlotComponent});

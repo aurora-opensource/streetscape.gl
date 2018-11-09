@@ -1,4 +1,4 @@
-import {getXvizSettings, getXvizConfig} from '@xviz/parser';
+import {getXVIZSettings, getXVIZConfig} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
@@ -123,7 +123,7 @@ export default class XVIZLoaderInterface {
   }
 
   getLogStartTime = createSelector(this, this.getMetadata, metadata => {
-    return metadata && metadata.start_time + getXvizSettings().TIME_WINDOW;
+    return metadata && metadata.start_time + getXVIZSettings().TIME_WINDOW;
   });
 
   getLogEndTime = createSelector(this, this.getMetadata, metadata => {
@@ -156,7 +156,7 @@ export default class XVIZLoaderInterface {
   );
 
   getTimestamps = createSelector(this, this.getStreams, streams => {
-    const {PRIMARY_POSE_STREAM} = getXvizConfig();
+    const {PRIMARY_POSE_STREAM} = getXVIZConfig();
     const vehiclePoses = streams && streams[PRIMARY_POSE_STREAM];
     if (vehiclePoses) {
       // TODO(twojtasz): normalize 'time' vs 'timestamp' in parsing

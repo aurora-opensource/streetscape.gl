@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-export default class XvizContainer extends PureComponent {
+export default class XVIZContainer extends PureComponent {
   static propTypes = {
     layout: PropTypes.string
   };
