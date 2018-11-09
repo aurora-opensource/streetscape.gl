@@ -35,7 +35,7 @@ export default function connectToLog({getLogState, Component}) {
     render() {
       const {log, ...otherProps} = this.props;
 
-      const logState = getLogState(log);
+      const logState = getLogState(log, otherProps);
 
       return <Component {...otherProps} {...logState} log={log} />;
     }
