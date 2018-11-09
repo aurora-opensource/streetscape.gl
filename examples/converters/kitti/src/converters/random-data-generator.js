@@ -66,7 +66,7 @@ export default class RandomDataGenerator {
         const deviation = Math.random() * 2;
         builder.values(Array.from({length: 10}, () => mean + Math.random(deviation)));
       } else if (info.type === 'treetable') {
-        builder.columns(info.columns);
+        builder.treetable(info.columns);
         makeRandomTableData(builder, {columns: info.columns, maxNodes: 1000, maxDepth: 3});
       }
     }
@@ -95,7 +95,7 @@ export default class RandomDataGenerator {
 // opts.columns {array}
 // opts.maxNodes {number}
 // opts.maxDepth {number}
-function makeRandomTableData(builder, opts, parent = null, depth = 0, stats = {count: 0}) {
+function makeRandomTableData(builder, opts, depth = 0, stats = {count: 0}) {
   const {maxDepth = 1, maxNodes = 100} = opts;
 
   if (depth > maxDepth) {
@@ -107,10 +107,11 @@ function makeRandomTableData(builder, opts, parent = null, depth = 0, stats = {c
   for (let i = 0; i < n; i++) {
     const id = `node-${stats.count}`;
 
-    builder.row(parent, id, makeRandomColumnValues(opts.columns));
+    const command = depth ? 'child' : 'row';
+    const row = builder[command](id, makeRandomColumnValues(opts.columns));
     stats.count++;
 
-    makeRandomTableData(builder, opts, id, depth + 1, stats);
+    makeRandomTableData(row, opts, depth + 1, stats);
   }
 }
 
@@ -125,7 +126,7 @@ function makeRandomColumnValues(columns) {
       case 'float':
         return Math.random() * 100;
 
-      case 'int':
+      case 'integer':
         return Math.round(Math.random() * 1e5);
 
       default:
