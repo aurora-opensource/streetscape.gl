@@ -23,7 +23,7 @@ import styled, {keyframes} from 'styled-components';
 import {window} from 'global';
 
 import {media, breakPoints} from '../styles';
-import {HERO_IMAGES, HERO_IMAGES_SCALED} from '../content';
+import {HERO_BACKGROUND, STREETSCAPE_GL_LOGO, HERO_IMAGES, HERO_IMAGES_SCALED} from '../content';
 import SlideShow from './common/slideshow';
 import {LinkButton} from './common/styled-components';
 
@@ -54,7 +54,7 @@ const Container = styled.div`
 
   ${media.palm`
     padding-top: ${props => props.theme.margins.large};
-  `}
+  `};
 `;
 
 const Content = styled.div`
@@ -188,9 +188,9 @@ export default class Hero extends PureComponent {
     const isPalm = this.state.width <= breakPoints.palm;
     return (
       <Container>
-        <BackgroundImage src={'hero-background.png'} />
+        <BackgroundImage src={HERO_BACKGROUND} />
         <Content>
-          <Logo src={'logo.png'} />
+          <Logo src={STREETSCAPE_GL_LOGO} />
           <StyledCaption>
             <div className="sg-home__caption__subtitle">
               Make an leap with your autonomous vehicle data

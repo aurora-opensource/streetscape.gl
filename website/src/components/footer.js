@@ -18,18 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import styled from 'styled-components';
-import {
-  FacebookIcon,
-  FacebookShareButton,
-  TwitterIcon,
-  TwitterShareButton
-} from 'react-share';
+import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton} from 'react-share';
 
-import { LinkButton } from './common/styled-components';
-import { media } from '../styles';
+import {LinkButton} from './common/styled-components';
+import {media} from '../styles';
 import MapboxLogo from './mapbox-logo';
+import {UBER_LOGO, VIS_LOGO} from '../content';
 
 const Container = styled.div`
   background: #242730;
@@ -65,14 +61,14 @@ const SectionText = styled.div`
   justify-content: center;
   letter-spacing: 0.5px;
   line-height: 14px;
-  width: 100%;
   z-index: 101;
 `;
 
-const StyledLogo = styled.span`
+const StyledLogo = styled.div`
+  display: inline-flex;
   margin-left: 0.8rem;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 4px;
   position: relative;
   margin-top: 0;
@@ -115,10 +111,6 @@ const ButtonContainer = styled.div`
   `};
 `;
 
-const VoyageLogo = styled.span`
-  font-size: 20px;
-`;
-
 const SocialContainer = styled.div`
   display: flex;
   align-items: center;
@@ -148,41 +140,31 @@ export default class Footer extends PureComponent {
 
         <SocialContainer>
           <FacebookShareButton url="https://uber.github.io/streetscape.gl/">
-            <FacebookIcon size={32}/>
-          </FacebookShareButton>
-          {' '}
-          <TwitterShareButton url="https://uber.github.io/streetscape.gl/" hashtags={['streetscapegl']}>
-            <TwitterIcon size={32}/>
+            <FacebookIcon size={32} />
+          </FacebookShareButton>{' '}
+          <TwitterShareButton
+            url="https://uber.github.io/streetscape.gl/"
+            hashtags={['streetscapegl']}
+          >
+            <TwitterIcon size={32} />
           </TwitterShareButton>
         </SocialContainer>
 
         <LogosContainer>
-          <SectionText>
-            partnership with
-          </SectionText>
+          <SectionText>partnership with</SectionText>
           <StyledLogo>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://voyage.auto/"
-            >
-              <VoyageLogo className="icon-voyage"/>
+            <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
+              Voyage Auto
             </a>
           </StyledLogo>
-          <MapboxLogo/>
+          <MapboxLogo />
         </LogosContainer>
 
         <BrandingContainer>
-          <img src={'uber-logo.png'}/>
-          <SectionText>
-            created by
-          </SectionText>
-          <VisGLLogo logo={'viz_logo_bw.png'}>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="http://vis.gl"
-            >
+          <img src={UBER_LOGO} />
+          <SectionText>created by</SectionText>
+          <VisGLLogo logo={VIS_LOGO}>
+            <a target="_blank" rel="noopener noreferrer" href="http://vis.gl">
               VIS.GL
             </a>
           </VisGLLogo>
