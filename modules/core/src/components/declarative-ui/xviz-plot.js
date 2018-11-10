@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 import {MetricCard, MetricChart} from 'monochrome-ui';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
@@ -8,10 +9,46 @@ const GET_X = d => d[0];
 const GET_Y = d => d[1];
 const DATA_LOADING = {isLoading: true};
 
-class XVIZPlotComponent extends PureComponent {
+export class XVIZPlotComponent extends PureComponent {
+  static propTypes = {
+    // User configuration
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    margin: PropTypes.shape({
+      left: PropTypes.number,
+      right: PropTypes.number,
+      top: PropTypes.number,
+      bottom: PropTypes.number
+    }),
+    getColor: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    xTicks: PropTypes.number,
+    yTicks: PropTypes.number,
+    formatXTick: PropTypes.Function,
+    formatYTick: PropTypes.Function,
+    horizontalGridLines: PropTypes.number,
+    verticalGridLines: PropTypes.number,
+    onClick: PropTypes.func,
+
+    // From declarative UI plot component
+    title: PropTypes.string,
+    description: PropTypes.string,
+    independentVariable: PropTypes.string,
+    dependentVariable: PropTypes.arrayOf(PropTypes.string),
+
+    // From connected log
+    metadata: PropTypes.object,
+    variables: PropTypes.object
+  };
+
   static defaultProps = {
+    metadata: {},
     variables: {},
+    width: '100%',
     height: 300,
+    xTicks: 0,
+    yTicks: 5,
+    horizontalGridLines: 5,
+    verticalGridLines: 0,
     margin: {left: 45, right: 10, top: 10, bottom: 45},
     getColor: DEFAULT_COLOR_SERIES
   };
@@ -59,8 +96,12 @@ class XVIZPlotComponent extends PureComponent {
   }
 
   _onClick = x => {
-    // TODO - set look ahead
-    // this.props.log.seek(x);
+    const {onClick, log} = this.props;
+    if (onClick) {
+      onClick(x);
+    } else if (log) {
+      // TODO - set look ahead
+    }
   };
 
   _formatTitle = streamName => {
@@ -111,7 +152,20 @@ class XVIZPlotComponent extends PureComponent {
   }
 
   render() {
-    const {title, description, height, margin, getColor} = this.props;
+    const {
+      title,
+      description,
+      width,
+      height,
+      margin,
+      xTicks,
+      yTicks,
+      formatXTick,
+      formatYTick,
+      horizontalGridLines,
+      verticalGridLines,
+      getColor
+    } = this.props;
 
     return (
       <MetricCard title={title} description={description}>
@@ -119,14 +173,17 @@ class XVIZPlotComponent extends PureComponent {
           {...this._extractDataProps()}
           getColor={getColor}
           highlightX={0}
+          width={width}
           height={height}
           margin={margin}
-          xTicks={4}
-          yTicks={3}
+          xTicks={xTicks}
+          yTicks={yTicks}
+          formatXTick={formatXTick}
+          formatYTick={formatYTick}
           onClick={this._onClick}
           formatTitle={this._formatTitle}
-          horizontalGridLines={3}
-          verticalGridLines={0}
+          horizontalGridLines={horizontalGridLines}
+          verticalGridLines={verticalGridLines}
         />
       </MetricCard>
     );

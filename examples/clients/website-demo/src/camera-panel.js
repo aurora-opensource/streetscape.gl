@@ -31,7 +31,7 @@ export default class CameraPanel extends PureComponent {
         resizable={true}
         onUpdate={this._onUpdate}
       >
-        <XVIZPanel log={log} id="Camera" />
+        <XVIZPanel log={log} name="Camera" />
       </FloatPanel>
     );
   }
