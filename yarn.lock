@@ -799,14 +799,6 @@
     seer "^0.2.4"
     viewport-mercator-project "^6.0.0"
 
-"@deck.gl/experimental-layers@^6.2.1":
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/@deck.gl/experimental-layers/-/experimental-layers-6.2.1.tgz#c2ec363761845fa7dfdcd625971772191cf1226e"
-  integrity sha512-hFRoBROb1sSZ6Nymu42TCe9sLV3m/1FXO6tlXDvvG0Dyt8x80K0COBFCM6pAyHQc2sxpk5E7TZA/fRVMGdeZ0g==
-  dependencies:
-    "@deck.gl/core" "^6.2.1"
-    "@deck.gl/layers" "^6.2.1"
-
 "@deck.gl/layers@^6.2.1":
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.2.1.tgz#b140792185a3637b2e87ee14ee2dac518184ee31"

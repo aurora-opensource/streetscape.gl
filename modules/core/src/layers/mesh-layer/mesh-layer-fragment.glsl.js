@@ -5,13 +5,14 @@ const carLayerFragment = `
 precision highp float;
 #endif
 
-// uniform bool hasTexture1;
-uniform sampler2D sampler1;
+uniform bool hasTexture;
+uniform sampler2D sampler;
 uniform float opacity;
 uniform float desaturate;
 uniform float brightness;
 
 varying vec2 vTexCoord;
+varying vec4 vColor;
 varying float vLightWeight;
 
 // apply desaturation and brightness
@@ -21,9 +22,8 @@ vec3 color_transform(vec3 color) {
 }
 
 void main(void) {
-  vec4 color = texture2D(sampler1, vTexCoord);
-  color = vec4(color_transform(color.rgb), color.a * opacity);
-  gl_FragColor = color * vLightWeight;
+  vec4 color = hasTexture ? texture2D(sampler, vTexCoord) : vColor / 255.;
+  gl_FragColor = vec4(color_transform(color.rgb) * vLightWeight, color.a * opacity);
   
   // use highlight color if this fragment belongs to the selected object.
   gl_FragColor = picking_filterHighlightColor(gl_FragColor);
