@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import test from 'tape';
 
-import {mergeXvizStyles} from 'streetscape.gl/utils/style';
+import {mergeXVIZStyles} from 'streetscape.gl/utils/style';
 
-test('style#mergeXvizStyles precedence order', t => {
+test('style#mergeXVIZStyles precedence order', t => {
   const style1 = {
     '/foo': [
       {
@@ -53,7 +53,7 @@ test('style#mergeXvizStyles precedence order', t => {
     ]
   };
 
-  const mergedStyles = mergeXvizStyles(style1, style2);
+  const mergedStyles = mergeXVIZStyles(style1, style2);
 
   // style1 entries come first, because in XVIZ Styling
   // latter rule definitions overrule earler ones.

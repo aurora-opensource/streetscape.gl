@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {XvizPanel} from 'streetscape.gl';
+import {XVIZPanel} from 'streetscape.gl';
 import {FloatPanel} from 'monochrome-ui';
 
 export default class CameraPanel extends PureComponent {
@@ -31,7 +31,7 @@ export default class CameraPanel extends PureComponent {
         resizable={true}
         onUpdate={this._onUpdate}
       >
-        <XvizPanel log={log} id="Camera" />
+        <XVIZPanel log={log} name="Camera" />
       </FloatPanel>
     );
   }

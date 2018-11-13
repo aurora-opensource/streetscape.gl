@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {getXvizConfig} from '@xviz/parser';
+import {getXVIZConfig} from '@xviz/parser';
 import {_MapContext as MapContext} from 'react-map-gl';
 
 import PerspectivePopup from './perspective-popup';
@@ -66,7 +66,7 @@ export default class ObjectLabelsOverlay extends Component {
 
   _findObjectGeometryStream(streams) {
     // TODO - deal with multiple streams
-    const {OBJECT_STREAM} = getXvizConfig();
+    const {OBJECT_STREAM} = getXVIZConfig();
     return streams[OBJECT_STREAM] ? OBJECT_STREAM : null;
   }
 

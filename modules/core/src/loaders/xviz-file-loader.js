@@ -4,7 +4,7 @@ import {
   LOG_STREAM_MESSAGE,
   parseStreamMessage,
   StreamSynchronizer,
-  XvizStreamBuffer
+  XVIZStreamBuffer
 } from '@xviz/parser';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
@@ -21,7 +21,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     this._getFilePath = options.getFilePath;
     this._batchSize = options.maxConcurrency || DEFUALT_BATCH_SIZE;
 
-    this.streamBuffer = new XvizStreamBuffer();
+    this.streamBuffer = new XVIZStreamBuffer();
     this._isOpen = false;
   }
 

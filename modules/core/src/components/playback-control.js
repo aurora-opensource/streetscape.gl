@@ -1,24 +1,26 @@
 /* global window */
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
 import {PlaybackControl as MonochromePlaybackControl} from 'monochrome-ui';
-import {getXvizSettings} from '@xviz/parser';
+import {getXVIZConfig, getXVIZSettings} from '@xviz/parser';
 
 import connectToLog from './connect';
 
-class PlaybackControl extends PureComponent {
-  static propTypes = {
-    timeScale: PropTypes.number
-  };
+const TIME_SCALES = {
+  seconds: 0.001,
+  milliseconds: 1
+};
 
-  static defaultProps = {
-    timeScale: 1
-  };
+class PlaybackControl extends PureComponent {
+  static propTypes = {};
+
+  static defaultProps = {};
 
   state = {
     isPlaying: false,
-    lastUpdate: -1
+    lastUpdate: -1,
+    timeScale: TIME_SCALES[getXVIZConfig().TIMESTAMP_FORMAT] || 1
   };
 
   componentWillUnmount() {
@@ -46,16 +48,15 @@ class PlaybackControl extends PureComponent {
   };
 
   _animate = () => {
-    const {hiTimeResolution} = getXvizSettings();
-
     if (this.state.isPlaying) {
       const now = Date.now();
-      const {startTime, endTime, timeScale, log, timestamp} = this.props;
-      const {lastUpdate} = this.state;
+      const {startTime, endTime, log, timestamp} = this.props;
+      const {lastUpdate, timeScale} = this.state;
+      const {PLAYBACK_FRAME_RATE} = getXVIZSettings();
 
       // avoid skipping frames - cap delta at resolution
       let timeDeltaMs = lastUpdate > 0 ? now - lastUpdate : 0;
-      timeDeltaMs = Math.min(timeDeltaMs, hiTimeResolution * 1000);
+      timeDeltaMs = Math.min(timeDeltaMs, 1000 / PLAYBACK_FRAME_RATE);
 
       // TODO: check buffer
 
@@ -72,7 +73,8 @@ class PlaybackControl extends PureComponent {
   };
 
   _formatTime = (x, formatter) => {
-    const {startTime, timeScale} = this.props;
+    const {startTime} = this.props;
+    const {timeScale} = this.state;
 
     if (formatter) {
       return formatter(x, startTime);

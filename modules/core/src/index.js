@@ -3,7 +3,7 @@
 // LAYERS
 
 // The generic XVIZ layer
-export {default as XvizLayer} from './layers/xviz-layer';
+export {default as XVIZLayer} from './layers/xviz-layer';
 
 // Streetscape.gl custom layers
 export {default as SignLayer} from './layers/sign-layer/sign-layer';
@@ -24,8 +24,13 @@ export {default as PlaybackControl} from './components/playback-control';
 export {default as PerspectivePopup} from './components/perspective-popup';
 export {default as StreamSettingsPanel} from './components/stream-settings-panel';
 
-export {default as XvizPanel} from './components/declarative-ui/xviz-panel';
-export {default as VideoPanel} from './components/declarative-ui/xviz-video-component';
+export {default as XVIZPanel} from './components/declarative-ui/xviz-panel';
+
+export {XVIZPanelComponent} from './components/declarative-ui/xviz-panel';
+export {XVIZMetricComponent} from './components/declarative-ui/xviz-metric';
+export {XVIZPlotComponent} from './components/declarative-ui/xviz-plot';
+export {XVIZTableComponent} from './components/declarative-ui/xviz-table';
+export {XVIZVideoComponent} from './components/declarative-ui/xviz-video';
 
 // Constants
 export * from './constants';
