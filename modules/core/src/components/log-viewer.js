@@ -5,7 +5,7 @@ import {StaticMap} from 'react-map-gl';
 import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
 import {CubeGeometry} from 'luma.gl';
 
-import {MeshLayer} from '@deck.gl/experimental-layers';
+import MeshLayer from '../layers/mesh-layer/mesh-layer';
 import {XVIZStyleParser} from '@xviz/parser';
 
 import {loadOBJMesh} from '../loaders/obj-loader';
@@ -34,6 +34,7 @@ const LIGHT_SETTINGS = {
 const DEFAULT_CAR = {
   mesh: new CubeGeometry(),
   texture: null,
+  wireframe: false,
   scale: 1,
   origin: [0, 0, 0]
 };
@@ -219,8 +220,9 @@ class Core3DViewer extends PureComponent {
           sizeScale: car.scale || DEFAULT_CAR.scale,
           data: CAR_DATA,
           getPosition: d => d,
-          getColor: d => [160, 160, 160],
-          getYaw: d => -heading,
+          getColor: [160, 160, 160],
+          getYaw: d => heading,
+          wireframe: car.wireframe || DEFAULT_CAR.wireframe,
           lightSettings: {},
           updateTriggers: {
             getYaw: heading
