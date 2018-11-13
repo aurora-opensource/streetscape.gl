@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {setXVIZSettings, getXVIZSettings, getXVIZConfig} from '@xviz/parser';
+import {getXVIZSettings, getXVIZConfig} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
@@ -36,10 +36,6 @@ export default class XVIZLoaderInterface {
     this._version = 0;
     this._updateTimer = null;
     this.timestamp = null;
-
-    setXVIZSettings({
-      currentMajorVersion: 2
-    });
   }
 
   /* Event types:

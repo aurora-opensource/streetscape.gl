@@ -241,12 +241,14 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           ws.binaryType = 'arraybuffer';
 
           ws.onmessage = message => {
+            const hasMetadata = Boolean(this.getMetadata());
+
             return parseStreamMessage({
               message: message.data,
               onResult: this._onWSMessage,
               onError: this._onWSError,
               debug: this._debug.bind('parse_message'),
-              worker: this.options.worker,
+              worker: hasMetadata && this.options.worker,
               maxConcurrency: this.options.maxConcurrency
             });
           };
