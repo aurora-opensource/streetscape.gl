@@ -86,8 +86,7 @@ const CONFIG = {
   },
   resolve: {
     alias: {
-      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`),
-      webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
+      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`)
     }
   },
   plugins: [

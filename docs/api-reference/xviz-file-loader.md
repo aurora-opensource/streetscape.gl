@@ -19,5 +19,7 @@ const log = new XVIZFileLoader({
 **Options**
 - `numberOfFrames` (Number, required) - number of frames to load
 - `getFilePath` (Function, required) - Given a frame index, return the url to the file of that frame. Supported fileFormats are `glb` and `json`
-- `worker` (String|Function, optional) - the worker script to use for message processing. (more documentation needed)
+- `worker` (String|Boolean, optional) - Use a worker for message processing. Default `true`.
+  + Type `Boolean`: enable/disable default worker
+  + Type `String`: the worker URL to use
 - `maxConcurrency` (Number, optional) - the maximum number of worker threads to spawn. Default `3`.

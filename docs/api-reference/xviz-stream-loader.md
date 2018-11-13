@@ -32,5 +32,7 @@ new XVIZStreamLoader({
 - `duration` (Number, optional) - Length of the log
 - `timestamp` (Number, optional) - the timestamp to start loading at
 - `bufferLength` (Number, optional) - the length of the buffer to keep in memory. Uses the same unit as timestamp. If specified, older frames may be discarded during playback, to avoid crashes due to excessive memory usage.
-- `worker` (String|Function, optional) - the worker script to use for message processing. (more documentation needed)
+- `worker` (String|Boolean, optional) - Use a worker for message processing. Default `true`.
+  + Type `Boolean`: enable/disable default worker
+  + Type `String`: the worker URL to use
 - `maxConcurrency` (Number, optional) - the maximum number of worker threads to spawn. Default `3`.

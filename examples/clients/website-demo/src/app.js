@@ -40,7 +40,7 @@ class Example extends PureComponent {
     log: new XVIZFileLoader({
       numberOfFrames: 155,
       getFilePath: index => `/kitti/2011_09_26/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
-      worker: require.resolve('./stream-data-worker'),
+      worker: true,
       maxConcurrency: 4
     }).on('error', console.error), // eslint-disable-line
 
