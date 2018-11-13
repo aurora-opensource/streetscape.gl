@@ -31,7 +31,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
   connect() {
     this._isOpen = true;
-    this._loadNextBatch(0);
+    this._loadMetadata().then(() => this._loadNextBatch(1));
   }
 
   close() {
@@ -52,6 +52,12 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     super.seek(timestamp);
   }
 
+  _loadMetadata() {
+    const metadataPath = this._getFilePath(0);
+    assert(metadataPath);
+    return this._loadFile(metadataPath, {worker: false});
+  }
+
   _loadNextBatch(startFrame) {
     if (!this.isOpen()) {
       return;
@@ -65,7 +71,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     for (let i = 0; i < this._batchSize && startFrame + i < this._numberOfFrames; i++) {
       const filePath = this._getFilePath(startFrame + i);
       assert(filePath);
-      promises.push(this._loadFile(filePath));
+      promises.push(this._loadFile(filePath, this.options));
     }
 
     // if there are more frames need to fetch
@@ -74,7 +80,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     });
   }
 
-  _loadFile(filePath) {
+  _loadFile(filePath, options) {
     const fileFormat = filePath.toLowerCase().match(/[^\.]*$/)[0];
 
     let fetch;
@@ -96,8 +102,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
         message: data,
         onResult: this._onMessage,
         onError: this._onError,
-        worker: this.options.worker,
-        maxConcurrency: this.options.maxConcurrency
+        worker: options.worker,
+        maxConcurrency: options.maxConcurrency
       })
     );
   }
