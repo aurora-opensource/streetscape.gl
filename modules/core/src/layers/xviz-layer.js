@@ -31,7 +31,7 @@ import {
 // import PathLayer from './binary-path-layer/binary-path-layer';
 // import PolygonLayer from './binary-polygon-layer/binary-polygon-layer';
 
-import {XvizObject} from '@xviz/parser';
+import {XVIZObject} from '@xviz/parser';
 
 import deepExtend from 'deep-extend';
 
@@ -128,7 +128,7 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
     switch (propertyName) {
       case 'stroke_color':
       case 'fill_color':
-        objectState = XvizObject.get(f.id) || f;
+        objectState = XVIZObject.get(f.id) || f;
         break;
 
       default:
@@ -181,7 +181,7 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 }
 /* eslint-enable complexity */
 
-export default class XvizLayer extends CompositeLayer {
+export default class XVIZLayer extends CompositeLayer {
   _getProperty(propertyName) {
     return getProperty(this.props, propertyName);
   }
@@ -357,4 +357,4 @@ export default class XvizLayer extends CompositeLayer {
   }
 }
 
-XvizLayer.layerName = 'XvizLayer';
+XVIZLayer.layerName = 'XVIZLayer';

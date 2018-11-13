@@ -27,19 +27,28 @@ import connectToLog from '../connect';
 
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 
-class XvizVideoComponent extends PureComponent {
+export class XVIZVideoComponent extends PureComponent {
   static propTypes = {
+    // User configuration
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+
+    // From declarative UI video component
     cameras: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.array,
       PropTypes.object,
       PropTypes.func
-    ])
+    ]),
+
+    // From connected log
+    currentTime: PropTypes.number,
+    imageFrames: PropTypes.object
   };
 
   static defaultProps = {
-    width: '100%'
+    width: '100%',
+    height: 'auto'
   };
 
   constructor(props) {
@@ -98,7 +107,7 @@ class XvizVideoComponent extends PureComponent {
   }
 
   render() {
-    const {currentTime, imageFrames, width} = this.props;
+    const {currentTime, imageFrames, width, height} = this.props;
     const {selectedStreamName} = this.state;
 
     if (!currentTime || !selectedStreamName) {
@@ -109,6 +118,7 @@ class XvizVideoComponent extends PureComponent {
       <div>
         <ImageSequence
           width={width}
+          height={height}
           src={imageFrames[selectedStreamName]}
           currentTime={currentTime}
         />
@@ -124,4 +134,4 @@ const getLogState = log => ({
   imageFrames: log.getImageFrames()
 });
 
-export default connectToLog({getLogState, Component: XvizVideoComponent});
+export default connectToLog({getLogState, Component: XVIZVideoComponent});

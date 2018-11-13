@@ -18,18 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {setXvizSettings, setXvizConfig} from '@xviz/parser';
-
-export const XVIZ_SETTINGS = {
-  currentMajorVersion: 2,
-  TIME_WINDOW: 400
-};
-
-setXvizSettings(XVIZ_SETTINGS);
+import {setXVIZConfig} from '@xviz/parser';
 
 export const XVIZ_CONFIG = {
   PRIMARY_POSE_STREAM: '/vehicle_pose',
   OBJECT_STREAM: '/tracklets/objects'
 };
 
-setXvizConfig(XVIZ_CONFIG);
+setXVIZConfig(XVIZ_CONFIG);

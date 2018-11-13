@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 // @flow
-import {getXvizSettings} from '@xviz/parser';
+import {getXVIZSettings} from '@xviz/parser';
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
@@ -79,7 +79,7 @@ export default class ImageSequence extends PureComponent {
 
     let currentFrame = null;
     let currentFrameIndex = -1;
-    let bestDelta = getXvizSettings().TIME_WINDOW;
+    let bestDelta = getXVIZSettings().TIME_WINDOW;
 
     // Find the frame closest to the current timestamp
     src.forEach((frame, i) => {

@@ -23,9 +23,9 @@
 import assert from 'assert';
 import {
   parseStreamMessage,
-  getXvizSettings,
+  getXVIZSettings,
   LOG_STREAM_MESSAGE,
-  XvizStreamBuffer,
+  XVIZStreamBuffer,
   StreamSynchronizer
 } from '@xviz/parser';
 import PromiseRetry from 'promise-retry';
@@ -161,7 +161,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     // Handler object for the websocket events
     // Note: needs to be last due to member dependencies
     this.WebSocketClass = options.WebSocketClass || WebSocket;
-    this.streamBuffer = new XvizStreamBuffer();
+    this.streamBuffer = new XVIZStreamBuffer();
     this.bufferRange = rangeUtils.empty();
   }
 
@@ -181,7 +181,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
     if (
       this.lastRequest &&
-      this.streamBuffer.isInBufferRange(timestamp - getXvizSettings().TIME_WINDOW)
+      this.streamBuffer.isInBufferRange(timestamp - getXVIZSettings().TIME_WINDOW)
     ) {
       // Already loading
       return;

@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
-import {StreamSettingsPanel, XvizPanel} from 'streetscape.gl';
+import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
 import {Tooltip, Popover} from 'monochrome-ui';
 
 import MetadataPanel from './metadata-panel';
@@ -41,7 +41,7 @@ export default class ControlPanel extends PureComponent {
         return <StreamSettingsPanel log={log} />;
 
       case 'charts':
-        return <XvizPanel log={log} id="Metrics" />;
+        return <XVIZPanel log={log} name="Metrics" />;
 
       case 'metadata':
         return <MetadataPanel log={log} />;

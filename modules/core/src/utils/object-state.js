@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {XvizObject} from '@xviz/parser';
+import {XVIZObject} from '@xviz/parser';
 
 // Toggle a specific state of objects
 export function setObjectState(objectStates, {stateName, id, value}) {
   const state = {...objectStates[stateName]};
 
-  const xvizObject = XvizObject.get(id);
+  const xvizObject = XVIZObject.get(id);
   if (xvizObject) {
     xvizObject._setState(stateName, value);
   }

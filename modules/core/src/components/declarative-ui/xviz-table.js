@@ -24,10 +24,32 @@ import PropTypes from 'prop-types';
 
 import connectToLog from '../connect';
 
-class XvizTableComponent extends PureComponent {
+export class XVIZTableComponent extends PureComponent {
   static propTypes = {
+    // UI configuration
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    renderHeader: PropTypes.Function,
+    renderCell: PropTypes.Function,
+    indentSize: PropTypes.number,
+
+    // From declarative UI table component
+    stream: PropTypes.string,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    displayObjectId: PropTypes.bool,
+
+    // From connected log
     columns: PropTypes.array,
     nodes: PropTypes.array
+  };
+
+  static defaultProps = {
+    width: '100%',
+    height: 400,
+    indentSize: 12,
+    renderHeader: ({column}) => column.name,
+    renderCell: ({value}) => (value === null ? null : String(value))
   };
 
   constructor(props) {
@@ -85,15 +107,32 @@ class XvizTableComponent extends PureComponent {
       return null;
     }
 
-    const {title, description, type} = this.props;
+    const {
+      title,
+      description,
+      width,
+      height,
+      renderHeader,
+      renderCell,
+      indentSize,
+      type
+    } = this.props;
     const Component = type === 'table' ? Table : TreeTable;
 
     return (
-      <div>
+      <div style={{width, height}}>
         <Tooltip content={description}>
           <h4>{title}</h4>
         </Tooltip>
-        <Component columns={columns} rows={rows} />
+        <Component
+          width="100%"
+          height="100%"
+          renderHeader={renderHeader}
+          renderCell={renderCell}
+          indentSize={indentSize}
+          columns={columns}
+          rows={rows}
+        />
       </div>
     );
   }
@@ -105,4 +144,4 @@ const getLogState = (log, ownProps) => {
   return data && data.treetable;
 };
 
-export default connectToLog({getLogState, Component: XvizTableComponent});
+export default connectToLog({getLogState, Component: XVIZTableComponent});

@@ -26,15 +26,15 @@ import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
 import {CubeGeometry} from 'luma.gl';
 
 import {MeshLayer} from '@deck.gl/experimental-layers';
-import {XvizStyleParser} from '@xviz/parser';
+import {XVIZStyleParser} from '@xviz/parser';
 
 import {loadOBJMesh} from '../loaders/obj-loader';
-import XvizLayer from '../layers/xviz-layer';
+import XVIZLayer from '../layers/xviz-layer';
 
 import {VIEW_MODE} from '../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
 import {resolveCoordinateTransform} from '../utils/transform';
-import {mergeXvizStyles} from '../utils/style';
+import {mergeXVIZStyles} from '../utils/style';
 import {normalizeStreamFilter} from '../utils/stream-utils';
 import {setObjectState} from '../utils/object-state';
 
@@ -203,7 +203,7 @@ class Core3DViewer extends PureComponent {
   };
 
   _getStyleParser({metadata, xvizStyles}) {
-    return new XvizStyleParser(mergeXvizStyles(metadata && metadata.styles, xvizStyles));
+    return new XVIZStyleParser(mergeXVIZStyles(metadata && metadata.styles, xvizStyles));
   }
 
   _getLayers() {
@@ -258,7 +258,7 @@ class Core3DViewer extends PureComponent {
           );
 
           if (stream.features && stream.features.length) {
-            return new XvizLayer({
+            return new XVIZLayer({
               id: `xviz-${streamName}`,
               ...coordinateProps,
 
