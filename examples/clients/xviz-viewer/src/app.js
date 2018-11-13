@@ -21,7 +21,7 @@ class Example extends PureComponent {
         defaultLogLength: 30000,
         serverUrl: 'ws://localhost:8081'
       },
-      worker: require.resolve('./stream-data-worker'),
+      worker: true,
       maxConcurrency: 4
     }).on('error', console.error), // eslint-disable-line
 

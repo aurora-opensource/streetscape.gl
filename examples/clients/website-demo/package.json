@@ -11,11 +11,9 @@
     "build": "npm run build-clean && npm run build-script && npm run build-copy"
   },
   "dependencies": {
-    "math.gl": "^2.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "streetscape.gl": "^0.0.1",
-    "webworkify-webpack": "^2.1.2"
+    "streetscape.gl": "^0.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
