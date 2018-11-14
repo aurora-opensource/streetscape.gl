@@ -1,17 +1,8 @@
 // @flow
-import {getXVIZSettings} from '@xviz/parser';
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-
-// Buffer size in seconds around the given timestamp
-// This is used to pre-load frames into the DOM tree so that the video plays smoothly
-const VIDEO_FRAME_BUFFER = 10;
-
-const CONTAINER_STYLE = {
-  position: 'relative',
-  background: '#000',
-  lineHeight: 0
-};
+import {AutoSizer} from 'monochrome-ui';
+import ImageBuffer from '../../utils/image-buffer';
 
 /* Component that renders image sequence as video */
 export default class ImageSequence extends PureComponent {
@@ -43,9 +34,21 @@ export default class ImageSequence extends PureComponent {
 
   constructor(props) {
     super(props);
+
+    this._buffer = new ImageBuffer(10);
+
     this.state = {
+      width: 0,
+      height: 0,
       ...this._getCurrentFrames(props)
     };
+
+    this._canvas = null;
+    this._context = null;
+  }
+
+  componentDidMount() {
+    this._renderFrame();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -54,33 +57,46 @@ export default class ImageSequence extends PureComponent {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.currentFrameImage !== prevState.currentFrameImage ||
+      this.state.width !== prevState.width ||
+      this.state.height !== prevState.height
+    ) {
+      this._renderFrame();
+    }
+  }
+
+  _onCanvasLoad = ref => {
+    this._canvas = ref;
+
+    if (ref) {
+      this._context = ref.getContext('2d');
+    }
+  };
+
+  _onCanvasResize = ({width, height}) => {
+    this.setState({width, height});
+  };
+
   _getCurrentFrames(props) {
     const {currentTime, src} = props;
 
-    let currentFrame = null;
-    let currentFrameIndex = -1;
-    let bestDelta = getXVIZSettings().TIME_WINDOW;
+    const currentFrame = this._buffer.set(src, currentTime);
+    const currentFrameData = this._buffer.get(currentFrame);
 
-    // Find the frame closest to the current timestamp
-    src.forEach((frame, i) => {
-      const delta = currentTime - frame.timestamp;
-      if (delta >= 0 && delta < bestDelta) {
-        bestDelta = delta;
-        currentFrame = frame;
-        currentFrameIndex = i;
-      }
-    });
+    if (currentFrameData && !currentFrameData.image) {
+      currentFrameData.promise.then(image => {
+        if (this.state.currentFrame === currentFrame) {
+          this.setState({currentFrameImage: image});
+        }
+      });
+    }
 
-    const buffer =
-      currentFrameIndex >= 0
-        ? src.slice(
-            Math.max(0, currentFrameIndex - VIDEO_FRAME_BUFFER),
-            currentFrameIndex + VIDEO_FRAME_BUFFER
-          )
-        : // If no frame is matched, still render an invisible placeholder so that the container has size
-          src.slice(0, 1);
-
-    return {currentFrame, buffer};
+    return {
+      currentFrameImage: currentFrameData && currentFrameData.image,
+      currentFrame
+    };
   }
 
   _getVideoFilterCSS = () => {
@@ -93,33 +109,48 @@ export default class ImageSequence extends PureComponent {
     return filter;
   };
 
-  _renderFrame = (frame, i) => {
-    if (!frame) {
-      return null;
+  _renderFrame = () => {
+    if (!this._context) {
+      return;
     }
 
-    const {width, height} = this.props;
-    const isVisible = frame === this.state.currentFrame;
+    const width = this.state.width;
+    let height = this.state.height;
 
-    const style = {width, height, left: 0, top: 0};
-
-    if (i > 0) {
-      style.position = 'absolute';
+    if (!width) {
+      return;
     }
 
-    if (isVisible) {
-      style.filter = this._getVideoFilterCSS();
-    } else if (i === 0) {
-      // the first image is always displayed for the container to have the correct size
-      style.visibility = 'hidden';
+    this._context.filter = this._getVideoFilterCSS();
+
+    const {currentFrameImage} = this.state;
+    if (!currentFrameImage) {
+      this._context.clearRect(0, 0, width, height);
     } else {
-      style.display = 'none';
+      if (this.props.height === 'auto') {
+        height = (width / currentFrameImage.width) * currentFrameImage.height;
+      }
+      this._canvas.width = width;
+      this._canvas.height = height;
+      this._context.drawImage(currentFrameImage, 0, 0, width, height);
     }
-
-    return <img key={frame.timestamp} src={frame.imageUrl} style={style} />;
   };
 
   render() {
-    return <div style={CONTAINER_STYLE}>{this.state.buffer.map(this._renderFrame)}</div>;
+    const {width, height} = this.props;
+    const style = {
+      position: 'relative',
+      background: '#000',
+      lineHeight: 0,
+      width,
+      height
+    };
+
+    return (
+      <div style={style}>
+        <AutoSizer onResize={this._onCanvasResize} />
+        <canvas ref={this._onCanvasLoad} />
+      </div>
+    );
   }
 }
