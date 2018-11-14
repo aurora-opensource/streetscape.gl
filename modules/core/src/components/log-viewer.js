@@ -223,7 +223,7 @@ class Core3DViewer extends PureComponent {
           getColor: [160, 160, 160],
           getYaw: d => heading,
           wireframe: car.wireframe || DEFAULT_CAR.wireframe,
-          lightSettings: {},
+          lightSettings: LIGHT_SETTINGS,
           updateTriggers: {
             getYaw: heading
           }
@@ -269,7 +269,7 @@ class Core3DViewer extends PureComponent {
               instanceColors: stream.pointCloud.colors,
               instancePickingColors: stream.pointCloud.colors,
               radiusPixels: viewMode.firstPerson ? 4 : 1,
-              lightSettings: {},
+              lightSettings: LIGHT_SETTINGS,
 
               // Hack: draw point clouds before polygons to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
