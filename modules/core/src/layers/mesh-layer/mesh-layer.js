@@ -86,28 +86,23 @@ const DEFAULT_COLOR = [0, 0, 0, 255];
 const defaultProps = {
   mesh: null,
   texture: null,
-  sizeScale: 1,
-  desaturate: 0,
-  brightness: 0,
+  sizeScale: {type: 'number', value: 1, min: 0},
+  desaturate: {type: 'number', value: 0, min: 0},
+  brightness: {type: 'number', value: 0, min: 0},
 
-  // TODO - parameters should be merged, not completely overridden
-  parameters: {
-    depthTest: true,
-    depthFunc: GL.LEQUAL
-  },
   fp64: false,
   wireframe: false,
   // Optional settings for 'lighting' shader module
   lightSettings: {},
 
-  getPosition: x => x.position,
-  getColor: x => x.color || DEFAULT_COLOR,
+  getPosition: {type: 'accessor', value: x => x.position},
+  getColor: {type: 'accessor', value: DEFAULT_COLOR},
 
   // yaw, pitch and roll are in degrees
   // https://en.wikipedia.org/wiki/Euler_angles
-  getYaw: x => x.yaw || x.angle || 0,
-  getPitch: x => x.pitch || 0,
-  getRoll: x => x.roll || 0
+  getYaw: {type: 'accessor', value: d => d.yaw || 0},
+  getPitch: {type: 'accessor', value: d => d.pitch || 0},
+  getRoll: {type: 'accessor', value: d => d.roll || 0}
 };
 
 export default class MeshLayer extends Layer {
@@ -178,9 +173,12 @@ export default class MeshLayer extends Layer {
 
   draw({uniforms}) {
     const {sizeScale, desaturate, brightness} = this.props;
+    const {texture, emptyTexture} = this.state;
 
     this.state.model.render(
       Object.assign({}, uniforms, {
+        sampler: texture || emptyTexture,
+        hasTexture: Boolean(texture),
         sizeScale,
         desaturate,
         brightness
@@ -202,16 +200,12 @@ export default class MeshLayer extends Layer {
 
   setTexture(src) {
     const {gl} = this.context;
-    const {model, emptyTexture} = this.state;
 
     if (src) {
       getTexture(gl, src).then(texture => {
-        model.setUniforms({sampler: texture, hasTexture: 1});
         this.setState({texture});
       });
     } else {
-      // reset
-      this.state.model.setUniforms({sampler: emptyTexture, hasTexture: 0});
       this.setState({texture: null});
     }
   }

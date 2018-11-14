@@ -46,7 +46,7 @@ varying vec2 vTexCoord;
 const vec4 defaultColor = vec4(0.05, 0.05, 0.05, 0.8);
 
 void main(void) {
-  float angle = instanceAngles;
+  float angle = instanceAngles + PI;
   mat2 rotationMatrix = mat2(cos(angle), sin(angle), -sin(angle), cos(angle));
   vec3 position_modelspace = positions * modelScale + modelTranslate;
   position_modelspace = instancePositions + vec3(rotationMatrix * position_modelspace.xy, position_modelspace.z);

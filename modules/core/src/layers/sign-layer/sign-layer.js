@@ -25,7 +25,7 @@ import vertex from './sign-layer-vertex.glsl';
 const defaultProps = {
   ...IconLayer.defaultProps,
   render3D: false,
-  getAngle: x => x.angle || 0
+  getAngle: {type: 'accessor', value: 0}
 };
 
 export default class SignLayer extends IconLayer {
@@ -34,7 +34,7 @@ export default class SignLayer extends IconLayer {
 
     const {attributeManager} = this.state;
     attributeManager.addInstanced({
-      instanceAngles: {size: 1, accessor: 'getAngle', update: this.calculateInstanceAngles}
+      instanceAngles: {size: 1, accessor: 'getAngle'}
     });
   }
 
@@ -52,15 +52,6 @@ export default class SignLayer extends IconLayer {
       vs: vertex,
       shaderCache: this.context.shaderCache
     };
-  }
-
-  calculateInstanceAngles(attribute) {
-    const {data, getAngle} = this.props;
-    const {value} = attribute;
-    let i = 0;
-    for (const object of data) {
-      value[i++] = getAngle(object);
-    }
   }
 }
 
