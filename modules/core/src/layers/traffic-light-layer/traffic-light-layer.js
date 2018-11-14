@@ -57,11 +57,11 @@ const LIGHT_SHAPE = {
 };
 
 const defaultProps = {
-  getPosition: x => x.position,
-  getAngle: x => x.angle || 0,
-  getShape: x => 'TRAFFIC_LIGHT_SECTION_SHAPE_CIRCULAR',
-  getColor: x => 'TRAFFIC_LIGHT_SECTION_COLOR_GREEN',
-  getState: x => 1,
+  getPosition: {type: 'accessor', value: x => x.position},
+  getAngle: {type: 'accessor', value: 0},
+  getShape: {type: 'accessor', value: x => 'TRAFFIC_LIGHT_SECTION_SHAPE_CIRCULAR'},
+  getColor: {type: 'accessor', value: x => 'TRAFFIC_LIGHT_SECTION_COLOR_GREEN'},
+  getState: {type: 'accessor', value: 1},
   lightSettings: {}
 };
 
@@ -88,10 +88,9 @@ export default class TrafficLightLayer extends Layer {
     attributeManager.addInstanced({
       instancePositions: {
         size: 3,
-        accessor: 'getPosition',
-        update: this.calculateInstancePositions
+        accessor: 'getPosition'
       },
-      instanceAngles: {size: 1, accessor: 'getAngle', update: this.calculateInstanceAngles},
+      instanceAngles: {size: 1, accessor: 'getAngle'},
       instanceShapes: {
         size: 1,
         type: GL.UNSIGNED_BYTE,
@@ -107,8 +106,7 @@ export default class TrafficLightLayer extends Layer {
       instanceStates: {
         size: 1,
         type: GL.UNSIGNED_BYTE,
-        accessor: 'getState',
-        update: this.calculateInstanceStates
+        accessor: 'getState'
       }
     });
     /* eslint-enable max-len */
@@ -154,27 +152,6 @@ export default class TrafficLightLayer extends Layer {
     }
   }
 
-  calculateInstancePositions(attribute) {
-    const {data, getPosition} = this.props;
-    const {value} = attribute;
-    let i = 0;
-    for (const point of data) {
-      const position = getPosition(point);
-      value[i++] = position[0];
-      value[i++] = position[1];
-      value[i++] = position[2];
-    }
-  }
-
-  calculateInstanceAngles(attribute) {
-    const {data, getAngle} = this.props;
-    const {value} = attribute;
-    let i = 0;
-    for (const point of data) {
-      value[i++] = getAngle(point) + Math.PI;
-    }
-  }
-
   calculateInstanceColors(attribute) {
     const {data, getColor} = this.props;
     const {value} = attribute;
@@ -193,15 +170,6 @@ export default class TrafficLightLayer extends Layer {
     let i = 0;
     for (const point of data) {
       value[i++] = LIGHT_SHAPE[getShape(point)] || 0;
-    }
-  }
-
-  calculateInstanceStates(attribute) {
-    const {data, getState} = this.props;
-    const {value} = attribute;
-    let i = 0;
-    for (const point of data) {
-      value[i++] = getState(point);
     }
   }
 }
