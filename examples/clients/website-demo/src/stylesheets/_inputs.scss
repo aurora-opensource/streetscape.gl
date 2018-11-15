@@ -63,6 +63,7 @@
 }
 
 .mc-float-panel--title {
+  font-size: 11px;
   background: $background-alt;
   color: $color-text-primary;
 
@@ -91,11 +92,12 @@
   }
 
   &.active {
+    background: $background;
     color: $color-control-active;
   }
 
   .material-icons {
-    font-size: 24px;
+    font-size: 2em;
   }
 }
 

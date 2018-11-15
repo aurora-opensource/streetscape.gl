@@ -363,6 +363,7 @@ class Core3DViewer extends PureComponent {
       >
         <StaticMap
           reuseMap={true}
+          attributionControl={false}
           mapboxApiAccessToken={mapboxApiAccessToken}
           mapStyle={mapStyle}
           visible={!viewMode.firstPerson}
