@@ -31,7 +31,7 @@
     "monochrome-ui": "^0.0.9",
     "promise-retry": "^1.1.1",
     "prop-types": "^15.6.2",
-    "react-map-gl": "^4.0.0-beta.7",
+    "react-map-gl": "^4.0.1",
     "reselect": "^3.0.0",
     "webgl-obj-loader": "^0.1.1"
   },

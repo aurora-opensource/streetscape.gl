@@ -33,7 +33,8 @@ function getMetricsPanel(builder) {
     description: 'The velocity of the vehicle'
   });
 
-  container.child(metricAcceleration).child(metricVelocity);
+  container.child(metricAcceleration);
+  container.child(metricVelocity);
   panel.child(container);
 
   return panel;

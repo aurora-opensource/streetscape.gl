@@ -47,7 +47,9 @@ export default class ControlPanel extends PureComponent {
     return (
       <div id="control-panel">
         <header>
-          <div>Streetscape.gl</div>
+          <div>
+            <img src="assets/images/logo.png" />
+          </div>
           <div>
             {this._renderTab({id: 'metadata', displayName: 'Log Info', icon: 'info'})}
             {this._renderTab({id: 'streams', displayName: 'Stream Settings', icon: 'toc'})}

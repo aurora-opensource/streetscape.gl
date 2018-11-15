@@ -32,9 +32,9 @@ export function loadLidarData(data) {
     positions[i * 3 + 2] = float[i * 4 + 2];
 
     const reflectance = Math.min(float[i * 4 + 3], 3);
-    colors[i * 4 + 0] = 40 + reflectance * 70;
-    colors[i * 4 + 1] = 40 + reflectance * 60;
-    colors[i * 4 + 2] = 40 + reflectance * 60;
+    colors[i * 4 + 0] = 80 + reflectance * 80;
+    colors[i * 4 + 1] = 80 + reflectance * 80;
+    colors[i * 4 + 2] = 80 + reflectance * 60;
   }
   return {positions, colors};
 }

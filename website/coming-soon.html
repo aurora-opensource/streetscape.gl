@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Autonomous Visualization System">
+    <title>AVS Home</title>
+    <link rel="shortcut icon" href="favicon.png">
+    <link rel="stylesheet" id="font-link" href="https://d1a3f4spazzrp4.cloudfront.net/uber-fonts/3.1.0/refresh.css">
+    <link rel="stylesheet" href="assets/style.css"/>
+
+    <style>
+      body {font-family: ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif; margin: 0; padding: 0; overflow-x: hidden; background: #0c131e; color: #fff;}
+      .background {position: fixed; top: 0; left: 0; bottom: 0; right: 0; z-index: -1; background-image: url('images/splash-screen-bg.png'); background-size: cover; background-position: bottom; background-repeat: no-repeat; opacity: 0.5;}
+      p {line-height: 1.5;}
+      p a {color: #acacb0; text-decoration: none; font-weight: 700;}
+      p a:hover { color: #fff; }
+
+      @keyframes slidein {
+        from {top: 60px; opacity: 0;}
+        to {top: 0px; opacity: 1;}
+      }
+
+      .container {margin: 0 auto; position: relative; top: calc(50vh - 20vw);  width: 90vw; max-width: 1440px; display: flex; align-items: center;}
+      #info {width: 320px; padding: 0 40px 0 0; flex: 0 0 auto; font-size: 14px;}
+      #screenshot > img {box-shadow: 0 0 4px 8px rgba(0,0,0,0.3); opacity: 0; position: relative; animation-name: slidein; animation-delay: 0.5s; animation-duration: 1s; animation-fill-mode: forwards;}
+      h1 {font-size: 3em; letter-spacing: 0.1em; margin-top: 0}
+      h1 i {font-style: normal; color: #eaf0c7;}
+      hr {height: 3em; border: none;}
+      .btn {display: inline-block; cursor: pointer; text-decoration: none; background: #005CD2; padding: 12px 24px; color: #fff; font-weight: 700; border-radius: 2px; transition: background 0.3s;}
+      .btn:hover {background: #1f7cf4; }
+      .links {padding: 12px 0;}
+      .links > a {display: inline-block; vertical-align: middle; cursor: pointer; margin-right: 20px; }
+
+      @media screen and (max-width: 1080px) {
+        body {overflow-y: auto;}
+        #info {width: 100%; padding: 0 0 40px 0;}
+        .container {top: 0; padding: 40px 0; flex-direction: column;}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background" ></div>
+    <div class="container">
+      <div id="info">
+        <h1><i>A</i>utonomous<br/><i>V</i>isualization<br/><i>S</i>ystem</h1>
+        <p>A visualization protocol and toolkit for robotics data in the browser. <br/>
+          <a href="https://eng.uber.com/atg-dataviz/">Learn more</a></p>
+        <hr />
+        <div class="links">
+          <a href="https://www.uber.com" title="Uber"><img width="48" src="images/uber-logo.png" /></a>
+          <a href="http://vis.gl/" title="Uber Visualization"><img width="24" src="images/viz_logo_bw.png" /></a>
+        </div>
+        <p><b>Coming soon in December 2018</b></p>
+        <div><a href="https://docs.google.com/forms/d/1Vm8sMGytIFIvhO2p2HRMDh4WsHg3pLwvmWku1nTs9eY" class="btn" >Keep Me Updated</a></a></div>
+
+      </div>
+      <div id="screenshot">
+        <img id="screenshot-img" width="100%" src="images/splash-screen.png" />
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
+// export const MAP_STYLE = 'mapbox://styles/uberdata/cj04kmyzw003t2rml6zf8pe59';
 export const MAP_STYLE = 'mapbox://styles/mapbox/dark-v9';
 
 // OBJ model width 2073mm, length 4946mm
@@ -8,7 +9,8 @@ export const MAP_STYLE = 'mapbox://styles/mapbox/dark-v9';
 export const CAR = {
   mesh: 'assets/car.obj',
   origin: [1.08, -0.32, 0],
-  scale: 0.0009
+  scale: 0.0009,
+  wireframe: true
 };
 
 export const SETTINGS = {
@@ -20,5 +22,5 @@ export const SETTINGS = {
 };
 
 export const XVIZ_STYLE = {
-  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
+  // '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
 };

@@ -24,10 +24,9 @@ export default class CameraPanel extends PureComponent {
     return (
       <FloatPanel
         {...panelState}
-        title="Camera"
         className="camera-panel"
         movable={true}
-        minimizable={true}
+        minimizable={false}
         resizable={true}
         onUpdate={this._onUpdate}
       >

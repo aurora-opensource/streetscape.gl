@@ -9,6 +9,7 @@ import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
+import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
@@ -66,6 +67,7 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           xvizStyles={XVIZ_STYLE}
+          customLayers={[new BuildingLayer()]}
           viewMode={VIEW_MODE[settings.viewMode]}
           viewOffset={settings.viewOffset}
           onViewStateChange={this._onViewStateChange}
