@@ -136,23 +136,23 @@ export default class TrackletsConverter {
         fill_color: '#00000080'
       })
       .styleClass('Car', {
-        fill_color: '#7DDDD780',
+        fill_color: '#7DDDD760',
         stroke_color: '#7DDDD7'
       })
       .styleClass('Cyclist', {
-        fill_color: '#DA70BF80',
+        fill_color: '#DA70BF60',
         stroke_color: '#DA70BF'
       })
       .styleClass('Pedestrian', {
-        fill_color: '#FEC56480',
+        fill_color: '#FEC56460',
         stroke_color: '#FEC564'
       })
       .styleClass('Van', {
-        fill_color: '#267E6380',
+        fill_color: '#267E6360',
         stroke_color: '#267E63'
       })
       .styleClass('Unknown', {
-        fill_color: '#D6A00080',
+        fill_color: '#D6A00060',
         stroke_color: '#D6A000'
       })
       .pose(this.FIXTURE_TRANSFORM_POSE)

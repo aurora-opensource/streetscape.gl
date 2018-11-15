@@ -18,40 +18,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, {PureComponent} from 'react';
-import {XVIZPanel} from 'streetscape.gl';
-import {FloatPanel} from 'monochrome-ui';
+import Protobuf from 'pbf';
+import {VectorTile} from '@mapbox/vector-tile';
+import {worldToLngLat} from 'viewport-mercator-project';
+import {vectorTileFeatureToGeoJSON} from './feature';
 
-export default class CameraPanel extends PureComponent {
-  state = {
-    panelState: {
-      x: 400,
-      y: 50,
-      width: 400,
-      height: 121,
-      minimized: false
+const TILE_SIZE = 512;
+
+export function decodeTile(x, y, z, arrayBuffer) {
+  const tile = new VectorTile(new Protobuf(arrayBuffer));
+
+  const result = [];
+  const xProj = x * TILE_SIZE;
+  const yProj = y * TILE_SIZE;
+  const scale = Math.pow(2, z);
+
+  const projectFunc = project.bind(null, xProj, yProj, scale);
+  const vectorTileLayer = tile.layers.building;
+
+  if (vectorTileLayer) {
+    for (let i = 0; i < vectorTileLayer.length; i++) {
+      const vectorTileFeature = vectorTileLayer.feature(i);
+      const features = vectorTileFeatureToGeoJSON(vectorTileFeature, projectFunc);
+      features.forEach(f => {
+        result.push(f);
+      });
     }
-  };
+  }
+  return result;
+}
 
-  _onUpdate = panelState => {
-    this.setState({panelState});
-  };
+function project(x, y, scale, line, extent) {
+  const sizeToPixel = extent / TILE_SIZE;
 
-  render() {
-    const {log} = this.props;
-    const {panelState} = this.state;
-
-    return (
-      <FloatPanel
-        {...panelState}
-        className="camera-panel"
-        movable={true}
-        minimizable={false}
-        resizable={true}
-        onUpdate={this._onUpdate}
-      >
-        <XVIZPanel log={log} name="Camera" />
-      </FloatPanel>
-    );
+  for (let ii = 0; ii < line.length; ii++) {
+    const p = line[ii];
+    // LNGLAT
+    line[ii] = worldToLngLat([x + p[0] / sizeToPixel, y + p[1] / sizeToPixel], scale);
   }
 }
