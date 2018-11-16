@@ -41,9 +41,6 @@ const CONFIG = {
     path: resolve('./dist'),
     filename: 'bundle.js'
   },
-  devServer: {
-    contentBase: [resolve(__dirname)]
-  },
   module: {
     noParse: /(mapbox-gl)\.js$/,
     rules: [
@@ -90,6 +87,7 @@ const CONFIG = {
   resolve: {
     alias: {
       // TODO figure out a way to allow switch config file
+      // xviz config for demo app, only support kitti demo for now
       'xviz-config': resolve(__dirname, '../examples/clients/config/xviz-config-kitti.js'),
       webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
     }

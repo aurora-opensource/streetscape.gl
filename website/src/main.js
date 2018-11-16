@@ -29,7 +29,7 @@ import store from './reducers';
 import Routes from './routes';
 import document from 'global/document';
 
-require('../favicon.png');
+require('./static/favicon.png');
 
 const el = document.createElement('div');
 document.body.appendChild(el);
