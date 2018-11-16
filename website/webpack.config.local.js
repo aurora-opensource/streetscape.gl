@@ -6,7 +6,7 @@
 // without publishing or npm linking, with conveniences such hot reloading etc.
 
 // avoid destructuring for older Node version support
-const resolve = require('path').resolve;
+const {resolve} = require('path');
 
 const ROOT_DIR = resolve(__dirname, '..');
 
@@ -22,13 +22,17 @@ function makeLocalDevConfig() {
     devServer: {
       stats: {
         warnings: false
-      }
+      },
+      contentBase: [
+        resolve(__dirname, './src/static'),
+        // data directory for demo app
+        resolve(__dirname, '../data/generated')
+      ]
     },
 
     devtool: 'source-map',
 
     resolve: {
-      // mainFields: ['esnext', 'module', 'main'],
       modules: [resolve(ROOT_DIR, './node_modules'), resolve('./node_modules')],
       alias: ALIASES
     },
@@ -56,6 +60,12 @@ function addLocalDevSettings(config, exampleDir) {
   Object.assign(config.module, {
     rules: (config.module.rules || []).concat(LOCAL_DEV_CONFIG.module.rules)
   });
+
+  config.devServer = config.devServer || {};
+  config.devServer.contentBase = (config.devServer.contentBase || []).concat(
+    LOCAL_DEV_CONFIG.devServer.contentBase
+  );
+
   return config;
 }
 
