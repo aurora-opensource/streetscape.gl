@@ -53,7 +53,7 @@ export class XVIZPlotComponent extends PureComponent {
     title: PropTypes.string,
     description: PropTypes.string,
     independentVariable: PropTypes.string,
-    dependentVariable: PropTypes.arrayOf(PropTypes.string),
+    dependentVariables: PropTypes.arrayOf(PropTypes.string),
 
     // From connected log
     metadata: PropTypes.object,
@@ -75,7 +75,7 @@ export class XVIZPlotComponent extends PureComponent {
 
   state = {
     independentVariable: null,
-    dependentVariable: {}
+    dependentVariables: {}
   };
 
   componentWillReceiveProps(nextProps) {
@@ -86,13 +86,13 @@ export class XVIZPlotComponent extends PureComponent {
 
     const independentVariable = nextProps.variables[nextProps.independentVariable];
     let independentVariableChanged = false;
-    let dependentVariableChanged = false;
+    let dependentVariablesChanged = false;
     const updatedDependentVariable = {};
 
     if (independentVariable !== this.state.independentVariable) {
       independentVariableChanged = true;
     }
-    for (const streamName of nextProps.dependentVariable) {
+    for (const streamName of nextProps.dependentVariables) {
       const variable = nextProps.variables[streamName];
       if (
         independentVariableChanged ||
@@ -103,14 +103,14 @@ export class XVIZPlotComponent extends PureComponent {
           independentVariable,
           variable
         );
-        dependentVariableChanged = true;
+        dependentVariablesChanged = true;
       }
     }
 
-    if (independentVariableChanged || dependentVariableChanged) {
+    if (independentVariableChanged || dependentVariablesChanged) {
       this.setState({
         independentVariable,
-        dependentVariable: {...this.state.dependentVariable, ...updatedDependentVariable}
+        dependentVariables: {...this.state.dependentVariables, ...updatedDependentVariable}
       });
     }
   }
@@ -146,7 +146,7 @@ export class XVIZPlotComponent extends PureComponent {
   }
 
   _extractDataProps() {
-    const {independentVariable, dependentVariable} = this.state;
+    const {independentVariable, dependentVariables} = this.state;
 
     if (!independentVariable) {
       return DATA_LOADING;
@@ -154,8 +154,8 @@ export class XVIZPlotComponent extends PureComponent {
 
     const x = independentVariable[0].values;
     const data = {};
-    for (const streamName in dependentVariable) {
-      const variable = dependentVariable[streamName];
+    for (const streamName in dependentVariables) {
+      const variable = dependentVariables[streamName];
       if (variable) {
         variable.forEach(({id, values}, i) => {
           data[`${streamName}-${id || i}`] = values;
