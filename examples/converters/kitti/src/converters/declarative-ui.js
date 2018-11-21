@@ -49,7 +49,7 @@ function getPlotPanel(builder) {
     title: 'Cost',
     description: 'Costs considered in planning the vehicle trajectory',
     independentVariable: '/motion_planning/time',
-    dependentVariable: [
+    dependentVariables: [
       '/motion_planning/trajectory/cost/cost1',
       '/motion_planning/trajectory/cost/cost2',
       '/motion_planning/trajectory/cost/cost3'
