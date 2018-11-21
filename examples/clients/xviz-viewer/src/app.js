@@ -65,7 +65,7 @@ class Example extends PureComponent {
         <div id="control-panel">
           <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
           <hr />
-          <XVIZPanel log={log} name="Perception" />
+          <XVIZPanel log={log} name="Metrics" />
         </div>
         <div id="video-panel">
           <XVIZPanel log={log} name="Camera" />
