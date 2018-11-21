@@ -22,32 +22,17 @@
 import {Layer} from '@deck.gl/core';
 import {Cube, Sphere} from 'luma.gl';
 import GL from 'luma.gl/constants';
-import Color from 'color';
 
 import trafficLightLayerVertex from './traffic-light-layer-vertex.glsl';
 import trafficLightLayerFragment from './traffic-light-layer-fragment.glsl';
 
 import {makeLightShapeTexture} from './traffic-light-utils';
 
-/* Util */
-function parseColor(hex, opacity = 1) {
-  const rgb = Color(hex).rgb();
-  if (rgb.array) {
-    const color = Color(hex)
-      .rgb()
-      .array();
-    color.push(Math.round(opacity * 255));
-    return color;
-  }
-
-  return [rgb.r, rgb.g, rgb.b, Math.round(opacity * 255)];
-}
-
 // keys are from Mercator API
 const LIGHT_COLOR = {
-  TRAFFIC_LIGHT_SECTION_COLOR_GREEN: parseColor('#00FF80'),
-  TRAFFIC_LIGHT_SECTION_COLOR_YELLOW: parseColor('#FFF000'),
-  TRAFFIC_LIGHT_SECTION_COLOR_RED: parseColor('#FF1010')
+  TRAFFIC_LIGHT_SECTION_COLOR_GREEN: [0, 255, 128, 255],
+  TRAFFIC_LIGHT_SECTION_COLOR_YELLOW: [255, 250, 0, 255],
+  TRAFFIC_LIGHT_SECTION_COLOR_RED: [255, 16, 16, 255]
 };
 
 // keys are from Mercator API
