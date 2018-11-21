@@ -29,8 +29,8 @@ export class XVIZTableComponent extends PureComponent {
     // UI configuration
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    renderHeader: PropTypes.Function,
-    renderCell: PropTypes.Function,
+    renderHeader: PropTypes.func,
+    renderCell: PropTypes.func,
     indentSize: PropTypes.number,
 
     // From declarative UI table component
