@@ -1,5 +1,5 @@
+/* global fetch */
 import assert from 'assert';
-import {json, buffer} from 'd3-fetch';
 import {
   LOG_STREAM_MESSAGE,
   parseStreamMessage,
@@ -83,21 +83,21 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   _loadFile(filePath, options) {
     const fileFormat = filePath.toLowerCase().match(/[^\.]*$/)[0];
 
-    let fetch;
+    let file;
     switch (fileFormat) {
       case 'glb':
-        fetch = buffer(filePath);
+        file = fetch(filePath).then(resp => resp.arrayBuffer());
         break;
 
       case 'json':
-        fetch = json(filePath);
+        file = fetch(filePath).then(resp => resp.json());
         break;
 
       default:
         return Promise.reject('Unknown file format');
     }
 
-    return fetch.then(data =>
+    return file.then(data =>
       parseStreamMessage({
         message: data,
         onResult: this._onMessage,
