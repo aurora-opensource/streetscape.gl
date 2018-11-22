@@ -29,7 +29,7 @@ const urlRewrites = [
       if (!route) {
         console.warn('Cannot find linked doc: ', filepath); // eslint-disable-line
       }
-      return `#/documentation${route}${hash ? '?section=' : ''}${hash}`;
+      return `#/${route}${hash ? '?section=' : ''}${hash}`;
     }
   }
 ];

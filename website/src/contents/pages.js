@@ -9,34 +9,34 @@ function getStreetscapeDocUrl(filename) {
 // mapping from file path in source to generated page url
 export const markdownFiles = {};
 
-function generatePath(tree, parentPath = '', depth = 0) {
+function generatePath(cachKey, tree, parentPath = '', depth = 0) {
   if (Array.isArray(tree)) {
-    tree.forEach(branch => generatePath(branch, parentPath, depth));
+    tree.forEach(branch => generatePath(cachKey, branch, parentPath, depth));
     return tree;
   }
 
   tree.depth = depth;
   if (tree.name) {
     tree.path = tree.name
-      .match(/(GeoJson|3D|API|JSON|XVIZ|FAQ|[A-Z]?[a-z'0-9\.]+|\d+)/g)
+      .match(/(GeoJson|3D|API|JSON|XVIZ|UI|FAQ|[A-Z]?[a-z'0-9\.]+|\d+)/g)
       .join('-')
       .toLowerCase()
       .replace(/[^\w-]/g, '');
   }
   if (tree.children) {
-    generatePath(tree.children, `${parentPath}/${tree.path}`, depth + 1);
+    generatePath(cachKey, tree.children, `${parentPath}/${tree.path}`, depth + 1);
   }
-  if (typeof tree.content === 'string') {
-    const i = tree.content.indexOf('docs/');
+  if (typeof tree.markdown === 'string') {
+    const i = tree.markdown.indexOf('docs/');
     if (i >= 0) {
-      markdownFiles[tree.content.slice(i)] = `${parentPath}/${tree.path}`;
+      markdownFiles[tree.markdown.slice(i)] = `${cachKey}${parentPath}/${tree.path}`;
     }
   }
 
   return tree;
 }
 
-export const streetscapeDocPages = generatePath([
+export const streetscapeDocPages = generatePath('streetscape.gl', [
   {
     name: 'Overview',
     children: [
@@ -127,7 +127,7 @@ export const streetscapeDocPages = generatePath([
   }
 ]);
 
-export const xvizDocPages = generatePath([
+export const xvizDocPages = generatePath('xviz', [
   {
     name: 'Overview',
     children: [
@@ -252,36 +252,58 @@ export const xvizDocPages = generatePath([
     name: 'API Reference',
     children: [
       {
-        name: 'XVIZ Configuration',
-        markdown: getXVIZDocUrl('api-reference/xviz-configuration.md')
+        name: '@xviz/parser',
+        children: [
+          {
+            name: 'XVIZBuilder',
+            markdown: getXVIZDocUrl('api-reference/xviz-builder.md')
+          },
+          {
+            name: 'XVIZMetadataBuilder',
+            markdown: getXVIZDocUrl('api-reference/xviz-metadata-builder.md')
+          },
+          {
+            name: 'XVIZUIBuilder',
+            markdown: getXVIZDocUrl('api-reference/xviz-ui-builder.md')
+          }
+        ]
       },
       {
-        name: 'XVIZ Parsing',
-        markdown: getXVIZDocUrl('api-reference/parse-xviz.md')
-      },
-      {
-        name: 'XVIZSynchronizer',
-        markdown: getXVIZDocUrl('api-reference/xviz-synchronizer.md')
-      },
-      {
-        name: 'XVIZLogSlice',
-        markdown: getXVIZDocUrl('api-reference/xviz-log-slice.md')
-      },
-      {
-        name: 'XVIZObject',
-        markdown: getXVIZDocUrl('api-reference/xviz-object.md')
-      },
-      {
-        name: 'XVIZObjectCollection',
-        markdown: getXVIZDocUrl('api-reference/xviz-object-collection.md')
-      },
-      {
-        name: 'XVIZ Loader',
-        markdown: getXVIZDocUrl('api-reference/xviz-loader.md')
-      },
-      {
-        name: 'XVIZValidator',
-        markdown: getXVIZDocUrl('api-reference/xviz-validator.md')
+        name: '@xviz/parser',
+        children: [
+          {
+            name: 'XVIZ Configuration',
+            markdown: getXVIZDocUrl('api-reference/xviz-configuration.md')
+          },
+          {
+            name: 'XVIZ Parsing',
+            markdown: getXVIZDocUrl('api-reference/parse-xviz.md')
+          },
+          {
+            name: 'XVIZSynchronizer',
+            markdown: getXVIZDocUrl('api-reference/xviz-synchronizer.md')
+          },
+          {
+            name: 'XVIZLogSlice',
+            markdown: getXVIZDocUrl('api-reference/xviz-log-slice.md')
+          },
+          {
+            name: 'XVIZObject',
+            markdown: getXVIZDocUrl('api-reference/xviz-object.md')
+          },
+          {
+            name: 'XVIZObjectCollection',
+            markdown: getXVIZDocUrl('api-reference/xviz-object-collection.md')
+          },
+          {
+            name: 'XVIZ Loader',
+            markdown: getXVIZDocUrl('api-reference/xviz-loader.md')
+          },
+          {
+            name: 'XVIZValidator',
+            markdown: getXVIZDocUrl('api-reference/xviz-validator.md')
+          }
+        ]
       }
     ]
   }
