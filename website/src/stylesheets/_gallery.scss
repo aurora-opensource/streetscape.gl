@@ -1,0 +1,218 @@
+
+.gallery-wrapper {
+  position: fixed;;
+  width: 100%;
+  height: 100vh;
+  padding-top: $topbar-height;
+}
+.page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.toc {
+  min-width: 240px;
+  max-width: 320px;
+  width: 30vw;
+  height: 100%;
+  background: #fff;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.15);
+  z-index: 1;
+  transition: all 300ms;
+  white-space: nowrap;
+
+  >div {
+    padding-top: 20px;
+    padding-bottom: 80px;
+  }
+  .subpages {
+    transition: max-height 0.3s;
+    overflow: hidden;
+  }
+  li {
+    list-style: none;
+  }
+  a {
+    display: inline-block;
+  }
+  .badge {
+    display: inline-block;
+    background: $white-40;
+    color: $white;
+    font-size: smaller;
+    padding: 0 4px;
+    border-radius: 4px;
+    margin: 0 -40px 0 6px;
+  }
+  .link, h4 {
+    line-height: 40px;
+    color: $black-20;
+    background: transparent;
+    border-style: solid;
+    border-width: 0 0 0 4px;
+    border-color: transparent;
+  }
+  .link.active {
+    color: $primary;
+    font-weight: bold;
+    border-color: $primary;
+  }
+  .link:hover {
+    color: $white-40;
+  }
+  .list-header {
+    position: relative;
+    font-weight: 700;
+    font-size: 0.833em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 24px 0 8px 24px;
+    color: $white-40;
+    display: block;
+  }
+  .list-header:not(.active):not(.expanded):before {
+    content: '+';
+    font-weight: 700;
+    color: $white-40;
+    position: absolute;
+    top: 24px;
+    right: 8px;
+    font-size: 16px;
+    line-height: 18px;
+  }
+  .list-header:not(.active):not(.expanded) + .subpages {
+    max-height: 0 !important;
+  }
+}
+.markdown-body {
+  padding: 40px 36px 96px;
+}
+.stat {
+  text-transform: uppercase;
+  font-size: 0.833em;
+
+  b {
+    display: block;
+    font-size: 3em;
+  }
+}
+.markdown {
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.markdown .demo {
+  height: 80vh;
+
+  >div:first-child {
+    margin-top: 0;
+    transition: margin-top 600ms ease-in;
+  }
+
+  &:not(:hover) {
+    height: 30vh;
+    min-height: 200px;
+    transition: height 300ms;
+
+    >div:first-child {
+      margin-top: -20vh;
+      transition: margin-top 300ms;
+    }
+    .options-panel {
+      .input, hr {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .flexbox--row {
+    display: block;
+  }
+  .toc {
+    position: absolute;
+    width: 100vw;
+    max-width: initial;
+    height: 0;
+    z-index: 9;
+
+    >div {
+      padding-top: 220px;
+    }
+  }
+  .toc.open {
+    height: 100%;
+  }
+  .options-panel {
+    width: 100%;
+    margin: 0;
+  }
+  .options-panel:not(.focus) {
+    cursor: pointer;
+    >div > *, hr, .input {
+      display: none;
+    }
+    &:before {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      color: $white-40;
+      font-size: 24px;
+      font-family: 'deckgl';
+      content: "\e906";
+    }
+    >.spinner {
+      height: 3px;
+      line-height: 0;
+      font-size: 0;
+
+      .spinner--fill {
+        height: 3px;
+        display: block;
+      }
+    }
+    h3 {
+      display: block;
+    }
+  }
+  .tabs .tip {
+    display: none;
+  }
+  .markdown-body {
+    padding: 40px 12px 96px;
+  }
+}
+
+.icon-demo {
+  .tooltip {
+    padding: 4px 12px;
+    max-width: 240px;
+    max-height: 320px;
+    box-sizing: content-box;
+    overflow-y: hidden;
+
+    h5 {
+      font-size: 1em;
+    }
+    p {
+      display: none;
+      text-indent: 4px;
+    }
+  }
+  .tooltip.interactive {
+    border: solid 4px transparent;
+    margin: -4px;
+    background: $white;
+    color: $black;
+    pointer-events: all;
+    width: 240px;
+    overflow-y: auto;
+
+    p {
+      display: block;
+    }
+  }
+}

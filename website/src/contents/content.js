@@ -18,7 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {getImageUrl} from './utils';
+export function getImageUrl(filename) {
+  return `./images/${filename}`;
+}
+
+export const DEMO_LINK = './demo/index.html';
 
 export const SECTIONS = [
   {
@@ -63,18 +67,6 @@ export const HERO_IMAGES_SCALED = [
   getImageUrl('example-demoapp.png'),
   getImageUrl('example-mapping.png'),
   getImageUrl('example-remoteassist.png')
-];
-
-export const HEADER_NAVS = [
-  {
-    text: 'User Guide',
-    link: 'https://github.com/uber/streetscape.gl/blob/master/docs/develop.md'
-  },
-
-  {
-    text: 'Github',
-    link: 'https://github.com/uber/streetscape.gl'
-  }
 ];
 
 export const SHOWCASE_ITEMS = [

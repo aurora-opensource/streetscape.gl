@@ -19,26 +19,21 @@
 // THE SOFTWARE.
 
 import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
-import {routerReducer} from 'react-router-redux';
 // import {taskMiddleware} from 'react-palm/tasks';
 import thunk from 'redux-thunk';
-import {routerMiddleware} from 'react-router-redux';
-import {hashHistory} from 'react-router';
 import appReducer from './app';
 // import analyticsMiddleware from './analytics';
 
 const initialState = {};
 const reducers = {
-  app: appReducer,
-  routing: routerReducer
+  app: appReducer
 };
 
 const combinedReducers = combineReducers(reducers);
 
 export const middlewares = [
   // taskMiddleware,
-  thunk,
-  routerMiddleware(hashHistory)
+  thunk
   // analyticsMiddleware
 ];
 
@@ -47,8 +42,4 @@ export const enhancers = [applyMiddleware(...middlewares)];
 // add redux devtools
 // const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default createStore(
-  combinedReducers,
-  initialState,
-  compose(...enhancers)
-);
+export default createStore(combinedReducers, initialState, compose(...enhancers));

@@ -18,13 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
-import { STEPS } from '../content';
-import { media } from '../styles';
+import {STEPS} from '../contents/content';
+import {media} from '../styles';
 import StaggeredScrollAnimation from './common/staggered-scroll-animation';
-import { LinkButton } from './common/styled-components';
+import {LinkButton} from './common/styled-components';
 
 const StepsContainer = styled.div`
   display: flex;
@@ -64,15 +64,15 @@ const StepTitle = styled.div`
 
 const StepDescription = styled.div`
   font-size: 16px;
-  color: #C7CBCF;
-    margin-bottom: ${props => props.theme.margins.small};
+  color: #c7cbcf;
+  margin-bottom: ${props => props.theme.margins.small};
 `;
 
 const NumberCircle = styled.div`
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  background: #C7CBCF;
+  background: #c7cbcf;
   color: #000;
   display: flex;
   align-items: center;
@@ -85,15 +85,15 @@ const NavItemContainer = styled(StepColumn)`
   justify-content: center;
 `;
 
-const Step = ({ index, title, description, link }) => (
+const Step = ({index, title, description, link}) => (
   <StepContainer>
     <StepTitle>{title}</StepTitle>
     <StepDescription>{description}</StepDescription>
-    {link &&
-    <LinkButton secondary none link href={link.url}>
-      {link.title}  &nbsp; &rarr;
-    </LinkButton>
-    }
+    {link && (
+      <LinkButton secondary none link href={link.url}>
+        {link.title} &nbsp; &rarr;
+      </LinkButton>
+    )}
   </StepContainer>
 );
 
@@ -109,30 +109,21 @@ class Walkthrough extends PureComponent {
       <div>
         <StaggeredScrollAnimation Container={StepsContainer}>
           <StepsRow>
-          {
-             STEPS.map( (_, i) => (
-               <NavItem
-                 key={`step-${i}`}
-                 index={i + 1}/>
-               )
-             )
-          }
+            {STEPS.map((_, i) => (
+              <NavItem key={`step-${i}`} index={i + 1} />
+            ))}
           </StepsRow>
           <StepsRow>
-          {
-            STEPS.map(({ title, description, link }, i) => (
-                <Step
-                  key={`step-${i}`}
-                  index={i + 1}
-                  title={title}
-                  description={description}
-                  link={link}
-                />
-              )
-            )
-          }
+            {STEPS.map(({title, description, link}, i) => (
+              <Step
+                key={`step-${i}`}
+                index={i + 1}
+                title={title}
+                description={description}
+                link={link}
+              />
+            ))}
           </StepsRow>
-
         </StaggeredScrollAnimation>
       </div>
     );

@@ -16,14 +16,15 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "d3-fetch": "^1.1.2",
     "global": "^4.3.2",
+    "highlight.js": "^9.7.0",
+    "marked": "^0.3.6",
     "prop-types": "^15.6.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^4.4.5",
-    "react-router": "^3.0.5",
-    "react-router-redux": "^4.0.8",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.3.1",
     "react-share": "^2.3.1",
     "react-swipeable-views": "^0.13.0",
     "react-waypoint": "^8.0.3",
