@@ -18,29 +18,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
-import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
-// import {taskMiddleware} from 'react-palm/tasks';
-import thunk from 'redux-thunk';
-import appReducer from './app';
-// import analyticsMiddleware from './analytics';
-
-const initialState = {};
-const reducers = {
-  app: appReducer
+// TODO move to a GitHub file?
+export const FRAMEWORK_LINKS = {
+  'deck.gl': 'https://uber.github.io/deck.gl',
+  'luma.gl': 'https://uber.github.io/luma.gl',
+  'react-map-gl': 'https://uber.github.io/react-map-gl',
+  'nebula.gl': 'https://uber.github.io/nebula.gl',
+  'react-vis': 'https://uber.github.io/react-vis',
+  'vis.gl': 'http://vis.gl'
 };
 
-const combinedReducers = combineReducers(reducers);
+export const FRAMEWORK_NAME = 'AVS';
 
-export const middlewares = [
-  // taskMiddleware,
-  thunk
-  // analyticsMiddleware
-];
-
-export const enhancers = [applyMiddleware(...middlewares)];
-
-// add redux devtools
-// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-export default createStore(combinedReducers, initialState, compose(...enhancers));
+export const XVIZ_GITHUB_URL = 'https://github.com/uber/xviz';
+export const STREETSCAPE_GITHUB_URL = 'https://github.com/uber/streetscape.gl';

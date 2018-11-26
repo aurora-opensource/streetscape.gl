@@ -23,7 +23,7 @@ import React, {PureComponent} from 'react';
 import {ThemeProvider} from 'styled-components';
 
 import {theme} from '../styles';
-import {SECTIONS} from '../content';
+import {SECTIONS} from '../contents/content';
 import Hero from './hero';
 import Showcase from './showcase';
 import Elements from './elements';
@@ -32,7 +32,6 @@ import Walkthrough from './walkthrough';
 import Features from './features';
 import Footer from './footer';
 import Section from './common/section';
-import Header from './header';
 
 const SECTION_CONTENT = {
   walkthrough: Walkthrough,
@@ -47,26 +46,23 @@ export default class Home extends PureComponent {
     return (
       <ThemeProvider theme={theme}>
         <div>
-          <Header/>
           <Hero />
-          {SECTIONS.map(
-            ({id, title, description, icon, isDark, background}, i) => {
-              const SectionContent = SECTION_CONTENT[id];
-              return (
-                <Section
-                  key={`section-${i}`}
-                  title={title}
-                  description={description}
-                  icon={icon}
-                  isDark={isDark}
-                  marginBottom={'0px'}
-                  background={background}
-                >
-                  <SectionContent />
-                </Section>
-              );
-            }
-          )}
+          {SECTIONS.map(({id, title, description, icon, isDark, background}, i) => {
+            const SectionContent = SECTION_CONTENT[id];
+            return (
+              <Section
+                key={`section-${i}`}
+                title={title}
+                description={description}
+                icon={icon}
+                isDark={isDark}
+                marginBottom={'0px'}
+                background={background}
+              >
+                <SectionContent />
+              </Section>
+            );
+          })}
           <Footer />
         </div>
       </ThemeProvider>

@@ -22,7 +22,7 @@
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
-import {FEATURES} from '../content';
+import {FEATURES} from '../contents/content';
 import {media} from '../styles';
 import StaggeredScrollAnimation from './common/staggered-scroll-animation';
 import {LinkButton, CenteredContent} from './common/styled-components';
@@ -75,7 +75,10 @@ const Feature = ({title, description, images, icon}) => (
       <Icon className={`icon-${icon}`} />
       {title}
     </FeatureTitle>
-    <FeatureImages>{images.map((img, i) => <StyledImage key={`img-${i}`} src={img}/>)}
+    <FeatureImages>
+      {images.map((img, i) => (
+        <StyledImage key={`img-${i}`} src={img} />
+      ))}
     </FeatureImages>
   </FeatureContainer>
 );

@@ -19,11 +19,11 @@
 // THE SOFTWARE.
 
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
-import { SHOWCASE_ITEMS } from '../content';
-import { media } from '../styles';
+import {SHOWCASE_ITEMS} from '../contents/content';
+import {media} from '../styles';
 import Carousel from './common/carousel';
 
 const CarouselContainer = styled.div`
@@ -87,26 +87,25 @@ const NavItem = styled.div`
 const NavIcon = styled.div`
   display: block;
 
-  width: ${props => props.isActive ? 12 : 10}px;
-  height: ${props => props.isActive ? 12 : 10}px;
-  
-  border-radius: ${props => props.isActive ? 6 : 5}px;
-  background-color: ${props => props.isActive ? '#FFFFFF' : '#9BA0A5'};
+  width: ${props => (props.isActive ? 12 : 10)}px;
+  height: ${props => (props.isActive ? 12 : 10)}px;
+
+  border-radius: ${props => (props.isActive ? 6 : 5)}px;
+  background-color: ${props => (props.isActive ? '#FFFFFF' : '#9BA0A5')};
 `;
 
-const Nav = ({ items, selectedIndex, onClick }) => (
+const Nav = ({items, selectedIndex, onClick}) => (
   <NavContainer>
     {items[selectedIndex].text}
     <NavItems>
-    {items.map((_, i) => {
+      {items.map((_, i) => {
         const isActive = selectedIndex === i;
         return (
           <NavItem key={i} isActive={isActive} onClick={() => onClick(i)}>
-            <NavIcon isActive={isActive}/>
+            <NavIcon isActive={isActive} />
           </NavItem>
         );
-      }
-    )}
+      })}
     </NavItems>
   </NavContainer>
 );
@@ -122,17 +121,17 @@ class Showcase extends PureComponent {
         <CarouselContainer>
           <Carousel
             selectedIndex={this.state.selectedIndex}
-            onChange={i => this.setState({ selectedIndex: i })}
+            onChange={i => this.setState({selectedIndex: i})}
           >
-            {SHOWCASE_ITEMS.map(({ image }, i) => (
-              <Image key={`showcase-image-${i}`} src={image}/>
+            {SHOWCASE_ITEMS.map(({image}, i) => (
+              <Image key={`showcase-image-${i}`} src={image} />
             ))}
           </Carousel>
         </CarouselContainer>
         <Nav
           items={SHOWCASE_ITEMS}
           selectedIndex={this.state.selectedIndex}
-          onClick={i => this.setState({ selectedIndex: i })}
+          onClick={i => this.setState({selectedIndex: i})}
         />
       </div>
     );

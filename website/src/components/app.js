@@ -22,6 +22,13 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
+import {Switch, Route, Redirect} from 'react-router';
+
+import Header from './header';
+import Home from './home';
+import Gallery from './gallery';
+
+import {xvizDocPages, streetscapeDocPages} from '../contents/pages';
 
 const GlobalStyleDiv = styled.div`
   font-family: ff-clan-web-pro, 'Helvetica Neue', Helvetica, sans-serif;
@@ -55,7 +62,15 @@ class App extends Component {
   render() {
     return (
       <GlobalStyleDiv className="sg-web-content">
-        {this.props.children}
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/xviz">{props => <Gallery {...props} pages={xvizDocPages} />}</Route>
+          <Route path="/streetscape.gl">
+            {props => <Gallery {...props} pages={streetscapeDocPages} />}
+          </Route>
+          <Redirect to="/" />
+        </Switch>
       </GlobalStyleDiv>
     );
   }

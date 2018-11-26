@@ -53,7 +53,8 @@ function makeLocalDevConfig() {
     devtool: 'source-map',
 
     resolve: {
-      modules: [resolve(ROOT_DIR, './node_modules'), resolve('./node_modules')],
+      // https://github.com/ReactTraining/react-router/issues/6201
+      modules: [resolve('./node_modules'), resolve(ROOT_DIR, './node_modules')],
       alias: ALIASES
     },
     module: {

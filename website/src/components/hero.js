@@ -24,10 +24,15 @@ import styled, {keyframes} from 'styled-components';
 import {window} from 'global';
 
 import {media, breakPoints} from '../styles';
-import {HERO_BACKGROUND, STREETSCAPE_GL_LOGO, HERO_IMAGES, HERO_IMAGES_SCALED} from '../content';
+import {
+  HERO_BACKGROUND,
+  STREETSCAPE_GL_LOGO,
+  HERO_IMAGES,
+  HERO_IMAGES_SCALED,
+  DEMO_LINK
+} from '../contents/content';
 import SlideShow from './common/slideshow';
 import {LinkButton} from './common/styled-components';
-import {getDemoLink} from '../utils';
 
 const SlideShowAnimation = keyframes`
   0% {
@@ -205,7 +210,7 @@ export default class Hero extends PureComponent {
               <span>autonomous development data sets.</span>
             </div>
             <ButtonContainer>
-              <LinkButton large href={getDemoLink()}>
+              <LinkButton large href={DEMO_LINK}>
                 Try demo
               </LinkButton>
               <LinkButton
