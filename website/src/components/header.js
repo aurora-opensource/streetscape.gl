@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
 
-import {FRAMEWORK_LINKS, FRAMEWORK_NAME, FRAMEWORK_GITHUB_URL} from '../contents/links';
+import {
+  FRAMEWORK_LINKS,
+  FRAMEWORK_NAME,
+  XVIZ_GITHUB_URL,
+  STREETSCAPE_GITHUB_URL
+} from '../contents/links';
 
 export default class Header extends Component {
   _renderLinks() {
@@ -35,17 +40,22 @@ export default class Header extends Component {
             <i className={`icon icon-${isMenuOpen ? 'close' : 'menu'}`} />
           </div>
           <div className="links">
-            <a href="https://github.com/uber/streetscape.gl/blob/master/docs/develop.md">
+            <a
+              href="https://github.com/uber/streetscape.gl/blob/master/docs/develop.md"
+              className="external"
+            >
               User Guide
             </a>
             <NavLink activeClassName="active" to="/xviz">
               XVIZ
             </NavLink>
+            <a href={XVIZ_GITHUB_URL} className="external">
+              <i className="icon icon-github" />
+            </a>
             <NavLink activeClassName="active" to="/streetscape.gl">
               Streetscape.gl
             </NavLink>
-            <a href={FRAMEWORK_GITHUB_URL}>
-              Github
+            <a href={STREETSCAPE_GITHUB_URL} className="external">
               <i className="icon icon-github" />
             </a>
           </div>

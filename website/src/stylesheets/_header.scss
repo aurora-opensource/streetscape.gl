@@ -47,8 +47,15 @@ header {
       border-width: 3px 0 0 0;
       border-color: transparent;
     }
+    a.external {
+      margin-left: 8px;
+    }
     a:hover {
       border-color: $white-40;
+    }
+    a.external:hover {
+      border-color: transparent;
+      color: $white;
     }
     a.active {
       color: $white;

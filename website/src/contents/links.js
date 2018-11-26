@@ -8,6 +8,7 @@ export const FRAMEWORK_LINKS = {
   'vis.gl': 'http://vis.gl'
 };
 
-export const FRAMEWORK_NAME = 'AVS.auto';
+export const FRAMEWORK_NAME = 'AVS';
 
-export const FRAMEWORK_GITHUB_URL = 'https://github.com/uber/xviz';
+export const XVIZ_GITHUB_URL = 'https://github.com/uber/xviz';
+export const STREETSCAPE_GITHUB_URL = 'https://github.com/uber/streetscape.gl';
