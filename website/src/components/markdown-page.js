@@ -4,6 +4,15 @@ import PropTypes from 'prop-types';
 import marked from 'marked';
 import {markdownFiles} from '../contents/pages';
 
+/* Markdown renderer */
+marked.setOptions({
+  // code highlight
+  highlight: code => {
+    return require('highlight.js').highlightAuto(code).value;
+  }
+});
+const renderer = new marked.Renderer();
+
 /**
  * This map allows you to rewrite urls present in the markdown files
  * to be rewritted to point to other targets. It is useful so that
@@ -22,7 +31,7 @@ const urlRewrites = [
      * `#/documentation/path/to/page?section=header`
      */
     test: /^\/(docs\/.+?\.md)(#.*)?$/,
-    rewrite: match => {
+    rewrite: (href, match) => {
       const filepath = match[1];
       const hash = match[2] ? match[2].slice(1) : '';
       const route = markdownFiles[filepath];
@@ -34,30 +43,24 @@ const urlRewrites = [
   }
 ];
 
-/**
- * Same as above, but for image src's
- */
-const imageRewrites = {};
+const imageRewrites = [
+  {
+    /* Resolve relative links */
+    test: /^\./,
+    rewrite: (href, match) => `${renderer._dirname}${href}`
+  }
+];
 
 /* Look for demo injection tag */
 const INJECTION_REG = /<!-- INJECT:"(.+)\" -->/g;
 
-/* Markdown renderer */
-marked.setOptions({
-  // code highlight
-  highlight: code => {
-    return require('highlight.js').highlightAuto(code).value;
-  }
-});
-
-const renderer = new marked.Renderer();
 // links override
 renderer.link = (href, title, text) => {
   let to = href;
 
   urlRewrites.forEach(rule => {
     if (to && rule.test.test(to)) {
-      to = rule.rewrite(to.match(rule.test));
+      to = rule.rewrite(to, to.match(rule.test));
     }
   });
 
@@ -65,17 +68,19 @@ renderer.link = (href, title, text) => {
 };
 // images override
 renderer.image = (href, title, text) => {
-  const src = imageRewrites[href] || href;
-  return `<img src=${src} title=${title} alt=${text} />`;
+  let src = href;
+
+  imageRewrites.forEach(rule => {
+    if (src && rule.test.test(src)) {
+      src = rule.rewrite(src, src.match(rule.test));
+    }
+  });
+  return `<img src="${src}" title="${title || text}" alt="${text}" />`;
 };
 
-function renderMarkdown(content) {
-  return (
-    marked(content, {renderer})
-      // Since some images are embedded as html, it won't be processed by
-      // the renderer image override. So hard replace it globally.
-      .replace(/\/website\/src\/static\/images/g, 'images')
-  );
+function renderMarkdown(content, url) {
+  renderer._dirname = url.replace(/[^\/]*$/, '');
+  return marked(content, {renderer});
 }
 
 export default class MarkdownPage extends PureComponent {
@@ -107,13 +112,13 @@ export default class MarkdownPage extends PureComponent {
 
   _loadPage(page) {
     if (page.content) {
-      this.setState({html: renderMarkdown(page.content)});
+      this.setState({html: renderMarkdown(page.content, page.markdown)});
     } else if (page.markdown) {
       fetch(page.markdown)
         .then(resp => resp.text())
         .then(content => {
           page.content = content;
-          this.setState({html: renderMarkdown(content)});
+          this.setState({html: renderMarkdown(content, page.markdown)});
         });
     }
   }
