@@ -201,7 +201,7 @@ class Core3DViewer extends PureComponent {
       return [];
     }
 
-    const {streams, origin, heading, vehicleRelativeTransform} = frame;
+    const {streams, origin, heading, lookAheads = {}, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
     const objectStates = this.props.objectStates || this.state.objectStates;
@@ -274,6 +274,43 @@ class Core3DViewer extends PureComponent {
               // Hack: draw point clouds before polygons to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
               zIndex: 1
+            });
+          }
+          return null;
+        })
+        .filter(Boolean)
+        .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex),
+      Object.keys(lookAheads)
+        .filter(streamName => streamFilter(streamName) && streamSettings[streamName])
+        .map(streamName => {
+          // TODO(twojtasz): XVIZ parsing places the selected futureInstances into the 'lookAhead' field
+          //                 See if this can be treated the same as features by iterating over 'streams'
+          const stream = lookAheads[streamName];
+          const streamMetadata = metadata.streams[streamName];
+          const coordinateProps = resolveCoordinateTransform(
+            frame,
+            streamMetadata,
+            getTransformMatrix
+          );
+
+          if (stream.length) {
+            return new XVIZLayer({
+              id: `xviz-${streamName}`,
+              ...coordinateProps,
+
+              pickable: true,
+              lightSettings: LIGHT_SETTINGS,
+
+              data: stream,
+              style: styleParser.getStylesheet(streamName),
+              objectStates,
+
+              // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
+              // This is not used by deck.gl, only used in this function to sort the layers
+              zIndex: streamMetadata.type === 'polygon' ? 2 : 0,
+
+              // Selection props (app defined, not used by deck.gl)
+              streamName
             });
           }
           return null;
