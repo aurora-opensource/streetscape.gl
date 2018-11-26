@@ -21,7 +21,7 @@
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
-import {ELEMENTS} from '../content';
+import {ELEMENTS} from '../contents/content';
 import {media} from '../styles';
 import {LinkButton, CenteredContent} from './common/styled-components';
 import Carousel from './common/carousel';

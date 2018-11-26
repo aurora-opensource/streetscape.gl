@@ -23,10 +23,13 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {HashRouter, Route} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import store from './reducers';
-import Routes from './routes';
+import App from './components/app';
 import document from 'global/document';
+
+import './stylesheets/main.scss';
 
 require('./static/favicon.png');
 
@@ -35,7 +38,9 @@ document.body.appendChild(el);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Routes />
+    <HashRouter>
+      <Route path="/" component={App} />
+    </HashRouter>
   </Provider>,
   el
 );

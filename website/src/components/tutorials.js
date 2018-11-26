@@ -23,7 +23,7 @@ import styled from 'styled-components';
 
 import Carousel from './common/carousel';
 import {media} from '../styles';
-import { TUTORIALS } from '../content';
+import {TUTORIALS} from '../contents/content';
 
 const CarouselContainer = styled.div`
   height: 360px;
@@ -86,30 +86,28 @@ const NavItem = styled.div`
 const NavIcon = styled.div`
   display: block;
 
-  width: ${props => props.isActive ? 12 : 10}px;
-  height: ${props => props.isActive ? 12 : 10}px;
-  
-  border-radius: ${props => props.isActive ? 6 : 5}px;
-  background-color: ${props => props.isActive ? '#FFFFFF' : '#9BA0A5'};
+  width: ${props => (props.isActive ? 12 : 10)}px;
+  height: ${props => (props.isActive ? 12 : 10)}px;
+
+  border-radius: ${props => (props.isActive ? 6 : 5)}px;
+  background-color: ${props => (props.isActive ? '#FFFFFF' : '#9BA0A5')};
 `;
 
-const Nav = ({ items, selectedIndex, onClick }) => (
+const Nav = ({items, selectedIndex, onClick}) => (
   <NavContainer>
     {items[selectedIndex].text}
     <NavItems>
       {items.map((_, i) => {
-          const isActive = selectedIndex === i;
-          return (
-            <NavItem key={i} isActive={isActive} onClick={() => onClick(i)}>
-              <NavIcon isActive={isActive}/>
-            </NavItem>
-          );
-        }
-      )}
+        const isActive = selectedIndex === i;
+        return (
+          <NavItem key={i} isActive={isActive} onClick={() => onClick(i)}>
+            <NavIcon isActive={isActive} />
+          </NavItem>
+        );
+      })}
     </NavItems>
   </NavContainer>
 );
-
 
 class Tutorials extends PureComponent {
   state = {
@@ -122,17 +120,17 @@ class Tutorials extends PureComponent {
         <CarouselContainer>
           <Carousel
             selectedIndex={this.state.selectedIndex}
-            onChange={i => this.setState({ selectedIndex: i })}
+            onChange={i => this.setState({selectedIndex: i})}
           >
-            {TUTORIALS.map(({ image }, i) => (
-              <Image key={`showcase-image-${i}`} src={image}/>
+            {TUTORIALS.map(({image}, i) => (
+              <Image key={`showcase-image-${i}`} src={image} />
             ))}
           </Carousel>
         </CarouselContainer>
         <Nav
           items={TUTORIALS}
           selectedIndex={this.state.selectedIndex}
-          onClick={i => this.setState({ selectedIndex: i })}
+          onClick={i => this.setState({selectedIndex: i})}
         />
       </div>
     );

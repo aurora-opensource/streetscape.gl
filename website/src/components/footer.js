@@ -25,7 +25,7 @@ import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton} from
 import {LinkButton} from './common/styled-components';
 import {media} from '../styles';
 import MapboxLogo from './mapbox-logo';
-import {UBER_LOGO, VIS_LOGO} from '../content';
+import {UBER_LOGO, VIS_LOGO} from '../contents/content';
 
 const Container = styled.div`
   background: #242730;
@@ -161,7 +161,9 @@ export default class Footer extends PureComponent {
         </LogosContainer>
 
         <BrandingContainer>
-          <img src={UBER_LOGO} />
+          <a target="_blank" rel="noopener noreferrer" href="https://www.uber.com">
+            <img src={UBER_LOGO} height={16} />
+          </a>
           <SectionText>created by</SectionText>
           <VisGLLogo logo={VIS_LOGO}>
             <a target="_blank" rel="noopener noreferrer" href="http://vis.gl">
