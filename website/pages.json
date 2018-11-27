@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Overview",
+    "children": [
+      {
+        "name": "Introduction",
+        "markdown": "README.md"
+      },
+      {
+        "name": "Overview",
+        "markdown": "overview.md"
+      },
+      {
+        "name": "What's New",
+        "markdown": "whats-new.md"
+      },
+      {
+        "name": "Roadmap",
+        "markdown": "roadmap.md"
+      },
+      {
+        "name": "FAQ",
+        "markdown": "faq.md"
+      },
+      {
+        "name": "Develop/Contribute",
+        "markdown": "develop.md"
+      }
+    ]
+  },
+  {
+    "name": "Example Guide",
+    "children": [
+      {
+        "name": "Overview",
+        "markdown": "example-guide/README.md"
+      },
+      {
+        "name": "Running the Example",
+        "markdown": "example-guide/running-the-example.md"
+      },
+      {
+        "name": "Convert Data to XVIZ",
+        "markdown": "example-guide/convert-data-to-xviz.md"
+      }
+    ]
+  },
+  {
+    "name": "Developer Guide",
+    "children": [
+      {
+        "name": "Overview",
+        "markdown": "developer-guide/README.md"
+      },
+      {
+        "name": "Installing",
+        "markdown": "developer-guide/installing.md"
+      },
+      {
+        "name": "Use Custom deck.gl Layers",
+        "markdown": "developer-guide/use-custom-deck-layers.md"
+      },
+      {
+        "name": "Building Custom Applications",
+        "markdown": "developer-guide/build-custom-applications.md"
+      },
+      {
+        "name": "Advanced",
+        "markdown": "developer-guide/advanced.md"
+      }
+    ]
+  },
+  {
+    "name": "API Reference",
+    "children": [
+      {
+        "name": "LogViewer",
+        "markdown": "api-reference/log-viewer.md"
+      },
+      {
+        "name": "XVIZLoaderInterface",
+        "markdown": "api-reference/xviz-loader-interface.md"
+      },
+      {
+        "name": "XVIZStreamLoader",
+        "markdown": "api-reference/xviz-stream-loader.md"
+      }
+    ]
+  }
+]
