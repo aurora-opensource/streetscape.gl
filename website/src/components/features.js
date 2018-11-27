@@ -21,82 +21,19 @@
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
-import {FEATURES} from '../contents/content';
-import {media} from '../styles';
-import StaggeredScrollAnimation from './common/staggered-scroll-animation';
+import {getImageUrl} from '../contents/content';
 import {LinkButton, CenteredContent} from './common/styled-components';
 
-const FeaturesContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: ${props => props.theme.margins.large};
+const BackgroundImage = styled.img`
+  width: 100%;
+  height: 100%;
 `;
-
-const FeatureContainer = styled.div`
-  text-align: center;
-  width: 350px;
-  padding: 24px;
-  margin: ${props => props.theme.margins.small};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  ${media.palm`
-    margin: 0px;
-    margin-bottom: ${props => props.theme.margins.small}
-  `};
-`;
-
-const FeatureImages = styled.div`
-  display: flex;
-`;
-
-const StyledImage = styled.img`
-  object-fit: none;
-`;
-
-const FeatureTitle = styled.div`
-  display: flex;
-  align-items: center;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 500;
-  margin-bottom: ${props => props.theme.margins.small};
-`;
-
-const Icon = styled.span`
-  font-size: 24px;
-`;
-
-const Feature = ({title, description, images, icon}) => (
-  <FeatureContainer>
-    <FeatureTitle>
-      <Icon className={`icon-${icon}`} />
-      {title}
-    </FeatureTitle>
-    <FeatureImages>
-      {images.map((img, i) => (
-        <StyledImage key={`img-${i}`} src={img} />
-      ))}
-    </FeatureImages>
-  </FeatureContainer>
-);
 
 class Features extends PureComponent {
   render() {
     return (
       <div>
-        <StaggeredScrollAnimation Container={FeaturesContainer}>
-          {FEATURES.map(({title, description, images, icon}, i) => (
-            <Feature
-              key={`feature-${i}`}
-              title={title}
-              description={description}
-              images={images}
-              icon={icon}
-            />
-          ))}
-        </StaggeredScrollAnimation>
+        <BackgroundImage src={getImageUrl('ui-controls.png')} />
         <CenteredContent>
           <LinkButton large outline href="https://github.com/uber/streetscape.gl">
             See More
