@@ -24,7 +24,6 @@ const LOOKAHEAD_MARKER_STYLE = {
 export default class DualPlaybackControl extends MonochromePlaybackControl {
   static propTypes = {
     ...MonochromePlaybackControl.propTypes,
-    showLookAheadSlider: PropTypes.bool,
     lookAhead: PropTypes.number,
     maxLookAhead: PropTypes.number,
     formatLookAhead: PropTypes.func,
@@ -33,8 +32,7 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
 
   static defaultProps = {
     ...MonochromePlaybackControl.defaultProps,
-    showLookAheadSlider: true,
-    lookAhead: 5000,
+    lookAhead: 0,
     maxLookAhead: 10000,
     formatLookAhead: String,
     onLookAheadChange: () => {}
@@ -43,7 +41,7 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
   _renderSlider() {
     const mainSlider = super._renderSlider();
 
-    if (this.props.showLookAheadSlider) {
+    if (this.props.maxLookAhead > 0) {
       const {currentTime, startTime, endTime, lookAhead} = this.props;
       const lookAheadTime = Math.min(currentTime + lookAhead, endTime);
       const lookAheadMarkerStyle = {
@@ -59,9 +57,9 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
   }
 
   _renderControls() {
-    const {showLookAheadSlider, lookAhead, formatLookAhead, maxLookAhead, step} = this.props;
+    const {lookAhead, formatLookAhead, maxLookAhead, step} = this.props;
     const controls = super._renderControls();
-    if (showLookAheadSlider) {
+    if (maxLookAhead > 0) {
       controls.push(
         <div
           className="mc-playback-control--lookahead"
