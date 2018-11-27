@@ -6,6 +6,9 @@ DEMO_DIR=../examples/clients/website-demo
 DEMO_PACKAGE_DIR=${DEMO_DIR}/dist
 DEMO_DESTINATION=./dist/demo
 
+# install dependencies
+yarn
+
 rm -rf ./dist && mkdir dist
 
 # build website

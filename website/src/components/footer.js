@@ -25,18 +25,19 @@ import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton} from
 import {LinkButton} from './common/styled-components';
 import {media} from '../styles';
 import MapboxLogo from './mapbox-logo';
-import {UBER_LOGO, VIS_LOGO} from '../contents/content';
+import {DEMO_LINK, STREETSCAPE_GL_LOGO, UBER_LOGO, VIS_LOGO} from '../contents/content';
 
 const Container = styled.div`
   background: #242730;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: ${props => props.theme.margins.medium};
 `;
 
 const LogosContainer = styled.div`
-  display: inline-flex;
-  justify-content: flex-end;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
 
   ${media.palm`
@@ -80,6 +81,15 @@ const StyledLogo = styled.div`
   }
 `;
 
+const StreetscapeLogo = styled.img`
+  width: 120px;
+  ${media.palm`
+    position: inherit;
+    margin-top: ${props => props.theme.margins.normal};
+    margin-bottom: ${props => props.theme.margins.small};
+  `};
+`;
+
 const VisGLLogo = styled(StyledLogo)`
   margin-left: 1.8rem;
   :before {
@@ -111,6 +121,34 @@ const ButtonContainer = styled.div`
   `};
 `;
 
+const ButtonSection = styled.div`
+  display: flex;
+  margin-top: 32px;
+  justify-content: space-between;
+
+  ${media.palm`
+    display: flex;
+    margin-top: 18px;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+  `};
+`;
+
+const PartnerSection = styled.div`
+  display: flex;
+  justify-content: center;
+
+  ${media.palm`
+    margin-top: 18px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+  `};
+`;
+
 const SocialContainer = styled.div`
   display: flex;
   align-items: center;
@@ -123,54 +161,77 @@ const SocialContainer = styled.div`
   ${media.palm`
     display: flex;
     justify-content: center;
-    margin-top: 12px;
+    margin-top: 18px;
     width: 100%;
   `};
+`;
+
+const GithubLink = styled.span`
+  margin-right: 8px;
 `;
 
 export default class Footer extends PureComponent {
   render() {
     return (
       <Container>
-        <ButtonContainer>
-          <LinkButton large href="https://github.com/uber/streetscape.gl">
-            Get Started
-          </LinkButton>
-        </ButtonContainer>
-
-        <SocialContainer>
-          <FacebookShareButton url="https://uber.github.io/streetscape.gl/">
-            <FacebookIcon size={32} />
-          </FacebookShareButton>{' '}
-          <TwitterShareButton
-            url="https://uber.github.io/streetscape.gl/"
-            hashtags={['streetscapegl']}
-          >
-            <TwitterIcon size={32} />
-          </TwitterShareButton>
-        </SocialContainer>
-
         <LogosContainer>
-          <SectionText>partnership with</SectionText>
-          <StyledLogo>
-            <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
-              Voyage Auto
+          <StreetscapeLogo src={STREETSCAPE_GL_LOGO} />
+          <BrandingContainer>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.uber.com">
+              <img src={UBER_LOGO} height={16} />
             </a>
-          </StyledLogo>
-          <MapboxLogo />
+            <SectionText>created by</SectionText>
+            <VisGLLogo logo={VIS_LOGO}>
+              <a target="_blank" rel="noopener noreferrer" href="http://vis.gl">
+                VIS.GL
+              </a>
+            </VisGLLogo>
+          </BrandingContainer>
         </LogosContainer>
 
-        <BrandingContainer>
-          <a target="_blank" rel="noopener noreferrer" href="https://www.uber.com">
-            <img src={UBER_LOGO} height={16} />
-          </a>
-          <SectionText>created by</SectionText>
-          <VisGLLogo logo={VIS_LOGO}>
-            <a target="_blank" rel="noopener noreferrer" href="http://vis.gl">
-              VIS.GL
-            </a>
-          </VisGLLogo>
-        </BrandingContainer>
+        <ButtonSection>
+          <ButtonContainer>
+            <LinkButton
+              large
+              href={DEMO_LINK}
+              style={{marginRight: '5px', ...media.palm('margin-bottom: 5px;')}}
+            >
+              Try demo
+            </LinkButton>
+            <LinkButton large outlineDark href="https://github.com/uber/streetscape.gl">
+              <GithubLink className={'icon-github'} /> Github
+            </LinkButton>
+          </ButtonContainer>
+
+          <PartnerSection>
+            <SectionText>partnership with</SectionText>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <StyledLogo>
+                <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
+                  Voyage Auto
+                </a>
+              </StyledLogo>
+              <MapboxLogo />
+            </div>
+          </PartnerSection>
+
+          <SocialContainer>
+            <FacebookShareButton url="https://uber.github.io/streetscape.gl/">
+              <FacebookIcon size={32} />
+            </FacebookShareButton>{' '}
+            <TwitterShareButton
+              url="https://uber.github.io/streetscape.gl/"
+              hashtags={['streetscapegl']}
+            >
+              <TwitterIcon size={32} />
+            </TwitterShareButton>
+          </SocialContainer>
+        </ButtonSection>
       </Container>
     );
   }

@@ -29,7 +29,7 @@ case $MODE in
 
   *)
     echo "Checking prettier code styles..."
-    npx prettier-check "{modules,examples,test}/**/*.js" || echo "Running prettier." && prettier --write "{modules,examples,test}/**/*.js" --loglevel warn
+    npx prettier-check "{modules,examples,website,test}/**/*.js" || echo "Running prettier." && prettier --write "{modules,examples,test}/**/*.js" --loglevel warn
 
     echo "Running eslint..."
     npx eslint modules test examples

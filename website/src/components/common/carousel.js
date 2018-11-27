@@ -23,7 +23,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Waypoint from 'react-waypoint';
 
-const Container = styled.div`
+const StyledContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
@@ -41,13 +41,11 @@ const Item = styled.div`
   position: absolute;
   transition: transform 1s;
   cursor: pointer;
-  transform: ${props => props.transform}; 
+  transform: ${props => props.transform};
 `;
 
 const WrappedContainer = ({innerRef, Container, children}) => {
-  return innerRef ? (
-    <Container ref={innerRef}>{children}</Container>
-  ) : null;
+  return innerRef ? <Container ref={innerRef}>{children}</Container> : null;
 };
 
 export default class Carousel extends PureComponent {
@@ -103,9 +101,9 @@ export default class Carousel extends PureComponent {
     }
 
     const translateX = isVisible ? (index - selectedIndex) * xOffset : 0;
-    const translateY = isVisible ? (index -  selectedIndex) * yOffset : 0;
+    const translateY = isVisible ? (index - selectedIndex) * yOffset : 0;
     const translateZ = -Math.abs(index - selectedIndex) * zOffset;
-    const rotateX =  Math.sign(index - selectedIndex) * xRotate;
+    const rotateX = Math.sign(index - selectedIndex) * xRotate;
     const rotateY = Math.sign(index - selectedIndex) * yRotate;
     const rotateZ = Math.sign(index - selectedIndex) * zRotate;
     const scaleX = index - selectedIndex === 0 ? 1 : xScale;
@@ -123,10 +121,10 @@ export default class Carousel extends PureComponent {
   }
 
   render() {
-    const { children, } = this.props;
+    const {children} = this.props;
     return (
       <Waypoint onEnter={this._onWaypointEnter} onLeave={this._onWaypointLeave}>
-        <WrappedContainer Container={Container}>
+        <WrappedContainer Container={StyledContainer}>
           <Content>
             {children.map((item, i) => {
               return (

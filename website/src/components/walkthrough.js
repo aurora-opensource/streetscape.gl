@@ -20,11 +20,13 @@
 
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
+import {window} from 'global';
 
-import {STEPS} from '../contents/content';
-import {media} from '../styles';
+import Nav from './common/nav';
 import StaggeredScrollAnimation from './common/staggered-scroll-animation';
 import {LinkButton} from './common/styled-components';
+import {media, breakPoints} from '../styles';
+import {STEPS} from '../contents/content';
 
 const StepsContainer = styled.div`
   display: flex;
@@ -56,10 +58,15 @@ const StepContainer = styled(StepColumn)`
 `;
 
 const StepTitle = styled.div`
-  text-transform: 'uppercase';
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
   font-size: 32px;
   font-weight: 500;
   margin-bottom: ${props => props.theme.margins.small};
+  ${media.palm`
+    font-size: 24px;
+  `};
 `;
 
 const StepDescription = styled.div`
@@ -77,17 +84,36 @@ const NumberCircle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  ${media.palm`
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+  `};
 `;
 
-const NavItemContainer = styled(StepColumn)`
+const NumberContainer = styled(StepColumn)`
   margin-bottom: 0;
-  padding-bottom: 0;
+  padding: 0;
   justify-content: center;
+  ${media.palm`
+    width: auto;
+    margin-bottom: 0;
+    margin-right: ${props => props.theme.margins.tiny};
+  `};
 `;
 
-const Step = ({index, title, description, link}) => (
+const Number = ({number}) => (
+  <NumberContainer>
+    <NumberCircle>{number}</NumberCircle>
+  </NumberContainer>
+);
+
+const Step = ({showStep = false, index, title, description, link}) => (
   <StepContainer>
-    <StepTitle>{title}</StepTitle>
+    <StepTitle>
+      {showStep && <Number inline number={index + 1} />}
+      {title}
+    </StepTitle>
     <StepDescription>{description}</StepDescription>
     {link && (
       <LinkButton secondary none link href={link.url}>
@@ -97,36 +123,78 @@ const Step = ({index, title, description, link}) => (
   </StepContainer>
 );
 
-const NavItem = ({index}) => (
-  <NavItemContainer>
-    <NumberCircle>{index}</NumberCircle>
-  </NavItemContainer>
-);
-
 class Walkthrough extends PureComponent {
-  render() {
+  state = {
+    selectedIndex: 0,
+    window: window.innerWidth,
+    height: window.innerHeight
+  };
+
+  componentDidMount() {
+    window.addEventListener('resize', this.resize);
+    this.resize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
+
+  resize = () => {
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  };
+
+  _renderSteps = () => {
+    const isPalm = this.state.width <= breakPoints.palm;
+    const selectedIndex = this.state.selectedIndex;
+    if (isPalm) {
+      const {title, description, link} = STEPS[selectedIndex];
+      return (
+        <div>
+          <Step
+            index={selectedIndex}
+            title={title}
+            showStep={true}
+            description={description}
+            link={link}
+          />
+          <Nav
+            items={STEPS}
+            selectedIndex={selectedIndex}
+            onClick={i => {
+              this.setState({selectedIndex: i});
+            }}
+          />
+        </div>
+      );
+    }
+
     return (
-      <div>
-        <StaggeredScrollAnimation Container={StepsContainer}>
-          <StepsRow>
-            {STEPS.map((_, i) => (
-              <NavItem key={`step-${i}`} index={i + 1} />
-            ))}
-          </StepsRow>
-          <StepsRow>
-            {STEPS.map(({title, description, link}, i) => (
-              <Step
-                key={`step-${i}`}
-                index={i + 1}
-                title={title}
-                description={description}
-                link={link}
-              />
-            ))}
-          </StepsRow>
-        </StaggeredScrollAnimation>
-      </div>
+      <StaggeredScrollAnimation Container={StepsContainer}>
+        <StepsRow>
+          {STEPS.map((_, i) => (
+            <Number key={i} number={i + 1} />
+          ))}
+        </StepsRow>
+        <StepsRow>
+          {STEPS.map(({title, description, link}, i) => (
+            <Step
+              key={`step-${i}`}
+              index={i + 1}
+              title={title}
+              description={description}
+              link={link}
+            />
+          ))}
+        </StepsRow>
+      </StaggeredScrollAnimation>
     );
+  };
+
+  render() {
+    return <div>{this._renderSteps()}</div>;
   }
 }
 
