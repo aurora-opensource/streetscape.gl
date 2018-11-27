@@ -30,8 +30,10 @@ function deleteImage(image) {
 
 /* Manages loaded images for a XVIZ image stream */
 export default class ImageBuffer {
-  constructor(size) {
+  constructor(size, {imageLoader = loadImage, imageDeleter = deleteImage} = {}) {
     this.size = size;
+    this.imageLoader = imageLoader;
+    this.imageDeleter = imageDeleter;
     this.buffer = new Map();
   }
 
@@ -47,10 +49,11 @@ export default class ImageBuffer {
     // Remove images outside of the buffer range
     for (const frame of buffer.keys()) {
       if (
+        bufferedFrames.length === 0 ||
         frame.timestamp < bufferedFrames[0].timestamp ||
         frame.timestamp > bufferedFrames[bufferedFrames.length - 1].timestamp
       ) {
-        deleteImage(buffer.get(frame));
+        this.imageDeleter(buffer.get(frame));
         buffer.delete(frame);
       }
     }
@@ -60,7 +63,7 @@ export default class ImageBuffer {
       if (!buffer.has(frame)) {
         const data = {};
 
-        data.promise = loadImage(frame).then(image => {
+        data.promise = this.imageLoader(frame).then(image => {
           data.image = image;
           return image;
         });
