@@ -18,11 +18,10 @@ const LOOKAHEAD_MARKER_STYLE = {
   marginTop: -3,
   width: 6,
   height: 6,
-  background: '#888',
+  background: '#888'
 };
 
 export default class DualPlaybackControl extends MonochromePlaybackControl {
-
   static propTypes = {
     ...MonochromePlaybackControl.propTypes,
     showLookAheadSlider: PropTypes.bool,
@@ -45,11 +44,11 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
     const mainSlider = super._renderSlider();
 
     if (this.props.showLookAheadSlider) {
-      const {currentTime, startTime, endTime, lookAhead, maxLookAhead} = this.props;
+      const {currentTime, startTime, endTime, lookAhead} = this.props;
       const lookAheadTime = Math.min(currentTime + lookAhead, endTime);
       const lookAheadMarkerStyle = {
         ...LOOKAHEAD_MARKER_STYLE,
-        left: `${(lookAheadTime - startTime) * 100 / (endTime - startTime)}%`
+        left: `${((lookAheadTime - startTime) * 100) / (endTime - startTime)}%`
       };
       const children = React.Children.toArray(mainSlider.props.children);
       children.push(<div key="lookahead-marker" style={lookAheadMarkerStyle} />);
@@ -64,7 +63,11 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
     const controls = super._renderControls();
     if (showLookAheadSlider) {
       controls.push(
-        <div className="mc-playback-control--lookahead" style={LOOKAHEAD_CONTAINER_STYLE} key="lookahead-slider">
+        <div
+          className="mc-playback-control--lookahead"
+          style={LOOKAHEAD_CONTAINER_STYLE}
+          key="lookahead-slider"
+        >
           <div style={LOOKAHEAD_SLIDER_STYLE}>
             <Slider
               value={lookAhead}
@@ -72,7 +75,8 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
               max={maxLookAhead}
               step={step}
               size={16}
-              onChange={this.props.onLookAheadChange} />
+              onChange={this.props.onLookAheadChange}
+            />
           </div>
           <span>Look ahead: {formatLookAhead(lookAhead)}</span>
         </div>
@@ -80,5 +84,4 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
     }
     return controls;
   }
-
 }

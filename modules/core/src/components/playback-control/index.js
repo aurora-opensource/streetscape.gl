@@ -49,7 +49,7 @@ class PlaybackControl extends PureComponent {
 
   _onLookAheadChange = lookAhead => {
     this.props.log.setLookAhead(lookAhead);
-  }
+  };
 
   _animate = () => {
     if (this.state.isPlaying) {
@@ -106,17 +106,10 @@ class PlaybackControl extends PureComponent {
 
     const deltaTimeS = x / timeScale / 1000;
     return DualPlaybackControl.formatTimeCode(deltaTimeS, '{s}.{S}s');
-  }
+  };
 
   render() {
-    const {
-      startTime,
-      endTime,
-      timestamp,
-      lookAhead,
-      bufferRange,
-      ...otherProps
-    } = this.props;
+    const {startTime, endTime, timestamp, lookAhead, bufferRange, ...otherProps} = this.props;
 
     if (!Number.isFinite(timestamp)) {
       return null;

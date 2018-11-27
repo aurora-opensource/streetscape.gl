@@ -137,12 +137,19 @@ export default class XVIZLoaderInterface {
 
   getCurrentFrame = createSelector(
     this,
-    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime, this.getStreams],
+    [
+      this.getLogSynchronizer,
+      this.getMetadata,
+      this.getCurrentTime,
+      this.getLookAhead,
+      this.getStreams
+    ],
     // `getStreams` is only needed to trigger recomputation.
     // The logSynchronizer has access to the streamBuffer.
-    (logSynchronizer, metadata, timestamp) => {
+    (logSynchronizer, metadata, timestamp, lookAhead) => {
       if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
         logSynchronizer.setTime(timestamp);
+        logSynchronizer.setLookAheadTimeOffset(lookAhead);
         return logSynchronizer.getCurrentFrame(metadata.streams);
       }
       return null;
