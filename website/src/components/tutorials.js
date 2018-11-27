@@ -42,6 +42,7 @@ import React, {PureComponent} from 'react';
 import styled from 'styled-components';
 
 import Carousel from './common/carousel';
+import Nav from './common/nav';
 import {media} from '../styles';
 import {TUTORIALS} from '../contents/content';
 
@@ -72,64 +73,7 @@ const Image = styled.img`
   `};
 `;
 
-const NavContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 24px;
-`;
-
-const NavItems = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-`;
-
-const NavItem = styled.div`
-  margin: ${props => props.theme.margins.small};
-  font-size: 10px;
-  text-align: center;
-  filter: ${props => props.isActive && 'brightness(300%)'};
-  transform: ${props => props.isActive && 'scale(1.1)'};
-  transition: transform 500ms, filter 500ms;
-  cursor: pointer;
-  :hover {
-    transform: scale(1.1);
-  }
-
-  ${media.palm`
-    margin: 2px 4px;
-    font-size: 8px;
-  `};
-`;
-
-const NavIcon = styled.div`
-  display: block;
-
-  width: ${props => (props.isActive ? 12 : 10)}px;
-  height: ${props => (props.isActive ? 12 : 10)}px;
-
-  border-radius: ${props => (props.isActive ? 6 : 5)}px;
-  background-color: ${props => (props.isActive ? '#FFFFFF' : '#9BA0A5')};
-`;
-
-const Nav = ({items, selectedIndex, onClick}) => (
-  <NavContainer>
-    {items[selectedIndex].text}
-    <NavItems>
-      {items.map((_, i) => {
-        const isActive = selectedIndex === i;
-        return (
-          <NavItem key={i} isActive={isActive} onClick={() => onClick(i)}>
-            <NavIcon isActive={isActive} />
-          </NavItem>
-        );
-      })}
-    </NavItems>
-  </NavContainer>
-);
-
-class Tutorials extends PureComponent {
+export default class Tutorials extends PureComponent {
   state = {
     selectedIndex: 1
   };
@@ -156,5 +100,3 @@ class Tutorials extends PureComponent {
     );
   }
 }
-
-export default Tutorials;

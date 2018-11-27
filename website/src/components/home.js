@@ -32,6 +32,7 @@ import Walkthrough from './walkthrough';
 import Features from './features';
 import Footer from './footer';
 import Section from './common/section';
+import styled from 'styled-components';
 
 const SECTION_CONTENT = {
   walkthrough: Walkthrough,
@@ -41,11 +42,15 @@ const SECTION_CONTENT = {
   showcase: Showcase
 };
 
+const Container = styled.div`
+  margin-top: 32px;
+`;
+
 export default class Home extends PureComponent {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <div>
+        <Container>
           <Hero />
           {SECTIONS.map(({id, title, description, icon, isDark, background}, i) => {
             const SectionContent = SECTION_CONTENT[id];
@@ -64,7 +69,7 @@ export default class Home extends PureComponent {
             );
           })}
           <Footer />
-        </div>
+        </Container>
       </ThemeProvider>
     );
   }

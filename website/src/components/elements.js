@@ -21,19 +21,40 @@
 
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
+import {window} from 'global';
 
+import {breakPoints, media} from '../styles';
 import {ELEMENTS} from '../contents/content';
-import {media} from '../styles';
 import {LinkButton, CenteredContent} from './common/styled-components';
-import Carousel from './common/carousel';
+import Carousal from './common/carousel';
 
-const CarouselContainer = styled.div`
+const ImageContainer = styled.div`
   height: 360px;
+  overflow: hidden;
   ${media.palm`
     height: 240px;
   `} ${media.desk`
     height: 480px;
   `};
+`;
+
+const TitleContainer = styled.div`
+  height: 80px;
+  ${media.palm`
+    height: 60px;
+  `} ${media.desk`
+    height: 100px;
+  `};
+`;
+
+const DescriptionContainer = styled.div`
+  height: 80px;
+  ${media.palm`
+    height: 60px;
+  `} ${media.desk`
+    height: 120px;
+  `};
+  margin-bottom: ${props => props.theme.margins.small};
 `;
 
 const Image = styled.img`
@@ -54,80 +75,104 @@ const Image = styled.img`
   `};
 `;
 
-const NavContainer = styled.div`
+const Column = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 12px;
-`;
-
-const NavItems = styled.div`
-  display: flex;
   justify-content: center;
-  margin-top: 12px;
-`;
-
-const NavItem = styled.div`
-  width: 299px;
-  margin: ${props => props.theme.margins.small};
-  font-size: 10px;
-  text-align: center;
-  transform: ${props => props.isActive && 'scale(1.1)'};
-  transition: transform 500ms, filter 500ms;
-  cursor: pointer;
-  :hover {
-    transform: scale(1.1);
-  }
-
-  ${media.palm`
-    margin: 2px 4px;
-    font-size: 8px;
-  `};
-`;
-
-const NavIcon = styled.span`
-  display: block;
-  font-size: ${props => (props.isActive ? 36 : 20)}px;
+  align-items: center;
   color: ${props => (props.isActive ? '#000' : '#9BA0A5')};
 
-  border-radius: ${props => (props.isActive ? 6 : 5)}px;
+  width: 420px;
+  ${media.palm`
+    width: 320px;
+  `} ${media.desk`
+    width: 560px;
+  `};
 `;
 
 const Title = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  text-transform: 'uppercase';
+  align-items: center;
+  text-transform: uppercase;
   font-size: 20px;
   font-weight: 500;
 `;
 
 const Description = styled.div`
   color: #5b5f62;
+  width: 240px;
 `;
 
-const Nav = ({items, selectedIndex, onClick}) => {
-  const activeItem = items[selectedIndex];
-  const {title, description, icon} = activeItem;
+const NavIcon = styled.span`
+  display: block;
+  font-size: ${props => (props.isActive ? 36 : 20)}px;
 
-  return (
-    <NavContainer>
-      <NavItems>
-        <NavItem isActive={true}>
-          <Title>
-            {title}
-            <NavIcon isActive={true} key={`${icon}`} className={`icon-${icon}`} />
-          </Title>
-          <Description>{description}</Description>
-        </NavItem>
-      </NavItems>
-    </NavContainer>
-  );
-};
+  border-radius: ${props => (props.isActive ? 6 : 5)}px;
+`;
 
 class Elements extends PureComponent {
   state = {
-    selectedIndex: 0
+    selectedIndex: 0,
+    window: window.innerWidth,
+    height: window.innerHeight
+  };
+
+  componentDidMount() {
+    window.addEventListener('resize', this.resize);
+    this.resize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
+
+  resize = () => {
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  };
+
+  _getImageTransform = ({isVisible, index}) => {
+    const isPalm = this.state.width <= breakPoints.palm;
+    const selectedIndex = this.state.selectedIndex;
+    const xOffset = 45;
+    const zOffset = 60;
+    const yRotate = -25;
+    const translateX = isVisible
+      ? isPalm
+        ? (index - selectedIndex) * xOffset
+        : // A hack to make the images layout aligned with design
+          (index - ELEMENTS.length / 2 + (selectedIndex - ELEMENTS / 2 > 0 ? 1 : 0.5)) * xOffset
+      : 0;
+    const translateZ = -Math.abs(index - selectedIndex) * zOffset;
+    const rotateY = Math.sign(index - selectedIndex) * yRotate;
+    return `
+      perspective(600px)
+      translate3d(${translateX}%, 0, ${translateZ}px)
+      rotateY(${rotateY}deg)
+      scale(${index === selectedIndex ? 1 : 0.8});
+    `;
+  };
+
+  _getTransform = ({isVisible, index}) => {
+    const isPalm = this.state.width <= breakPoints.palm;
+    const selectedIndex = this.state.selectedIndex;
+    const xOffset = 45;
+    const zOffset = 60;
+    const translateX = isVisible
+      ? isPalm
+        ? (index - selectedIndex) * xOffset
+        : // A hack to make the images layout aligned with design
+          (index - ELEMENTS.length / 2 + (selectedIndex - ELEMENTS / 2 > 0 ? 1 : 0.5)) * xOffset
+      : 0;
+    const translateZ = -Math.abs(index - selectedIndex) * zOffset;
+    return `
+      translate3d(${translateX}%, 0, ${translateZ}px)
+      scale(${index === selectedIndex ? 1 : 0.8});
+    `;
   };
 
   render() {
@@ -135,38 +180,55 @@ class Elements extends PureComponent {
 
     return (
       <div>
-        <CarouselContainer>
-          <Carousel
+        <TitleContainer>
+          <Carousal
+            minHeight="80px"
             selectedIndex={selectedIndex}
             onChange={i => this.setState({selectedIndex: i})}
-            getTransform={({index, isVisible}) => {
-              const xOffset = 45;
-              const zOffset = 60;
-              const yRotate = -25;
-              const translateX = isVisible
-                ? (index - ELEMENTS.length / 2 + (selectedIndex - ELEMENTS / 2 > 0 ? 1 : 0.5)) *
-                  xOffset
-                : 0;
-              const translateZ = -Math.abs(index - selectedIndex) * zOffset;
-              const rotateY = Math.sign(index - selectedIndex) * yRotate;
-              return `
-                perspective(600px)
-                translate3d(${translateX}%, 0, ${translateZ}px)
-                rotateY(${rotateY}deg)
-                scale(${index === selectedIndex ? 1 : 0.8});
-            `;
-            }}
+            getTransform={this._getTransform}
+          >
+            {ELEMENTS.map(({title, description, image, icon}, i) => {
+              const isActive = i === selectedIndex;
+              return (
+                <Column isActive={isActive}>
+                  <Title>
+                    {title}
+                    <NavIcon isActive={isActive} key={`${icon}`} className={`icon-${icon}`} />
+                  </Title>
+                </Column>
+              );
+            })}
+          </Carousal>
+        </TitleContainer>
+        <ImageContainer>
+          <Carousal
+            minHeight="420px"
+            selectedIndex={selectedIndex}
+            onChange={i => this.setState({selectedIndex: i})}
+            getTransform={this._getImageTransform}
           >
             {ELEMENTS.map(({title, description, image, icon}, i) => (
               <Image key={`image-${i}`} src={image} />
             ))}
-          </Carousel>
-        </CarouselContainer>
-        <Nav
-          items={ELEMENTS}
-          selectedIndex={this.state.selectedIndex}
-          onClick={i => this.setState({selectedIndex: i})}
-        />
+          </Carousal>
+        </ImageContainer>
+        <DescriptionContainer>
+          <Carousal
+            selectedIndex={selectedIndex}
+            onChange={i => this.setState({selectedIndex: i})}
+            getTransform={this._getTransform}
+          >
+            {ELEMENTS.map(({title, description, image, icon}, i) => {
+              const isActive = i === selectedIndex;
+              return (
+                <Column isActive={isActive}>
+                  {isActive && <Description>{description}</Description>}
+                </Column>
+              );
+            })}
+          </Carousal>
+        </DescriptionContainer>
+
         <CenteredContent>
           <LinkButton outline large href="https://github.com/uber/streetscape.gl">
             Read More
