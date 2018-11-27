@@ -62,7 +62,7 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
     if (maxLookAhead > 0) {
       controls.push(
         <div
-          className="mc-playback-control--lookahead"
+          className="playback-control--lookahead"
           style={LOOKAHEAD_CONTAINER_STYLE}
           key="lookahead-slider"
         >
