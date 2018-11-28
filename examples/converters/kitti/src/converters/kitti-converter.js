@@ -5,6 +5,7 @@ import {getTimestamps, createDir} from '../parsers/common';
 import GPSConverter from './gps-converter';
 import LidarConverter from './lidar-converter';
 import TrackletsConverter from './tracklets-converter';
+import FutureTrackletsConverter from './future-tracklets-converter';
 import CameraConverter from './camera-converter';
 import RandomDataGenerator from './random-data-generator';
 import {getDeclarativeUI} from './declarative-ui';
@@ -50,6 +51,9 @@ export class KittiConverter {
 
     if (this.fakeStreams) {
       this.converters.push(new RandomDataGenerator());
+      this.converters.push(
+        new FutureTrackletsConverter(this.inputDir, () => gpsConverter.getPoses(), this.timestamps)
+      );
     }
 
     this.converters.forEach(converter => converter.load());
