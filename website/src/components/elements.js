@@ -190,7 +190,7 @@ class Elements extends PureComponent {
             {ELEMENTS.map(({title, description, image, icon}, i) => {
               const isActive = i === selectedIndex;
               return (
-                <Column isActive={isActive}>
+                <Column key={`title-${i}`} isActive={isActive}>
                   <Title>
                     {title}
                     <NavIcon isActive={isActive} key={`${icon}`} className={`icon-${icon}`} />
@@ -221,7 +221,7 @@ class Elements extends PureComponent {
             {ELEMENTS.map(({title, description, image, icon}, i) => {
               const isActive = i === selectedIndex;
               return (
-                <Column isActive={isActive}>
+                <Column key={`description-${i}`} isActive={isActive}>
                   {isActive && <Description>{description}</Description>}
                 </Column>
               );
