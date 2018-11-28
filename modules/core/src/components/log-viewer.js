@@ -206,9 +206,11 @@ class Core3DViewer extends PureComponent {
 
     const objectStates = this.props.objectStates || this.state.objectStates;
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
-    const featuresAndFutures = Object.keys(streams)
-      .concat(Object.keys(lookAheads))
-      .filter(streamName => streamFilter(streamName) && streamSettings[streamName]);
+    const featuresAndFutures = new Set(
+      Object.keys(streams)
+        .concat(Object.keys(lookAheads))
+        .filter(streamName => streamFilter(streamName) && streamSettings[streamName])
+    );
 
     return [
       carMesh &&
@@ -227,7 +229,7 @@ class Core3DViewer extends PureComponent {
           wireframe: car.wireframe || DEFAULT_CAR.wireframe,
           lightSettings: LIGHT_SETTINGS
         }),
-      featuresAndFutures
+      Array.from(featuresAndFutures)
         .map(streamName => {
           // Check lookAheads first because it will contain the selected futures
           // while streams would contain the full futures array
