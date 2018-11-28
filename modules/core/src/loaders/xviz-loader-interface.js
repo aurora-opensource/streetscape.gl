@@ -193,7 +193,7 @@ export default class XVIZLoaderInterface {
         const frames = {};
         Object.keys(streams).forEach(streamName => {
           const streamMetadata = metadata.streams[streamName];
-          if (!streamMetadata || streamMetadata.type !== 'image') {
+          if (!streamMetadata || streamMetadata.primitive_type !== 'image') {
             return;
           }
           frames[streamName] = streams[streamName].map((frame, i) => {

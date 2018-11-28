@@ -68,7 +68,7 @@ export default class ControlPanel extends PureComponent {
       <div id="control-panel">
         <header>
           <div>
-            <img src="assets/images/logo.png" />
+            <img src="images/logo.png" />
           </div>
           <div>
             {this._renderTab({id: 'metadata', displayName: 'Log Info', icon: 'info'})}
