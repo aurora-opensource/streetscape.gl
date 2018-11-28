@@ -201,7 +201,7 @@ class Core3DViewer extends PureComponent {
       return [];
     }
 
-    const {streams, origin, heading, lookAheads = {}, vehicleRelativeTransform} = frame;
+    const {streams, origin, lookAheads = {}, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
     const objectStates = this.props.objectStates || this.state.objectStates;
@@ -224,12 +224,8 @@ class Core3DViewer extends PureComponent {
           data: CAR_DATA,
           getPosition: d => d,
           getColor: [160, 160, 160],
-          getYaw: d => heading,
           wireframe: car.wireframe || DEFAULT_CAR.wireframe,
-          lightSettings: LIGHT_SETTINGS,
-          updateTriggers: {
-            getYaw: heading
-          }
+          lightSettings: LIGHT_SETTINGS
         }),
       featuresAndFutures
         .map(streamName => {
