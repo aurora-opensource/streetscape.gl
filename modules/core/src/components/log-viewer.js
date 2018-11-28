@@ -221,11 +221,14 @@ class Core3DViewer extends PureComponent {
       return [];
     }
 
-    const {streams, origin, heading, vehicleRelativeTransform} = frame;
+    const {streams, origin, heading, lookAheads = {}, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
     const objectStates = this.props.objectStates || this.state.objectStates;
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
+    const featuresAndFutures = Object.keys(streams)
+      .concat(Object.keys(lookAheads))
+      .filter(streamName => streamFilter(streamName) && streamSettings[streamName]);
 
     return [
       carMesh &&
@@ -248,10 +251,11 @@ class Core3DViewer extends PureComponent {
             getYaw: heading
           }
         }),
-      Object.keys(streams)
-        .filter(streamName => streamFilter(streamName) && streamSettings[streamName])
+      featuresAndFutures
         .map(streamName => {
-          const stream = streams[streamName];
+          // Check lookAheads first because it will contain the selected futures
+          // while streams would contain the full futures array
+          const stream = lookAheads[streamName] || streams[streamName];
           const streamMetadata = metadata.streams[streamName];
           const coordinateProps = resolveCoordinateTransform(
             frame,
@@ -259,7 +263,9 @@ class Core3DViewer extends PureComponent {
             getTransformMatrix
           );
 
-          if (stream.features && stream.features.length) {
+          // Support both features and lookAheads, respectively
+          const primitives = stream.features || stream;
+          if (primitives && primitives.length) {
             return new XVIZLayer({
               id: `xviz-${streamName}`,
               ...coordinateProps,
@@ -267,7 +273,7 @@ class Core3DViewer extends PureComponent {
               pickable: true,
               lightSettings: LIGHT_SETTINGS,
 
-              data: stream.features,
+              data: primitives,
               style: styleParser.getStylesheet(streamName),
               objectStates,
 
@@ -300,7 +306,6 @@ class Core3DViewer extends PureComponent {
         })
         .filter(Boolean)
         .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex),
-
       customLayers.map(layer => {
         // Clone layer props
         const props = {...layer.props};
