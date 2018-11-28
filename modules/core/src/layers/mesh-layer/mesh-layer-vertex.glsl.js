@@ -69,6 +69,7 @@ void main(void) {
 
   vec3 pos = positions;
   pos = rotationMatrix * pos;
+  pos = (project_uModelMatrix * vec4(pos, 0.0)).xyz;
   pos = project_scale(pos * sizeScale);
 
   vec4 worldPosition;
