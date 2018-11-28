@@ -24,22 +24,30 @@ import styled from 'styled-components';
 import {getImageUrl} from '../contents/content';
 import {LinkButton, CenteredContent} from './common/styled-components';
 
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+
 const BackgroundImage = styled.img`
   width: 100%;
   height: 100%;
+  max-width: 1319px;
+  margin-bottom: ${props => props.theme.margins.small};
 `;
 
 class Features extends PureComponent {
   render() {
     return (
-      <div>
+      <Container>
         <BackgroundImage src={getImageUrl('ui-controls.png')} />
         <CenteredContent>
           <LinkButton large outline href="https://github.com/uber/streetscape.gl">
             See More
           </LinkButton>
         </CenteredContent>
-      </div>
+      </Container>
     );
   }
 }
