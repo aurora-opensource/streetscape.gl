@@ -5,22 +5,23 @@ import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
 import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
-
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {getLogPath} from './utils';
 
 import './stylesheets/main.scss';
 
 class Example extends PureComponent {
   /* eslint-disable no-console */
   state = {
+    selectedLog: '0005',
     log: new XVIZFileLoader({
-      numberOfFrames: 155,
-      getFilePath: index => `/kitti/2011_09_26/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
+      timingsFilePath: `${getLogPath('kitti', '0005')}/0-frame.json`,
+      getFilePath: index => `${getLogPath('kitti', '0005')}/${index + 1}-frame.glb`,
       worker: true,
       maxConcurrency: 4
     }).on('error', console.error), // eslint-disable-line
@@ -34,6 +35,26 @@ class Example extends PureComponent {
   componentDidMount() {
     this.state.log.connect();
   }
+
+  _onLogChange = selectedLog => {
+    if (this.state.log) {
+      this.state.log.close();
+    }
+
+    // const {dataPath, numberOfFrames} = log;
+    this.setState(
+      {
+        selectedLog,
+        log: new XVIZFileLoader({
+          timingsFilePath: `${getLogPath('kitti', selectedLog)}/0-frame.json`,
+          getFilePath: index => `${getLogPath('kitti', selectedLog)}/${index + 1}-frame.glb`,
+          worker: true,
+          maxConcurrency: 4
+        }).on('error', console.error) // eslint-disable-line
+      },
+      () => this.state.log.connect()
+    );
+  };
 
   _onSettingsChange = changedSettings => {
     this.setState({
@@ -57,7 +78,7 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, settings} = this.state;
+    const {log, selectedLog, settings} = this.state;
 
     return (
       <div id="container">
@@ -86,7 +107,11 @@ class Example extends PureComponent {
 
         <ControlPanel log={log} />
 
-        <Toolbar onChange={this._onSettingsChange} />
+        <Toolbar
+          selectedLog={selectedLog}
+          onLogChange={this._onLogChange}
+          onSettingsChange={this._onSettingsChange}
+        />
 
         <CameraPanel log={log} />
       </div>
