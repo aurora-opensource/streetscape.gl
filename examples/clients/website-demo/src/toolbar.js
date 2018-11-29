@@ -1,7 +1,13 @@
 import React, {PureComponent} from 'react';
-import {Tooltip, Popover} from 'monochrome-ui';
+import {Tooltip, Popover, Dropdown} from 'monochrome-ui';
+
+const LOGS = ['0001', '0005', '0009', '0011', '0051', '0056', '0091', '0093'];
 
 export default class Toolbar extends PureComponent {
+  state = {
+    selectedLog: 5
+  };
+
   _gotoViewMode = viewMode => {
     this.props.onChange({viewMode});
     this._viewModePopover._hidePopover();
@@ -26,6 +32,22 @@ export default class Toolbar extends PureComponent {
       </div>
     );
   };
+
+  _onSelectLog = value => {
+    this.setState({selectedLog: value});
+  };
+
+  _renderLogSelector() {
+    const {selectedLog} = this.state;
+
+    const data = {};
+    LOGS.forEach(name => {
+      // TODO - use display name from metadata
+      data[name] = name;
+    });
+
+    return <Dropdown value={selectedLog} data={data} onChange={this._onSelectLog} />;
+  }
 
   render() {
     return (
@@ -54,6 +76,7 @@ export default class Toolbar extends PureComponent {
             <i className="material-icons">near_me</i>
           </div>
         </Tooltip>
+        {this._renderLogSelector()}
       </div>
     );
   }
