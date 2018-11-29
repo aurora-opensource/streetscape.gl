@@ -78,12 +78,58 @@
         "markdown": "api-reference/log-viewer.md"
       },
       {
-        "name": "XVIZLoaderInterface",
-        "markdown": "api-reference/xviz-loader-interface.md"
+        "name": "Playback Control",
+        "markdown": "api-reference/playback-control.md"
       },
       {
-        "name": "XVIZStreamLoader",
-        "markdown": "api-reference/xviz-stream-loader.md"
+        "name": "Stream Settings",
+        "markdown": "api-reference/stream-settings-panel.md"
+      },
+      {
+        "name": "Loaders",
+        "children": [
+          {
+            "name": "XVIZLoaderInterface",
+            "markdown": "api-reference/xviz-loader-interface.md"
+          },
+          {
+            "name": "XVIZStreamLoader",
+            "markdown": "api-reference/xviz-stream-loader.md"
+          },
+          {
+            "name": "XVIZFileLoader",
+            "markdown": "api-reference/xviz-file-loader.md"
+          }
+        ]
+      },
+      {
+        "name": "Declarative UI",
+        "children": [
+          {
+            "name": "XVIZ panel",
+            "markdown": "api-reference/xviz-panel.md"
+          },
+          {
+            "name": "XVIZ panel",
+            "markdown": "api-reference/xviz-panel-component.md"
+          },
+          {
+            "name": "XVIZ metric",
+            "markdown": "api-reference/xviz-metric-component.md"
+          },
+          {
+            "name": "XVIZ plot",
+            "markdown": "api-reference/xviz-plot-component.md"
+          },
+          {
+            "name": "XVIZ video",
+            "markdown": "api-reference/xviz-video-component.md"
+          },
+          {
+            "name": "XVIZ table",
+            "markdown": "api-reference/xviz-table-component.md"
+          }
+        ]
       }
     ]
   }

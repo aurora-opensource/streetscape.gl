@@ -15,7 +15,7 @@ yarn start-local
 
 ## Development
 
-### Streetscape styles
+### streetscape styles
 
 #### How to update
 

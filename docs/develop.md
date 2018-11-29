@@ -43,7 +43,7 @@ $ yarn test-browser
 
 ## Dependency setup for Local Development
 
-To improve the development flow while working on both XVIZ and Streetscape.gl it is useful to directly link the dependencies rather than use packages.
+To improve the development flow while working on both XVIZ and streetscape.gl it is useful to directly link the dependencies rather than use packages.
 
 We have some utility script to use yarn linking between XVIZ
 

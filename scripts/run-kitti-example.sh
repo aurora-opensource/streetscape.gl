@@ -36,7 +36,7 @@ exit_script() {
     kill ${pid}
   done
 }
-trap exit_script SIGINT SIGTERM
+trap exit_script SIGINT SIGERM
 
 # Run KITTI XVIZ conversion
 # check for both json & glb files
