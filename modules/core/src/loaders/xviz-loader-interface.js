@@ -15,7 +15,6 @@ export default class XVIZLoaderInterface {
     this.state = {};
     this._version = 0;
     this._updateTimer = null;
-    this.timestamp = null;
   }
 
   /* Event types:
@@ -97,6 +96,10 @@ export default class XVIZLoaderInterface {
     this.set('timestamp', timestamp);
   }
 
+  setLookAhead(lookAhead) {
+    this.set('lookAhead', lookAhead);
+  }
+
   updateStreamSettings(settings) {
     const streamSettings = this.get('streamSettings');
     this.set('streamSettings', {...streamSettings, ...settings});
@@ -109,6 +112,8 @@ export default class XVIZLoaderInterface {
   /* Data selector API */
 
   getCurrentTime = () => this.get('timestamp');
+
+  getLookAhead = () => this.get('lookAhead');
 
   getMetadata = () => this.get('metadata');
 
@@ -132,12 +137,19 @@ export default class XVIZLoaderInterface {
 
   getCurrentFrame = createSelector(
     this,
-    [this.getLogSynchronizer, this.getMetadata, this.getCurrentTime, this.getStreams],
+    [
+      this.getLogSynchronizer,
+      this.getMetadata,
+      this.getCurrentTime,
+      this.getLookAhead,
+      this.getStreams
+    ],
     // `getStreams` is only needed to trigger recomputation.
     // The logSynchronizer has access to the streamBuffer.
-    (logSynchronizer, metadata, timestamp) => {
+    (logSynchronizer, metadata, timestamp, lookAhead) => {
       if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
         logSynchronizer.setTime(timestamp);
+        logSynchronizer.setLookAheadTimeOffset(lookAhead);
         return logSynchronizer.getCurrentFrame(metadata.streams);
       }
       return null;
