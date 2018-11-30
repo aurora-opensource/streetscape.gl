@@ -36,12 +36,30 @@ Format of ticks. Receives parameters:
 - `t` (`Number`) - the timestamp to format
 - `startTime` (`Number`) - the start time of the log.
 
+Default formats the time since start into `mm:ss`.
+
 ##### `formatTimestamp` (`Function`, optional)
 
 Format of the current time label. Receives parameters:
 
 - `t` (`Number`) - the timestamp to format
 - `startTime` (`Number`) - the start time of the log.
+
+Default formats the time since start into `mm:ss`.
+
+##### `formatLookAhead` (`Function`, optional)
+
+Format of the current look ahead offset label. Receives parameters:
+
+- `t` (`Number`) - the look ahead value
+
+Default formats the value into `ss.S`.
+
+##### `maxLookAhead` (`Number`, optional)
+
+Max value of the look ahead offset. If `0`, the look ahead slider will be hidden.
+
+Default `10000`.
 
 ##### `className` (`String`, optional)
 

@@ -22,10 +22,10 @@
 import React, {PureComponent} from 'react';
 // import PropTypes from 'prop-types';
 
-import {PlaybackControl as MonochromePlaybackControl} from 'monochrome-ui';
 import {getXVIZConfig, getXVIZSettings} from '@xviz/parser';
+import DualPlaybackControl from './dual-playback-control';
 
-import connectToLog from './connect';
+import connectToLog from '../connect';
 
 const TIME_SCALES = {
   seconds: 0.001,
@@ -67,6 +67,10 @@ class PlaybackControl extends PureComponent {
     }
   };
 
+  _onLookAheadChange = lookAhead => {
+    this.props.log.setLookAhead(lookAhead);
+  };
+
   _animate = () => {
     if (this.state.isPlaying) {
       const now = Date.now();
@@ -92,7 +96,7 @@ class PlaybackControl extends PureComponent {
     }
   };
 
-  _formatTime = (x, formatter) => {
+  _formatTime = (x, formatter = null) => {
     const {startTime} = this.props;
     const {timeScale} = this.state;
 
@@ -101,19 +105,31 @@ class PlaybackControl extends PureComponent {
     }
 
     const deltaTimeS = (x - startTime) / timeScale / 1000;
-    return MonochromePlaybackControl.formatTimeCode(deltaTimeS, '{mm}:{ss}');
+    return DualPlaybackControl.formatTimeCode(deltaTimeS, '{mm}:{ss}');
+  };
+
+  _formatTick = x => {
+    return this._formatTime(x, this.props.formatTick);
+  };
+
+  _formatTimestamp = x => {
+    return this._formatTime(x, this.props.formatTimestamp);
+  };
+
+  _formatLookAhead = x => {
+    const {formatLookAhead} = this.props;
+    const {timeScale} = this.state;
+
+    if (formatLookAhead) {
+      return formatLookAhead(x);
+    }
+
+    const deltaTimeS = x / timeScale / 1000;
+    return DualPlaybackControl.formatTimeCode(deltaTimeS, '{s}.{S}s');
   };
 
   render() {
-    const {
-      startTime,
-      endTime,
-      timestamp,
-      formatTick,
-      formatTimestamp,
-      bufferRange,
-      ...otherProps
-    } = this.props;
+    const {startTime, endTime, timestamp, lookAhead, bufferRange, ...otherProps} = this.props;
 
     if (!Number.isFinite(timestamp)) {
       return null;
@@ -125,18 +141,21 @@ class PlaybackControl extends PureComponent {
     }));
 
     return (
-      <MonochromePlaybackControl
+      <DualPlaybackControl
         {...otherProps}
         bufferRange={buffers}
         currentTime={timestamp}
+        lookAhead={lookAhead}
         startTime={startTime}
         endTime={endTime}
         isPlaying={this.state.isPlaying}
-        formatTick={x => this._formatTime(x, formatTick)}
-        formatTimestamp={x => this._formatTime(x, formatTimestamp)}
+        formatTick={this._formatTick}
+        formatTimestamp={this._formatTimestamp}
+        formatLookAhead={this._formatLookAhead}
         onSeek={this._onSeek}
         onPlay={this._onPlay}
         onPause={this._onPause}
+        onLookAheadChange={this._onLookAheadChange}
       />
     );
   }
@@ -144,6 +163,7 @@ class PlaybackControl extends PureComponent {
 
 const getLogState = log => ({
   timestamp: log.getCurrentTime(),
+  lookAhead: log.getLookAhead(),
   startTime: log.getLogStartTime(),
   endTime: log.getLogEndTime(),
   bufferRange: log.getBufferRange()
