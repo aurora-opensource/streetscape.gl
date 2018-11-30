@@ -17,7 +17,6 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
     assert(options.timingsFilePath && options.getFilePath);
 
-    // this._numberOfFrames = options.numberOfFrames;
     this._timingsFilePath = options.timingsFilePath;
     this._getFilePath = options.getFilePath;
     this._batchSize = options.maxConcurrency || DEFUALT_BATCH_SIZE;
@@ -33,6 +32,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   connect() {
     this._isOpen = true;
     this._loadTimings().then(data => {
+      // Adding 1 is to account for the metadata file
       this._numberOfFrames = data.timing.length + 1;
       this._loadMetadata().then(() => this._loadNextBatch(1));
     });

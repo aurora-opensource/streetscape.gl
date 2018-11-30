@@ -4,53 +4,46 @@ import 'xviz-config';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
+import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
-import {getLogPath} from './utils';
+import {getLogLoader} from './utils';
 
 import './stylesheets/main.scss';
 
+const DEFAULT_LOG = {
+  namespace: 'kitti',
+  logName: '0005'
+};
+
 class Example extends PureComponent {
-  /* eslint-disable no-console */
   state = {
-    selectedLog: '0005',
-    log: new XVIZFileLoader({
-      timingsFilePath: `${getLogPath('kitti', '0005')}/0-frame.json`,
-      getFilePath: index => `${getLogPath('kitti', '0005')}/${index + 1}-frame.glb`,
-      worker: true,
-      maxConcurrency: 4
-    }).on('error', console.error), // eslint-disable-line
+    selectedLog: DEFAULT_LOG,
+    log: getLogLoader(DEFAULT_LOG.namespace, DEFAULT_LOG.logName),
 
     settings: {
       viewMode: 'PERSPECTIVE'
     }
   };
-  /* eslint-enable no-console */
 
   componentDidMount() {
     this.state.log.connect();
   }
 
   _onLogChange = selectedLog => {
-    if (this.state.log) {
-      this.state.log.close();
-    }
+    const logState = {
+      ...this.state.selectedLog,
+      ...selectedLog
+    };
 
-    // const {dataPath, numberOfFrames} = log;
     this.setState(
       {
-        selectedLog,
-        log: new XVIZFileLoader({
-          timingsFilePath: `${getLogPath('kitti', selectedLog)}/0-frame.json`,
-          getFilePath: index => `${getLogPath('kitti', selectedLog)}/${index + 1}-frame.glb`,
-          worker: true,
-          maxConcurrency: 4
-        }).on('error', console.error) // eslint-disable-line
+        selectedLog: logState,
+        log: getLogLoader(logState.namespace, logState.logName)
       },
       () => this.state.log.connect()
     );
