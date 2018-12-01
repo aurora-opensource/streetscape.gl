@@ -203,7 +203,7 @@ export default class Hero extends PureComponent {
               Make an leap with your autonomous vehicle data
             </div>
             <div className="sg-home__caption__description">
-              <span>Streetscape.gl is a powerful </span>
+              <span>streetscape.gl is a powerful </span>
               <span className="t-bold">open source </span>
               <span>web-based 3D visualization framework for </span>
               <span className="t-bold">full-stack </span>

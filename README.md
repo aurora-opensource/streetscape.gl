@@ -1,6 +1,6 @@
 *Uber Confidential Information*
 
-# Streetscape.gl
+# streetscape.gl
 
 ### Dependencies
 
