@@ -172,7 +172,12 @@ export default class TrackletsConverter {
       .filter(object => frameIndex >= object.firstFrame && frameIndex < object.lastFrame)
       .map(object => {
         const poseIndex = frameIndex - object.firstFrame;
-        const {tx, ty, tz, rx, ry, rz} = object.data.poses.item[poseIndex];
+
+        const pose = Array.isArray(object.data.poses.item)
+          ? object.data.poses.item[poseIndex]
+          : object.data.poses.item;
+
+        const {tx, ty, tz, rx, ry, rz} = pose;
 
         const poseProps = {
           x: Number(tx),

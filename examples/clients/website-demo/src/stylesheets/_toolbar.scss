@@ -2,7 +2,22 @@
   padding: 0 $spacing-normal;
   background: $background-alt;
   position: fixed;
+  display: flex;
+  align-items: center;
   left: 50%;
   top: 0;
   transform: translateX(-50%);
+
+  .mc-dropdown--wrapper {
+    background: rgba($background-alt, 0.9);
+
+    select {
+      border-color: transparent;
+    }
+  }
+}
+
+#log-selector {
+  display: flex;
+  flex-direction: row
 }

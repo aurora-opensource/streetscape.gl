@@ -4,36 +4,50 @@ import 'xviz-config';
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
-
+import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {getLogLoader} from './utils';
 
 import './stylesheets/main.scss';
 
+const DEFAULT_LOG = {
+  namespace: 'kitti',
+  logName: '0005'
+};
+
 class Example extends PureComponent {
-  /* eslint-disable no-console */
   state = {
-    log: new XVIZFileLoader({
-      numberOfFrames: 155,
-      getFilePath: index => `/kitti/2011_09_26/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
-      worker: true,
-      maxConcurrency: 4
-    }).on('error', console.error), // eslint-disable-line
+    selectedLog: DEFAULT_LOG,
+    log: getLogLoader(DEFAULT_LOG.namespace, DEFAULT_LOG.logName),
 
     settings: {
       viewMode: 'PERSPECTIVE'
     }
   };
-  /* eslint-enable no-console */
 
   componentDidMount() {
     this.state.log.connect();
   }
+
+  _onLogChange = selectedLog => {
+    const logState = {
+      ...this.state.selectedLog,
+      ...selectedLog
+    };
+
+    this.setState(
+      {
+        selectedLog: logState,
+        log: getLogLoader(logState.namespace, logState.logName)
+      },
+      () => this.state.log.connect()
+    );
+  };
 
   _onSettingsChange = changedSettings => {
     this.setState({
@@ -57,7 +71,7 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, settings} = this.state;
+    const {log, selectedLog, settings} = this.state;
 
     return (
       <div id="container">
@@ -86,7 +100,11 @@ class Example extends PureComponent {
 
         <ControlPanel log={log} />
 
-        <Toolbar onChange={this._onSettingsChange} />
+        <Toolbar
+          selectedLog={selectedLog}
+          onLogChange={this._onLogChange}
+          onSettingsChange={this._onSettingsChange}
+        />
 
         <CameraPanel log={log} />
       </div>

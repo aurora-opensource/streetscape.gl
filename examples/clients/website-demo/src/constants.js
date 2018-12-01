@@ -24,3 +24,27 @@ export const SETTINGS = {
 export const XVIZ_STYLE = {
   // '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
 };
+
+export const LOGS = {
+  kitti: {
+    logs: [
+      '0001',
+      '0002',
+      '0005',
+      '0009',
+      '0011',
+      '0013',
+      '0014',
+      '0017',
+      '0018',
+      '0048',
+      '0051',
+      '0056',
+      '0057',
+      '0059',
+      '0060',
+      '0091',
+      '0093'
+    ]
+  }
+};
