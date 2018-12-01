@@ -53,7 +53,7 @@ export default class Header extends Component {
               <i className="icon icon-github" />
             </a>
             <NavLink activeClassName="active" to="/streetscape.gl">
-              Streetscape.gl
+              streetscape.gl
             </NavLink>
             <a href={STREETSCAPE_GITHUB_URL} className="external">
               <i className="icon icon-github" />

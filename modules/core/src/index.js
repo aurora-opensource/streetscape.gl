@@ -5,7 +5,7 @@
 // The generic XVIZ layer
 export {default as XVIZLayer} from './layers/xviz-layer';
 
-// Streetscape.gl custom layers
+// streetscape.gl custom layers
 export {default as SignLayer} from './layers/sign-layer/sign-layer';
 export {default as TrafficLightLayer} from './layers/traffic-light-layer/traffic-light-layer';
 export {default as ImageryLayer} from './layers/imagery-layer/imagery-layer';

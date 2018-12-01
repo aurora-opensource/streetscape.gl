@@ -74,16 +74,67 @@
     "name": "API Reference",
     "children": [
       {
-        "name": "LogViewer",
-        "markdown": "api-reference/log-viewer.md"
+        "name": "Loaders",
+        "children": [
+          {
+            "name": "XVIZLoaderInterface",
+            "markdown": "api-reference/xviz-loader-interface.md"
+          },
+          {
+            "name": "XVIZStreamLoader",
+            "markdown": "api-reference/xviz-stream-loader.md"
+          },
+          {
+            "name": "XVIZFileLoader",
+            "markdown": "api-reference/xviz-file-loader.md"
+          }
+        ]
       },
       {
-        "name": "XVIZLoaderInterface",
-        "markdown": "api-reference/xviz-loader-interface.md"
-      },
-      {
-        "name": "XVIZStreamLoader",
-        "markdown": "api-reference/xviz-stream-loader.md"
+        "name": "React Components",
+        "children": [
+          {
+            "name": "Log Viewer",
+            "markdown": "api-reference/log-viewer.md"
+          },
+          {
+            "name": "Playback Control",
+            "markdown": "api-reference/playback-control.md"
+          },
+          {
+            "name": "Stream Settings",
+            "markdown": "api-reference/stream-settings-panel.md"
+          },
+          {
+            "name": "XVIZ panel",
+            "children": [
+              {
+                "name": "XVIZ panel",
+                "markdown": "api-reference/xviz-panel.md"
+              },
+              {
+                "name": "XVIZ Panel Component",
+                "markdown": "api-reference/xviz-panel-component.md"
+              },
+              {
+                "name": "XVIZ Metric Component",
+                "markdown": "api-reference/xviz-metric-component.md"
+              },
+              {
+                "name": "XVIZ Plot Component",
+                "markdown": "api-reference/xviz-plot-component.md"
+              },
+              {
+                "name": "XVIZ Video Component",
+                "markdown": "api-reference/xviz-video-component.md"
+              },
+              {
+                "name": "XVIZ Table Component",
+                "markdown": "api-reference/xviz-table-component.md"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

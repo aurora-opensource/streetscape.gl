@@ -9,4 +9,4 @@ yarn.lock -diff
 
 *.png -diff
 
-website/styles/Streetscape.json -diff
+website/streetscape.gl.json -diff
