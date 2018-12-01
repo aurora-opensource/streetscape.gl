@@ -19,7 +19,9 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
-import {Tooltip, Popover} from 'monochrome-ui';
+import {Tooltip, Popover, Dropdown} from 'monochrome-ui';
+
+import {LOGS} from './constants';
 
 export default class Toolbar extends PureComponent {
   _gotoViewMode = viewMode => {
@@ -28,7 +30,7 @@ export default class Toolbar extends PureComponent {
   };
 
   _resetView = () => {
-    this.props.onChange({viewOffset: {x: 0, y: 0, bearing: 0}});
+    this.props.onSettingsChange({viewOffset: {x: 0, y: 0, bearing: 0}});
   };
 
   _renderViewModeSelector = () => {
@@ -47,9 +49,47 @@ export default class Toolbar extends PureComponent {
     );
   };
 
+  _renderLogSelector() {
+    const {selectedLog} = this.props;
+
+    // only support kitti logs for now
+    const namespaces = Object.keys(LOGS).reduce((resMap, namespace) => {
+      resMap[namespace] = namespace;
+      return resMap;
+    }, {});
+
+    const logs = LOGS[selectedLog.namespace].logs.reduce((resMap, log) => {
+      resMap[log] = log;
+      return resMap;
+    }, {});
+
+    return (
+      <div id="log-selector">
+        <Dropdown
+          value={selectedLog.namespace}
+          data={namespaces}
+          onChange={namespace =>
+            this.props.onLogChange({
+              namespace,
+              logName: LOGS[namespace].logs[0]
+            })
+          }
+        />
+        <Dropdown
+          value={selectedLog.logName}
+          data={logs}
+          onChange={logName => this.props.onLogChange({logName})}
+        />
+      </div>
+    );
+  }
+
   render() {
     return (
       <div id="toolbar">
+        <Tooltip content="Select a log" position={Popover.BOTTOM}>
+          {this._renderLogSelector()}
+        </Tooltip>
         <Popover
           content={this._renderViewModeSelector}
           trigger={Popover.CLICK}
