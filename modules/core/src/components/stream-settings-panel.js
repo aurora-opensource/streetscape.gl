@@ -69,7 +69,9 @@ export function createFormData(metadata) {
 
     siblings[streamName] = {
       type: 'checkbox',
-      badge: <Badge type={metadata[streamName].type} />,
+      badge: (
+        <Badge type={metadata[streamName].primitive_type || metadata[streamName].scalar_type} />
+      ),
       title: streamName.replace(parentKey, '')
     };
   }
