@@ -1,9 +1,12 @@
 # XVIZMetricComponent (React Component)
 
-The base component for rendering a Declarative UI [metric](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#metric) component.
+The base component for rendering a Declarative UI
+[metric](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#metric)
+component.
 
-> Do not use this component directly unless implementing your own UI component. See [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI configurations.
-
+> Do not use this component directly unless implementing your own UI component. See
+> [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI
+> configurations.
 
 ## Properties
 
@@ -20,6 +23,7 @@ The height of the chart. Default `160`.
 ##### margin (Object, optional)
 
 The margin of the chart in pixles, must have the following fields:
+
 - `left`
 - `right`
 - `top`
@@ -30,6 +34,7 @@ Default: `{left: 45, right: 10, top: 10, bottom: 20}`
 ##### getColor (Object|Function|String, optional)
 
 The color accessor of a the line/area series.
+
 - Type `string`: a CSS color string.
 - Type `object`: a map from stream name to its CSS color.
 - Type `function`: a callback that receives a stream name and returns its CSS color.
@@ -67,12 +72,13 @@ Number of vertical grid lines. Default `0`.
 Called when the chart is clicked.
 
 Parameters:
-- `x` (number) - x value at the pointer position.
 
+- `x` (number) - x value at the pointer position.
 
 ### Declarative UI Component Descriptor
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`. See Declarative UI specification for details.
+The following props are automatically populated when this component is rendered via `XVIZPanel`. See
+Declarative UI specification for details.
 
 ##### streams (Array)
 
@@ -80,10 +86,11 @@ The following props are automatically populated when this component is rendered 
 
 ##### description (String)
 
-
 ### Log Info
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`. Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux store.
+The following props are automatically populated when this component is rendered via `XVIZPanel`.
+Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected
+with a Redux store.
 
 ##### currentTime (Number)
 
@@ -92,6 +99,7 @@ The current playback position of the log.
 ##### timeSeries (Number)
 
 An object mapping from stream names to objects in the following shape:
+
 - `data` (Array) - list of objects to be rendered as a time series
 - `getX` (Function) - accessor of x value from each item in `data`
 - `getY` (Function) - accessor of y value from each item in `data`

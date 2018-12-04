@@ -26,7 +26,7 @@ export const buttonStyles = css`
   align-items: center;
   background-color: ${props =>
     props.none
-    ? 'transparent'
+      ? 'transparent'
       : props.negative
         ? props.theme.negativeBtnBgd
         : props.secondary
@@ -35,9 +35,9 @@ export const buttonStyles = css`
             ? props.theme.outlineBtnBgd
             : props.outlineDark
               ? props.outlineDarkBtnBgd
-                : props.link
-                  ? props.theme.linkBtnBgd
-                  : props.theme.primaryBtnBgd};
+              : props.link
+                ? props.theme.linkBtnBgd
+                : props.theme.primaryBtnBgd};
   border-radius: ${props => props.theme.primaryBtnRadius};
   color: ${props =>
     props.negative
@@ -78,9 +78,9 @@ export const buttonStyles = css`
   :visited,
   &.active {
     background-color: ${props =>
-    props.none ? 
-      'transparent'
-        :props.negative
+      props.none
+        ? 'transparent'
+        : props.negative
           ? props.theme.negativeBtnBgdHover
           : props.secondary
             ? props.theme.secondaryBtnBgdHover
@@ -102,7 +102,8 @@ export const buttonStyles = css`
               ? props.theme.outlineDarkBtnActColor
               : props.link
                 ? props.theme.linkBtnActColor
-                : props.theme.primaryBtnActColor}};
+                : props.theme.primaryBtnActColor;
+    }};
   }
 
   svg,

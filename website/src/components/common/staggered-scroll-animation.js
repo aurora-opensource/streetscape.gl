@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
@@ -27,14 +27,11 @@ import styled from 'styled-components';
 const FadeIn = styled.div`
   opacity: ${props => (props.isVisible ? '1.0' : '0.0')};
   transform: ${props => (props.isVisible ? undefined : 'translateY(10px)')};
-  transition: ${props =>
-  `opacity 350ms ${props.delay}ms, transform 350ms ${props.delay}ms`};
+  transition: ${props => `opacity 350ms ${props.delay}ms, transform 350ms ${props.delay}ms`};
 `;
 
 const WrappedContainer = ({innerRef, Container, children}) => {
-  return innerRef ? (
-    <Container ref={innerRef}>{children}</Container>
-  ) : null;
+  return innerRef ? <Container ref={innerRef}>{children}</Container> : null;
 };
 
 export default class StaggeredScrollAnimation extends PureComponent {
@@ -59,13 +56,13 @@ export default class StaggeredScrollAnimation extends PureComponent {
   };
 
   _onWaypointEnter = () => {
-    this.setState({ isVisible: true });
+    this.setState({isVisible: true});
   };
 
   _onWaypointLeave = () => {
-    const { animateOnce } = this.props;
+    const {animateOnce} = this.props;
     if (!animateOnce) {
-      this.setState({ isVisible: false });
+      this.setState({isVisible: false});
     }
   };
 

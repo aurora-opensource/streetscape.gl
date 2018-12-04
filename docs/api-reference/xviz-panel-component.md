@@ -1,6 +1,7 @@
 # XVIZPanelComponent (React Component)
 
-The base component for [XVIZPanel](/docs/api-reference/xviz-panel). This component can be used without a `XVIZLoader` instance.
+The base component for [XVIZPanel](/docs/api-reference/xviz-panel). This component can be used
+without a `XVIZLoader` instance.
 
 ```jsx
 import {XVIZPanelComponent} from 'streetscape.gl';
@@ -23,7 +24,6 @@ const UI_CONFIG = {
 };
 
 <XVIZPanel name="Metrics" uiConfig={UI_CONFIG}} />
-
 ```
 
 ## Properties
@@ -32,4 +32,6 @@ All of the `XVIZPanel` properties, and the following:
 
 ##### UIConfig (Object)
 
-A Declarative UI [Panel](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#panels) descriptor.
+A Declarative UI
+[Panel](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#panels)
+descriptor.

@@ -1,15 +1,13 @@
 # StreamSettingsPanel
 
-*Uber Confidential Information*
-
+_Uber Confidential Information_
 
 Renders a stream settings editor.
 
 ```jsx
 import {StreamSettingsPanel} from 'streetscape.gl';
 
-<StreamSettingsPanel log={log} />
-
+<StreamSettingsPanel log={log} />;
 ```
 
 ## Properties

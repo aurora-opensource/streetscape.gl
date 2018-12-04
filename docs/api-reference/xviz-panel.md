@@ -1,15 +1,15 @@
 # XVIZPanel (React Component)
 
-*Uber Confidential Information*
+_Uber Confidential Information_
 
-
-Renders a XVIZ panel from a Declarative UI [Panel](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#panels) definition.
+Renders a XVIZ panel from a Declarative UI
+[Panel](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#panels)
+definition.
 
 ```jsx
 import {XVIZPanel} from 'streetscape.gl';
 
-<XVIZPanel log={log} name="Metrics" />
-
+<XVIZPanel log={log} name="Metrics" />;
 ```
 
 ## Properties
@@ -20,7 +20,8 @@ The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md
 
 ##### `name` (String)
 
-The identifier of the panel to render. The definition for this panel must be supplied via the metadata of the log.
+The identifier of the panel to render. The definition for this panel must be supplied via the
+metadata of the log.
 
 ##### `style` (Object, optional)
 
@@ -30,25 +31,24 @@ CSS style of the panel container.
 
 #### `components` (Object, optional)
 
-Supply custom renderers for XVIZ Declarative UI components. Key is declarative UI component types and value is a `React.Component`.
+Supply custom renderers for XVIZ Declarative UI components. Key is declarative UI component types
+and value is a `React.Component`.
 
 ```jsx
 // Support an additional component type `text`
 const myCustomComponents = {
-    text: props => <div style={{color: props.color}}>{props.text}</div>
+  text: props => <div style={{color: props.color}}>{props.text}</div>
 };
 
-<XVIZPanel
-    log={log}
-    name="Metrics"
-    components={myCustomComponents} />
+<XVIZPanel log={log} name="Metrics" components={myCustomComponents} />;
 ```
 
 - Default: `{}`
 
 #### `componentProps` (Object, optional)
 
-Supply custom props for each XVIZ Declarative UI components. Key is declarative UI component types and value is an object of custom props.
+Supply custom props for each XVIZ Declarative UI components. Key is declarative UI component types
+and value is an object of custom props.
 
 For a list of customizable props, see the documentation for each component:
 
@@ -60,16 +60,13 @@ For a list of customizable props, see the documentation for each component:
 ```jsx
 // Support an additional component type `text`
 const myComponentProps = {
-    metric: {
-        height: 200,
-        margin: {left: 20, top: 10, right: 10, bottom: 20}
-    }
+  metric: {
+    height: 200,
+    margin: {left: 20, top: 10, right: 10, bottom: 20}
+  }
 };
 
-<XVIZPanel
-    log={log}
-    name="Metrics"
-    componentProps={myComponentProps} />
+<XVIZPanel log={log} name="Metrics" componentProps={myComponentProps} />;
 ```
 
 - Default: `{}`
