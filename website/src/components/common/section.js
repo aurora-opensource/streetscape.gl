@@ -31,12 +31,12 @@ export const SectionContainer = styled.div`
     props.isDark
       ? props.theme.darkBackgroundColor
       : props.background
-        ? /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(props.background) 
-          ? props.background 
+        ? /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(props.background)
+          ? props.background
           : `url(${props.background})`
-            : 'white'};
+        : 'white'};
   padding: ${props => props.theme.margins.huge};
-  margin-bottom: ${props => props.marginBottom ? props.marginBottom : props.theme.margins.large};
+  margin-bottom: ${props => (props.marginBottom ? props.marginBottom : props.theme.margins.large)};
   background-size: cover;
 
   ${media.portable`

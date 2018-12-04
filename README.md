@@ -1,4 +1,4 @@
-*Uber Confidential Information*
+_Uber Confidential Information_
 
 # streetscape.gl
 
@@ -6,8 +6,8 @@
 
 To build this repository you need:
 
- - Node.js, tested with 8.11.3, compatible with 8.x
- - Yarn, tested with 1.7.0, compatible with 1.x
+- Node.js, tested with 8.11.3, compatible with 8.x
+- Yarn, tested with 1.7.0, compatible with 1.x
 
 ## Quick start
 
@@ -34,7 +34,8 @@ $ ./scripts/run-kitti-example.sh
 
 ## Documentation
 
-To read the documentation look in the docs folder (e.g. locally or on github), or build and run the website:
+To read the documentation look in the docs folder (e.g. locally or on github), or build and run the
+website:
 
 ```
 yarn
@@ -63,4 +64,5 @@ $ yarn bootstrap
 
 ## Coding Standard
 
-xviz uses a pinned version of the [uber-es2015](https://www.npmjs.com/package/eslint-config-uber-es2015) linter rules.
+xviz uses a pinned version of the
+[uber-es2015](https://www.npmjs.com/package/eslint-config-uber-es2015) linter rules.

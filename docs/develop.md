@@ -1,14 +1,13 @@
 # Development
 
-*Uber Confidential Information*
-
+_Uber Confidential Information_
 
 ## Installing Dependencies
 
 To build this repository you need:
 
- - Node.js, tested with 8.11.3, compatible with 8.x
- - Yarn, tested with 1.7.0, compatible with 1.x
+- Node.js, tested with 8.11.3, compatible with 8.x
+- Yarn, tested with 1.7.0, compatible with 1.x
 
 To install dependencies, run:
 
@@ -43,13 +42,14 @@ $ yarn test-browser
 
 ## Dependency setup for Local Development
 
-To improve the development flow while working on both XVIZ and streetscape.gl it is useful to directly link the dependencies rather than use packages.
+To improve the development flow while working on both XVIZ and streetscape.gl it is useful to
+directly link the dependencies rather than use packages.
 
 We have some utility script to use yarn linking between XVIZ
 
 ### Setup yarn link
 
-Assumes your environment is already setup following the *Quick Start* sequence.
+Assumes your environment is already setup following the _Quick Start_ sequence.
 
 ```
 $ ./scripts/dev-link-dependencies.sh link
@@ -66,4 +66,6 @@ $ yarn bootstrap
 
 ## Contributions
 
-streetscape.gl welcomes contributions. If you have an idea, it is always a good idea to open a github issue to get some feedback before you start implementing, to make sure maintainers are ready to accept it.
+streetscape.gl welcomes contributions. If you have an idea, it is always a good idea to open a
+github issue to get some feedback before you start implementing, to make sure maintainers are ready
+to accept it.

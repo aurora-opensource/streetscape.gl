@@ -1,14 +1,13 @@
 # PlaybackControl (React Component)
 
-*Uber Confidential Information*
-
+_Uber Confidential Information_
 
 Renders a playback control for a XVIZ log.
 
 ```jsx
 import {PlaybackControl} from 'streetscape.gl';
 
-<PlaybackControl log={log} />
+<PlaybackControl log={log} />;
 ```
 
 ## Properties
@@ -64,4 +63,3 @@ Default `10000`.
 ##### `className` (`String`, optional)
 
 Additional class name.
-

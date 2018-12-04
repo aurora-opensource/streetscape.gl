@@ -1,9 +1,13 @@
 # XVIZTableComponent (React Component)
 
-The base component for rendering a Declarative UI [table](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#table) or [treetable](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#table) component.
+The base component for rendering a Declarative UI
+[table](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#table) or
+[treetable](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#table)
+component.
 
-> Do not use this component directly unless implementing your own UI component. See [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI configurations.
-
+> Do not use this component directly unless implementing your own UI component. See
+> [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI
+> configurations.
 
 ## Properties
 
@@ -20,6 +24,7 @@ The height of the video. Default `400`.
 ##### renderHeader (Function, optional)
 
 Custom renderer for each column's header. Receives one argument with the following fields:
+
 - `column` (Object) - the column definition
 - `columnIndex` (Number) - the column index
 
@@ -28,6 +33,7 @@ Default: `({column}) => column.name`
 ##### renderCell (Function, optional)
 
 Custom renderer for each cell. Receives one argument with the following fields:
+
 - `value` (object) - the cell value
 - `column` (object) - the column definition
 - `columnIndex` (number) - the column index
@@ -36,10 +42,10 @@ Custom renderer for each cell. Receives one argument with the following fields:
 
 Default: `({value}) => value === null ? null : String(value)`
 
-
 ### Declarative UI Component Descriptor
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`. See Declarative UI specification for details.
+The following props are automatically populated when this component is rendered via `XVIZPanel`. See
+Declarative UI specification for details.
 
 ##### title (String)
 
@@ -49,15 +55,18 @@ The following props are automatically populated when this component is rendered 
 
 ##### displayObjectId (Boolean)
 
-
 ### Log Info
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`. Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux store.
+The following props are automatically populated when this component is rendered via `XVIZPanel`.
+Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected
+with a Redux store.
 
 ##### columns (Array)
 
-See [treetable columns spec](https://github.com/uber/xviz/blob/master/docs/protocol-schema/ui-primitives.md#treetable-columns)
+See
+[treetable columns spec](https://github.com/uber/xviz/blob/master/docs/protocol-schema/ui-primitives.md#treetable-columns)
 
 ##### nodes (Array)
 
-See [treetable nodes spec](https://github.com/uber/xviz/blob/master/docs/protocol-schema/ui-primitives.md#treetable-nodes-rows)
+See
+[treetable nodes spec](https://github.com/uber/xviz/blob/master/docs/protocol-schema/ui-primitives.md#treetable-nodes-rows)
