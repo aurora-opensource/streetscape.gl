@@ -1,9 +1,12 @@
 # XVIZVideoComponent (React Component)
 
-The base component for rendering a Declarative UI [video](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#video) component.
+The base component for rendering a Declarative UI
+[video](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#video)
+component.
 
-> Do not use this component directly unless implementing your own UI component. See [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI configurations.
-
+> Do not use this component directly unless implementing your own UI component. See
+> [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI
+> configurations.
 
 ## Properties
 
@@ -17,17 +20,18 @@ The width of the video. Default `100%`.
 
 The height of the video. Default `auto`.
 
-
 ### Declarative UI Component Descriptor
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`. See Declarative UI specification for details.
+The following props are automatically populated when this component is rendered via `XVIZPanel`. See
+Declarative UI specification for details.
 
 ##### cameras (Array)
 
-
 ### Log Info
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`. Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux store.
+The following props are automatically populated when this component is rendered via `XVIZPanel`.
+Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected
+with a Redux store.
 
 ##### currentTime (number)
 

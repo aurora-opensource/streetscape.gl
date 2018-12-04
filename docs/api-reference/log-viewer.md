@@ -1,15 +1,13 @@
 # LogViewer (React Component)
 
-*Uber Confidential Information*
-
+_Uber Confidential Information_
 
 Renders a 3D view of a XVIZ log.
 
 ```jsx
 import {LogViewer, VIEW_MODE} from 'streetscape.gl';
 
-<LogViewer log={log} viewMode={VIEW_MODE.TOP_DOWN} />
-
+<LogViewer log={log} viewMode={VIEW_MODE.TOP_DOWN} />;
 ```
 
 ## Properties
@@ -30,7 +28,8 @@ A [Mapbox style](https://www.mapbox.com/mapbox-gl-js/api/#map) to render the bas
 
 Override the XVIZ styles. If supplied, will be deep-merged with the styles in the log metadata.
 
-For more information, see [XVIZ styling specification](https://github.com/uber/xviz/blob/master/docs/protocol-schema/style-specification.md).
+For more information, see
+[XVIZ styling specification](https://github.com/uber/xviz/blob/master/docs/protocol-schema/style-specification.md).
 
 ##### `car` (Object, optional)
 
@@ -41,16 +40,15 @@ Defines the car asset. May contain the following fields:
 - `scale` (Number) - size scale of the car
 - `origin` ([Number, Number, Number]) - offset of the model origin
 
-
 ##### `streamFilter` (Array|String|Object|Function)
 
 Specify which streams to render.
 
- - String: a single stream name to be allowed.
- - Array: multiple stream names to be allowed.
- - Object: keys are stream names. A stream is rendered if its value is truthy.
- - Function: custom callback that receives a stream name as argument and returns truthy if the stream should be rendered.
- 
+- String: a single stream name to be allowed.
+- Array: multiple stream names to be allowed.
+- Object: keys are stream names. A stream is rendered if its value is truthy.
+- Function: custom callback that receives a stream name as argument and returns truthy if the stream
+  should be rendered.
 
 ##### `customLayers` (Array)
 
@@ -75,20 +73,22 @@ const customLayers = [
   })
 ];
 
-<LogViewer log={log} customLayers={customLayers} />
+<LogViewer log={log} customLayers={customLayers} />;
 ```
 
-Each layer must be a deck.gl `Layer` instance. In addition to deck.gl's layer properties, you may add the following props:
+Each layer must be a deck.gl `Layer` instance. In addition to deck.gl's layer properties, you may
+add the following props:
 
-- `streamName` (String) - if supplied, the layer will receive the primitives from the current frame as `data`, and will use the stream's coordinate system as defined in the log metadata.
+- `streamName` (String) - if supplied, the layer will receive the primitives from the current frame
+  as `data`, and will use the stream's coordinate system as defined in the log metadata.
 
-If `streamName` is not supplied, a custom layer is expected to bring its own data. In this case, you may still supply these props in order to use a specific coordinate system from the current frame:
+If `streamName` is not supplied, a custom layer is expected to bring its own data. In this case, you
+may still supply these props in order to use a specific coordinate system from the current frame:
 
 - `coordinate` (String)
 - `pose` (Object)
 
 See XVIZ's stream metadata spec for details.
-
 
 ##### `viewMode` (Enum, optional)
 
@@ -106,8 +106,9 @@ import {VIEW_MODE} from 'streetscape.gl';
 
 ##### `viewOffset` (Object, optional)
 
-Override the internal view state and view offset. By default, `LogViewer` is a stateful component which stores the latest camera state internally. Supply these props if you wish to use it as a stateless component. See `onViewStateChange` for more information.
-
+Override the internal view state and view offset. By default, `LogViewer` is a stateful component
+which stores the latest camera state internally. Supply these props if you wish to use it as a
+stateless component. See `onViewStateChange` for more information.
 
 ##### `onViewStateChange` (Function, optional)
 
@@ -115,22 +116,23 @@ Callback when the view state changes.
 
 To use `LogViewer` as a stateless component:
 
-
 ```jsx
 import {LogViewer, VIEW_MODE} from 'streetscape.gl';
 
 <LogViewer
-    log={log}
-    viewMode={VIEW_MODE.TOP_DOWN}
-    viewState={this.state.viewState}
-    viewOffset={this.state.viewOffset}
-    onViewStateChange={({viewState, viewOffset}) => this.setState({viewState, viewOffset})}
-    />
+  log={log}
+  viewMode={VIEW_MODE.TOP_DOWN}
+  viewState={this.state.viewState}
+  viewOffset={this.state.viewOffset}
+  onViewStateChange={({viewState, viewOffset}) => this.setState({viewState, viewOffset})}
+/>;
 ```
 
 ##### `objectStates` (Object, optional)
 
-Override the internal object states. By default, `LogViewer` is a stateful component which stores the latest object states internally. Supply this prop if you wish to use it as a stateless component. See `onObjectStateChange` for more information.
+Override the internal object states. By default, `LogViewer` is a stateful component which stores
+the latest object states internally. Supply this prop if you wish to use it as a stateless
+component. See `onObjectStateChange` for more information.
 
 ##### `onObjectStateChange` (Function, optional)
 
@@ -138,30 +140,30 @@ Callback when some object state (e.g. whether they are selected) changes.
 
 To use `LogViewer` as a stateless component:
 
-
 ```jsx
 import {LogViewer} from 'streetscape.gl';
 
 <LogViewer
-    log={log}
-    objectStates={this.state.objectStates}
-    onViewStateChange={(objectStates) => this.setState({objectStates})}
-    />
+  log={log}
+  objectStates={this.state.objectStates}
+  onViewStateChange={objectStates => this.setState({objectStates})}
+/>;
 ```
 
 ##### `getTransformMatrix` (Function, optional)
 
-A custom function that is called if a stream's `coordinate` is `DYNAMIC`. Will receive the following props:
+A custom function that is called if a stream's `coordinate` is `DYNAMIC`. Will receive the following
+props:
 
 - `key` (String) - key of the transform, as specified in the stream's metadata
 - `context` (Object) - the current frame
 
 Default: `() => null`
 
-
 ##### `renderObjectLabel` (Function, optional)
 
-A custom function / React component to render the content of the popup for selected objects. Will receive the following props:
+A custom function / React component to render the content of the popup for selected objects. Will
+receive the following props:
 
 - `id` (String) - object id
 - `object` (Object) - selected object

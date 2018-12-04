@@ -1,7 +1,6 @@
 # XVIZLoaderInterface
 
-*Uber Confidential Information*
-
+_Uber Confidential Information_
 
 An interface that handles the loading and synchronization of a log.
 
@@ -25,7 +24,8 @@ Seek to a given timestamp.
 
 ##### `updateStreamSettings(settings)`
 
-Update stream settings. The `settings` object is a stream name to value map and will be merged with the existing settings.
+Update stream settings. The `settings` object is a stream name to value map and will be merged with
+the existing settings.
 
 ##### `on(eventType, callback)`
 
@@ -45,4 +45,3 @@ Stop listening to an event.
 ## Implementations
 
 [XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md);
-

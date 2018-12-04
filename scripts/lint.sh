@@ -29,7 +29,15 @@ case $MODE in
 
   *)
     echo "Checking prettier code styles..."
-    npx prettier-check "{modules,examples,website,test}/**/*.js" || echo "Running prettier." && prettier --write "{modules,examples,test}/**/*.js" --loglevel warn
+
+    JS_PATTERN="{modules,examples,website,test}/**/*.js"
+    DOCS_PATTERN="docs/**/*.md"
+    ROOT_PATTERN="*.md"
+    npx prettier-check  "$JS_PATTERN" "$DOCS_PATTERN" "$ROOT_PATTERN" \
+        || echo "Running prettier." && prettier --loglevel warn --write \
+                                       "$JS_PATTERN" \
+                                       "$DOCS_PATTERN" \
+                                       "$ROOT_PATTERN"
 
     echo "Running eslint..."
     npx eslint modules test examples
