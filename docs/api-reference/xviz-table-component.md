@@ -21,6 +21,10 @@ The width of the video. Default `100%`.
 
 The height of the video. Default `400`.
 
+##### style (Object, optional)
+
+Custom CSS overrides. See [styling Table](https://github.com/uber-web/monochrome/blob/master/docs/api-reference/table.md#styling).
+
 ##### renderHeader (Function, optional)
 
 Custom renderer for each column's header. Receives one argument with the following fields:

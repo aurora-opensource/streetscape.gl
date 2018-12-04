@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import {Dropdown} from 'monochrome-ui';
+import {Dropdown} from '@streetscape.gl/monochrome';
 import ImageSequence from './image-sequence';
 import connectToLog from '../connect';
 
@@ -10,6 +10,7 @@ import {normalizeStreamFilter} from '../../utils/stream-utils';
 export class XVIZVideoComponent extends PureComponent {
   static propTypes = {
     // User configuration
+    style: PropTypes.object,
     width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 
@@ -27,6 +28,7 @@ export class XVIZVideoComponent extends PureComponent {
   };
 
   static defaultProps = {
+    style: {},
     width: '100%',
     height: 'auto'
   };
@@ -71,6 +73,7 @@ export class XVIZVideoComponent extends PureComponent {
   };
 
   _renderVideoSelector() {
+    const {style} = this.props;
     const {streamNames, selectedStreamName} = this.state;
 
     if (streamNames.length <= 1) {
@@ -83,7 +86,14 @@ export class XVIZVideoComponent extends PureComponent {
       data[name] = name;
     });
 
-    return <Dropdown value={selectedStreamName} data={data} onChange={this._onSelectVideo} />;
+    return (
+      <Dropdown
+        style={style.selector}
+        value={selectedStreamName}
+        data={data}
+        onChange={this._onSelectVideo}
+      />
+    );
   }
 
   render() {

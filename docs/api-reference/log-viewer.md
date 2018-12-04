@@ -177,3 +177,18 @@ Default: `(props) => <div>{props.id}</div>`
 ##### `objectLabelColor` (String, optional)
 
 Color of the object label.
+
+##### `style` (`Object`, optional)
+
+Custom CSS overrides. May contain the following fields:
+
+* `objectLabelColor` (String) - color of the object labels
+* `objectLabelTipSize` (Number) - size of the object labels
+* `objectLabelTip` (Object|Function) - the pointer on the object
+* `objectLabelLine` (Object|Function) - the line connecting the object and its label
+
+A custom style callback function will receive the following arguments:
+
+* `props` **(object)**
+  - `theme` **(object)** - the current theme
+  - `position` **(string)** - position of the label relative to the object

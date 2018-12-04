@@ -25,9 +25,13 @@ metadata of the log.
 
 ##### `style` (Object, optional)
 
-CSS style of the panel container.
+Custom CSS overrides. May contain the following keys:
 
-- Default: `{}`
+- `metric`: passed to [XvizMetricComponent](/docs/api-reference/xviz-metric-component)'s `style` prop
+- `plot`: passed to [XvizPlotComponent](/docs/api-reference/xviz-plot-component)'s `style` prop
+- `table` and `treetable`: passed to [XvizTableComponent](/docs/api-reference/xviz-table-component)'s `style` prop
+- `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video-component)'s `style` prop
+
 
 #### `components` (Object, optional)
 

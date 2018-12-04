@@ -32,12 +32,13 @@ export class XVIZPanelComponent extends PureComponent {
   };
 
   static defaultProps = {
+    style: {},
     components: {},
     componentProps: {}
   };
 
   _renderItem = (item, i) => {
-    const {components, componentProps, log} = this.props;
+    const {components, componentProps, log, style} = this.props;
     const XVIZComponent = components[item.type] || DEFAULT_COMPONENTS[item.type];
     const customProps = componentProps[item.type];
 
@@ -46,19 +47,17 @@ export class XVIZPanelComponent extends PureComponent {
     }
 
     return (
-      <XVIZComponent key={i} {...customProps} {...item} log={log}>
+      <XVIZComponent key={i} {...customProps} {...item} log={log} style={style[item.type]}>
         {item.children && item.children.map(this._renderItem)}
       </XVIZComponent>
     );
   };
 
   render() {
-    const {uiConfig, style} = this.props;
+    const {uiConfig} = this.props;
 
     return uiConfig ? (
-      <div className="xviz-panel" style={style}>
-        {uiConfig.children && uiConfig.children.map(this._renderItem)}
-      </div>
+      <div>{uiConfig.children && uiConfig.children.map(this._renderItem)}</div>
     ) : null;
   }
 }
