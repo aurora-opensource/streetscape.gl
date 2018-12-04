@@ -33,6 +33,7 @@ const PopupLine = styled.div(props => ({
 }));
 
 const PopupContent = styled.div(props => ({
+  ...props.theme.__reset__,
   ...evaluateStyle(props.userStyle, props)
 }));
 
@@ -107,7 +108,7 @@ class PerspectivePopup extends Popup {
         ref={this._contentLoaded}
         className="mapboxgl-popup-content"
         theme={theme}
-        style={{background: style.objectLabelColor || theme.background}}
+        style={{background: style.objectLabelColor}}
         userStyle={style.body}
       >
         {this.props.children}
