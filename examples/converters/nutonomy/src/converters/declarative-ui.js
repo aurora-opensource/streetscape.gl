@@ -3,41 +3,11 @@ import {XVIZUIBuilder} from '@xviz/builder';
 export function getDeclarativeUI() {
   const builder = new XVIZUIBuilder({});
 
-  builder.child(getMetricsPanel(builder));
   builder.child(getPlotPanel(builder));
   builder.child(getVideoPanel(builder));
   builder.child(getTablePanel(builder));
 
   return builder;
-}
-
-function getMetricsPanel(builder) {
-  const panel = builder.panel({
-    name: 'Metrics'
-  });
-
-  const container = builder.container({
-    name: 'Metrics Panel',
-    layout: 'vertical'
-  });
-
-  const metricAcceleration = builder.metric({
-    title: 'Acceleration',
-    streams: ['/vehicle/acceleration'],
-    description: 'The acceleration of the vehicle'
-  });
-
-  const metricVelocity = builder.metric({
-    title: 'Velocity',
-    streams: ['/vehicle/velocity'],
-    description: 'The velocity of the vehicle'
-  });
-
-  container.child(metricAcceleration);
-  container.child(metricVelocity);
-  panel.child(container);
-
-  return panel;
 }
 
 function getPlotPanel(builder) {
@@ -67,7 +37,14 @@ function getVideoPanel(builder) {
   });
 
   const video = builder.video({
-    cameras: ['/camera/image_00', '/camera/image_01', '/camera/image_02', '/camera/image_03']
+    cameras: [
+      '/camera/cam_front',
+      '/camera/cam_front_left',
+      '/camera/cam_front_right',
+      '/camera/cam_back',
+      '/camera/cam_back_left',
+      '/camera/cam_back_right'
+    ]
   });
 
   panel.child(video);

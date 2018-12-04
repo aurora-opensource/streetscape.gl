@@ -1,17 +1,13 @@
 /* global document */
-import 'xviz-config';
-
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
-
 import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
-import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
-import {getLogLoader} from './utils';
+import {getLogLoader, setLogConfig, getCustomLayers} from './utils';
 
 import './stylesheets/main.scss';
 
@@ -22,6 +18,7 @@ const DEFAULT_LOG = {
 
 class Example extends PureComponent {
   state = {
+    customLayers: getCustomLayers(DEFAULT_LOG.namespace),
     selectedLog: DEFAULT_LOG,
     log: getLogLoader(DEFAULT_LOG.namespace, DEFAULT_LOG.logName),
 
@@ -30,20 +27,24 @@ class Example extends PureComponent {
     }
   };
 
+  componentWillMount() {
+    setLogConfig(DEFAULT_LOG.namespace);
+  }
+
   componentDidMount() {
     this.state.log.connect();
   }
 
   _onLogChange = selectedLog => {
-    const logState = {
-      ...this.state.selectedLog,
-      ...selectedLog
-    };
+    if (selectedLog.namespace !== this.state.selectedLog.namespace) {
+      setLogConfig(selectedLog.namespace);
+    }
 
     this.setState(
       {
-        selectedLog: logState,
-        log: getLogLoader(logState.namespace, logState.logName)
+        customLayers: getCustomLayers(selectedLog.namespace),
+        selectedLog,
+        log: getLogLoader(selectedLog.namespace, selectedLog.logName)
       },
       () => this.state.log.connect()
     );
@@ -81,7 +82,7 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           xvizStyles={XVIZ_STYLE}
-          customLayers={[new BuildingLayer()]}
+          customLayers={this.state.customLayers || []}
           viewMode={VIEW_MODE[settings.viewMode]}
           viewOffset={settings.viewOffset}
           onViewStateChange={this._onViewStateChange}

@@ -40,9 +40,9 @@ parser.addArgument(['--image-max-height'], {
   help: 'Image max height'
 });
 
-parser.addArgument(['--scene'], {
-  defaultValue: 161,
-  help: 'scene number'
+parser.addArgument(['--scenes'], {
+  defaultValue: '161',
+  help: 'List of scene number'
 });
 
 parser.addArgument('--fake-streams', {
@@ -50,18 +50,29 @@ parser.addArgument('--fake-streams', {
   help: 'Generate fake streams with random data for testing'
 });
 
+parser.addArgument('--list-scenes', {
+  defaultValue: false,
+  help: 'List available scenes (use with -d or --data-directory).'
+});
+
 // extract args from user input
 module.exports = function getArgs() {
   const args = parser.parseArgs();
   const inputDir = path.resolve(__dirname, '../../../../data/nutonomy', args.data_directory);
+
   const samplesDir = path.resolve(__dirname, '../../../../data/nutonomy', args.samples_directory);
   const outputDir = path.resolve(
     __dirname,
     '../../../../data/generated/nutonomy',
     args.out || args.data_directory
   );
+  const scenes = args.scenes
+    .split(',')
+    .filter(Boolean)
+    .map(n => Number(n));
   console.log(inputDir, outputDir); // eslint-disable-line
   const disabledStreams = args.disable_streams.split(',').filter(Boolean);
+
   return {
     inputDir,
     outputDir,
@@ -71,6 +82,7 @@ module.exports = function getArgs() {
     imageMaxWidth: Number(args.image_max_width),
     imageMaxHeight: Number(args.image_max_height),
     frameLimit: Number(args.frame_limit),
-    scene: Number(args.scene)
+    listScenes: args.list_scenes,
+    scenes
   };
 };

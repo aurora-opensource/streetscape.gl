@@ -72,7 +72,8 @@ const CONFIG = {
   },
   resolve: {
     alias: {
-      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`)
+      'xviz-config-kitti': resolve(__dirname, '../config', `xviz-config-${appName}.js`),
+      'xviz-config': resolve(__dirname, '../config')
     }
   },
   plugins: [

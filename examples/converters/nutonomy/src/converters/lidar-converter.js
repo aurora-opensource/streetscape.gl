@@ -15,6 +15,8 @@ export default class LidarConverter {
   }
 
   load({frames}) {
+    this.frames = frames;
+
     this.pointCloudFilePathByToken = toMap(frames, 'token', frame => {
       const substrings = frame.sensors.LIDAR_TOP.filename.split('/');
       const filename = substrings[substrings.length - 1];
@@ -22,7 +24,9 @@ export default class LidarConverter {
     });
   }
 
-  convertFrame(frameToken, xvizBuilder) {
+  convertFrame(frameIndex, xvizBuilder) {
+    const frameToken = this.frames[frameIndex].token;
+
     const filepath = this.pointCloudFilePathByToken[frameToken];
     const buffer = fs.readFileSync(filepath);
     const arraybuffer = toArrayBuffer(buffer);

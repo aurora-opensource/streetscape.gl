@@ -22,6 +22,8 @@ export default class ImageConverter {
   }
 
   load({frames}) {
+    this.frames = frames;
+
     this.cameraFilePathByToken = toMap(frames, 'token', frame => {
       const substrings = frame.sensors[this.camera].filename.split('/');
       const filename = substrings[substrings.length - 1];
@@ -29,7 +31,8 @@ export default class ImageConverter {
     });
   }
 
-  async convertFrame(frameToken, xvizBuilder) {
+  async convertFrame(frameIndex, xvizBuilder) {
+    const frameToken = this.frames[frameIndex].token;
     const {data, width, height} = await this.loadFrame(frameToken);
 
     xvizBuilder

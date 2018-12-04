@@ -3,5 +3,11 @@ require('@babel/polyfill');
 
 const parseArgs = require('./args');
 const transform = require('./transform');
+const scenes = require('./scenes');
 
-transform(parseArgs());
+const args = parseArgs();
+if (args.listScenes) {
+  scenes(args);
+} else {
+  transform(args);
+}

@@ -58,7 +58,12 @@ export default class Toolbar extends PureComponent {
         <Dropdown
           value={selectedLog.logName}
           data={logs}
-          onChange={logName => this.props.onLogChange({logName})}
+          onChange={logName =>
+            this.props.onLogChange({
+              namespace: selectedLog.namespace,
+              logName
+            })
+          }
         />
       </div>
     );

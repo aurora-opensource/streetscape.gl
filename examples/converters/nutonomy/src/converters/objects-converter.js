@@ -1,9 +1,10 @@
 /* eslint-disable camelcase */
-import {_getRelativeCoordinates as getRelativeCoordinates} from '@xviz/builder';
-import {parseJsonFile, quaternionToEulerAngle} from '../common';
+import {parseJsonFile} from '../common';
 import {COORDINATE} from 'streetscape.gl';
 
-const PALATTE = {
+import {loadObjects} from '../parsers/parse-objects';
+
+export const OBJECT_PALATTE = {
   ['/human/pedestrian/adult']: {
     fill_color: '#FEC56480',
     stroke_color: '#FEC564'
@@ -107,57 +108,22 @@ export default class ObjectsConverter {
 
     this.OBJECTS = '/objects/objects';
     this.OBJECTS_TRACKING_POINT = '/objects/tracking_point';
+    this.OBJECTS_TRAJECTORY = '/objects/trajectory';
+    this.OBJECTS_LABEL = '/objects/label';
   }
 
-  load({instances}) {
+  load({staticData, frames}) {
+    this.frames = frames;
+
     const objects = parseJsonFile(this.rootDir, this.streamFile);
-    this.objectsByFrame = objects.reduce((resMap, object) => {
-      if (!resMap[object.sample_token]) {
-        resMap[object.sample_token] = {};
-      }
-
-      resMap[object.sample_token][object.instance_token] = this._parseObjectMetadata(
-        object,
-        instances
-      );
-      return resMap;
-    }, {});
+    this.objectsByFrame = loadObjects(objects, staticData.instances);
   }
 
-  _parseObjectMetadata(object, instances) {
-    const {translation, rotation, size} = object;
-    const {roll, pitch, yaw} = quaternionToEulerAngle(...rotation);
-    const instance = instances[object.instance_token];
+  convertFrame(frameIndex, xvizBuilder) {
+    const frameToken = this.frames[frameIndex].token;
 
-    const category = instance.category;
-    const bounds = [
-      [-size[1] / 2, -size[0] / 2, 0],
-      [-size[1] / 2, size[0] / 2, 0],
-      [size[1] / 2, size[0] / 2, 0],
-      [size[1] / 2, -size[0] / 2, 0],
-      [-size[1] / 2, -size[0] / 2, 0]
-    ];
-
-    const poseProps = {
-      x: translation[0],
-      y: translation[1],
-      z: translation[2],
-      roll,
-      pitch,
-      yaw
-    };
-
-    return {
-      ...object,
-      ...poseProps,
-      category,
-      bounds,
-      vertices: getRelativeCoordinates(bounds, poseProps)
-    };
-  }
-
-  convertFrame(sampleToken, xvizBuilder) {
-    const objects = this.objectsByFrame[sampleToken];
+    // objects of given sample
+    const objects = this.objectsByFrame[frameToken];
 
     if (objects) {
       Object.keys(objects).forEach((objectToken, i) => {
@@ -166,7 +132,7 @@ export default class ObjectsConverter {
         xvizBuilder
           .primitive(this.OBJECTS)
           .polygon(object.vertices)
-          .classes(object.category)
+          .classes([object.category])
           .style({
             height: object.size[2]
           })
@@ -177,10 +143,20 @@ export default class ObjectsConverter {
           .circle([object.x, object.y, object.z])
           .id(object.token);
       });
+
+      Object.values(objects).forEach(object => {
+        const objectTrajectory = this._getObjectTrajectory(
+          object,
+          frameIndex,
+          Math.min(frameIndex + 50, this.frames.length)
+        );
+
+        xvizBuilder.primitive(this.OBJECTS_TRAJECTORY).polyline(objectTrajectory);
+      });
     }
   }
 
-  getMetadata(xvizMetaBuilder, {categories}) {
+  getMetadata(xvizMetaBuilder, {staticData}) {
     const xb = xvizMetaBuilder;
     xb.stream(this.OBJECTS)
       .category('primitive')
@@ -193,9 +169,8 @@ export default class ObjectsConverter {
         fill_color: '#00000080'
       });
 
-    Object.keys(categories).forEach(token => {
-      const category = categories[token];
-      xb.styleClass(category.streamName, PALATTE[category.streamName]);
+    Object.values(staticData.categories).forEach(category => {
+      xb.styleClass(category.streamName, OBJECT_PALATTE[category.streamName]);
     });
 
     xb.stream(this.OBJECTS_TRACKING_POINT)
@@ -204,6 +179,31 @@ export default class ObjectsConverter {
       .streamStyle({
         radius: 0.2,
         fill_color: '#FFFF00'
-      });
+      })
+      .coordinate(COORDINATE.IDENTITY);
+
+    xb.stream(this.OBJECTS_TRAJECTORY)
+      .category('primitive')
+      .type('polyline')
+      .streamStyle({
+        stroke_color: '#FEC557',
+        stroke_width: 0.1,
+        stroke_width_min_pixels: 1
+      })
+      .coordinate(COORDINATE.IDENTITY);
+  }
+
+  _getObjectTrajectory(targetObject, startFrame, endFrame) {
+    const trajectory = [];
+    const objects = this.objectsByFrame;
+    for (let i = startFrame; i < endFrame; i++) {
+      const frameToken = this.frames[i].token;
+      const frameObject = objects[frameToken][targetObject.instance_token];
+      if (!frameObject) {
+        return trajectory;
+      }
+      trajectory.push([frameObject.x, frameObject.y, frameObject.z]);
+    }
+    return trajectory;
   }
 }

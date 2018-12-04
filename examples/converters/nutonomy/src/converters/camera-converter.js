@@ -30,9 +30,9 @@ export default class CameraConverter {
     this.imageConverters.forEach(imageConverter => imageConverter.load({frames}));
   }
 
-  async convertFrame(frameNumber, xvizBuilder) {
+  async convertFrame(frameIndex, xvizBuilder) {
     const promises = this.imageConverters.map(imageConverter =>
-      imageConverter.convertFrame(frameNumber, xvizBuilder)
+      imageConverter.convertFrame(frameIndex, xvizBuilder)
     );
 
     await Promise.all(promises);
