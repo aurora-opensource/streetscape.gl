@@ -1,6 +1,6 @@
 import test from 'tape';
 
-import {CheckBox} from 'monochrome-ui';
+import {CheckBox} from '@streetscape.gl/monochrome';
 import {
   createFormData,
   settingsToFormValues,
