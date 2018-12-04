@@ -13,7 +13,7 @@ import {
 
 import {XVIZObject} from '@xviz/parser';
 
-import deepExtend from 'deep-extend';
+import deepExtend from 'lodash.merge';
 
 const XVIZ_TO_LAYER_TYPE = {
   // V1
