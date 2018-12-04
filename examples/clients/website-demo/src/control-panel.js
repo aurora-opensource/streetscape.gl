@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
-import {Tooltip, Popover} from 'monochrome-ui';
+import {Tooltip, Popover} from '@streetscape.gl/monochrome';
 
+import {TOOLTIP_STYLE, PANEL_STYLE, STREAM_SETTINGS_STYLE} from './styles';
 import MetadataPanel from './metadata-panel';
 
 export default class ControlPanel extends PureComponent {
@@ -18,10 +19,10 @@ export default class ControlPanel extends PureComponent {
 
     switch (this.state.tab) {
       case 'streams':
-        return <StreamSettingsPanel log={log} />;
+        return <StreamSettingsPanel log={log} style={STREAM_SETTINGS_STYLE} />;
 
       case 'charts':
-        return <XVIZPanel log={log} name="Metrics" />;
+        return <XVIZPanel log={log} name="Metrics" style={PANEL_STYLE} />;
 
       case 'metadata':
         return <MetadataPanel log={log} />;
@@ -35,7 +36,7 @@ export default class ControlPanel extends PureComponent {
     const {tab} = this.state;
 
     return (
-      <Tooltip content={displayName} position={Popover.BOTTOM}>
+      <Tooltip content={displayName} position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
         <div className={`btn ${id === tab ? 'active' : ''}`} onClick={() => this._gotoTab(id)}>
           <i className="material-icons">{icon}</i>
         </div>
@@ -59,7 +60,7 @@ export default class ControlPanel extends PureComponent {
 
         <main>{this._renderTabContent()}</main>
         <footer>
-          <Tooltip content="Help">
+          <Tooltip content="Help" style={TOOLTIP_STYLE}>
             <div className="btn">
               <i className="material-icons">help_outline</i>
             </div>

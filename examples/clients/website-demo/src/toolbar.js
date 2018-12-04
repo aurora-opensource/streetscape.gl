@@ -1,12 +1,13 @@
 import React, {PureComponent} from 'react';
-import {Tooltip, Popover, Dropdown} from 'monochrome-ui';
+import {Tooltip, Popover, Dropdown} from '@streetscape.gl/monochrome';
 
+import {TOOLTIP_STYLE} from './styles';
 import {LOGS} from './constants';
 
 export default class Toolbar extends PureComponent {
   _gotoViewMode = viewMode => {
-    this.props.onChange({viewMode});
-    this._viewModePopover._hidePopover();
+    this.props.onSettingsChange({viewMode});
+    // this._viewModePopover._hidePopover();
   };
 
   _resetView = () => {
@@ -67,7 +68,7 @@ export default class Toolbar extends PureComponent {
   render() {
     return (
       <div id="toolbar">
-        <Tooltip content="Select a log" position={Popover.BOTTOM}>
+        <Tooltip content="Select a log" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
           {this._renderLogSelector()}
         </Tooltip>
         <Popover
@@ -78,18 +79,18 @@ export default class Toolbar extends PureComponent {
             this._viewModePopover = ref;
           }}
         >
-          <Tooltip content="View" position={Popover.BOTTOM}>
+          <Tooltip content="View" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
             <div className="btn">
               <i className="material-icons">videocam</i>
             </div>
           </Tooltip>
         </Popover>
-        <Tooltip content="Reset Camera" position={Popover.BOTTOM}>
+        <Tooltip content="Reset Camera" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
           <div className="btn" onClick={this._resetView}>
             <i className="material-icons">center_focus_strong</i>
           </div>
         </Tooltip>
-        <Tooltip content="Select" position={Popover.BOTTOM}>
+        <Tooltip content="Select" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
           <div className="btn">
             <i className="material-icons">near_me</i>
           </div>
