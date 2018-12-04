@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Tooltip, Popover, Dropdown} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE} from './styles';
+import {TOOLTIP_STYLE} from './custom-styles';
 import {LOGS} from './constants';
 
 export default class Toolbar extends PureComponent {

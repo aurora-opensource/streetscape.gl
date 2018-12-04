@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {XVIZPanel} from 'streetscape.gl';
 import {FloatPanel} from '@streetscape.gl/monochrome';
 
-import {PANEL_STYLE} from './styles';
+import {PANEL_STYLE} from './custom-styles';
 
 const ASPECT_RATIO = 10 / 3;
 

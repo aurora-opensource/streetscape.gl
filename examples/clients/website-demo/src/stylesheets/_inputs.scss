@@ -1,39 +1,3 @@
-.mc-checkbox {
-  .mc-checkbox--border {
-    border: none !important;
-  }
-  .mc-checkbox--icon {
-    font-family: 'Material Icons';
-    font-size: 150%;
-    color: $color-text-primary;
-  }
-  &.on {
-    .mc-checkbox--icon:before {
-      content: 'check_box';
-    }
-  }
-  &.off {
-    .mc-checkbox--icon:before {
-      content: 'check_box_outline_blank';
-    }
-  }
-  &.indeterminate {
-    .mc-checkbox--icon:before {
-      content: 'indeterminate_check_box';
-    }
-  }
-}
-
-.mc-float-panel--title {
-  font-size: 11px;
-  background: $background-alt;
-  color: $color-text-primary;
-
-  &:hover {
-    background: $color-control-active;
-  }
-}
-
 .btn {
   cursor: pointer;
   display: inline-block;

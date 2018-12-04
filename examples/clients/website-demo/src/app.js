@@ -13,7 +13,7 @@ import Toolbar from './toolbar';
 import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
-import {UI_THEME, PLAYBACK_CONTROL_STYLE} from './styles';
+import {UI_THEME, PLAYBACK_CONTROL_STYLE} from './custom-styles';
 import {getLogLoader} from './utils';
 
 import './stylesheets/main.scss';

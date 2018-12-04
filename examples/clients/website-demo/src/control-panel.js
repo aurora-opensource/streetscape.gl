@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
 import {Tooltip, Popover} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE, PANEL_STYLE, STREAM_SETTINGS_STYLE} from './styles';
+import {TOOLTIP_STYLE, PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
 import MetadataPanel from './metadata-panel';
 
 export default class ControlPanel extends PureComponent {
