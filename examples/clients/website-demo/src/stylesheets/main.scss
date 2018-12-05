@@ -1,5 +1,4 @@
 @import 'theme';
-@import '~monochrome-ui/src/main.scss';
 
 body {
   user-select: none;
@@ -32,7 +31,5 @@ body {
 }
 
 @import 'inputs';
-@import 'camera-panel';
 @import 'control-panel';
 @import 'toolbar';
-@import 'object-label';

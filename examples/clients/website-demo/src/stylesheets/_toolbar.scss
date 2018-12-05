@@ -7,14 +7,6 @@
   left: 50%;
   top: 0;
   transform: translateX(-50%);
-
-  .mc-dropdown--wrapper {
-    background: rgba($background-alt, 0.9);
-
-    select {
-      border-color: transparent;
-    }
-  }
 }
 
 #log-selector {
