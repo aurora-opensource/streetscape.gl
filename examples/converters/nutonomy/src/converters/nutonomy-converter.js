@@ -6,6 +6,7 @@ import GPSConverter from './gps-converter';
 import ObjectsConverter from './objects-converter';
 import LidarConverter from './lidar-converter';
 import CameraConverter from './camera-converter';
+import FutureObjectsConverter from './future-objects-converter';
 
 import {XVIZBuilder, XVIZMetadataBuilder} from '@xviz/builder';
 import RandomDataGenerator from './random-data-generator';
@@ -61,9 +62,7 @@ export default class NuTonomyConverter {
 
     if (this.fakeStreams) {
       this.converters.push(new RandomDataGenerator());
-      // this.converters.push(
-      //   new FutureObjectsConverter(this.inputDir, 'sample_annotation.json')
-      // );
+      this.converters.push(new FutureObjectsConverter(this.inputDir, 'sample_annotation.json'));
     }
 
     gpsConverter.load({

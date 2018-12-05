@@ -195,14 +195,17 @@ export default class ObjectsConverter {
 
   _getObjectTrajectory(targetObject, startFrame, endFrame) {
     const trajectory = [];
-    const objects = this.objectsByFrame;
     for (let i = startFrame; i < endFrame; i++) {
+      const startFrameToken = this.frames[startFrame].token;
+      const startObject = this.objectsByFrame[startFrameToken][targetObject.instance_token];
+
       const frameToken = this.frames[i].token;
-      const frameObject = objects[frameToken][targetObject.instance_token];
+      const frameObject = this.objectsByFrame[frameToken][targetObject.instance_token];
       if (!frameObject) {
         return trajectory;
       }
-      trajectory.push([frameObject.x, frameObject.y, frameObject.z]);
+
+      trajectory.push([frameObject.x, frameObject.y, startObject.z]);
     }
     return trajectory;
   }

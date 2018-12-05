@@ -32,22 +32,21 @@ export default class FutureObjectsConverter {
 
     for (let i = frameIndex; i < futureFrameLimit; i++) {
       const objects = this._convertObjectsFutureFrame(frameIndex, i);
-      const frameToken = this.frames[frameIndex].token;
+      const frameToken = this.frames[i].token;
       const pose = this.posesByFrame[frameToken];
 
       objects.forEach(object => {
         const future_ts = pose.timestamp;
         xvizBuilder
           .futureInstance(this.OBJECTS_FUTURES, future_ts)
-          .polygon(object.vertices.map(v => [v.x, v.y, 0]))
-          .classes([object.objectType])
+          .polygon(object.vertices)
+          .classes([object.category])
           .id(object.id);
       });
     }
   }
 
   getMetadata(xvizMetaBuilder, {staticData}) {
-    const {categories} = staticData;
     const xb = xvizMetaBuilder;
     xb.stream(this.OBJECTS_FUTURES)
       .category('future_instance')
@@ -61,15 +60,30 @@ export default class FutureObjectsConverter {
         fill_color: '#00000080'
       });
 
-    Object.values(categories).forEach(category => {
+    Object.values(staticData.categories).forEach(category => {
       xb.styleClass(category.streamName, OBJECT_PALATTE[category.streamName]);
     });
   }
 
   // create set of data for the currentFrameIndex that represents the objects from the futureFrameIndex
   _convertObjectsFutureFrame(currentFrameIndex, futureFrameIndex) {
+    const currentFrameToken = this.frames[currentFrameIndex].token;
+    const currentObjects = this.objectsByFrame[currentFrameToken];
+
     const futureFrameToken = this.frames[futureFrameIndex].token;
     const futureObjects = this.objectsByFrame[futureFrameToken];
-    return Object.values(futureObjects);
+
+    return Object.keys(currentObjects)
+      .filter(token => futureObjects[token])
+      .map(token => {
+        const currObject = currentObjects[token];
+        const futureObject = futureObjects[token];
+
+        // assign current object's z to the future object
+        return {
+          ...futureObject,
+          vertices: futureObject.vertices.map((v, i) => [v[0], v[1], currObject.vertices[i][2]])
+        };
+      });
   }
 }
