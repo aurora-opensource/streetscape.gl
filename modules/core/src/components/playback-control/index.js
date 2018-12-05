@@ -69,9 +69,9 @@ class PlaybackControl extends PureComponent {
 
       // check buffer availability
       if (bufferRange.some(r => newTimestamp >= r[0] && newTimestamp <= r[1])) {
+        // only move forward if buffer is loaded
+        // otherwise pause and wait
         log.seek(newTimestamp);
-      } else {
-        // buffer not yet loaded, pause and wait for the buffer to be loaded
       }
 
       this.setState({lastUpdate: now});
