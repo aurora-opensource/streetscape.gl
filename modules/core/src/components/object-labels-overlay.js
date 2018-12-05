@@ -19,14 +19,14 @@ export default class ObjectLabelsOverlay extends Component {
     metadata: PropTypes.object,
 
     renderObjectLabel: PropTypes.func,
-    objectLabelColor: PropTypes.string,
+    style: PropTypes.object,
     getTransformMatrix: PropTypes.func
   };
 
   static defaultProps = {
     objectSelection: {},
     renderObjectLabel: renderDefaultObjectLabel,
-    objectLabelColor: '#fff'
+    style: {}
   };
 
   constructor(props) {
@@ -78,13 +78,7 @@ export default class ObjectLabelsOverlay extends Component {
   }
 
   _renderPerspectivePopup = object => {
-    const {
-      objectSelection,
-      frame,
-      metadata,
-      renderObjectLabel: ObjectLabel,
-      objectLabelColor
-    } = this.props;
+    const {objectSelection, frame, metadata, style, renderObjectLabel: ObjectLabel} = this.props;
 
     if (!objectSelection[object.id]) {
       return null;
@@ -97,14 +91,12 @@ export default class ObjectLabelsOverlay extends Component {
     return (
       <PerspectivePopup
         key={object.id}
-        className="object-label"
         longitude={trackingPoint[0]}
         latitude={trackingPoint[1]}
         altitude={trackingPoint[2]}
         anchor="bottom-left"
         dynamicPosition={true}
-        tipSize={30}
-        color={objectLabelColor}
+        style={style}
         sortByDepth={true}
         closeButton={false}
         closeOnClick={false}

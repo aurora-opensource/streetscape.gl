@@ -1,10 +1,16 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {Form, CheckBox} from 'monochrome-ui';
+import {Form, CheckBox, evaluateStyle} from '@streetscape.gl/monochrome';
+import styled from '@emotion/styled';
 
 import connectToLog from './connect';
 
-const Badge = props => <div className="stream-settings-panel--badge" data-type={props.type} />;
+const Badge = styled.div(props => ({
+  '&:before': {
+    content: `"${props.type}"`
+  },
+  ...evaluateStyle(props.userStyle, props)
+}));
 
 function getParentKey(streamName) {
   const i = streamName.indexOf('/', 1);
@@ -28,12 +34,13 @@ function getParentValue(children, values) {
 }
 
 // Created 1-level nested form structure
-export function createFormData(metadata) {
+export function createFormData(metadata, opts) {
   if (!metadata) {
     return null;
   }
 
   const root = {};
+  const {style = {}} = opts;
 
   for (const streamName in metadata) {
     const parentKey = getParentKey(streamName);
@@ -42,17 +49,21 @@ export function createFormData(metadata) {
     if (parentKey) {
       root[parentKey] = root[parentKey] || {
         type: 'checkbox',
-        children: {}
+        children: {},
+        badge: <Badge userStyle={style.badge} />
       };
       siblings = root[parentKey].children;
     }
 
     siblings[streamName] = {
       type: 'checkbox',
+      title: streamName.replace(parentKey, ''),
       badge: (
-        <Badge type={metadata[streamName].primitive_type || metadata[streamName].scalar_type} />
-      ),
-      title: streamName.replace(parentKey, '')
+        <Badge
+          userStyle={style.badge}
+          type={metadata[streamName].primitive_type || metadata[streamName].scalar_type}
+        />
+      )
     };
   }
 
@@ -110,18 +121,20 @@ export function formValuesToSettings(metadata, values) {
 
 class StreamSettingsPanel extends PureComponent {
   static propTypes = {
+    style: PropTypes.object,
     streamMetadata: PropTypes.object,
     onSettingsChange: PropTypes.func
   };
 
   static defaultProps = {
+    style: {},
     onSettingsChange: () => {}
   };
 
   constructor(props) {
     super(props);
 
-    const data = createFormData(props.streamMetadata);
+    const data = createFormData(props.streamMetadata, props);
     const values = settingsToFormValues(data, props.streamSettings);
     this.state = {data, values};
   }
@@ -130,7 +143,7 @@ class StreamSettingsPanel extends PureComponent {
     let {data, values} = this.state;
 
     if (nextProps.streamMetadata !== this.props.streamMetadata) {
-      data = createFormData(nextProps.streamMetadata);
+      data = createFormData(nextProps.streamMetadata, nextProps);
       values = null;
     }
     if (nextProps.streamSettings !== this.props.streamSettings) {
@@ -150,13 +163,14 @@ class StreamSettingsPanel extends PureComponent {
   };
 
   render() {
+    const {style} = this.props;
     const {data, values} = this.state;
 
     if (!data || !values) {
       return null;
     }
 
-    return <Form data={data} values={values} onChange={this._onValuesChange} />;
+    return <Form style={style} data={data} values={values} onChange={this._onValuesChange} />;
   }
 }
 

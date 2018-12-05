@@ -20,9 +20,9 @@ The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md
 
 Width of the control. Default `100%`.
 
-##### `padding` (`Number`, optional)
+##### `compact` (`Boolean`, optional)
 
-Padding at the sides in pixels, default `24`.
+Use compact layout. Default `false`.
 
 ##### `tickSpacing` (`Number`, optional)
 
@@ -63,3 +63,12 @@ Default `10000`.
 ##### `className` (`String`, optional)
 
 Additional class name.
+
+##### `style` (`Object`, optional)
+
+Custom CSS overrides of the control. Supports all [PlaybackControl styling](https://github.com/uber-web/monochrome/blob/master/src/playback-control/README.md#styling) options, plus the following:
+
+* `lookAheadMarker` **(`Object`|`Function`)** - the marker that indicates the 
+* `lookAhead` **(`Object`|`Function`)** - the container around the look ahead control.
+* `lookAheadSlider` **(`Object`)** - the look ahead slider. See [styling a slider](https://github.com/uber-web/monochrome/blob/master/src/shared/slider/README.md#styling).
+* `lookAheadTimestamp` **(`Object`|`Function`)** - the timestamp showing the value of the look ahead slider.

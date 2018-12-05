@@ -20,16 +20,9 @@ The width of the chart. Default `100%`.
 
 The height of the chart. Default `160`.
 
-##### margin (Object, optional)
+##### style (Object, optional)
 
-The margin of the chart in pixles, must have the following fields:
-
-- `left`
-- `right`
-- `top`
-- `bottom`
-
-Default: `{left: 45, right: 10, top: 10, bottom: 20}`
+Custom CSS overrides. Supports all [MetricCard](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling) and [MetricChart](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling-1) options.
 
 ##### getColor (Object|Function|String, optional)
 

@@ -25,7 +25,7 @@ other modules. To help you get oriented quickly, here are some examples.
 | `react-vis`     | vis.gl charting library used by streetscape.gl                                                           |
 | `react-map-gl`  | vis.gl react wrapper for mapboxgl. Declarative API for maps                                              |
 | `mapboxgl`      | Mapbox GL map library, used to render the base map                                                       |
-| `monochrome-ui` | A set of React components many of which are used by streetscape.gl and other autonomous web applications |
+| `@streetscape.gl/monochrome` | A set of React components many of which are used by streetscape.gl and other autonomous web applications |
 | `react`         | Facebook's react library, the generic parts                                                              |
 | `react-dom`     | Facebook's react library, the part that renders into the browser DOM                                     |
 

@@ -1,6 +1,6 @@
 import test from 'tape';
 
-import {CheckBox} from 'monochrome-ui';
+import {CheckBox} from '@streetscape.gl/monochrome';
 import {
   createFormData,
   settingsToFormValues,
@@ -26,7 +26,7 @@ const TEST_STREAMS = {
 };
 
 test('StreamSettingsPanel#createFormData', t => {
-  const data = createFormData(TEST_STREAMS);
+  const data = createFormData(TEST_STREAMS, {});
 
   t.deepEquals(
     Object.keys(data),
@@ -43,7 +43,7 @@ test('StreamSettingsPanel#createFormData', t => {
 });
 
 test('StreamSettingsPanel#settingsToFormValues', t => {
-  const data = createFormData(TEST_STREAMS);
+  const data = createFormData(TEST_STREAMS, {});
 
   t.deepEquals(
     settingsToFormValues(data, {
@@ -85,7 +85,7 @@ test('StreamSettingsPanel#settingsToFormValues', t => {
 });
 
 test('StreamSettingsPanel#updateFormValues', t => {
-  const data = createFormData(TEST_STREAMS);
+  const data = createFormData(TEST_STREAMS, {});
   let values = {
     '/vehicle_pose': CheckBox.ON,
     '/vehicle': CheckBox.ON,

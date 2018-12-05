@@ -1,5 +1,8 @@
 import React from 'react';
 import {Popup} from 'react-map-gl';
+import {withTheme, evaluateStyle} from '@streetscape.gl/monochrome';
+
+import styled from '@emotion/styled';
 
 // Copied from 'react-map-gl/src/utils/dynamic-position.js'
 const ANCHOR_POSITION = {
@@ -13,35 +16,42 @@ const ANCHOR_POSITION = {
   right: {x: 1, y: 0.5}
 };
 
-const STYLES = {
-  TIP_CIRCLE: {
-    position: 'absolute',
-    width: 4,
-    height: 4,
-    margin: -2,
-    borderRadius: 2
-  },
-  TIP_LINE: {
-    position: 'absolute',
-    opacity: 0.25,
-    borderLeftStyle: 'solid',
-    borderLeftWidth: 1
-  }
-};
+const PopupTip = styled.div(props => ({
+  position: 'absolute',
+  width: 4,
+  height: 4,
+  margin: -2,
+  borderRadius: 2,
+  ...evaluateStyle(props.userStyle, props)
+}));
+
+const PopupLine = styled.div(props => ({
+  position: 'absolute',
+  borderLeftStyle: 'solid',
+  borderLeftWidth: 1,
+  ...evaluateStyle(props.userStyle, props)
+}));
+
+const PopupContent = styled.div(props => ({
+  ...props.theme.__reset__,
+  ...evaluateStyle(props.userStyle, props)
+}));
 
 /* Like Popup but deal with z */
-export default class PerspectivePopup extends Popup {
+class PerspectivePopup extends Popup {
   _renderTip(positionType) {
     const anchorPosition = ANCHOR_POSITION[positionType];
-    const {tipSize, color} = this.props;
+    const {theme, style} = this.props;
+    const {objectLabelTipSize = 30, objectLabelColor = theme.background} = style;
     const tipStyle = {
-      width: tipSize,
-      height: tipSize,
+      width: objectLabelTipSize,
+      height: objectLabelTipSize,
       position: 'relative',
       border: 'none'
     };
-    const tipCircleStyle = {...STYLES.TIP_CIRCLE, background: color};
-    const tipLineStyle = {...STYLES.TIP_LINE, borderColor: color};
+
+    const tipCircleStyle = {background: objectLabelColor};
+    const tipLineStyle = {borderColor: objectLabelColor};
 
     switch (anchorPosition.x) {
       case 0.5:
@@ -73,24 +83,38 @@ export default class PerspectivePopup extends Popup {
 
     return (
       <div key="tip" className="mapboxgl-popup-tip" style={tipStyle}>
-        <div style={tipCircleStyle} />
-        <div style={tipLineStyle} />
+        <PopupTip
+          style={tipCircleStyle}
+          theme={theme}
+          position={positionType}
+          userStyle={style.objectLabelTip}
+        />
+        <PopupLine
+          style={tipLineStyle}
+          theme={theme}
+          position={positionType}
+          userStyle={style.objectLabelLine}
+        />
       </div>
     );
   }
 
   _renderContent() {
-    const {color} = this.props;
+    const {theme, style} = this.props;
 
     return (
-      <div
+      <PopupContent
         key="content"
         ref={this._contentLoaded}
-        className="mapboxgl-popup-content object-label--content"
-        style={{background: color}}
+        className="mapboxgl-popup-content"
+        theme={theme}
+        style={{background: style.objectLabelColor}}
+        userStyle={style.body}
       >
         {this.props.children}
-      </div>
+      </PopupContent>
     );
   }
 }
+
+export default withTheme(PerspectivePopup);
