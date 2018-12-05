@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
-import {Table, TreeTable, Tooltip} from 'monochrome-ui';
+import {Table, TreeTable, Tooltip} from '@streetscape.gl/monochrome';
 import PropTypes from 'prop-types';
 
 import connectToLog from '../connect';
@@ -29,6 +29,7 @@ export class XVIZTableComponent extends PureComponent {
     // UI configuration
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    style: PropTypes.object,
     renderHeader: PropTypes.func,
     renderCell: PropTypes.func,
     indentSize: PropTypes.number,
@@ -47,6 +48,7 @@ export class XVIZTableComponent extends PureComponent {
   static defaultProps = {
     width: '100%',
     height: 400,
+    style: {},
     indentSize: 12,
     renderHeader: ({column}) => column.name,
     renderCell: ({value}) => (value === null ? null : String(value))
@@ -112,6 +114,7 @@ export class XVIZTableComponent extends PureComponent {
       description,
       width,
       height,
+      style,
       renderHeader,
       renderCell,
       indentSize,
@@ -127,6 +130,7 @@ export class XVIZTableComponent extends PureComponent {
         <Component
           width="100%"
           height="100%"
+          style={style}
           renderHeader={renderHeader}
           renderCell={renderCell}
           indentSize={indentSize}

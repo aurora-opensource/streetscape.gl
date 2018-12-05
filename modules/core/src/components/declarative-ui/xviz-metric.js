@@ -20,7 +20,7 @@
 
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {MetricCard, MetricChart} from 'monochrome-ui';
+import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
@@ -28,14 +28,9 @@ import connectToLog from '../connect';
 export class XVIZMetricComponent extends PureComponent {
   static propTypes = {
     // User configuration
+    style: PropTypes.object,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    margin: PropTypes.shape({
-      left: PropTypes.number,
-      right: PropTypes.number,
-      top: PropTypes.number,
-      bottom: PropTypes.number
-    }),
     getColor: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     xTicks: PropTypes.number,
     yTicks: PropTypes.number,
@@ -67,11 +62,13 @@ export class XVIZMetricComponent extends PureComponent {
     timeSeries: {},
     width: '100%',
     height: 160,
+    style: {
+      margin: {left: 45, right: 10, top: 10, bottom: 20}
+    },
     xTicks: 0,
     yTicks: 3,
     horizontalGridLines: 3,
     verticalGridLines: 0,
-    margin: {left: 45, right: 10, top: 10, bottom: 20},
     getColor: DEFAULT_COLOR_SERIES
   };
 
@@ -117,7 +114,7 @@ export class XVIZMetricComponent extends PureComponent {
       currentTime,
       width,
       height,
-      margin,
+      style,
       xTicks,
       yTicks,
       formatXTick,
@@ -129,7 +126,7 @@ export class XVIZMetricComponent extends PureComponent {
     const isLoading = currentTime === null;
 
     return (
-      <MetricCard title={title} description={description} isLoading={isLoading}>
+      <MetricCard title={title} description={description} isLoading={isLoading} style={style}>
         {!isLoading && (
           <MetricChart
             {...this._extractDataProps()}
@@ -137,7 +134,7 @@ export class XVIZMetricComponent extends PureComponent {
             highlightX={currentTime}
             width={width}
             height={height}
-            margin={margin}
+            style={style}
             xTicks={xTicks}
             yTicks={yTicks}
             formatXTick={formatXTick}

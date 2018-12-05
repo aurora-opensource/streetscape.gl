@@ -18,32 +18,45 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import React from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {PlaybackControl as MonochromePlaybackControl, Slider} from 'monochrome-ui';
+import {PlaybackControl, Slider, withTheme, evaluateStyle} from '@streetscape.gl/monochrome';
 
-const LOOKAHEAD_CONTAINER_STYLE = {
+import styled from '@emotion/styled';
+
+const LookAheadContainer = styled.div(props => ({
   display: 'flex',
-  alignItems: 'center'
-};
+  alignItems: 'center',
+  width: 200,
+  '>div': {
+    flexGrow: 1
+  },
+  ...evaluateStyle(props.userStyle, props)
+}));
 
-const LOOKAHEAD_SLIDER_STYLE = {
-  width: 120,
-  marginRight: 8
-};
+const LookAheadTimestamp = styled.span(props => ({
+  marginLeft: props.theme.spacingNormal,
+  ...evaluateStyle(props.userStyle, props)
+}));
 
-const LOOKAHEAD_MARKER_STYLE = {
+const lookAheadMarkerStyle = props => ({
   position: 'absolute',
-  top: '50%',
-  marginTop: -3,
-  width: 6,
-  height: 6,
-  background: '#888'
-};
+  boxSizing: 'content-box',
+  borderStyle: 'solid',
+  marginTop: 6,
+  marginLeft: -6,
+  borderWidth: 6,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+  borderTopColor: '#888',
+  borderBottomStyle: 'none',
 
-export default class DualPlaybackControl extends MonochromePlaybackControl {
+  ...evaluateStyle(props.userStyle, props)
+});
+
+class DualPlaybackControl extends PureComponent {
   static propTypes = {
-    ...MonochromePlaybackControl.propTypes,
+    ...PlaybackControl.propTypes,
     lookAhead: PropTypes.number,
     maxLookAhead: PropTypes.number,
     formatLookAhead: PropTypes.func,
@@ -51,55 +64,68 @@ export default class DualPlaybackControl extends MonochromePlaybackControl {
   };
 
   static defaultProps = {
-    ...MonochromePlaybackControl.defaultProps,
+    ...PlaybackControl.defaultProps,
+    markers: [],
     lookAhead: 0,
     maxLookAhead: 10000,
     formatLookAhead: String,
     onLookAheadChange: () => {}
   };
 
-  _renderSlider() {
-    const mainSlider = super._renderSlider();
+  _renderLookAheadSlider() {
+    const {theme, style, isPlaying, lookAhead, formatLookAhead, maxLookAhead, step} = this.props;
 
-    if (this.props.maxLookAhead > 0) {
-      const {currentTime, startTime, endTime, lookAhead} = this.props;
-      const lookAheadTime = Math.min(currentTime + lookAhead, endTime);
-      const lookAheadMarkerStyle = {
-        ...LOOKAHEAD_MARKER_STYLE,
-        left: `${((lookAheadTime - startTime) * 100) / (endTime - startTime)}%`
-      };
-      const children = React.Children.toArray(mainSlider.props.children);
-      children.push(<div key="lookahead-marker" style={lookAheadMarkerStyle} />);
-      return React.cloneElement(mainSlider, null, children);
-    }
-
-    return mainSlider;
+    return (
+      <LookAheadContainer theme={theme} isPlaying={isPlaying} userStyle={style.lookAhead}>
+        <Slider
+          style={style.lookAheadSlider}
+          value={lookAhead}
+          min={0}
+          max={maxLookAhead}
+          step={step}
+          size={16}
+          onChange={this.props.onLookAheadChange}
+        />
+        <LookAheadTimestamp
+          theme={theme}
+          isPlaying={isPlaying}
+          userStyle={style.lookAheadTimestamp}
+        >
+          Look ahead: {formatLookAhead(lookAhead)}
+        </LookAheadTimestamp>
+      </LookAheadContainer>
+    );
   }
 
-  _renderControls() {
-    const {lookAhead, formatLookAhead, maxLookAhead, step} = this.props;
-    const controls = super._renderControls();
-    if (maxLookAhead > 0) {
-      controls.push(
-        <div
-          className="playback-control--lookahead"
-          style={LOOKAHEAD_CONTAINER_STYLE}
-          key="lookahead-slider"
-        >
-          <div style={LOOKAHEAD_SLIDER_STYLE}>
-            <Slider
-              value={lookAhead}
-              min={0}
-              max={maxLookAhead}
-              step={step}
-              size={16}
-              onChange={this.props.onLookAheadChange}
-            />
-          </div>
-          <span>Look ahead: {formatLookAhead(lookAhead)}</span>
-        </div>
-      );
-    }
-    return controls;
+  render() {
+    const {
+      theme,
+      isPlaying,
+      markers: userMarkers,
+      style,
+      children,
+      currentTime,
+      lookAhead,
+      endTime
+    } = this.props;
+    const lookAheadTime = Math.min(endTime, currentTime + lookAhead);
+
+    const markers = userMarkers.concat({
+      time: lookAheadTime,
+      style: lookAheadMarkerStyle({theme, isPlaying, userStyle: style.lookAheadMarker})
+    });
+
+    return (
+      <PlaybackControl {...this.props} markers={markers}>
+        {children}
+        <div style={{flexGrow: 1}} />
+        {this._renderLookAheadSlider()}
+      </PlaybackControl>
+    );
   }
 }
+
+const ThemedDualPlaybackControl = withTheme(DualPlaybackControl);
+ThemedDualPlaybackControl.formatTimeCode = PlaybackControl.formatTimeCode;
+
+export default ThemedDualPlaybackControl;

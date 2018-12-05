@@ -80,6 +80,7 @@ class Core3DViewer extends PureComponent {
     customLayers: PropTypes.array,
     renderObjectLabel: PropTypes.func,
     getTransformMatrix: PropTypes.func,
+    style: PropTypes.object,
 
     // Optional: to use with external state management (e.g. Redux)
     viewState: PropTypes.object,
@@ -93,6 +94,7 @@ class Core3DViewer extends PureComponent {
     car: DEFAULT_CAR,
     viewMode: VIEW_MODE.PERSPECTIVE,
     xvizStyles: {},
+    style: {},
     customLayers: [],
     onViewStateChange: () => {},
     onObjectStateChange: () => {},
@@ -366,7 +368,7 @@ class Core3DViewer extends PureComponent {
       frame,
       metadata,
       renderObjectLabel,
-      objectLabelColor,
+      style,
       getTransformMatrix
     } = this.props;
     const objectSelection = (this.props.objectStates || this.state.objectStates).selected;
@@ -397,7 +399,7 @@ class Core3DViewer extends PureComponent {
           frame={frame}
           metadata={metadata}
           renderObjectLabel={renderObjectLabel}
-          objectLabelColor={objectLabelColor}
+          style={style}
           getTransformMatrix={getTransformMatrix}
         />
       </DeckGL>

@@ -26,7 +26,7 @@ import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
 import {XVIZStreamLoader, LogViewer, PlaybackControl, XVIZPanel, VIEW_MODE} from 'streetscape.gl';
-import {Form} from 'monochrome-ui';
+import {Form} from '@streetscape.gl/monochrome';
 
 import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 

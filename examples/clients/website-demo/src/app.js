@@ -25,12 +25,15 @@ import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
 import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
+import {ThemeProvider} from '@streetscape.gl/monochrome';
+
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {UI_THEME, PLAYBACK_CONTROL_STYLE} from './custom-styles';
 import {getLogLoader} from './utils';
 
 import './stylesheets/main.scss';
@@ -111,7 +114,8 @@ class Example extends PureComponent {
 
         <div id="timeline">
           <PlaybackControl
-            padding={{top: 12, bottom: 12, left: 48, right: 24}}
+            compact={true}
+            style={PLAYBACK_CONTROL_STYLE}
             width="100%"
             log={log}
             formatTimestamp={x => new Date(x).toUTCString()}
@@ -135,4 +139,9 @@ class Example extends PureComponent {
 const root = document.createElement('div');
 document.body.appendChild(root);
 
-render(<Example />, root);
+render(
+  <ThemeProvider theme={UI_THEME}>
+    <Example />
+  </ThemeProvider>,
+  root
+);

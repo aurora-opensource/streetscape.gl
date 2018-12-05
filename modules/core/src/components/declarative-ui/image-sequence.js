@@ -21,7 +21,7 @@
 // @flow
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {AutoSizer} from 'monochrome-ui';
+import {AutoSizer} from '@streetscape.gl/monochrome';
 import ImageBuffer from '../../utils/image-buffer';
 
 /* Component that renders image sequence as video */

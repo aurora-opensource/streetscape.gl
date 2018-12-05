@@ -1,5 +1,3 @@
-@import '~monochrome-ui/dist/main.css';
-
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -20,7 +18,8 @@ body {
   position: relative;
 }
 #timeline {
-  flex: 0 0 103px;
+  flex: 0 0 auto;
+  padding: 24px 0;
   position: relative;
 }
 #control-panel {
