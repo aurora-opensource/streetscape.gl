@@ -16,6 +16,7 @@ NODE_ENV=production webpack --env.prod=true
 
 # copy static files
 cp -r ./src/static/* dist/
+cp coming-soon.html dist/
 
 # build demo app
 (cd ${DEMO_DIR} && rm -rf node_modules && yarn && yarn build)
