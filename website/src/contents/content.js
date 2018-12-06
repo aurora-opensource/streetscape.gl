@@ -27,8 +27,8 @@ export const DEMO_LINK = './demo/index.html';
 export const SECTIONS = [
   {
     id: 'walkthrough',
-    title: '80-20',
-    description: 'We take care of 80% of the legwork. Customize your app for your workflow.',
+    title: 'Start building your application in three steps',
+    description: 'Bring autonomous vehicle data to life for inspection.',
     isDark: true
   },
   {
@@ -43,12 +43,6 @@ export const SECTIONS = [
     background: '#F8F8F9'
   },
   {
-    id: 'tutorials',
-    title: 'Golden Standard',
-    description: 'Accelerate work with ready Visualization Template.',
-    isDark: true
-  },
-  {
     id: 'showcase',
     title: 'Success Stories',
     description: 'See what other companies have created with streetscape.gl and xviz builder.',
@@ -56,74 +50,26 @@ export const SECTIONS = [
   }
 ];
 
-export const HERO_IMAGES = [
-  getImageUrl('example-demoapp.png'),
-  getImageUrl('example-mapping.png'),
-  getImageUrl('example-remoteassist.png')
-];
+export const HERO_IMAGES = [getImageUrl('example-demoapp.png'), getImageUrl('example-mapping.png')];
 
 // TODO replace with scaled images
 export const HERO_IMAGES_SCALED = [
   getImageUrl('example-demoapp.png'),
-  getImageUrl('example-mapping.png'),
-  getImageUrl('example-remoteassist.png')
+  getImageUrl('example-mapping.png')
 ];
 
 export const SHOWCASE_ITEMS = [
   {
-    text: 'Kitty',
-    image: getImageUrl('example-demoapp.png')
+    title: 'Kitty',
+    image: getImageUrl('demo-kitti.gif'),
+    description:
+      'Kitti dataset is an open sourced autonomous driving log data including vehicle location, orientation, and metrics, objects classified with bounds (tracklets), camera imagery, and lidar scans'
   },
   {
-    text: 'Voyage',
-    image: getImageUrl('example-mapping.png')
-  },
-  {
-    text: 'Uber',
-    image: getImageUrl('example-remoteassist.png')
-  }
-];
-
-export const FEATURES = [
-  {
-    title: 'Camera',
-    images: [getImageUrl('ui-camera.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'Tree',
-    images: [getImageUrl('ui-treetable.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'Metric',
-    images: [getImageUrl('ui-metric.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'Obj Markers',
-    images: [getImageUrl('ui-obj-markers.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'Telemetry',
-    images: [getImageUrl('ui-telemetry.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'Plot',
-    images: [getImageUrl('ui-plot.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'HUD',
-    images: [getImageUrl('ui-hud.png')],
-    icon: 'solid_polygon'
-  },
-  {
-    title: 'Playback',
-    images: [getImageUrl('ui-playbackcontrol.png')],
-    icon: 'solid_polygon'
+    title: 'NuTonomy',
+    image: getImageUrl('demo-nutonomy.gif'),
+    description:
+      'The nuScenes dataset is a public large-scale dataset for autonomous driving provided by nuTonomy-Aptiv.'
   }
 ];
 
@@ -161,25 +107,10 @@ export const ELEMENTS = [
   }
 ];
 
-export const TUTORIALS = [
-  {
-    text: 'Traffic Lights',
-    image: getImageUrl('vis-trafficlights.png')
-  },
-  {
-    text: 'Perception data - actors the car sees',
-    image: getImageUrl('vis-objects.png')
-  },
-  {
-    text: 'Trajectory',
-    image: getImageUrl('vis-trajectory.png')
-  }
-];
-
 export const STEPS = [
   {
     title: 'Convert',
-    description: 'Convert data following XVIZ protocols. Lorem ipsum dolor sit amet, consectetur',
+    description: 'Convert data into the XVIZ protocol.',
     link: {
       title: 'Explore XVIZ',
       url: 'https://github.com/uber/xviz'
@@ -188,18 +119,20 @@ export const STEPS = [
   {
     title: 'Visualize',
     description:
-      'Render your converted data using streetscape.gl APIs. Lorem sit amet, consectetur.',
+      'Render your converted data using the streetscape.gl framework (part of the deck.gl family).',
     link: {
-      title: 'Explore OSS',
+      title: 'Explore streetscape.gl',
       url: 'https://github.com/uber/streetscape.gl'
     }
   },
   {
-    title: 'Inspect',
-    description: 'Interact, explore and inspect your sdv development. Lorem sit amet, consectetur.',
+    title: 'Explore',
+    description:
+      'Interact, inspect and drive insights with your data in a custom, autonomous-specific workflow.',
     link: {
-      title: 'Try demo',
-      url: 'https://github.com/uber/streetscape.gl'
+      title: 'Explore the triage demo application',
+      // TODO update url when data repo is ready
+      url: DEMO_LINK
     }
   }
 ];

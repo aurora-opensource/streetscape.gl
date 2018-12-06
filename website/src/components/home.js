@@ -26,7 +26,6 @@ import {SECTIONS} from '../contents/content';
 import Hero from './hero';
 import Showcase from './showcase';
 import Elements from './elements';
-import Tutorials from './tutorials';
 import Walkthrough from './walkthrough';
 import Features from './features';
 import Footer from './footer';
@@ -37,7 +36,6 @@ const SECTION_CONTENT = {
   walkthrough: Walkthrough,
   elements: Elements,
   features: Features,
-  tutorials: Tutorials,
   showcase: Showcase
 };
 
