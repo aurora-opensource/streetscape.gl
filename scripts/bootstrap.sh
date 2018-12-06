@@ -34,13 +34,7 @@ for D in *; do (
 # build the submodules
 npm run build
 
-# Setup KITTI converter JS dependencies
-(cd "${SCRIPT_DIR}/../examples/converters/kitti" && yarn --check-files)
-
-# Setup XVIZ server JS dependencies
-(cd "${SCRIPT_DIR}/../examples/server" && yarn --check-files)
-
 # Setup XVIZ-VIEWER JS dependencies
-(cd "${SCRIPT_DIR}/../examples/clients/xviz-viewer" && yarn --check-files)
+(cd "${SCRIPT_DIR}/../examples/xviz-viewer" && yarn --check-files)
 
 echo "Done"
