@@ -192,3 +192,7 @@ A custom style callback function will receive the following arguments:
 - `props` **(object)**
   - `theme` **(object)** - the current theme
   - `position` **(string)** - position of the label relative to the object
+
+##### `showMap` (Boolean, Optional)
+
+Render base map. Default is `true`.
