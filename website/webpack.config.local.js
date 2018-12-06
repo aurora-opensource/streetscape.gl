@@ -43,11 +43,7 @@ function makeLocalDevConfig() {
       stats: {
         warnings: false
       },
-      contentBase: [
-        resolve(__dirname, './src/static'),
-        // data directory for demo app
-        resolve(__dirname, '../data/generated')
-      ]
+      contentBase: [resolve(__dirname, './src/static')]
     },
 
     devtool: 'source-map',

@@ -25,11 +25,10 @@ $ cd streetscape.gl
 # Install dependencies and build projects
 $ yarn bootstrap
 
-# Download KITTI data
-$ ./scripts/download-kitti-data.sh
-
-# Convert KITTI data if necessary and run the XVIZ Server and Client
-$ ./scripts/run-kitti-example.sh
+# Run example
+$ cd examples/xviz-viewer
+$ yarn
+$ yarn start-local
 ```
 
 ## Documentation

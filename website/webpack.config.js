@@ -88,7 +88,7 @@ const CONFIG = {
     alias: {
       // TODO figure out a way to allow switch config file
       // xviz config for demo app, only support kitti demo for now
-      'xviz-config': resolve(__dirname, '../examples/clients/config/xviz-config-kitti.js'),
+      'xviz-config': resolve(__dirname, '../examples/config/xviz-config-kitti.js'),
       webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
     }
   },

@@ -205,6 +205,6 @@ me used to automate extensive correctness checks. For more information visit
 ## Converting your own Data
 
 The comments in the
-[KITTI Converter](http://github.com/uber/streetscape.gl/blob/master/examples/converters/kitti/src/converters/kitti-converter.js)
+[KITTI Converter](http://github.com/uber/xviz/blob/master/examples/converters/kitti/src/converters/kitti-converter.js)
 
 [XVIZ Documentation](http://github.com/uber/xviz) has information under the Developers Guide.

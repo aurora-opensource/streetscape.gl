@@ -22,7 +22,6 @@
 /* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Otherwise modules imported from outside this directory does not compile.
 // Also needed if modules from this directory were imported elsewhere
@@ -39,6 +38,9 @@ const CONFIG = {
   mode: 'development',
   entry: {
     app: resolve('./src/app.js')
+  },
+  devServer: {
+    contentBase: [resolve(__dirname, '../../website/src/static'), resolve(__dirname)]
   },
   devtool: 'source-map',
   output: {
@@ -90,11 +92,10 @@ const CONFIG = {
     }
   },
   plugins: [
-    new HtmlWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };
 
 // This line enables bundling against src in this repo rather than installed module
-module.exports = env => (env ? require('../../webpack.config.local')(CONFIG)(env) : CONFIG);
+module.exports = env => (env ? require('../webpack.config.local')(CONFIG)(env) : CONFIG);

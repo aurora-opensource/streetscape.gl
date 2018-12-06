@@ -23,7 +23,7 @@
 
 set -e
 
-DEMO_DIR=../examples/clients/website-demo
+DEMO_DIR=../examples/website-demo
 DEMO_PACKAGE_DIR=${DEMO_DIR}/dist
 DEMO_DESTINATION=./dist/demo
 
