@@ -6,28 +6,28 @@ An interface that handles the loading and synchronization of a log.
 
 ## Members
 
-##### `metadata`
+##### metadata
 
 ## Methods
 
-##### `connect()`
+##### connect()
 
 Connect to the server and start loading data.
 
-##### `close()`
+##### close()
 
 Terminate all connections.
 
-##### `seek(timestamp)`
+##### seek(timestamp)
 
 Seek to a given timestamp.
 
-##### `updateStreamSettings(settings)`
+##### updateStreamSettings(settings)
 
 Update stream settings. The `settings` object is a stream name to value map and will be merged with
 the existing settings.
 
-##### `on(eventType, callback)`
+##### on(eventType, callback)
 
 Listen to an event.
 
@@ -38,10 +38,11 @@ Listen to an event.
 - `finish` - fired when all available data is loaded
 - `error` - fired when an error is encountered
 
-##### `off(eventType, callback)`
+##### off(eventType, callback)
 
 Stop listening to an event.
 
 ## Implementations
 
 [XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md);
+[XVIZFileLoader](/docs/api-reference/xviz-file-loader.md);
