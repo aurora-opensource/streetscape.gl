@@ -1,7 +1,11 @@
+import AVS_DOCS from '../../avs-pages.json';
 import XVIZ_DOCS from '../../../../xviz/website/pages.json';
 import STREETSCAPE_DOCS from '../../pages.json';
 
 // TODO: replace with github url when the repo is public
+function getAVSDocUrl(filename) {
+  return `/streetscape-docs/${filename}`;
+}
 function getXVIZDocUrl(filename) {
   return `/xviz-docs/${filename}`;
 }
@@ -39,6 +43,8 @@ function generatePath(cachKey, tree, getDocUrl, parentPath = '', depth = 0) {
 
   return tree;
 }
+
+export const avsDocPages = generatePath('avs', AVS_DOCS, getAVSDocUrl);
 
 export const streetscapeDocPages = generatePath(
   'streetscape.gl',

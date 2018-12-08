@@ -22,7 +22,11 @@ The height of the chart. Default `160`.
 
 ##### style (Object, optional)
 
-Custom CSS overrides. Supports all [MetricCard](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling) and [MetricChart](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling-1) options.
+Custom CSS overrides. Supports all
+[MetricCard](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling)
+and
+[MetricChart](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling-1)
+options.
 
 ##### getColor (Object|Function|String, optional)
 
