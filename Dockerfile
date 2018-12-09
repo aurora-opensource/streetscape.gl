@@ -4,7 +4,7 @@ FROM node:8.12.0
 
 WORKDIR /streetscape
 
-RUN yarn global add yarn@1.7.0
+RUN yarn global add yarn@1.10.0
 
 WORKDIR /streetscape
 ENV PATH /streetscape/node_modules/.bin:$PATH
