@@ -7,54 +7,34 @@
         "markdown": "README.md"
       },
       {
-        "name": "Overview",
-        "markdown": "overview.md"
-      },
-      {
         "name": "What's New",
         "markdown": "whats-new.md"
       },
       {
         "name": "Roadmap",
         "markdown": "roadmap.md"
-      },
-      {
-        "name": "FAQ",
-        "markdown": "faq.md"
-      },
-      {
-        "name": "Develop/Contribute",
-        "markdown": "develop.md"
       }
     ]
   },
   {
-    "name": "Example Guide",
+    "name": "Getting Started",
     "children": [
       {
-        "name": "Overview",
-        "markdown": "example-guide/README.md"
+        "name": "Installing",
+        "markdown": "developer-guide/installing.md"
       },
       {
-        "name": "Running the Example",
-        "markdown": "example-guide/running-the-example.md"
-      },
-      {
-        "name": "Convert Data to XVIZ",
-        "markdown": "example-guide/convert-data-to-xviz.md"
+        "name": "Example XVIZ Viewer",
+        "markdown": "example-guide/xviz-viewer.md"
       }
     ]
   },
   {
-    "name": "Developer Guide",
+    "name": "Advanced Topics",
     "children": [
       {
         "name": "Overview",
         "markdown": "developer-guide/README.md"
-      },
-      {
-        "name": "Installing",
-        "markdown": "developer-guide/installing.md"
       },
       {
         "name": "Use Custom deck.gl Layers",

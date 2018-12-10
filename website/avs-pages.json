@@ -1,0 +1,19 @@
+[
+  {
+    "name": "Overview",
+    "children": [
+      {
+        "name": "AVS.auto",
+        "markdown": "avs/avs.md"
+      },
+      {
+        "name": "XVIZ",
+        "markdown": "avs/xviz.md"
+      },
+      {
+        "name": "streetscape.gl",
+        "markdown": "avs/streetscape.gl.md"
+      }
+    ]
+  }
+]
