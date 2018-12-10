@@ -29,7 +29,6 @@ export {default as XVIZLayer} from './layers/xviz-layer';
 export {default as SignLayer} from './layers/sign-layer/sign-layer';
 export {default as TrafficLightLayer} from './layers/traffic-light-layer/traffic-light-layer';
 export {default as ImageryLayer} from './layers/imagery-layer/imagery-layer';
-export {default as BinaryPathLayer} from './layers/binary-path-layer/binary-path-layer';
 
 // Generic layers (should be moved back to deck.gl)
 export {default as BitmapLayer} from './layers/bitmap-layer/bitmap-layer';
