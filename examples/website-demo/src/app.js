@@ -19,12 +19,11 @@
 // THE SOFTWARE.
 
 /* global document */
-import 'xviz-config';
-
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
+import {setXVIZConfig} from '@xviz/parser';
+import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 import {ThemeProvider} from '@streetscape.gl/monochrome';
 
 import ControlPanel from './control-panel';
@@ -32,22 +31,14 @@ import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 import BuildingLayer from './layers/building-layer/building-layer';
 
-import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR, LOGS} from './constants';
 import {UI_THEME, PLAYBACK_CONTROL_STYLE} from './custom-styles';
-import {getLogLoader} from './utils';
 
 import './stylesheets/main.scss';
 
-const DEFAULT_LOG = {
-  namespace: 'kitti',
-  logName: '0005'
-};
-
 class Example extends PureComponent {
   state = {
-    selectedLog: DEFAULT_LOG,
-    log: getLogLoader(DEFAULT_LOG.namespace, DEFAULT_LOG.logName),
-
+    ...this._loadLog(LOGS[0]),
     settings: {
       viewMode: 'PERSPECTIVE'
     }
@@ -57,19 +48,23 @@ class Example extends PureComponent {
     this.state.log.connect();
   }
 
-  _onLogChange = selectedLog => {
-    const logState = {
-      ...this.state.selectedLog,
-      ...selectedLog
-    };
+  _loadLog(logSettings) {
+    setXVIZConfig(logSettings.xvizConfig);
 
-    this.setState(
-      {
-        selectedLog: logState,
-        log: getLogLoader(logState.namespace, logState.logName)
-      },
-      () => this.state.log.connect()
-    );
+    const loader = new XVIZFileLoader({
+      timingsFilePath: `${logSettings.path}/0-frame.json`,
+      getFilePath: index => `${logSettings.path}/${index + 1}-frame.glb`,
+      worker: true,
+      maxConcurrency: 4
+    }).on('error', console.error); // eslint-disable-line
+
+    loader.connect();
+
+    return {selectedLog: logSettings, log: loader};
+  }
+
+  _onLogChange = selectedLog => {
+    this.setState(this._loadLog(selectedLog));
   };
 
   _onSettingsChange = changedSettings => {

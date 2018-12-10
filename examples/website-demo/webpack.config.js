@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 /* eslint-disable no-process-env */
-/* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
 
@@ -32,21 +31,16 @@ const BABEL_CONFIG = {
   plugins: ['@babel/proposal-class-properties']
 };
 
-const appName = process.env.appName || 'kitti';
-
 const CONFIG = {
-  mode: 'development',
   entry: {
     app: resolve('./src/app.js')
   },
-  devServer: {
-    contentBase: [resolve(__dirname, '../../website/src/static'), resolve(__dirname)]
-  },
-  devtool: 'source-map',
+
   output: {
     path: resolve('./dist'),
     filename: 'bundle.js'
   },
+
   module: {
     noParse: /(mapbox-gl)\.js$/,
     rules: [
@@ -77,19 +71,8 @@ const CONFIG = {
             }
           }
         ]
-      },
-      {
-        // Unfortunately, webpack doesn't import library sourcemaps on its own...
-        test: /\.js$/,
-        use: ['source-map-loader'],
-        enforce: 'pre'
       }
     ]
-  },
-  resolve: {
-    alias: {
-      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`)
-    }
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -97,5 +80,46 @@ const CONFIG = {
   ]
 };
 
-// This line enables bundling against src in this repo rather than installed module
-module.exports = env => (env ? require('../webpack.config.local')(CONFIG)(env) : CONFIG);
+module.exports = env => {
+  const config = Object.assign({}, CONFIG);
+
+  if (env.prod) {
+    // production
+    Object.assign(config, {
+      mode: 'production'
+    });
+
+    config.plugins = config.plugins.concat(
+      new webpack.DefinePlugin({
+        LOG_DIR: JSON.stringify('https://raw.githubusercontent.com/uber/xviz-data/master')
+      })
+    );
+  } else {
+    // dev
+    Object.assign(config, {
+      mode: 'development',
+      devServer: {
+        contentBase: [
+          resolve(__dirname, '../../website/src/static'),
+          resolve(__dirname, '../../../xviz/data/generated'),
+          resolve(__dirname)
+        ]
+      },
+      devtool: 'source-map'
+    });
+
+    config.module.rules = config.module.rules.concat({
+      // Unfortunately, webpack doesn't import library sourcemaps on its own...
+      test: /\.js$/,
+      use: ['source-map-loader'],
+      enforce: 'pre'
+    });
+
+    config.plugins = config.plugins.concat(
+      new webpack.DefinePlugin({
+        LOG_DIR: JSON.stringify('.')
+      })
+    );
+  }
+  return require('../webpack.config.local')(config)(env);
+};
