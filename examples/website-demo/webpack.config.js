@@ -1,5 +1,4 @@
 /* eslint-disable no-process-env */
-/* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
 
@@ -11,8 +10,6 @@ const BABEL_CONFIG = {
   presets: ['@babel/preset-env', '@babel/preset-react'],
   plugins: ['@babel/proposal-class-properties']
 };
-
-const appName = process.env.appName || 'kitti';
 
 const CONFIG = {
   entry: {
@@ -57,11 +54,6 @@ const CONFIG = {
       }
     ]
   },
-  resolve: {
-    alias: {
-      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`)
-    }
-  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
@@ -79,7 +71,7 @@ module.exports = env => {
 
     config.plugins = config.plugins.concat(
       new webpack.DefinePlugin({
-        LOG_DIR: JSON.stringify('https://raw.githubusercontent.com/uber/streetscape.gl-data/master')
+        LOG_DIR: JSON.stringify('https://raw.githubusercontent.com/uber/xviz-data/master')
       })
     );
   } else {

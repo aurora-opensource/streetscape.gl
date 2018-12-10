@@ -30,6 +30,9 @@ export const XVIZ_STYLE = {
 export const LOGS = [
   {
     name: 'KITTI-0005',
-    path: `${LOG_DIR}/kitti/2011_09_26/2011_09_26_drive_0005_sync`
+    path: `${LOG_DIR}/kitti/2011_09_26/2011_09_26_drive_0005_sync`,
+    xvizConfig: {
+      OBJECT_STREAM: '/tracklets/objects'
+    }
   }
 ];

@@ -1,9 +1,8 @@
 /* global document */
-import 'xviz-config';
-
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
+import {setXVIZConfig} from '@xviz/parser';
 import {XVIZFileLoader, LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 import {ThemeProvider} from '@streetscape.gl/monochrome';
 
@@ -30,6 +29,8 @@ class Example extends PureComponent {
   }
 
   _loadLog(logSettings) {
+    setXVIZConfig(logSettings.xvizConfig);
+
     const loader = new XVIZFileLoader({
       timingsFilePath: `${logSettings.path}/0-frame.json`,
       getFilePath: index => `${logSettings.path}/${index + 1}-frame.glb`,
