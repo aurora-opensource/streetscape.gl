@@ -33,33 +33,17 @@ export default class Toolbar extends PureComponent {
   _renderLogSelector() {
     const {selectedLog} = this.props;
 
-    // only support kitti logs for now
-    const namespaces = Object.keys(LOGS).reduce((resMap, namespace) => {
-      resMap[namespace] = namespace;
-      return resMap;
-    }, {});
-
-    const logs = LOGS[selectedLog.namespace].logs.reduce((resMap, log) => {
-      resMap[log] = log;
+    const logs = LOGS.reduce((resMap, log) => {
+      resMap[log.name] = log.name;
       return resMap;
     }, {});
 
     return (
       <div id="log-selector">
         <Dropdown
-          value={selectedLog.namespace}
-          data={namespaces}
-          onChange={namespace =>
-            this.props.onLogChange({
-              namespace,
-              logName: LOGS[namespace].logs[0]
-            })
-          }
-        />
-        <Dropdown
-          value={selectedLog.logName}
+          value={selectedLog.name}
           data={logs}
-          onChange={logName => this.props.onLogChange({logName})}
+          onChange={value => this.props.onLogChange(LOGS.find(log => log.name === value))}
         />
       </div>
     );
