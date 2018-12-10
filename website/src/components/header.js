@@ -60,12 +60,9 @@ export default class Header extends Component {
             <i className={`icon icon-${isMenuOpen ? 'close' : 'menu'}`} />
           </div>
           <div className="links">
-            <a
-              href="https://github.com/uber/streetscape.gl/blob/master/docs/develop.md"
-              className="external"
-            >
-              User Guide
-            </a>
+            <NavLink activeClassName="active" to="/avs">
+              AVS
+            </NavLink>
             <NavLink activeClassName="active" to="/xviz">
               XVIZ
             </NavLink>

@@ -23,7 +23,8 @@ The height of the video. Default `400`.
 
 ##### style (Object, optional)
 
-Custom CSS overrides. See [styling Table](https://github.com/uber-web/monochrome/blob/master/src/table/README.md#styling).
+Custom CSS overrides. See
+[styling Table](https://github.com/uber-web/monochrome/blob/master/src/table/README.md#styling).
 
 ##### renderHeader (Function, optional)
 

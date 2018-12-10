@@ -15,19 +15,19 @@ The two main modules are:
 Apart from the two main modules your streetscape.gl app may end up importing and using a number of
 other modules. To help you get oriented quickly, here are some examples.
 
-| NPM Module      | Description                                                                                              |
-| --------------- | -------------------------------------------------------------------------------------------------------- |
-| `@xviz/builder` | Classes that help data converters generate correct XVIZ code.                                            |
-| `@xviz/schema`  | JSON schemas used to validate that JSON encoded XVIZ data                                                |
-| `deck.gl`       | The geospatial rendering framework that streetscape.gl is built on.                                      |
-| `luma.gl`       | High-Performance WebGL2 components that powers deck.gl rendering.                                        |
-| `math.gl`       | 3D math library in the vis.gl suite. Used by xviz, streetscape.gl, deck.gl etc.                          |
-| `react-vis`     | vis.gl charting library used by streetscape.gl                                                           |
-| `react-map-gl`  | vis.gl react wrapper for mapboxgl. Declarative API for maps                                              |
-| `mapboxgl`      | Mapbox GL map library, used to render the base map                                                       |
+| NPM Module                   | Description                                                                                              |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `@xviz/builder`              | Classes that help data converters generate correct XVIZ code.                                            |
+| `@xviz/schema`               | JSON schemas used to validate that JSON encoded XVIZ data                                                |
+| `deck.gl`                    | The geospatial rendering framework that streetscape.gl is built on.                                      |
+| `luma.gl`                    | High-Performance WebGL2 components that powers deck.gl rendering.                                        |
+| `math.gl`                    | 3D math library in the vis.gl suite. Used by xviz, streetscape.gl, deck.gl etc.                          |
+| `react-vis`                  | vis.gl charting library used by streetscape.gl                                                           |
+| `react-map-gl`               | vis.gl react wrapper for mapboxgl. Declarative API for maps                                              |
+| `mapboxgl`                   | Mapbox GL map library, used to render the base map                                                       |
 | `@streetscape.gl/monochrome` | A set of React components many of which are used by streetscape.gl and other autonomous web applications |
-| `react`         | Facebook's react library, the generic parts                                                              |
-| `react-dom`     | Facebook's react library, the part that renders into the browser DOM                                     |
+| `react`                      | Facebook's react library, the generic parts                                                              |
+| `react-dom`                  | Facebook's react library, the part that renders into the browser DOM                                     |
 
 You may also want to head over to [vis.gl](http://vis.gl) to get a sense for other frameworks in the
 vis.gl framework suite which streetscape.gl and xviz are part of. These frameworks are all

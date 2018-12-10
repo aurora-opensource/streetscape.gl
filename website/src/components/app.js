@@ -28,7 +28,7 @@ import Header from './header';
 import Home from './home';
 import Gallery from './gallery';
 
-import {xvizDocPages, streetscapeDocPages} from '../contents/pages';
+import {avsDocPages, xvizDocPages, streetscapeDocPages} from '../contents/pages';
 
 const GlobalStyleDiv = styled.div`
   font-family: ff-clan-web-pro, 'Helvetica Neue', Helvetica, sans-serif;
@@ -65,6 +65,7 @@ class App extends Component {
         <Header />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route path="/avs">{props => <Gallery {...props} pages={avsDocPages} />}</Route>
           <Route path="/xviz">{props => <Gallery {...props} pages={xvizDocPages} />}</Route>
           <Route path="/streetscape.gl">
             {props => <Gallery {...props} pages={streetscapeDocPages} />}
