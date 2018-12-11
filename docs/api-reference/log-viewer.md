@@ -128,6 +128,14 @@ import {LogViewer, VIEW_MODE} from 'streetscape.gl';
 />;
 ```
 
+##### `onSelectObject` (Function, optional)
+
+Callback when an object is left clicked on.
+
+##### `onContextMenu` (Function, optional)
+
+Callback when an object is right clicked on.
+
 ##### `objectStates` (Object, optional)
 
 Override the internal object states. By default, `LogViewer` is a stateful component which stores
@@ -186,6 +194,8 @@ Custom CSS overrides. May contain the following fields:
 - `objectLabelTipSize` (Number) - size of the object labels
 - `objectLabelTip` (Object|Function) - the pointer on the object
 - `objectLabelLine` (Object|Function) - the line connecting the object and its label
+- `objectLabelBody` (Object|Function) - the body of the object label.
+- `tooltip` (Object|Function) - the hover tooltip.
 
 A custom style callback function will receive the following arguments:
 
@@ -196,3 +206,7 @@ A custom style callback function will receive the following arguments:
 ##### `showMap` (Boolean, Optional)
 
 Render base map. Default is `true`.
+
+##### `showTooltip` (Boolean, optional)
+
+Render hover tooltip. Default is `false`.

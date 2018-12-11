@@ -129,7 +129,7 @@ class PerspectivePopup extends Popup {
         className="mapboxgl-popup-content"
         theme={theme}
         style={{background: style.objectLabelColor}}
-        userStyle={style.body}
+        userStyle={style.objectLabelBody}
       >
         {this.props.children}
       </PopupContent>

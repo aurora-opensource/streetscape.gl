@@ -25,22 +25,17 @@ import {StaticMap} from 'react-map-gl';
 import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
 import {CubeGeometry} from 'luma.gl';
 
-import MeshLayer from '../layers/mesh-layer/mesh-layer';
+import MeshLayer from '../../layers/mesh-layer/mesh-layer';
 import {XVIZStyleParser} from '@xviz/parser';
 
-import {loadOBJMesh} from '../loaders/obj-loader';
-import XVIZLayer from '../layers/xviz-layer';
+import {loadOBJMesh} from '../../loaders/obj-loader';
+import XVIZLayer from '../../layers/xviz-layer';
 
-import {VIEW_MODE} from '../constants';
-import {getViewStateOffset, getViews, getViewStates} from '../utils/viewport';
-import {resolveCoordinateTransform} from '../utils/transform';
-import {mergeXVIZStyles} from '../utils/style';
-import {normalizeStreamFilter} from '../utils/stream-utils';
-import {setObjectState} from '../utils/object-state';
-
-import ObjectLabelsOverlay from './object-labels-overlay';
-
-import connectToLog from './connect';
+import {VIEW_MODE} from '../../constants';
+import {getViewStateOffset, getViews, getViewStates} from '../../utils/viewport';
+import {resolveCoordinateTransform} from '../../utils/transform';
+import {mergeXVIZStyles} from '../../utils/style';
+import {normalizeStreamFilter} from '../../utils/stream-utils';
 
 const CAR_DATA = [[0, 0, 0]];
 const LIGHT_SETTINGS = {
@@ -59,13 +54,17 @@ const DEFAULT_CAR = {
   origin: [0, 0, 0]
 };
 
-class Core3DViewer extends PureComponent {
+const noop = () => {};
+
+export default class Core3DViewer extends PureComponent {
   static propTypes = {
     // Props from loader
     frame: PropTypes.object,
     metadata: PropTypes.object,
 
     // Rendering options
+    showMap: PropTypes.bool,
+    showTooltip: PropTypes.bool,
     mapboxApiAccessToken: PropTypes.string,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     xvizStyles: PropTypes.object,
@@ -78,51 +77,37 @@ class Core3DViewer extends PureComponent {
       PropTypes.func
     ]),
     customLayers: PropTypes.array,
-    renderObjectLabel: PropTypes.func,
     getTransformMatrix: PropTypes.func,
-    style: PropTypes.object,
 
-    // Optional: to use with external state management (e.g. Redux)
+    // Callbacks
+    onHover: PropTypes.func,
+    onClick: PropTypes.func,
+    onContextMenu: PropTypes.func,
+    onViewStateChange: PropTypes.func,
+
+    // States
     viewState: PropTypes.object,
     viewOffset: PropTypes.object,
-    objectStates: PropTypes.object,
-    onViewStateChange: PropTypes.func,
-    onObjectStateChange: PropTypes.func,
-    showMap: PropTypes.bool
+    objectStates: PropTypes.object
   };
 
   static defaultProps = {
     car: DEFAULT_CAR,
     viewMode: VIEW_MODE.PERSPECTIVE,
     xvizStyles: {},
-    style: {},
     customLayers: [],
-    onViewStateChange: () => {},
-    onObjectStateChange: () => {},
-    getTransformMatrix: (streamName, context) => null,
-    showMap: true
+    onViewStateChange: noop,
+    onHover: noop,
+    onClick: noop,
+    onContextMenu: noop,
+    showMap: true,
+    showTooltip: false
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      viewState: {
-        width: 1,
-        height: 1,
-        longitude: 0,
-        latitude: 0,
-        zoom: 18,
-        pitch: 20,
-        bearing: 0,
-        ...props.viewMode.initialProps
-      },
-      viewOffset: {
-        x: 0,
-        y: 0,
-        bearing: 0
-      },
-      objectStates: {},
       styleParser: this._getStyleParser(props),
       carMesh: null
     };
@@ -136,8 +121,8 @@ class Core3DViewer extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
-      const viewState = {...this.state.viewState, ...nextProps.viewMode.initialProps};
-      let viewOffset = this.state.viewOffset;
+      const viewState = {...this.props.viewState, ...nextProps.viewMode.initialProps};
+      let viewOffset = this.props.viewOffset;
       if (nextProps.viewMode.firstPerson) {
         // Reset offset if switching to first person mode
         viewOffset = {
@@ -147,7 +132,6 @@ class Core3DViewer extends PureComponent {
         };
       }
 
-      this.setState({viewState, viewOffset});
       nextProps.onViewStateChange({viewState, viewOffset});
     }
     if (
@@ -161,49 +145,23 @@ class Core3DViewer extends PureComponent {
   }
 
   _onViewStateChange = ({viewState, oldViewState}) => {
-    const viewOffset = getViewStateOffset(
-      oldViewState,
-      viewState,
-      this.props.viewOffset || this.state.viewOffset
-    );
-    this.setState({viewState, viewOffset});
+    const viewOffset = getViewStateOffset(oldViewState, viewState, this.props.viewOffset);
     this.props.onViewStateChange({viewState, viewOffset});
   };
 
-  _onLayerHover = info => {
+  _onLayerHover = (info, evt) => {
     const objectId = info && info.object && info.object.id;
     this.isHovering = Boolean(objectId);
-
-    // TODO: show hover info
-
-    // const showHoverInfo = info && this.props.settings.showInfo;
-    // this.setState({
-    //   hoverInfo: showHoverInfo ? info : null
-    // });
+    this.props.onHover(info, evt);
   };
 
   _onLayerClick = (info, infos, evt) => {
-    const objectId = info && info.object && info.object.id;
+    const isRightClick = evt.which === 3;
 
-    if (objectId) {
-      const isRightClick = evt.which === 3;
-
-      if (isRightClick) {
-        // TODO: context menu
-      } else {
-        // Select object
-        let {objectStates} = this.state;
-        const isObjectSelected = objectStates.selected && objectStates.selected[objectId];
-
-        objectStates = setObjectState(objectStates, {
-          stateName: 'selected',
-          id: objectId,
-          value: !isObjectSelected
-        });
-
-        this.setState({objectStates});
-        this.props.onObjectStateChange(objectStates);
-      }
+    if (isRightClick) {
+      this.props.onContextMenu(info, evt);
+    } else {
+      this.props.onClick(info, evt);
     }
   };
 
@@ -217,6 +175,8 @@ class Core3DViewer extends PureComponent {
       car,
       viewMode,
       metadata,
+      showTooltip,
+      objectStates,
       customLayers,
       streamSettings,
       getTransformMatrix
@@ -228,7 +188,6 @@ class Core3DViewer extends PureComponent {
     const {streams, origin, lookAheads = {}, vehicleRelativeTransform} = frame;
     const {styleParser, carMesh} = this.state;
 
-    const objectStates = this.props.objectStates || this.state.objectStates;
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
     const featuresAndFutures = new Set(
       Object.keys(streams)
@@ -272,7 +231,7 @@ class Core3DViewer extends PureComponent {
               id: `xviz-${streamName}`,
               ...coordinateProps,
 
-              pickable: true,
+              pickable: showTooltip || primitives[0].id,
               lightSettings: LIGHT_SETTINGS,
 
               data: primitives,
@@ -345,11 +304,7 @@ class Core3DViewer extends PureComponent {
   };
 
   _getViewState() {
-    const {viewMode, frame} = this.props;
-    // Allow users to override viewState from application
-    // if not specified then use the saved internal state
-    const viewState = this.props.viewState || this.state.viewState;
-    const viewOffset = this.props.viewOffset || this.state.viewOffset;
+    const {viewMode, frame, viewState, viewOffset} = this.props;
 
     const trackedPosition = frame
       ? {
@@ -363,18 +318,7 @@ class Core3DViewer extends PureComponent {
   }
 
   render() {
-    const {
-      mapboxApiAccessToken,
-      mapStyle,
-      viewMode,
-      frame,
-      metadata,
-      renderObjectLabel,
-      showMap,
-      style,
-      getTransformMatrix
-    } = this.props;
-    const objectSelection = (this.props.objectStates || this.state.objectStates).selected;
+    const {mapboxApiAccessToken, mapStyle, viewMode, showMap} = this.props;
 
     return (
       <DeckGL
@@ -399,23 +343,8 @@ class Core3DViewer extends PureComponent {
           />
         )}
 
-        <ObjectLabelsOverlay
-          objectSelection={objectSelection}
-          frame={frame}
-          metadata={metadata}
-          renderObjectLabel={renderObjectLabel}
-          style={style}
-          getTransformMatrix={getTransformMatrix}
-        />
+        {this.props.children}
       </DeckGL>
     );
   }
 }
-
-const getLogState = log => ({
-  frame: log.getCurrentFrame(),
-  metadata: log.getMetadata(),
-  streamSettings: log.getStreamSettings()
-});
-
-export default connectToLog({getLogState, Component: Core3DViewer});

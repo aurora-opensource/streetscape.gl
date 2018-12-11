@@ -1,13 +1,16 @@
 # Roadmap
 
 ## Performance
+
 - Optimize data processing
 
 ## Use-cases
+
 - Advanced triage analysis
 - Log comparison
 
 ## Features
+
 - Improve object markers
 - Camera projection overlay
 - Measurement tooling
@@ -15,8 +18,9 @@
 - Multiple object selection
 
 ## Documentation
+
 - Tutorials
   - custom data layers
-  - custom XVIZ injection 
+  - custom XVIZ injection
   - custom component examples
   - waypoint/scene interaction

@@ -40,7 +40,7 @@ export {default as connectToLog} from './components/connect';
 
 export {default as LogViewer} from './components/log-viewer';
 export {default as PlaybackControl} from './components/playback-control';
-export {default as PerspectivePopup} from './components/perspective-popup';
+export {default as PerspectivePopup} from './components/log-viewer/perspective-popup';
 export {default as StreamSettingsPanel} from './components/stream-settings-panel';
 
 export {default as XVIZPanel} from './components/declarative-ui/xviz-panel';
