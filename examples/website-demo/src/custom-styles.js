@@ -59,13 +59,13 @@ export const TOOLTIP_STYLE = {
 };
 
 const PRIMITIVE_TYPE_TO_ICON = {
-  point: 'grain',
-  circle: 'scatter_plot',
-  image: 'photo',
-  polyline: 'show_chart',
-  polygon: 'panorama_fish_eye',
-  float: 'looks_two',
-  text: 'text_fields'
+  point: '\\e90a',
+  circle: '\\e91a',
+  image: '\\e906',
+  polyline: '\\e90c',
+  polygon: '\\e909',
+  float: '\\e90e',
+  text: '\\e90d'
 };
 
 export const STREAM_SETTINGS_STYLE = {
@@ -79,20 +79,20 @@ export const STREAM_SETTINGS_STYLE = {
       marginRight: 0
     },
     icon: props => ({
-      fontFamily: 'Material Icons',
+      fontFamily: 'streetscape',
       fontSize: 16,
       color: props.value === 'on' ? props.theme.controlColorActive : props.theme.controlColorPrimary
     }),
-    iconOn: 'visibility',
-    iconOff: 'visibility_off',
-    iconIndeterminate: 'visibility'
+    iconOn: '\ue91c',
+    iconOff: '\ue900',
+    iconIndeterminate: '\ue91c'
   },
   badge: props => ({
     order: -1,
     '&:before':
       props.type in PRIMITIVE_TYPE_TO_ICON
         ? {
-            fontFamily: 'Material Icons',
+            fontFamily: 'streetscape',
             fontSize: 16,
             paddingRight: 12,
             content: `"${PRIMITIVE_TYPE_TO_ICON[props.type]}"`
@@ -103,7 +103,23 @@ export const STREAM_SETTINGS_STYLE = {
   })
 };
 
-export const PANEL_STYLE = {
+export const FLOAT_PANEL_STYLE = {
+  wrapper: props => ({
+    borderColor:
+      props.isMoving || props.isResizing
+        ? props.theme.controlColorActive
+        : props.theme.backgroundAlt
+  }),
+  title: props => ({
+    color: props.theme.textColorPrimary,
+    background:
+      props.isMoving || props.isResizing
+        ? props.theme.controlColorActive
+        : props.theme.backgroundAlt
+  })
+};
+
+export const XVIZ_PANEL_STYLE = {
   metric: {
     title: {
       fontSize: 12,

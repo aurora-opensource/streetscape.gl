@@ -19,10 +19,9 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
-import {Tooltip, Popover, Dropdown} from '@streetscape.gl/monochrome';
+import {Tooltip, Popover} from '@streetscape.gl/monochrome';
 
 import {TOOLTIP_STYLE} from './custom-styles';
-import {LOGS} from './constants';
 
 export default class Toolbar extends PureComponent {
   _gotoViewMode = viewMode => {
@@ -50,31 +49,9 @@ export default class Toolbar extends PureComponent {
     );
   };
 
-  _renderLogSelector() {
-    const {selectedLog} = this.props;
-
-    const logs = LOGS.reduce((resMap, log) => {
-      resMap[log.name] = log.name;
-      return resMap;
-    }, {});
-
-    return (
-      <div id="log-selector">
-        <Dropdown
-          value={selectedLog.name}
-          data={logs}
-          onChange={value => this.props.onLogChange(LOGS.find(log => log.name === value))}
-        />
-      </div>
-    );
-  }
-
   render() {
     return (
       <div id="toolbar">
-        <Tooltip content="Select a log" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
-          {this._renderLogSelector()}
-        </Tooltip>
         <Popover
           content={this._renderViewModeSelector}
           trigger={Popover.CLICK}
@@ -85,18 +62,18 @@ export default class Toolbar extends PureComponent {
         >
           <Tooltip content="View" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
             <div className="btn">
-              <i className="material-icons">videocam</i>
+              <i className="icon-camera_alt" />
             </div>
           </Tooltip>
         </Popover>
         <Tooltip content="Reset Camera" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
           <div className="btn" onClick={this._resetView}>
-            <i className="material-icons">center_focus_strong</i>
+            <i className="icon-recenter" />
           </div>
         </Tooltip>
-        <Tooltip content="Select" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
+        <Tooltip content="Get Info" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
           <div className="btn">
-            <i className="material-icons">near_me</i>
+            <i className="icon-cursor" />
           </div>
         </Tooltip>
       </div>

@@ -29,7 +29,6 @@ import {ThemeProvider} from '@streetscape.gl/monochrome';
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
-import BuildingLayer from './layers/building-layer/building-layer';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR, LOGS} from './constants';
 import {UI_THEME, PLAYBACK_CONTROL_STYLE} from './custom-styles';
@@ -99,7 +98,6 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           xvizStyles={XVIZ_STYLE}
-          customLayers={[new BuildingLayer()]}
           viewMode={VIEW_MODE[settings.viewMode]}
           viewOffset={settings.viewOffset}
           onViewStateChange={this._onViewStateChange}
@@ -117,13 +115,9 @@ class Example extends PureComponent {
           />
         </div>
 
-        <ControlPanel log={log} />
+        <ControlPanel selectedLog={selectedLog} onLogChange={this._onLogChange} log={log} />
 
-        <Toolbar
-          selectedLog={selectedLog}
-          onLogChange={this._onLogChange}
-          onSettingsChange={this._onSettingsChange}
-        />
+        <Toolbar onSettingsChange={this._onSettingsChange} />
 
         <CameraPanel log={log} />
       </div>

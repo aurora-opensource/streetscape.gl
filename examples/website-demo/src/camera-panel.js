@@ -22,7 +22,7 @@ import React, {PureComponent} from 'react';
 import {XVIZPanel} from 'streetscape.gl';
 import {FloatPanel} from '@streetscape.gl/monochrome';
 
-import {PANEL_STYLE} from './custom-styles';
+import {XVIZ_PANEL_STYLE, FLOAT_PANEL_STYLE} from './custom-styles';
 
 const ASPECT_RATIO = 10 / 3;
 
@@ -53,8 +53,9 @@ export default class CameraPanel extends PureComponent {
         minimizable={false}
         resizable={true}
         onUpdate={this._onUpdate}
+        style={FLOAT_PANEL_STYLE}
       >
-        <XVIZPanel log={log} name="Camera" style={PANEL_STYLE} />
+        <XVIZPanel log={log} name="Camera" style={XVIZ_PANEL_STYLE} />
       </FloatPanel>
     );
   }
