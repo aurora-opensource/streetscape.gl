@@ -18,33 +18,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global document */
-/* eslint-disable no-console */
-import 'xviz-config';
-
+/* global document, console */
+/* eslint-disable no-console, no-unused-vars */
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {XVIZStreamLoader, LogViewer, PlaybackControl, XVIZPanel, VIEW_MODE} from 'streetscape.gl';
+import {setXVIZConfig, setXVIZSettings} from '@xviz/parser';
+import {LogViewer, PlaybackControl, XVIZPanel, VIEW_MODE} from 'streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
-import {SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {
+  XVIZ_CONFIG,
+  XVIZ_SETTINGS,
+  APP_SETTINGS,
+  MAPBOX_TOKEN,
+  MAP_STYLE,
+  XVIZ_STYLE,
+  CAR,
+  EXAMPLE_LOG_FROM_STREAM,
+  EXAMPLE_LOG_FROM_FILE
+} from './constants';
 
-import './main.scss';
+setXVIZConfig(XVIZ_CONFIG);
+setXVIZSettings(XVIZ_SETTINGS);
 
 class Example extends PureComponent {
   state = {
-    log: new XVIZStreamLoader({
-      logGuid: 'mock',
-      // bufferLength: 15000,
-      serverConfig: {
-        defaultLogLength: 30000,
-        serverUrl: 'ws://localhost:8081'
-      },
-      worker: true,
-      maxConcurrency: 4
-    }).on('error', console.error), // eslint-disable-line
-
+    log: EXAMPLE_LOG_FROM_FILE.on('error', console.error),
     settings: {
       viewMode: 'PERSPECTIVE'
     }
@@ -65,37 +65,39 @@ class Example extends PureComponent {
 
     return (
       <div id="container">
-        <div id="map-view">
-          <LogViewer
-            log={log}
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            mapStyle={MAP_STYLE}
-            car={CAR}
-            xvizStyles={XVIZ_STYLE}
-            viewMode={VIEW_MODE[settings.viewMode]}
-          />
-        </div>
-        <div id="timeline">
-          <PlaybackControl
-            width="100%"
-            log={log}
-            formatTimestamp={x => new Date(x).toUTCString()}
-          />
-        </div>
         <div id="control-panel">
-          <Form data={SETTINGS} values={this.state.settings} onChange={this._onSettingsChange} />
+          <XVIZPanel log={log} name="Camera" />
           <hr />
           <XVIZPanel log={log} name="Metrics" />
+          <hr />
+          <Form
+            data={APP_SETTINGS}
+            values={this.state.settings}
+            onChange={this._onSettingsChange}
+          />
         </div>
-        <div id="video-panel">
-          <XVIZPanel log={log} name="Camera" />
+        <div id="log-panel">
+          <div id="map-view">
+            <LogViewer
+              log={log}
+              mapboxApiAccessToken={MAPBOX_TOKEN}
+              mapStyle={MAP_STYLE}
+              car={CAR}
+              xvizStyles={XVIZ_STYLE}
+              viewMode={VIEW_MODE[settings.viewMode]}
+            />
+          </div>
+          <div id="timeline">
+            <PlaybackControl
+              width="100%"
+              log={log}
+              formatTimestamp={x => new Date(x).toUTCString()}
+            />
+          </div>
         </div>
       </div>
     );
   }
 }
 
-const root = document.createElement('div');
-document.body.appendChild(root);
-
-render(<Example />, root);
+render(<Example />, document.getElementById('app'));

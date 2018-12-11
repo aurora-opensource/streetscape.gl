@@ -19,21 +19,13 @@
 // THE SOFTWARE.
 
 /* eslint-disable no-process-env */
-/* global process */
 const {resolve} = require('path');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-// Otherwise modules imported from outside this directory does not compile.
-// Also needed if modules from this directory were imported elsewhere
-// Seems to be a Babel bug
-// https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
   presets: ['@babel/preset-env', '@babel/preset-react'],
   plugins: ['@babel/proposal-class-properties']
 };
-
-const appName = process.env.appName || 'kitti';
 
 const CONFIG = {
   mode: 'development',
@@ -60,23 +52,6 @@ const CONFIG = {
         ]
       },
       {
-        test: /\.s?css$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              includePaths: ['./node_modules', '.']
-            }
-          }
-        ]
-      },
-      {
         // Unfortunately, webpack doesn't import library sourcemaps on its own...
         test: /\.js$/,
         use: ['source-map-loader'],
@@ -84,13 +59,7 @@ const CONFIG = {
       }
     ]
   },
-  resolve: {
-    alias: {
-      'xviz-config': resolve(__dirname, '../config', `xviz-config-${appName}.js`)
-    }
-  },
   plugins: [
-    new HtmlWebpackPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
