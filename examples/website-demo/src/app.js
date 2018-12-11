@@ -19,7 +19,8 @@ class Example extends PureComponent {
   state = {
     ...this._loadLog(LOGS[0]),
     settings: {
-      viewMode: 'PERSPECTIVE'
+      viewMode: 'PERSPECTIVE',
+      showTooltip: false
     }
   };
 
@@ -78,6 +79,7 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           xvizStyles={XVIZ_STYLE}
+          showTooltip={settings.showTooltip}
           viewMode={VIEW_MODE[settings.viewMode]}
           viewOffset={settings.viewOffset}
           onViewStateChange={this._onViewStateChange}
@@ -97,7 +99,7 @@ class Example extends PureComponent {
 
         <ControlPanel selectedLog={selectedLog} onLogChange={this._onLogChange} log={log} />
 
-        <Toolbar onSettingsChange={this._onSettingsChange} />
+        <Toolbar settings={settings} onSettingsChange={this._onSettingsChange} />
 
         <CameraPanel log={log} />
       </div>
