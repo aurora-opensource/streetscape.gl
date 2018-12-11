@@ -42,6 +42,7 @@ function generatePath(cachKey, tree, getDocUrl, parentPath = '', depth = 0) {
     return tree;
   }
 
+  tree.root = cachKey;
   tree.depth = depth;
   if (tree.name) {
     tree.path = tree.name
@@ -57,7 +58,9 @@ function generatePath(cachKey, tree, getDocUrl, parentPath = '', depth = 0) {
     tree.markdown = getDocUrl(tree.markdown);
     const i = tree.markdown.indexOf('docs/');
     if (i >= 0) {
-      markdownFiles[tree.markdown.slice(i)] = `${cachKey}${parentPath}/${tree.path}`;
+      markdownFiles[`${cachKey}-${tree.markdown.slice(i)}`] = `${cachKey}${parentPath}/${
+        tree.path
+      }`;
     }
   }
 

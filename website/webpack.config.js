@@ -22,6 +22,10 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
 
+const ALIASES = require('../aliases');
+
+const ROOT_DIR = resolve(__dirname, '..');
+
 // Otherwise modules imported from outside this directory does not compile.
 // Also needed if modules from this directory were imported elsewhere
 // Seems to be a Babel bug
@@ -31,16 +35,34 @@ const BABEL_CONFIG = {
   plugins: ['@babel/proposal-class-properties']
 };
 
-const CONFIG = {
+module.exports = {
   mode: 'development',
+
   entry: {
     app: resolve('./src/main.js')
   },
+
   devtool: 'source-map',
+
+  // suppress warnings about bundle size
+  devServer: {
+    stats: {
+      warnings: false
+    },
+    contentBase: [resolve(__dirname, './src/static')]
+  },
+
   output: {
     path: resolve('./dist'),
     filename: 'bundle.js'
   },
+
+  resolve: {
+    // https://github.com/ReactTraining/react-router/issues/6201
+    modules: [resolve('./node_modules'), resolve(ROOT_DIR, './node_modules')],
+    alias: ALIASES
+  },
+
   module: {
     noParse: /(mapbox-gl)\.js$/,
     rules: [
@@ -84,19 +106,9 @@ const CONFIG = {
       }
     ]
   },
-  resolve: {
-    alias: {
-      // TODO figure out a way to allow switch config file
-      // xviz config for demo app, only support kitti demo for now
-      'xviz-config': resolve(__dirname, '../examples/config/xviz-config-kitti.js'),
-      webworkify$: resolve(__dirname, './node_modules/webworkify-webpack')
-    }
-  },
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
 };
-
-// This line enables bundling against src in this repo rather than installed module
-module.exports = env => (env ? require('./webpack.config.local')(CONFIG)(env) : CONFIG);

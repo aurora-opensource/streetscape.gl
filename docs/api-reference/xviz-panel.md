@@ -3,7 +3,7 @@
 _Uber Confidential Information_
 
 Renders a XVIZ panel from a Declarative UI
-[Panel](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#panels)
+[Panel](https://github.com/uber/xviz/blob/master/docs/declarative-ui/layout-elements.md#Panels)
 definition.
 
 ```jsx
@@ -27,12 +27,12 @@ metadata of the log.
 
 Custom CSS overrides. May contain the following keys:
 
-- `metric`: passed to [XvizMetricComponent](/docs/api-reference/xviz-metric-component)'s `style`
+- `metric`: passed to [XvizMetricComponent](/docs/api-reference/xviz-metric-component.md)'s `style`
   prop
-- `plot`: passed to [XvizPlotComponent](/docs/api-reference/xviz-plot-component)'s `style` prop
+- `plot`: passed to [XvizPlotComponent](/docs/api-reference/xviz-plot-component.md)'s `style` prop
 - `table` and `treetable`: passed to
-  [XvizTableComponent](/docs/api-reference/xviz-table-component)'s `style` prop
-- `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video-component)'s `style` prop
+  [XvizTableComponent](/docs/api-reference/xviz-table-component.md)'s `style` prop
+- `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video-component.md)'s `style` prop
 
 #### `components` (Object, optional)
 
@@ -57,10 +57,10 @@ and value is an object of custom props.
 
 For a list of customizable props, see the documentation for each component:
 
-- `metric`: [XvizMetricComponent](/docs/api-reference/xviz-metric-component)
-- `plot`: [XvizPlotComponent](/docs/api-reference/xviz-plot-component)
-- `table` and `treetable`: [XvizTableComponent](/docs/api-reference/xviz-table-component)
-- `video`: [XvizVideoComponent](/docs/api-reference/xviz-video-component)
+- `metric`: [XvizMetricComponent](/docs/api-reference/xviz-metric-component.md)
+- `plot`: [XvizPlotComponent](/docs/api-reference/xviz-plot-component.md)
+- `table` and `treetable`: [XvizTableComponent](/docs/api-reference/xviz-table-component.md)
+- `video`: [XvizVideoComponent](/docs/api-reference/xviz-video-component.md)
 
 ```jsx
 // Support an additional component type `text`
