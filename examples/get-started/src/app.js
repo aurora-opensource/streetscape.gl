@@ -24,7 +24,7 @@ setXVIZSettings(XVIZ_SETTINGS);
 
 class Example extends PureComponent {
   state = {
-    log: EXAMPLE_LOG_FROM_STREAM.on('error', console.error),
+    log: EXAMPLE_LOG_FROM_FILE.on('error', console.error),
     settings: {
       viewMode: 'PERSPECTIVE'
     }
@@ -80,4 +80,4 @@ class Example extends PureComponent {
   }
 }
 
-render(<Example />, document.body.appendChild(document.createElement('div')));
+render(<Example />, document.getElementById('app'));
