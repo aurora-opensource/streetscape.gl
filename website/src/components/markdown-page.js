@@ -36,7 +36,7 @@ function getLinkPath(repo, path, hash = '') {
  */
 const urlRewrites = [
   {
-    test: /https:\/\/github\.com\/uber\/([\w\.]*)\/.*\/(docs\/.+?\.md)(#.+)?$/,
+    test: /https:\/\/github\.com\/uber\/(streetscape\.gl|xviz)\/.*\/(docs\/.+?\.md)(#.+)?$/,
     rewrite: (href, match) => getLinkPath(match[1], match[2], match[3])
   },
   {
