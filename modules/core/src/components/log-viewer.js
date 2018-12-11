@@ -67,7 +67,8 @@ class Core3DViewer extends PureComponent {
     viewOffset: PropTypes.object,
     objectStates: PropTypes.object,
     onViewStateChange: PropTypes.func,
-    onObjectStateChange: PropTypes.func
+    onObjectStateChange: PropTypes.func,
+    showMap: PropTypes.bool
   };
 
   static defaultProps = {
@@ -78,7 +79,8 @@ class Core3DViewer extends PureComponent {
     customLayers: [],
     onViewStateChange: () => {},
     onObjectStateChange: () => {},
-    getTransformMatrix: (streamName, context) => null
+    getTransformMatrix: (streamName, context) => null,
+    showMap: true
   };
 
   constructor(props) {
@@ -348,6 +350,7 @@ class Core3DViewer extends PureComponent {
       frame,
       metadata,
       renderObjectLabel,
+      showMap,
       style,
       getTransformMatrix
     } = this.props;
@@ -366,13 +369,15 @@ class Core3DViewer extends PureComponent {
         onLayerClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
       >
-        <StaticMap
-          reuseMap={true}
-          attributionControl={false}
-          mapboxApiAccessToken={mapboxApiAccessToken}
-          mapStyle={mapStyle}
-          visible={!viewMode.firstPerson}
-        />
+        {showMap && (
+          <StaticMap
+            reuseMap={true}
+            attributionControl={false}
+            mapboxApiAccessToken={mapboxApiAccessToken}
+            mapStyle={mapStyle}
+            visible={!viewMode.firstPerson}
+          />
+        )}
 
         <ObjectLabelsOverlay
           objectSelection={objectSelection}
