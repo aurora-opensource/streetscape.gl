@@ -20,27 +20,28 @@ export default class XVIZControllerV2 {
   constructor(socket) {
     assert(socket, 'XVIZ socket');
     this.socket = socket;
+    this.transformCounter = 0;
   }
 
-  _send(message) {
-    this.socket.send(JSON.stringify(message));
+  _send(type, message) {
+    const msg = {type: `xviz/${type}`, data: message};
+    this.socket.send(JSON.stringify(msg));
   }
 
-  open({timestamp, duration}) {
-    const msg = {type: 'open', duration};
-    if (timestamp) {
-      msg.timestamp = timestamp;
+  transformLog({startTimestamp, endTimestamp}) {
+    const msg = {};
+    if (startTimestamp) {
+      msg.start_timestamp = startTimestamp; // eslint-disable-line camelcase
     }
-    this._send(msg);
-  }
 
-  metadata() {
-    const msg = {type: 'metadata'};
-    this._send(msg);
-  }
+    if (endTimestamp) {
+      msg.end_timestamp = endTimestamp; // eslint-disable-line camelcase
+    }
 
-  play({timestamp, duration}) {
-    const msg = {type: 'play', timestamp, duration};
-    this._send(msg);
+    // Add in a sequential id
+    msg.id = `${this.transformCounter}`;
+    this.transformCounter++;
+
+    this._send('transform_log', msg);
   }
 }
