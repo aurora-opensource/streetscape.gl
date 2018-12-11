@@ -13,6 +13,18 @@ marked.setOptions({
 });
 const renderer = new marked.Renderer();
 
+function getLinkPath(repo, path, hash = '') {
+  const filepath = `${repo}-${path}`;
+  if (hash[0] === '#') {
+    hash = hash.slice(1);
+  }
+  const route = markdownFiles[filepath];
+  if (!route) {
+    console.warn('Cannot find linked doc: ', filepath); // eslint-disable-line
+  }
+  return `#/${route}${hash ? '?section=' : ''}${hash}`;
+}
+
 /**
  * This map allows you to rewrite urls present in the markdown files
  * to be rewritted to point to other targets. It is useful so that
@@ -24,22 +36,22 @@ const renderer = new marked.Renderer();
  */
 const urlRewrites = [
   {
+    test: /https:\/\/github\.com\/uber\/(streetscape\.gl|xviz)\/.*\/(docs\/.+?\.md)(#.+)?$/,
+    rewrite: (href, match) => getLinkPath(match[1], match[2], match[3])
+  },
+  {
     /*
      * Look for urls in the form of
      * `/docs/path/to/file.md#header`
      * and convert to
      * `#/documentation/path/to/page?section=header`
      */
-    test: /^\/(docs\/.+?\.md)(#.*)?$/,
-    rewrite: (href, match) => {
-      const filepath = match[1];
-      const hash = match[2] ? match[2].slice(1) : '';
-      const route = markdownFiles[filepath];
-      if (!route) {
-        console.warn('Cannot find linked doc: ', filepath); // eslint-disable-line
-      }
-      return `#/${route}${hash ? '?section=' : ''}${hash}`;
-    }
+    test: /^\/(docs\/.+?\.md)(#.+)?$/,
+    rewrite: (href, match) => getLinkPath(renderer._root, match[1], match[2])
+  },
+  {
+    test: /#.+$/,
+    rewrite: (href, match) => getLinkPath(renderer._root, renderer._path, match[0])
   }
 ];
 
@@ -58,11 +70,12 @@ const INJECTION_REG = /<!-- INJECT:"(.+)\" -->/g;
 renderer.link = (href, title, text) => {
   let to = href;
 
-  urlRewrites.forEach(rule => {
+  for (const rule of urlRewrites) {
     if (to && rule.test.test(to)) {
       to = rule.rewrite(to, to.match(rule.test));
+      break;
     }
-  });
+  }
 
   return to ? `<a href=${to}>${text}</a>` : `<span>${text}</span>`;
 };
@@ -70,16 +83,19 @@ renderer.link = (href, title, text) => {
 renderer.image = (href, title, text) => {
   let src = href;
 
-  imageRewrites.forEach(rule => {
+  for (const rule of imageRewrites) {
     if (src && rule.test.test(src)) {
       src = rule.rewrite(src, src.match(rule.test));
+      break;
     }
-  });
+  }
   return `<img src="${src}" title="${title || text}" alt="${text}" />`;
 };
 
-function renderMarkdown(content, url) {
-  renderer._dirname = url.replace(/[^\/]*$/, '');
+function renderMarkdown(content, {markdown, root}) {
+  renderer._root = root;
+  renderer._dirname = markdown.replace(/[^\/]*$/, '');
+  renderer._path = markdown.slice(markdown.indexOf('docs/'));
   return marked(content, {renderer});
 }
 
@@ -98,27 +114,27 @@ export default class MarkdownPage extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.page !== this.props.page) {
-      this._loadPage(nextProps.page);
       this._anchorPositions = null;
-      this._currentSection = null;
+      this._currentSection = '.';
+      this._loadPage(nextProps.page);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.html !== this.state.html) {
+    if (prevState.html !== this.state.html || prevProps.location !== this.props.location) {
       this._jumpTo(this.props.location);
     }
   }
 
   _loadPage(page) {
     if (page.content) {
-      this.setState({html: renderMarkdown(page.content, page.markdown)});
+      this.setState({html: renderMarkdown(page.content, page)});
     } else if (page.markdown) {
       fetch(page.markdown)
         .then(resp => resp.text())
         .then(content => {
           page.content = content;
-          this.setState({html: renderMarkdown(content, page.markdown)});
+          this.setState({html: renderMarkdown(content, page)});
         });
     }
   }
@@ -140,14 +156,19 @@ export default class MarkdownPage extends PureComponent {
   _jumpTo({search}) {
     let section = search.match(/section=([^\?&]+)/);
     section = section && section[1];
+    let scrollTop = 0;
 
-    if (section && section !== this._currentSection) {
-      const anchor = this.refs.container.querySelector(`#${section}`);
-      const scrollTop = this._getScrollPosition(anchor);
-      if (this.refs.container.scrollTop !== scrollTop) {
-        this._internalScroll = true;
-        this.refs.container.scrollTop = scrollTop;
-      }
+    if (section === this._currentSection) {
+      return;
+    }
+    if (section) {
+      const anchor = this.refs.container.querySelector(`#${section.toLowerCase()}`);
+      scrollTop = this._getScrollPosition(anchor);
+    }
+
+    if (this.refs.container.scrollTop !== scrollTop) {
+      this._internalScroll = true;
+      this.refs.container.scrollTop = scrollTop;
     }
   }
 
@@ -167,7 +188,7 @@ export default class MarkdownPage extends PureComponent {
     if (!_anchorPositions) {
       _anchorPositions = {};
       // generate mapping of anchor id -> scrollTop
-      const anchors = this.refs.container.querySelectorAll('h2[id],h3[id]');
+      const anchors = this.refs.container.querySelectorAll('h2[id],h3[id],h4[id],h5[id]');
       for (const anchor of anchors) {
         _anchorPositions[anchor.id] = this._getScrollPosition(anchor);
       }

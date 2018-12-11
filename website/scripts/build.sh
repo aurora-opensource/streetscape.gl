@@ -12,7 +12,7 @@ yarn
 rm -rf ./dist && mkdir dist
 
 # build website
-NODE_ENV=production webpack --env.prod=true
+NODE_ENV=production webpack -p
 
 # copy static files
 cp -r ./src/static/* dist/
