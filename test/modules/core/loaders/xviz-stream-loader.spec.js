@@ -79,18 +79,14 @@ test('XVIZStreamLoader#connect, seek', t => {
       'http://localhost:3000?log=test_log&profile=default',
       'socket connected to correct url'
     );
-    t.deepEquals(
-      socket.flush(),
-      [{type: 'open', duration: 30}, {type: 'metadata'}],
-      'initial hand shake'
-    );
+    t.deepEquals(socket.flush(), [], 'No data till metadata');
 
     // Mock metadata
     loader._onWSMessage({type: LOG_STREAM_MESSAGE.METADATA, start_time: 1000, end_time: 1030});
     t.deepEquals(
       socket.flush(),
-      [{type: 'play', duration: 10, timestamp: 1000}],
-      'seek: update with correct parameters'
+      [{type: 'xviz/transform_log', data: {start_timestamp: 1000, end_timestamp: 1010, id: '0'}}],
+      'transform_log: update with correct parameters'
     );
 
     loader.seek(1005);
@@ -99,7 +95,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     loader.seek(1012);
     t.deepEquals(
       socket.flush(),
-      [{type: 'play', duration: 10, timestamp: 1007}],
+      [{type: 'xviz/transform_log', data: {start_timestamp: 1007, end_timestamp: 1017, id: '1'}}],
       'seek: update with correct parameters'
     );
 
@@ -111,7 +107,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     loader.seek(1001);
     t.deepEquals(
       socket.flush(),
-      [{type: 'play', duration: 7, timestamp: 1000}],
+      [{type: 'xviz/transform_log', data: {start_timestamp: 1000, end_timestamp: 1007, id: '2'}}],
       'seek: update with correct parameters'
     );
 

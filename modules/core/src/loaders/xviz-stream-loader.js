@@ -87,8 +87,8 @@ export function updateSocketRequestParams(timestamp, metadata, bufferLength, buf
   if (chunkSize >= totalDuration) {
     // Unlimited buffer
     return {
-      timestamp: logStartTime,
-      duration: logEndTime - logStartTime,
+      startTimestamp: logStartTime,
+      endTimestamp: logEndTime,
       bufferStart: logStartTime,
       bufferEnd: logEndTime
     };
@@ -105,8 +105,8 @@ export function updateSocketRequestParams(timestamp, metadata, bufferLength, buf
   const end = newBufferRange[newBufferRange.length - 1][1];
 
   return {
-    timestamp: start,
-    duration: end - start,
+    startTimestamp: start,
+    endTimestamp: end,
     bufferStart,
     bufferEnd
   };
@@ -216,7 +216,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     );
 
     if (this.isOpen()) {
-      this.xvizHandler.play(params);
+      this.xvizHandler.transformLog(params);
     } else {
       // Wait for socket to connect
     }
@@ -289,16 +289,14 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
 
   // Notifications and metric reporting
   _onWSOpen = () => {
-    // Immediately send request for data.
+    // Request data if we are restarting, otherwise wait for metadata
     // TODO - protocol negotiation
     this.xvizHandler = new XVIZController(this.socket);
-    this.xvizHandler.open(this.requestParams);
+
     this._debug('socket_open', this.requestParams);
 
     if (this.lastRequest) {
-      this.xvizHandler.play(this.lastRequest);
-    } else {
-      this.xvizHandler.metadata();
+      this.xvizHandler.transformLog(this.lastRequest);
     }
   };
 
@@ -322,7 +320,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
         if (this.streamBuffer.valueOf() !== oldVersion) {
           this.set('streams', this.streamBuffer.getStreams());
           this.bufferRange = rangeUtils.add(
-            [this.lastRequest.timestamp, message.timestamp],
+            [this.lastRequest.startTimestamp, message.timestamp],
             this.bufferRange
           );
         }
