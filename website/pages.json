@@ -20,12 +20,12 @@
     "name": "Getting Started",
     "children": [
       {
-        "name": "Installing",
-        "markdown": "developer-guide/installing.md"
+        "name": "Starter Kit",
+        "markdown": "get-started/starter-kit.md"
       },
       {
-        "name": "Example XVIZ Viewer",
-        "markdown": "example-guide/xviz-viewer.md"
+        "name": "About Mapbox Tokens",
+        "markdown": "get-started/mapbox-tokens.md"
       }
     ]
   },
