@@ -13,6 +13,10 @@ export default class Toolbar extends PureComponent {
     this.props.onSettingsChange({viewOffset: {x: 0, y: 0, bearing: 0}});
   };
 
+  _toggleTooltip = showTooltip => {
+    this.props.onSettingsChange({showTooltip});
+  };
+
   _renderViewModeSelector = () => {
     return (
       <div className="menu">
@@ -30,6 +34,8 @@ export default class Toolbar extends PureComponent {
   };
 
   render() {
+    const {settings} = this.props;
+
     return (
       <div id="toolbar">
         <Popover
@@ -52,7 +58,10 @@ export default class Toolbar extends PureComponent {
           </div>
         </Tooltip>
         <Tooltip content="Get Info" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
-          <div className="btn">
+          <div
+            className={`btn ${settings.showTooltip ? 'active' : ''}`}
+            onClick={() => this._toggleTooltip(!settings.showTooltip)}
+          >
             <i className="icon-cursor" />
           </div>
         </Tooltip>

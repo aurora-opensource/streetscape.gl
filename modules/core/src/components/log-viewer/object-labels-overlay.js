@@ -7,8 +7,8 @@ import {_MapContext as MapContext} from 'react-map-gl';
 
 import PerspectivePopup from './perspective-popup';
 
-import {getCentroid} from '../utils/geometry';
-import {resolveCoordinateTransform, positionToLngLat} from '../utils/transform';
+import {getCentroid} from '../../utils/geometry';
+import {resolveCoordinateTransform, positionToLngLat} from '../../utils/transform';
 
 const renderDefaultObjectLabel = ({id}) => <div>ID: {id}</div>;
 
