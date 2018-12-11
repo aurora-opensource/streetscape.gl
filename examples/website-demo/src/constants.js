@@ -22,7 +22,7 @@ export const SETTINGS = {
 };
 
 export const XVIZ_STYLE = {
-  // '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
+  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
 };
 
 // LOG_DIR is defined in webpack.config.js

@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
 import {Tooltip, Popover} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE, PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
+import {TOOLTIP_STYLE, XVIZ_PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
 import MetadataPanel from './metadata-panel';
 
 export default class ControlPanel extends PureComponent {
@@ -15,17 +15,17 @@ export default class ControlPanel extends PureComponent {
   }
 
   _renderTabContent() {
-    const {log} = this.props;
+    const {log, selectedLog, onLogChange} = this.props;
 
     switch (this.state.tab) {
       case 'streams':
         return <StreamSettingsPanel log={log} style={STREAM_SETTINGS_STYLE} />;
 
       case 'charts':
-        return <XVIZPanel log={log} name="Metrics" style={PANEL_STYLE} />;
+        return <XVIZPanel log={log} name="Metrics" style={XVIZ_PANEL_STYLE} />;
 
       case 'metadata':
-        return <MetadataPanel log={log} />;
+        return <MetadataPanel log={log} selectedLog={selectedLog} onLogChange={onLogChange} />;
 
       default:
         return null;
@@ -38,7 +38,7 @@ export default class ControlPanel extends PureComponent {
     return (
       <Tooltip content={displayName} position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
         <div className={`btn ${id === tab ? 'active' : ''}`} onClick={() => this._gotoTab(id)}>
-          <i className="material-icons">{icon}</i>
+          <i className={`icon-${icon}`} />
         </div>
       </Tooltip>
     );
@@ -52,9 +52,9 @@ export default class ControlPanel extends PureComponent {
             <img src="images/logo.png" />
           </div>
           <div>
-            {this._renderTab({id: 'metadata', displayName: 'Log Info', icon: 'info'})}
-            {this._renderTab({id: 'streams', displayName: 'Stream Settings', icon: 'toc'})}
-            {this._renderTab({id: 'charts', displayName: 'Charts', icon: 'show_chart'})}
+            {this._renderTab({id: 'metadata', displayName: 'Log Info', icon: 'content'})}
+            {this._renderTab({id: 'streams', displayName: 'Stream Settings', icon: 'streams'})}
+            {this._renderTab({id: 'charts', displayName: 'Charts', icon: 'car'})}
           </div>
         </header>
 
@@ -62,7 +62,7 @@ export default class ControlPanel extends PureComponent {
         <footer>
           <Tooltip content="Help" style={TOOLTIP_STYLE}>
             <div className="btn">
-              <i className="material-icons">help_outline</i>
+              <i className="icon-info" />
             </div>
           </Tooltip>
         </footer>
