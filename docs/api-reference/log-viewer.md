@@ -102,29 +102,36 @@ import {VIEW_MODE} from 'streetscape.gl';
 
 ##### viewState (Object, optional)
 
+Override the internal view state. By default, `LogViewer` is a stateful component
+which stores the latest camera state internally. Supply this prop if you wish to use it as a
+stateless component. The value is expected to contain the following fields:
+
+- `longitude` (Number) - longitude of the map center
+- `latitude` (Number) - latitude of the map center
+- `zoom` (Number)
+- `pitch` (Number) - rotation in degrees
+- `bearing` (Number) - rotation in degrees
+
 ##### viewOffset (Object, optional)
 
-Override the internal view state and view offset. By default, `LogViewer` is a stateful component
+Override the internal view offset. By default, `LogViewer` is a stateful component
 which stores the latest camera state internally. Supply these props if you wish to use it as a
-stateless component. See `onViewStateChange` for more information.
+stateless component. The value is expected to contain the following fields:
+
+- `x` (Number) - horizontal offset of the tracked object (car) from the map center, in screen pixels
+- `y` (Number) - vertical offset of the tracked object (car) from the map center, in screen pixels
+- `bearing` (Number) - rotation of the camera relative to the heading of the car
+
+See [Use Alternative State Manager](/docs/developer-guide/state-management.md) for examples.
 
 ##### onViewStateChange (Function, optional)
 
-Callback when the view state changes.
+Callback when the view state changes. Will be called with the following parameters:
 
-To use `LogViewer` as a stateless component:
+- `newState` (Object)
+  + `state.viewState` (Object) - descriptor of the new view state.
+  + `state.viewOffset` (Object) - descriptor of the new view offset.
 
-```jsx
-import {LogViewer, VIEW_MODE} from 'streetscape.gl';
-
-<LogViewer
-  log={log}
-  viewMode={VIEW_MODE.TOP_DOWN}
-  viewState={this.state.viewState}
-  viewOffset={this.state.viewOffset}
-  onViewStateChange={({viewState, viewOffset}) => this.setState({viewState, viewOffset})}
-/>;
-```
 
 ##### onSelectObject (Function, optional)
 
@@ -146,23 +153,26 @@ Callback when an object is right clicked on. Will receive the following argument
 
 Override the internal object states. By default, `LogViewer` is a stateful component which stores
 the latest object states internally. Supply this prop if you wish to use it as a stateless
-component. See `onObjectStateChange` for more information.
+component. The value is expected to be in the following form:
+
+```js
+{
+  [state_name_1]: {
+    [object_id_1]: true,
+    [object_id_2]: true
+  },
+  [state_name_2]: {
+    [object_id_1]: false
+  }
+}
+```
+
+See [Use Alternative State Manager](/docs/developer-guide/state-management.md) for examples.
 
 ##### onObjectStateChange (Function, optional)
 
-Callback when some object state (e.g. whether they are selected) changes.
+Callback when some object state (e.g. whether they are selected) changes. Will receive a single parameter `objectStates`.
 
-To use `LogViewer` as a stateless component:
-
-```jsx
-import {LogViewer} from 'streetscape.gl';
-
-<LogViewer
-  log={log}
-  objectStates={this.state.objectStates}
-  onViewStateChange={objectStates => this.setState({objectStates})}
-/>;
-```
 
 ##### getTransformMatrix (Function, optional)
 
