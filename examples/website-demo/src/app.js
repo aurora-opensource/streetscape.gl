@@ -34,8 +34,8 @@ class Example extends PureComponent {
     setXVIZConfig(logSettings.xvizConfig);
 
     const loader = new XVIZFileLoader({
-      timingsFilePath: `${logSettings.path}/0-frame.json`,
-      getFilePath: index => `${logSettings.path}/${index + 1}-frame.glb`,
+      timingsFilePath: `${path}/0-frame.json`,
+      getFilePath: index => `${path}/${index + 1}-frame.glb`,
       worker: true,
       maxConcurrency: 4
     })
@@ -78,7 +78,7 @@ class Example extends PureComponent {
 
         <Toolbar settings={settings} onSettingsChange={this._onSettingsChange} />
 
-        <CameraPanel log={log} />
+        <CameraPanel log={log} videoAspectRatio={selectedLog.videoAspectRatio} />
       </div>
     );
   }

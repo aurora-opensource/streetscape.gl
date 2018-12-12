@@ -81,7 +81,7 @@ module.exports = env => {
       devServer: {
         contentBase: [
           resolve(__dirname, '../../website/src/static'),
-          resolve(__dirname, '../../../xviz/data/generated'),
+          resolve(__dirname, '../../../xviz-data'),
           resolve(__dirname)
         ]
       },
