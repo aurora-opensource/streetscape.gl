@@ -21,10 +21,13 @@ You may need a Mapbox access token to display the base map. See your [options](d
 
 ### Load Data from a Different Source
 
-This example loads an XVIZ log extracted from the [KITTI](http://www.cvlibs.net/datasets/kitti/) dataset. By default, the data is loaded from a remote URL using the [XVIZFileLoader](docs/api-reference/xviz-file-loader.md). You can change the URL to point to your own files by tweaking the `EXAMPLE_LOG_FROM_FILE` variable in `constants.js`.
+This example loads an XVIZ log extracted from the [KITTI](http://www.cvlibs.net/datasets/kitti/) dataset. By default, the data is loaded from a remote URL using the [XVIZFileLoader](docs/api-reference/xviz-file-loader.md). You can change the URL to point to your own files by tweaking the options in [log-from-file.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/log-from-file.js).
 
-You can also use this application to stream XVIZ data from a server. To do this, follow these [instructions]() to start a local XVIZ stream server, and switch `EXAMPLE_LOG_FROM_FILE` to `EXAMPLE_LOG_FROM_STREAM` in `app.js`.
+You can also use this application to stream XVIZ data from a server. To do this:
+- Follow these [instructions]() to start a local XVIZ stream server
+- In the get-started example directory, run `yarn start-streaming`.
 
+You can change the streaming options in [log-from-stream.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/log-from-stream.js).
 
 ## Application Controls
 

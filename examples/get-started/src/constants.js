@@ -1,5 +1,3 @@
-import {XVIZStreamLoader, XVIZFileLoader} from 'streetscape.gl';
-
 /* eslint-disable camelcase */
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
@@ -13,25 +11,6 @@ export const XVIZ_CONFIG = {
 export const XVIZ_SETTINGS = {
   PLAYBACK_FRAME_RATE: 10
 };
-
-export const EXAMPLE_LOG_FROM_STREAM = new XVIZStreamLoader({
-  logGuid: 'mock',
-  // bufferLength: 15000,
-  serverConfig: {
-    defaultLogLength: 30000,
-    serverUrl: 'ws://localhost:8081'
-  },
-  worker: true,
-  maxConcurrency: 4
-});
-
-export const EXAMPLE_LOG_FROM_FILE = new XVIZFileLoader({
-  timingsFilePath: 'https://uber.github.io/xviz-data/kitti/2011_09_26_drive_0005_sync/0-frame.json',
-  getFilePath: index =>
-    `https://uber.github.io/xviz-data/kitti/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
-  worker: true,
-  maxConcurrency: 4
-});
 
 // OBJ model width 2073mm, length 4946mm
 // Volkswagen Passat: width 1820mm, length 4780mm
