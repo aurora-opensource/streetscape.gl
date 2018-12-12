@@ -1,4 +1,4 @@
-# StreamSettingsPane (React Component)
+# StreamSettingsPanel (React Component)
 
 _Uber Confidential Information_
 
