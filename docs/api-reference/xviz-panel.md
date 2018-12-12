@@ -14,16 +14,16 @@ import {XVIZPanel} from 'streetscape.gl';
 
 ## Properties
 
-##### `log` (`XVIZLoader`)
+##### log (XVIZLoader)
 
 The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) object.
 
-##### `name` (String)
+##### name (String)
 
 The identifier of the panel to render. The definition for this panel must be supplied via the
 metadata of the log.
 
-##### `style` (Object, optional)
+##### style (Object, optional)
 
 Custom CSS overrides. May contain the following keys:
 
@@ -34,7 +34,7 @@ Custom CSS overrides. May contain the following keys:
   [XvizTableComponent](/docs/api-reference/xviz-table-component.md)'s `style` prop
 - `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video-component.md)'s `style` prop
 
-#### `components` (Object, optional)
+##### components (Object, optional)
 
 Supply custom renderers for XVIZ Declarative UI components. Key is declarative UI component types
 and value is a `React.Component`.
@@ -50,7 +50,7 @@ const myCustomComponents = {
 
 - Default: `{}`
 
-#### `componentProps` (Object, optional)
+##### componentProps (Object, optional)
 
 Supply custom props for each XVIZ Declarative UI components. Key is declarative UI component types
 and value is an object of custom props.
