@@ -39,11 +39,11 @@ Default: `({column}) => column.name`
 
 Custom renderer for each cell. Receives one argument with the following fields:
 
-- `value` (object) - the cell value
-- `column` (object) - the column definition
-- `columnIndex` (number) - the column index
-- `row` (object) - the row definition
-- `rowId` (string) - the row identifier
+- `value` (Object) - the cell value
+- `column` (Object) - the column definition
+- `columnIndex` (Number) - the column index
+- `row` (Object) - the row definition
+- `rowId` (String) - the row identifier
 
 Default: `({value}) => value === null ? null : String(value)`
 
