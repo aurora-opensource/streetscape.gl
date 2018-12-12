@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 /* global document, console */
-/* eslint-disable no-console, no-unused-vars */
+/* eslint-disable no-console, no-unused-vars, no-undef */
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
@@ -34,17 +34,18 @@ import {
   MAPBOX_TOKEN,
   MAP_STYLE,
   XVIZ_STYLE,
-  CAR,
-  EXAMPLE_LOG_FROM_STREAM,
-  EXAMPLE_LOG_FROM_FILE
+  CAR
 } from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
 setXVIZSettings(XVIZ_SETTINGS);
 
+// __IS_STREAMING__ is defined in webpack.config.js
+const exampleLog = require(__IS_STREAMING__ ? './log-from-stream' : './log-from-file').default;
+
 class Example extends PureComponent {
   state = {
-    log: EXAMPLE_LOG_FROM_FILE.on('error', console.error),
+    log: exampleLog.on('error', console.error),
     settings: {
       viewMode: 'PERSPECTIVE'
     }

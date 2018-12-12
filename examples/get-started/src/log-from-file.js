@@ -18,36 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* eslint-disable camelcase */
-export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+import {XVIZFileLoader} from 'streetscape.gl';
 
-export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
-
-export const XVIZ_CONFIG = {
-  PRIMARY_POSE_STREAM: '/vehicle_pose',
-  OBJECT_STREAM: '/tracklets/objects'
-};
-
-export const XVIZ_SETTINGS = {
-  PLAYBACK_FRAME_RATE: 10
-};
-
-// OBJ model width 2073mm, length 4946mm
-// Volkswagen Passat: width 1820mm, length 4780mm
-export const CAR = {
-  mesh: 'assets/car.obj',
-  origin: [1.08, -0.32, 0],
-  scale: 0.0009
-};
-
-export const APP_SETTINGS = {
-  viewMode: {
-    type: 'select',
-    title: 'View Mode',
-    data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
-  }
-};
-
-export const XVIZ_STYLE = {
-  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}]
-};
+export default new XVIZFileLoader({
+  timingsFilePath: 'https://uber.github.io/xviz-data/kitti/2011_09_26_drive_0005_sync/0-frame.json',
+  getFilePath: index =>
+    `https://uber.github.io/xviz-data/kitti/2011_09_26_drive_0005_sync/${index + 1}-frame.glb`,
+  worker: true,
+  maxConcurrency: 4
+});
