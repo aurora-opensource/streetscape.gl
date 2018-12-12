@@ -56,6 +56,6 @@ for D in *; do (
 npm run build
 
 # Setup XVIZ-VIEWER JS dependencies
-(cd "${SCRIPT_DIR}/../examples/xviz-viewer" && yarn --check-files)
+(cd "${SCRIPT_DIR}/../examples/get-started" && yarn --check-files)
 
 echo "Done"
