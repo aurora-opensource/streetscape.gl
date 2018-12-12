@@ -1,7 +1,5 @@
 # LogViewer (React Component)
 
-_Uber Confidential Information_
-
 Renders a 3D view of a XVIZ log.
 
 ```jsx
@@ -190,10 +188,6 @@ Popups will be disabled if this prop is set to `false`.
 
 Default: `(props) => <div>{props.id}</div>`
 
-##### objectLabelColor (String, optional)
-
-Color of the object label.
-
 ##### style (Object, optional)
 
 Custom CSS overrides. May contain the following fields:
@@ -211,10 +205,10 @@ A custom style callback function will receive the following arguments:
   - `theme` (Object) - the current theme
   - `position` (String) - position of the label relative to the object
 
-##### `showMap` (Boolean, Optional)
+##### showMap (Boolean, Optional)
 
 Render base map. Default is `true`.
 
-##### `showTooltip` (Boolean, optional)
+##### showTooltip (Boolean, optional)
 
 Render hover tooltip. Default is `false`.

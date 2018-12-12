@@ -1,7 +1,5 @@
 # PlaybackControl (React Component)
 
-_Uber Confidential Information_
-
 Renders a playback control for a XVIZ log.
 
 ```jsx

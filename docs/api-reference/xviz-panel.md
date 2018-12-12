@@ -1,7 +1,5 @@
 # XVIZPanel (React Component)
 
-_Uber Confidential Information_
-
 Renders a XVIZ panel from a Declarative UI
 [Panel](https://github.com/uber/xviz/blob/master/docs/declarative-ui/layout-elements.md#Panels)
 definition.

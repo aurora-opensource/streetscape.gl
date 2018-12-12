@@ -1,8 +1,8 @@
 # XVIZTableComponent (React Component)
 
 The base component for rendering a Declarative UI
-[table](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#table) or
-[treetable](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#table)
+[table](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Table) or
+[treetable](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#TreeTable)
 component.
 
 > Do not use this component directly unless implementing your own UI component. See

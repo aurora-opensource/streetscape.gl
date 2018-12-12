@@ -1,7 +1,5 @@
 # StreamSettingsPanel (React Component)
 
-_Uber Confidential Information_
-
 Renders a stream settings editor.
 
 ```jsx

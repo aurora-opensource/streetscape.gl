@@ -110,4 +110,4 @@ An important part of XVIZ is the [Declarative UI](https://github.com/uber/xviz/b
 with bindings to XVIZ streams. This enables engineers to create controls that are defined at the
 source of the data generation without the need to know the specifics of the client implementation.
 
-The [XVIZPanel](/docs/api-reference/xivz-panel.md) component in streetscape.gl renders any valid panel definition that is compliant with the XVIZ declarative UI spec.
+The [XVIZPanel](/docs/api-reference/xviz-panel.md) component in streetscape.gl renders any valid panel definition that is compliant with the XVIZ declarative UI spec.

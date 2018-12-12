@@ -1,7 +1,7 @@
 # XVIZPlotComponent (React Component)
 
 The base component for rendering a Declarative UI
-[plot](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#plot)
+[plot](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Plot)
 component.
 
 > Do not use this component directly unless implementing your own UI component. See

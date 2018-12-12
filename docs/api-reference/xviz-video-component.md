@@ -1,7 +1,7 @@
 # XVIZVideoComponent (React Component)
 
 The base component for rendering a Declarative UI
-[video](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#video)
+[video](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Video)
 component.
 
 > Do not use this component directly unless implementing your own UI component. See

@@ -50,7 +50,7 @@ const urlRewrites = [
     rewrite: (href, match) => getLinkPath(renderer._root, match[1], match[2])
   },
   {
-    test: /#.+$/,
+    test: /^#.+$/,
     rewrite: (href, match) => getLinkPath(renderer._root, renderer._path, match[0])
   }
 ];
