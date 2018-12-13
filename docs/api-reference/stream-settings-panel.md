@@ -26,3 +26,12 @@ options, plus the following:
   receive the following arguments:
   - `theme` (Object) - the current theme
   - `type` (String) - the XVIZ primitive type of the current stream
+
+
+##### onSettingsChange (Function, optional)
+
+Callback when the user changes the stream settings. Will receive the following parameters:
+
+- `settings` (Object)
+
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior (log frame update)

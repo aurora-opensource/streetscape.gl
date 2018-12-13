@@ -178,8 +178,9 @@ class StreamSettingsPanel extends PureComponent {
     const values = updateFormValues(data, this.state.values, newValues);
     const settings = formValuesToSettings(streamMetadata, values);
 
-    log.updateStreamSettings(settings);
-    onSettingsChange(settings);
+    if (!onSettingsChange(settings) && log) {
+      log.updateStreamSettings(settings);
+    }
   };
 
   render() {
