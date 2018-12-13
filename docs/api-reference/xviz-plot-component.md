@@ -83,7 +83,7 @@ Declarative UI specification for details.
 
 ##### independentVariable (String)
 
-##### dependentVariable (Array)
+##### dependentVariables (Array)
 
 ### Log Info
 
