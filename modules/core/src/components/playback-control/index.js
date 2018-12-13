@@ -1,6 +1,6 @@
 /* global window */
 import React, {PureComponent} from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import {getXVIZConfig, getXVIZSettings} from '@xviz/parser';
 import DualPlaybackControl from './dual-playback-control';
@@ -13,9 +13,17 @@ const TIME_SCALES = {
 };
 
 class PlaybackControl extends PureComponent {
-  static propTypes = {};
+  static propTypes = {
+    ...DualPlaybackControl.propTypes,
+    onTimeChange: PropTypes.func,
+    onLookAheadChange: PropTypes.func
+  };
 
-  static defaultProps = {};
+  static defaultProps = {
+    ...DualPlaybackControl.defaultProps,
+    onTimeChange: () => {},
+    onLookAheadChange: () => {}
+  };
 
   state = {
     isPlaying: false,
@@ -41,20 +49,31 @@ class PlaybackControl extends PureComponent {
   };
 
   _onSeek = timestamp => {
-    this.props.log.seek(timestamp);
+    this._onTimeChange(timestamp);
+
     if (this.state.isPlaying) {
       this.setState({isPlaying: false});
     }
   };
 
+  _onTimeChange = timestamp => {
+    const {log, onTimeChange} = this.props;
+    if (!onTimeChange(timestamp) && log) {
+      log.seek(timestamp);
+    }
+  };
+
   _onLookAheadChange = lookAhead => {
-    this.props.log.setLookAhead(lookAhead);
+    const {log, onLookAheadChange} = this.props;
+    if (!onLookAheadChange(lookAhead) && log) {
+      log.setLookAhead(lookAhead);
+    }
   };
 
   _animate = () => {
     if (this.state.isPlaying) {
       const now = Date.now();
-      const {startTime, endTime, bufferRange, log, timestamp} = this.props;
+      const {startTime, endTime, bufferRange, timestamp} = this.props;
       const {lastUpdate, timeScale} = this.state;
       const {PLAYBACK_FRAME_RATE} = getXVIZSettings();
 
@@ -71,7 +90,7 @@ class PlaybackControl extends PureComponent {
       if (bufferRange.some(r => newTimestamp >= r[0] && newTimestamp <= r[1])) {
         // only move forward if buffer is loaded
         // otherwise pause and wait
-        log.seek(newTimestamp);
+        this._onTimeChange(newTimestamp);
       }
 
       this.setState({lastUpdate: now});

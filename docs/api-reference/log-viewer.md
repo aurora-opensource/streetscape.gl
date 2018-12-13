@@ -128,19 +128,23 @@ import {LogViewer, VIEW_MODE} from 'streetscape.gl';
 />;
 ```
 
-<<<<<<< HEAD
-##### `onSelectObject` (Function, optional)
+##### onSelectObject (Function, optional)
 
-Callback when an object is left clicked on.
+Callback when an object is left clicked on. Will receive the following arguments:
 
-##### `onContextMenu` (Function, optional)
+- `info` (Object) - a descriptor of the object being clicked
+- `event` (Object) - the original pointer event
 
-Callback when an object is right clicked on.
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior (toggle object selection).
 
-##### `objectStates` (Object, optional)
-=======
+##### onContextMenu (Function, optional)
+
+Callback when an object is right clicked on. Will receive the following arguments:
+
+- `info` (Object) - a descriptor of the object being clicked
+- `event` (Object) - the original pointer event
+
 ##### objectStates (Object, optional)
->>>>>>> 80465de... consistent formatting documentations
 
 Override the internal object states. By default, `LogViewer` is a stateful component which stores
 the latest object states internally. Supply this prop if you wish to use it as a stateless
