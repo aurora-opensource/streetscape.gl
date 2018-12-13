@@ -139,7 +139,8 @@ Callback when an object is left clicked on. Will receive the following arguments
 - `info` (Object) - a descriptor of the object being clicked
 - `event` (Object) - the original pointer event
 
-If the callback returns `true`, the event is considered "handled" and prevents the default behavior (toggle object selection).
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior
+(toggle object selection).
 
 ##### onContextMenu (Function, optional)
 
