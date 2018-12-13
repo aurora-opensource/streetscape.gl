@@ -1,4 +1,3 @@
-/* global ASSET_DIR */
 import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
 import {Tooltip, Popover} from '@streetscape.gl/monochrome';
@@ -50,7 +49,7 @@ export default class ControlPanel extends PureComponent {
       <div id="control-panel">
         <header>
           <div>
-            <img src={`${ASSET_DIR}/images/logo.png`} />
+            <img src="assets/logo.png" />
           </div>
           <div>
             {this._renderTab({id: 'metadata', displayName: 'Log Info', icon: 'content'})}

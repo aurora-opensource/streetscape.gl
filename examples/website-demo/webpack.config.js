@@ -71,8 +71,7 @@ module.exports = env => {
 
     config.plugins = config.plugins.concat(
       new webpack.DefinePlugin({
-        LOG_DIR: JSON.stringify('https://uber.github.io/xviz-data'),
-        ASSET_DIR: JSON.stringify('..')
+        LOG_DIR: JSON.stringify('https://uber.github.io/xviz-data')
       })
     );
   } else {
@@ -98,8 +97,7 @@ module.exports = env => {
 
     config.plugins = config.plugins.concat(
       new webpack.DefinePlugin({
-        LOG_DIR: JSON.stringify('.'),
-        ASSET_DIR: JSON.stringify('.')
+        LOG_DIR: JSON.stringify('.')
       })
     );
   }
