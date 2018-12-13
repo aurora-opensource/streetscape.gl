@@ -2,7 +2,9 @@
 
 ## Style Overrides
 
-streetscape.gl uses [emotion](https://emotion.sh) for JavaScript-based styling. Each component offers a `style` prop that accepts custom CSS overrides. See the documentation of each component for what's stylable.
+streetscape.gl uses [emotion](https://emotion.sh) for JavaScript-based styling. Each component
+offers a `style` prop that accepts custom CSS overrides. See the documentation of each component for
+what's stylable.
 
 ## Themes
 
@@ -19,7 +21,7 @@ const MY_THEME = {
 
 <ThemeProvider theme={MY_THEME}>
   <MyApp />
-</ThemeProvider>
+</ThemeProvider>;
 ```
 
 ### Theme Object
@@ -51,4 +53,3 @@ const MY_THEME = {
 - `spacingNormal`
 - `spacingLarge`
 - `spacingHuge`
-

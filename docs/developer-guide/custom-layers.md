@@ -1,12 +1,17 @@
 # Use Custom 3D Layers
 
-Applications can add custom [deck.gl](deck.gl) layers to enrich the log with additional graphics. This allows applications to inject content into the 3D scene.
+Applications can add custom [deck.gl](deck.gl) layers to enrich the log with additional graphics.
+This allows applications to inject content into the 3D scene.
 
 ## Render Custom Map Layers
 
 This example shows how to render a custom map layer that is not part of the XVIZ log.
 
-Suppose our team has an internal map service that hosts the lane geometries data, which our autonomous vehicle software uses, in GeoJSON format. The map is partitioned geospatially into chunks. During the playback, we will query the service to acquire the relevant chunks to the current viewport, and then render it with a deck.gl [GeoJsonLayer](http://deck.gl/#/documentation/deckgl-api-reference/layers/geojson-layer). 
+Suppose our team has an internal map service that hosts the lane geometries data, which our
+autonomous vehicle software uses, in GeoJSON format. The map is partitioned geospatially into
+chunks. During the playback, we will query the service to acquire the relevant chunks to the current
+viewport, and then render it with a deck.gl
+[GeoJsonLayer](http://deck.gl/#/documentation/deckgl-api-reference/layers/geojson-layer).
 
 ```js
 import React from 'react';
@@ -14,7 +19,6 @@ import {GeoJSONLayer} from '@deck.gl/layers';
 import {LogViewer} from 'streetscape.gl';
 
 class MapView extends React.PureComponent {
-
   state = {
     mapGeoJsonUrl: null
   };
@@ -51,20 +55,21 @@ class MapView extends React.PureComponent {
       })
     ];
 
-    return (<LogViewer
-      log={this.props.log}
-      customLayers={customLayers}
-     />);
-   }
- }
+    return <LogViewer log={this.props.log} customLayers={customLayers} />;
+  }
+}
 ```
-
 
 ## Custom Rendering of a XVIZ Stream
 
 This example replaces the default rendering of a XVIZ stream.
 
-The hypothetical stream `/trajectory/markers` contains geometries of the primitive type [circle](https://github.com/uber/xviz/blob/master/docs/protocol-schema/geometry-primitives.md#circle-primitive). By default, `circle` streams are rendered with a deck.gl [ScatterplotLayer](http://deck.gl/#/documentation/deckgl-api-reference/layers/scatterplot-layer). We will replace it with a custon [IconLayer](http://deck.gl/#/documentation/deckgl-api-reference/layers/icon-layer).
+The hypothetical stream `/trajectory/markers` contains geometries of the primitive type
+[circle](https://github.com/uber/xviz/blob/master/docs/protocol-schema/geometry-primitives.md#circle-primitive).
+By default, `circle` streams are rendered with a deck.gl
+[ScatterplotLayer](http://deck.gl/#/documentation/deckgl-api-reference/layers/scatterplot-layer). We
+will replace it with a custon
+[IconLayer](http://deck.gl/#/documentation/deckgl-api-reference/layers/icon-layer).
 
 ```js
 import React from 'react';
@@ -105,11 +110,13 @@ class MapView extends React.Component {
       })
     ];
 
-    return (<LogViewer
-      log={this.props.log}
-      streamFilter={this.streamFilter}
-      customLayers={customLayers}
-     />);
-   }
- }
+    return (
+      <LogViewer
+        log={this.props.log}
+        streamFilter={this.streamFilter}
+        customLayers={customLayers}
+      />
+    );
+  }
+}
 ```

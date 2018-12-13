@@ -102,9 +102,9 @@ import {VIEW_MODE} from 'streetscape.gl';
 
 ##### viewState (Object, optional)
 
-Override the internal view state. By default, `LogViewer` is a stateful component
-which stores the latest camera state internally. Supply this prop if you wish to use it as a
-stateless component. The value is expected to contain the following fields:
+Override the internal view state. By default, `LogViewer` is a stateful component which stores the
+latest camera state internally. Supply this prop if you wish to use it as a stateless component. The
+value is expected to contain the following fields:
 
 - `longitude` (Number) - longitude of the map center
 - `latitude` (Number) - latitude of the map center
@@ -114,9 +114,9 @@ stateless component. The value is expected to contain the following fields:
 
 ##### viewOffset (Object, optional)
 
-Override the internal view offset. By default, `LogViewer` is a stateful component
-which stores the latest camera state internally. Supply these props if you wish to use it as a
-stateless component. The value is expected to contain the following fields:
+Override the internal view offset. By default, `LogViewer` is a stateful component which stores the
+latest camera state internally. Supply these props if you wish to use it as a stateless component.
+The value is expected to contain the following fields:
 
 - `x` (Number) - horizontal offset of the tracked object (car) from the map center, in screen pixels
 - `y` (Number) - vertical offset of the tracked object (car) from the map center, in screen pixels
@@ -129,9 +129,8 @@ See [Use Alternative State Manager](/docs/developer-guide/state-management.md) f
 Callback when the view state changes. Will be called with the following parameters:
 
 - `newState` (Object)
-  + `state.viewState` (Object) - descriptor of the new view state.
-  + `state.viewOffset` (Object) - descriptor of the new view offset.
-
+  - `state.viewState` (Object) - descriptor of the new view state.
+  - `state.viewOffset` (Object) - descriptor of the new view offset.
 
 ##### onSelectObject (Function, optional)
 
@@ -171,8 +170,8 @@ See [Use Alternative State Manager](/docs/developer-guide/state-management.md) f
 
 ##### onObjectStateChange (Function, optional)
 
-Callback when some object state (e.g. whether they are selected) changes. Will receive a single parameter `objectStates`.
-
+Callback when some object state (e.g. whether they are selected) changes. Will receive a single
+parameter `objectStates`.
 
 ##### getTransformMatrix (Function, optional)
 
