@@ -1,7 +1,5 @@
 # PlaybackControl (React Component)
 
-_Uber Confidential Information_
-
 Renders a playback control for a XVIZ log.
 
 ```jsx
@@ -78,16 +76,20 @@ options, plus the following:
 
 ##### onTimeChange (Function, optional)
 
-Callback when the timestamp updates. This can be triggered by the animation playing, or the user clicked somewhere on the timeline. Will receive the following parameters:
+Callback when the timestamp updates. This can be triggered by the animation playing, or the user
+clicked somewhere on the timeline. Will receive the following parameters:
 
 - `timestamp` (Number)
 
-If the callback returns `true`, the event is considered "handled" and prevents the default behavior (log frame update).
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior
+(log frame update).
 
 ##### onLookAheadChange (Function, optional)
 
-Callback when the look ahead updates. This is triggered by the user manipulating the look ahead slider. Will receive the following parameters:
+Callback when the look ahead updates. This is triggered by the user manipulating the look ahead
+slider. Will receive the following parameters:
 
 - `lookAhead` (Number)
 
-If the callback returns `true`, the event is considered "handled" and prevents the default behavior (log frame update).
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior
+(log frame update).

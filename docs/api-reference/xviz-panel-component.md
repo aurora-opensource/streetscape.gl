@@ -33,5 +33,5 @@ All of the `XVIZPanel` properties, and the following:
 ##### UIConfig (Object)
 
 A Declarative UI
-[Panel](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#panels)
+[Panel](https://github.com/uber/xviz/blob/master/docs/declarative-ui/layout-elements.md#Panels)
 descriptor.

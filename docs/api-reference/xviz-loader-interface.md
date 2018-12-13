@@ -1,7 +1,5 @@
 # XVIZLoaderInterface
 
-_Uber Confidential Information_
-
 An interface that handles the loading and synchronization of a log.
 
 ## Members

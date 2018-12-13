@@ -1,7 +1,5 @@
 # XVIZStreamLoader
 
-_Uber Confidential Information_
-
 Loads a streamed XVIZ log using WebSocket. Implements
 [XVIZLoaderInterface](/docs/api-reference/xviz-loader-interface.md).
 

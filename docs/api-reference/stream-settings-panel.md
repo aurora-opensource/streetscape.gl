@@ -1,7 +1,5 @@
 # StreamSettingsPanel (React Component)
 
-_Uber Confidential Information_
-
 Renders a stream settings editor.
 
 ```jsx
@@ -27,11 +25,11 @@ options, plus the following:
   - `theme` (Object) - the current theme
   - `type` (String) - the XVIZ primitive type of the current stream
 
-
 ##### onSettingsChange (Function, optional)
 
 Callback when the user changes the stream settings. Will receive the following parameters:
 
 - `settings` (Object)
 
-If the callback returns `true`, the event is considered "handled" and prevents the default behavior (log frame update)
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior
+(log frame update)

@@ -1,7 +1,7 @@
 # XVIZMetricComponent (React Component)
 
 The base component for rendering a Declarative UI
-[metric](https://github.com/uber/xviz/blob/master/docs/protocol-schema/declarative-ui.md#metric)
+[metric](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Metric)
 component.
 
 > Do not use this component directly unless implementing your own UI component. See

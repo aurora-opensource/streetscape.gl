@@ -1,7 +1,5 @@
 # XVIZPanel (React Component)
 
-_Uber Confidential Information_
-
 Renders a XVIZ panel from a Declarative UI
 [Panel](https://github.com/uber/xviz/blob/master/docs/declarative-ui/layout-elements.md#Panels)
 definition.
@@ -32,7 +30,8 @@ Custom CSS overrides. May contain the following keys:
 - `plot`: passed to [XvizPlotComponent](/docs/api-reference/xviz-plot-component.md)'s `style` prop
 - `table` and `treetable`: passed to
   [XvizTableComponent](/docs/api-reference/xviz-table-component.md)'s `style` prop
-- `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video-component.md)'s `style` prop
+- `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video-component.md)'s `style`
+  prop
 
 ##### components (Object, optional)
 
