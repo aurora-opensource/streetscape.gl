@@ -14,7 +14,7 @@ AVS focuses on gaps where we see the most need compared to existing tools.
 
 ## Components of AVS
 
-### [XVIZ](/docs/avs/xviz.md)
+### [XVIZ](https://github.com/uber/xviz/blob/master/docs/README.md)
 
 XVIZ is a protocol for describing visual and metric data to provide a state view of the autonomous
 system as well as the environment.
@@ -22,7 +22,7 @@ system as well as the environment.
 XVIZ also defines a protocol for communicating with a server to control and configure which data is
 sent.
 
-### [streetscape.gl](/docs/avs/streetscape.gl.md)
+### [streetscape.gl](/docs/README.md)
 
 streetscape.gl is our React Component Toolkit that powers the web applications provided as part of
 AVS.
