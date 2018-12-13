@@ -165,10 +165,6 @@ const ButtonContainer = styled.div`
   `};
 `;
 
-const GithubLink = styled.span`
-  margin-right: 8px;
-`;
-
 export default class Hero extends PureComponent {
   state = {
     window: window.innerWidth,
@@ -213,13 +209,8 @@ export default class Hero extends PureComponent {
               <LinkButton large href={DEMO_LINK}>
                 Try demo
               </LinkButton>
-              <LinkButton
-                large
-                outlineDark
-                href="https://github.com/uber/streetscape.gl"
-                style={{marginLeft: '5px'}}
-              >
-                <GithubLink className={'icon-github'} /> Github
+              <LinkButton large outlineDark href="#avs" style={{marginLeft: '5px'}}>
+                About AVS
               </LinkButton>
             </ButtonContainer>
           </StyledCaption>

@@ -27,14 +27,16 @@ import {Switch, Route, Redirect} from 'react-router';
 import Header from './header';
 import Home from './home';
 import Gallery from './gallery';
+import MarkdownPage from './markdown-page';
 
-import {avsDocPages, xvizDocPages, streetscapeDocPages} from '../contents/pages';
+import {aboutPage, xvizDocPages, streetscapeDocPages} from '../contents/pages';
 
 const GlobalStyleDiv = styled.div`
   font-family: ff-clan-web-pro, 'Helvetica Neue', Helvetica, sans-serif;
   font-weight: 400;
   font-size: 0.875em;
   line-height: 1.71429;
+  padding-top: 64px;
 
   *,
   *:before,
@@ -65,7 +67,7 @@ class App extends Component {
         <Header />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/avs">{props => <Gallery {...props} pages={avsDocPages} />}</Route>
+          <Route path="/avs">{props => <MarkdownPage {...props} page={aboutPage} />}</Route>
           <Route path="/xviz">{props => <Gallery {...props} pages={xvizDocPages} />}</Route>
           <Route path="/streetscape.gl">
             {props => <Gallery {...props} pages={streetscapeDocPages} />}

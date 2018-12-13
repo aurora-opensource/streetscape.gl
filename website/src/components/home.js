@@ -43,7 +43,7 @@ const SECTION_CONTENT = {
 };
 
 const Container = styled.div`
-  margin-top: 32px;
+  margin-top: -64px;
 `;
 
 export default class Home extends PureComponent {
