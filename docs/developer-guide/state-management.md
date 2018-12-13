@@ -97,7 +97,7 @@ import React from 'react';
 import {PlaybackControl} from 'streetscape.gl';
 
 class CustomPlaybackControl extends React.PureComponent {
-  _onTimeChange(timestamp) {
+  _onSeek(timestamp) {
     const {log, loopStart, loopEnd} = this.props;
     // Do not play beyond the designated range
     if (timestamp > loopEnd) {
@@ -113,7 +113,7 @@ class CustomPlaybackControl extends React.PureComponent {
     return (
       <PlaybackControl
         log={this.props.log}
-        onTimeChange={this._onTimeChange}
+        onSeek={this._onSeek}
       />;
     );
   }
