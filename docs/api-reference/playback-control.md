@@ -75,3 +75,19 @@ options, plus the following:
 - `lookAheadSlider` (Object) - the look ahead slider. See
   [styling a slider](https://github.com/uber-web/monochrome/blob/master/src/shared/slider/README.md#styling).
 - `lookAheadTimestamp` (Object|Function) - the timestamp showing the value of the look ahead slider.
+
+##### onTimeChange (Function, optional)
+
+Callback when the timestamp updates. This can be triggered by the animation playing, or the user clicked somewhere on the timeline. Will receive the following parameters:
+
+- `timestamp` (Number)
+
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior (log frame update).
+
+##### onLookAheadChange (Function, optional)
+
+Callback when the look ahead updates. This is triggered by the user manipulating the look ahead slider. Will receive the following parameters:
+
+- `lookAhead` (Number)
+
+If the callback returns `true`, the event is considered "handled" and prevents the default behavior (log frame update).
