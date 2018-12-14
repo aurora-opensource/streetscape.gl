@@ -14,22 +14,58 @@ const TIME_SCALES = {
 
 class PlaybackControl extends PureComponent {
   static propTypes = {
-    ...DualPlaybackControl.propTypes,
-    onTimeChange: PropTypes.func,
+    // from log
+    timestamp: PropTypes.number,
+    lookAhead: PropTypes.number,
+    startTime: PropTypes.number,
+    endTime: PropTypes.number,
+    bufferRange: PropTypes.array,
+
+    // state override
+    isPlaying: PropTypes.bool,
+
+    // config
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    style: PropTypes.object,
+    compact: PropTypes.bool,
+    className: PropTypes.string,
+    step: PropTypes.number,
+    padding: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    tickSpacing: PropTypes.number,
+    markers: PropTypes.arrayOf(PropTypes.object),
+    formatTick: PropTypes.func,
+    formatTimestamp: PropTypes.func,
+    // dual playback control config
+    maxLookAhead: PropTypes.number,
+    formatLookAhead: PropTypes.func,
+
+    // callbacks
+    onPlay: PropTypes.func,
+    onPause: PropTypes.func,
+    onSeek: PropTypes.func,
     onLookAheadChange: PropTypes.func
   };
 
-  static defaultProps = {
-    ...DualPlaybackControl.defaultProps,
-    onTimeChange: () => {},
-    onLookAheadChange: () => {}
-  };
+  static defaultProps = DualPlaybackControl.defaultProps;
 
   state = {
     isPlaying: false,
-    lastUpdate: -1,
     timeScale: TIME_SCALES[getXVIZConfig().TIMESTAMP_FORMAT] || 1
   };
+
+  componentWillReceiveProps(nextProps) {
+    if ('isPlaying' in nextProps) {
+      this.setState({isPlaying: Boolean(nextProps.isPlaying)});
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const {isPlaying} = this.state;
+    if (isPlaying && prevState.isPlaying !== isPlaying) {
+      this._lastAnimationUpdate = Date.now();
+      this._animationFrame = window.requestAnimationFrame(this._animate);
+    }
+  }
 
   componentWillUnmount() {
     if (this._animationFrame) {
@@ -38,14 +74,16 @@ class PlaybackControl extends PureComponent {
   }
 
   _animationFrame = null;
+  _lastAnimationUpdate = -1;
 
   _onPlay = () => {
-    this.setState({isPlaying: true, lastUpdate: Date.now()});
-    this._animationFrame = window.requestAnimationFrame(this._animate);
+    this.props.onPlay();
+    this.setState({isPlaying: true});
   };
 
   _onPause = () => {
-    this.setState({isPlaying: false, lastUpdate: -1});
+    this.props.onPause();
+    this.setState({isPlaying: false});
   };
 
   _onSeek = timestamp => {
@@ -57,8 +95,8 @@ class PlaybackControl extends PureComponent {
   };
 
   _onTimeChange = timestamp => {
-    const {log, onTimeChange} = this.props;
-    if (!onTimeChange(timestamp) && log) {
+    const {log, onSeek} = this.props;
+    if (!onSeek(timestamp) && log) {
       log.seek(timestamp);
     }
   };
@@ -74,7 +112,8 @@ class PlaybackControl extends PureComponent {
     if (this.state.isPlaying) {
       const now = Date.now();
       const {startTime, endTime, bufferRange, timestamp} = this.props;
-      const {lastUpdate, timeScale} = this.state;
+      const {timeScale} = this.state;
+      const lastUpdate = this._lastAnimationUpdate;
       const {PLAYBACK_FRAME_RATE} = getXVIZSettings();
 
       // avoid skipping frames - cap delta at resolution
@@ -93,7 +132,7 @@ class PlaybackControl extends PureComponent {
         this._onTimeChange(newTimestamp);
       }
 
-      this.setState({lastUpdate: now});
+      this._lastAnimationUpdate = now;
       this._animationFrame = window.requestAnimationFrame(this._animate);
     }
   };

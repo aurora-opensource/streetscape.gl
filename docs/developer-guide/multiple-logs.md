@@ -91,7 +91,7 @@ update both logs:
 import {PlaybackControl, StreamSettingsPanel} from 'streetscape.gl';
 
 class App extends React.Component {
-  _onTimeChange(timestamp) {
+  _onSeek(timestamp) {
     logA.seek(timestamp);
     logB.seek(timestamp);
   }
@@ -118,7 +118,7 @@ class App extends React.Component {
         </div>
         <PlaybackControl
           log={logA}
-          onTimeChange={this._onTimeChange}
+          onSeek={this._onSeek}
           onLookAheadChange={this._onLookAheadChange}
         />
         <StreamSettingsPanel log={logA} onSettingsChange={this._onSettingsChange} />
