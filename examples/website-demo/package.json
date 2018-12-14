@@ -5,8 +5,8 @@
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
     "build-clean": "rm -rf dist && mkdir dist",
-    "build-copy": "cp -r assets/ index.html dist",
-    "build-script": "NODE_ENV=production webpack --env.prod=true",
+    "build-copy": "cp -r assets dist && cp index.html dist",
+    "build-script": "NODE_ENV=production webpack  --env.local --env.prod",
     "build": "npm run build-clean && npm run build-script && npm run build-copy"
   },
   "dependencies": {

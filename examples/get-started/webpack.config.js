@@ -51,11 +51,11 @@ module.exports = env => {
   if (env) {
     // This line enables bundling against src in this repo rather than installed module
     config = require('../webpack.config.local')(config)(env);
+    // This switch between streaming and static file loading
+    config.plugins = config.plugins.concat([
+      new webpack.DefinePlugin({__IS_STREAMING__: JSON.stringify(Boolean(env.stream))})
+    ]);
   }
 
-  if (env && env.stream) {
-    // This switch between streaming and static file loading
-    config.plugins = config.plugins.concat([new webpack.DefinePlugin({__IS_STREAMING__: 'true'})]);
-  }
   return config;
 };
