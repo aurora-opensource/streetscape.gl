@@ -14,6 +14,13 @@ import {PlaybackControl} from 'streetscape.gl';
 
 The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) object.
 
+##### isPlaying (Boolean, optional)
+
+By default, the `PlaybackControl` is a stateful component that stores the play/pause state internally. Supply this prop if you want to override it.
+
+
+### Render Options
+
 ##### width (String|Number, optional)
 
 Width of the control. Default `100%`.
@@ -74,7 +81,17 @@ options, plus the following:
   [styling a slider](https://github.com/uber-web/monochrome/blob/master/src/shared/slider/README.md#styling).
 - `lookAheadTimestamp` (Object|Function) - the timestamp showing the value of the look ahead slider.
 
-##### onTimeChange (Function, optional)
+### Callbacks
+
+##### onPlay (Function, optional)
+
+Callback when the user clicks the play button.
+
+##### onPause (Function, optional)
+
+Callback when the user clicks the pause button.
+
+##### onSeek (Function, optional)
 
 Callback when the timestamp updates. This can be triggered by the animation playing, or the user
 clicked somewhere on the timeline. Will receive the following parameters:
