@@ -61,13 +61,13 @@ export const HERO_IMAGES_SCALED = [
 export const SHOWCASE_ITEMS = [
   {
     title: 'Kitty',
-    image: getImageUrl('demo-kitti.gif'),
+    image: getImageUrl('demo-kitti.png'),
     description:
       'Kitti dataset is an open sourced autonomous driving log data including vehicle location, orientation, and metrics, objects classified with bounds (tracklets), camera imagery, and lidar scans'
   },
   {
     title: 'NuTonomy',
-    image: getImageUrl('demo-nutonomy.gif'),
+    image: getImageUrl('demo-nutonomy.png'),
     description:
       'The nuScenes dataset is a public large-scale dataset for autonomous driving provided by nuTonomy-Aptiv.'
   }
