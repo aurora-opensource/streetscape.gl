@@ -3,6 +3,7 @@ import test from 'tape-catch';
 
 import {setXVIZConfig, getXVIZSettings, setXVIZSettings, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {XVIZStreamLoader} from 'streetscape.gl';
+import {updateSocketRequestParams} from 'streetscape.gl/loaders/xviz-stream-loader';
 
 /* eslint-disable camelcase */
 class MockSocket {
@@ -32,6 +33,139 @@ class MockSocket {
     }
   }
 }
+
+const SAMPLE_METADATA = {start_time: 0, end_time: 30};
+const TEST_CASES = [
+  {
+    title: 'no buffer length',
+    metadata: SAMPLE_METADATA,
+    timestamp: 0,
+    bufferLength: null,
+    bufferRange: [],
+    result: {
+      startTimestamp: 0,
+      endTimestamp: 30,
+      bufferStart: 0,
+      bufferEnd: 30
+    }
+  },
+  {
+    title: 'big buffer length',
+    metadata: SAMPLE_METADATA,
+    timestamp: 0,
+    bufferLength: 40,
+    bufferRange: [],
+    result: {
+      startTimestamp: 0,
+      endTimestamp: 30,
+      bufferStart: 0,
+      bufferEnd: 30
+    }
+  },
+  {
+    title: 'initial buffer',
+    metadata: SAMPLE_METADATA,
+    timestamp: 0,
+    bufferLength: 10,
+    bufferRange: [],
+    result: {
+      startTimestamp: 0,
+      endTimestamp: 10,
+      bufferStart: 0,
+      bufferEnd: 10
+    }
+  },
+  {
+    title: 'incremental seek',
+    metadata: SAMPLE_METADATA,
+    timestamp: 1,
+    bufferLength: 10,
+    bufferRange: [[0, 10]],
+    result: null
+  },
+  {
+    title: 'incremental seek',
+    metadata: SAMPLE_METADATA,
+    timestamp: 6,
+    bufferLength: 10,
+    bufferRange: [[0, 10]],
+    result: {
+      startTimestamp: 10,
+      endTimestamp: 11,
+      bufferStart: 1,
+      bufferEnd: 11
+    }
+  },
+  {
+    title: 'jump forward',
+    metadata: SAMPLE_METADATA,
+    timestamp: 12,
+    bufferLength: 10,
+    bufferRange: [[1, 11]],
+    result: {
+      startTimestamp: 11,
+      endTimestamp: 17,
+      bufferStart: 7,
+      bufferEnd: 17
+    }
+  },
+  {
+    title: 'jump to end',
+    metadata: SAMPLE_METADATA,
+    timestamp: 30,
+    bufferLength: 10,
+    bufferRange: [[7, 17]],
+    result: {
+      startTimestamp: 25,
+      endTimestamp: 30,
+      bufferStart: 25,
+      bufferEnd: 30
+    }
+  },
+  {
+    title: 'jump backward',
+    metadata: SAMPLE_METADATA,
+    timestamp: 8,
+    bufferLength: 10,
+    bufferRange: [[7, 17]],
+    result: {
+      startTimestamp: 3,
+      endTimestamp: 7,
+      bufferStart: 3,
+      bufferEnd: 13
+    }
+  },
+  {
+    title: 'no start time - initial buffer',
+    metadata: {},
+    timestamp: 0,
+    bufferLength: 10,
+    bufferRange: [],
+    result: {
+      startTimestamp: -5,
+      endTimestamp: 5,
+      bufferStart: -5,
+      bufferEnd: 5
+    }
+  }
+];
+
+test('updateSocketRequestParams', t => {
+  TEST_CASES.forEach(testCase => {
+    t.deepEquals(
+      updateSocketRequestParams(
+        testCase.timestamp,
+        testCase.metadata,
+        testCase.bufferLength,
+        testCase.bufferRange
+      ),
+      testCase.result,
+      testCase.title
+    );
+  });
+
+  t.end();
+});
 
 test('XVIZStreamLoader#connect, seek', t => {
   setXVIZConfig({});

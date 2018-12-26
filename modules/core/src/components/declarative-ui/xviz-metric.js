@@ -130,10 +130,18 @@ export class XVIZMetricComponent extends PureComponent {
   }
 }
 
-const getLogState = log => ({
-  currentTime: log.getCurrentTime(),
-  timeSeries: log.getTimeSeries(),
-  timeDomain: log.getTimeDomain()
-});
+const getLogState = log => {
+  const bufferRange = log.getBufferRange();
+  const timeDomain = bufferRange.length && [
+    bufferRange[0][0],
+    bufferRange[bufferRange.length - 1][1]
+  ];
+
+  return {
+    currentTime: log.getCurrentTime(),
+    timeSeries: log.getTimeSeries(),
+    timeDomain
+  };
+};
 
 export default connectToLog({getLogState, Component: XVIZMetricComponent});

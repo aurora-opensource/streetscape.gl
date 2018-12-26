@@ -156,12 +156,6 @@ export default class XVIZLoaderInterface {
     }
   );
 
-  getTimeDomain = createSelector(
-    this,
-    [this.getLogStartTime, this.getLogEndTime],
-    (logStartTime, logEndTime) => [logStartTime, logEndTime]
-  );
-
   // TODO add declare ui metadata
   getTimeSeries = createSelector(this, [this.getMetadata, this.getStreams], (metadata, streams) =>
     getTimeSeries({metadata, streams})

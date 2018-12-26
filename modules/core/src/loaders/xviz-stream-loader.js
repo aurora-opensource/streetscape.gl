@@ -60,10 +60,14 @@ function getSocketRequestParams(options) {
 // Calculate based on current XVIZStreamBuffer data
 // Returns null if update is not needed
 export function updateSocketRequestParams(timestamp, metadata, bufferLength, bufferRange) {
-  const {start_time: logStartTime, end_time: logEndTime} = metadata;
+  const {start_time: logStartTime = -Infinity, end_time: logEndTime = Infinity} = metadata;
   const totalDuration = logEndTime - logStartTime;
   const chunkSize = bufferLength || totalDuration;
 
+  if (!Number.isFinite(totalDuration)) {
+    // If there is no start/end time in metadata, buffer length must be supplied
+    assert(bufferLength, 'bufferLength is invalid');
+  }
   if (chunkSize >= totalDuration) {
     // Unlimited buffer
     return {
@@ -288,7 +292,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
           // already has metadata
           return;
         }
-        this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
+        this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
         this._setMetadata(message);
         this.emit('ready', message);
 
