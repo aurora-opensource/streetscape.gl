@@ -128,7 +128,7 @@ export default class XVIZLoaderInterface {
   }
 
   getLogStartTime = createSelector(this, this.getMetadata, metadata => {
-    return metadata && metadata.start_time + getXVIZSettings().TIME_WINDOW;
+    return metadata && metadata.start_time && metadata.start_time + getXVIZSettings().TIME_WINDOW;
   });
 
   getLogEndTime = createSelector(this, this.getMetadata, metadata => {
@@ -209,6 +209,8 @@ export default class XVIZLoaderInterface {
     this.set('streamSettings', metadata.streams);
     const timestamp = this.get('timestamp');
     const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
-    this.seek(newTimestamp);
+    if (Number.isFinite(newTimestamp)) {
+      this.seek(newTimestamp);
+    }
   }
 }

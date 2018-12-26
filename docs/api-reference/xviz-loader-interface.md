@@ -99,10 +99,6 @@ Returns the end timestamp of the log.
 
 Returns the log [frame](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-synchronizer.md) at the current timestamp.
 
-##### getTimeDomain()
-
-Returns `[start, end]` timestamps of the log.
-
 ##### getTimeSeries()
 
 Returns all [time_series](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set) streams.
