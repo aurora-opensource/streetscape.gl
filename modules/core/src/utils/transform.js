@@ -4,6 +4,7 @@ import {addMetersToLngLat} from 'viewport-mercator-project';
 
 import {COORDINATE} from '../constants';
 
+// keep in sync with core-3d-viewer.js
 const DEFAULT_ORIGIN = [0, 0, 0];
 
 export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransformMatrix) {
