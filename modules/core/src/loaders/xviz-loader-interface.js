@@ -127,6 +127,14 @@ export default class XVIZLoaderInterface {
     throw new Error('not implemented');
   }
 
+  getBufferStart() {
+    return this.getLogStartTime();
+  }
+
+  getBufferEnd() {
+    return this.getLogEndTime();
+  }
+
   getLogStartTime = createSelector(this, this.getMetadata, metadata => {
     return metadata && metadata.start_time && metadata.start_time + getXVIZSettings().TIME_WINDOW;
   });
@@ -155,10 +163,6 @@ export default class XVIZLoaderInterface {
       return null;
     }
   );
-
-  getTimeDomain() {
-    return [this.getLogStartTime(), this.getLogEndTime()];
-  }
 
   // TODO add declare ui metadata
   getTimeSeries = createSelector(this, [this.getMetadata, this.getStreams], (metadata, streams) =>

@@ -97,16 +97,19 @@ Returns the start timestamp of the log.
 
 Returns the end timestamp of the log.
 
+##### getBufferStart()
+
+Returns the start timestamps of the current buffer.
+
+##### getBufferEnd()
+
+Returns the end timestamps of the current buffer.
+
 ##### getCurrentFrame()
 
 Returns the log
 [frame](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-synchronizer.md) at the
 current timestamp.
-
-##### getTimeDomain()
-
-Returns `[start, end]` timestamps of the current log. Only includes a subset of the log if loading
-into a limited buffer.
 
 ##### getTimeSeries()
 

@@ -161,9 +161,12 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     return this.bufferRange;
   }
 
-  getTimeDomain() {
-    const {lastRequest} = this;
-    return lastRequest && [lastRequest.bufferStart, lastRequest.bufferEnd];
+  getBufferStart() {
+    return this.lastRequest && this.lastRequest.bufferStart;
+  }
+
+  getBufferEnd() {
+    return this.lastRequest && this.lastRequest.bufferEnd;
   }
 
   seek(timestamp) {
