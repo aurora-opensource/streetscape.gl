@@ -4,6 +4,8 @@ import {addMetersToLngLat} from 'viewport-mercator-project';
 
 import {COORDINATE} from '../constants';
 
+const DEFAULT_ORIGIN = [0, 0, 0];
+
 export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransformMatrix) {
   const {origin, transforms = {}, vehicleRelativeTransform} = frame;
   const {coordinate, transform, pose} = streamMetadata;
@@ -45,7 +47,7 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
 
   return {
     coordinateSystem,
-    coordinateOrigin: origin,
+    coordinateOrigin: origin || DEFAULT_ORIGIN,
     modelMatrix
   };
 }
