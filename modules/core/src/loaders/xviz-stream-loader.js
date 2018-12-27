@@ -3,10 +3,10 @@
 import assert from 'assert';
 import {
   parseStreamMessage,
-  getXVIZSettings,
   LOG_STREAM_MESSAGE,
   XVIZStreamBuffer,
-  StreamSynchronizer
+  StreamSynchronizer,
+  getXVIZConfig
 } from '@xviz/parser';
 import PromiseRetry from 'promise-retry';
 
@@ -16,6 +16,10 @@ import * as rangeUtils from '../utils/buffer-range';
 
 const DEFAULT_LOG_PROFILE = 'default';
 const DEFAULT_RETRY_ATTEMPTS = 3;
+const DEFAULT_BUFFER_LENGTH = {
+  seconds: 30,
+  milliseconds: 30000
+};
 
 function getSocketRequestParams(options) {
   const {
@@ -23,7 +27,7 @@ function getSocketRequestParams(options) {
     logProfile = DEFAULT_LOG_PROFILE,
     timestamp,
     serverConfig,
-    bufferLength = null
+    bufferLength = DEFAULT_BUFFER_LENGTH[getXVIZConfig().TIMESTAMP_FORMAT]
   } = options;
 
   // set duration overrides & defaults
@@ -157,16 +161,18 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     return this.bufferRange;
   }
 
+  getTimeDomain() {
+    const {lastRequest} = this;
+    return lastRequest && [lastRequest.bufferStart, lastRequest.bufferEnd];
+  }
+
   seek(timestamp) {
     super.seek(timestamp);
 
     // use clamped/rounded timestamp
     timestamp = this.getCurrentTime();
 
-    if (
-      this.lastRequest &&
-      this.streamBuffer.isInBufferRange(timestamp - getXVIZSettings().TIME_WINDOW)
-    ) {
+    if (this.lastRequest && this.streamBuffer.isInBufferRange(timestamp)) {
       // Already loading
       return;
     }

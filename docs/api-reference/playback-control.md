@@ -16,8 +16,8 @@ The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md
 
 ##### isPlaying (Boolean, optional)
 
-By default, the `PlaybackControl` is a stateful component that stores the play/pause state internally. Supply this prop if you want to override it.
-
+By default, the `PlaybackControl` is a stateful component that stores the play/pause state
+internally. Supply this prop if you want to override it.
 
 ### Render Options
 

@@ -45,7 +45,9 @@ Parameters:
 
 ##### setLookAhead(lookAhead) {
 
-Set the look ahead time. This is used to retrieve a slice from the [future states](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set) for display.
+Set the look ahead time. This is used to retrieve a slice from the
+[future states](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set)
+for display.
 
 Parameters:
 
@@ -58,8 +60,8 @@ the existing settings.
 
 Parameters:
 
-- `settings` (Object) - a stream name to boolean map that indicates whether a stream should be included in the 3D scene.
-
+- `settings` (Object) - a stream name to boolean map that indicates whether a stream should be
+  included in the 3D scene.
 
 ### Getters
 
@@ -97,16 +99,26 @@ Returns the end timestamp of the log.
 
 ##### getCurrentFrame()
 
-Returns the log [frame](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-synchronizer.md) at the current timestamp.
+Returns the log
+[frame](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-synchronizer.md) at the
+current timestamp.
+
+##### getTimeDomain()
+
+Returns `[start, end]` timestamps of the current log. Only includes a subset of the log if loading
+into a limited buffer.
 
 ##### getTimeSeries()
 
-Returns all [time_series](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set) streams.
+Returns all
+[time_series](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set)
+streams.
 
 ##### getImageFrames()
 
-Returns all [image](https://github.com/uber/xviz/blob/master/docs/protocol-schema/geometry-primitives.md#image-primitive) streams.
-
+Returns all
+[image](https://github.com/uber/xviz/blob/master/docs/protocol-schema/geometry-primitives.md#image-primitive)
+streams.
 
 ## Implementations
 

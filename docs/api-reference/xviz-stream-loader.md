@@ -34,7 +34,7 @@ new XVIZStreamLoader({
 - `timestamp` (Number, optional) - the timestamp to start loading at
 - `bufferLength` (Number, optional) - the length of the buffer to keep in memory. Uses the same unit
   as timestamp. If specified, older frames may be discarded during playback, to avoid crashes due to
-  excessive memory usage.
+  excessive memory usage. Default 30 seconds.
 - `worker` (String|Boolean, optional) - Use a worker for message processing. Default `true`.
   - Type `Boolean`: enable/disable default worker
   - Type `String`: the worker URL to use
