@@ -17,6 +17,7 @@ import {resolveCoordinateTransform} from '../../utils/transform';
 import {mergeXVIZStyles} from '../../utils/style';
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 
+const DEFAULT_ORIGIN = [0, 0, 0];
 const CAR_DATA = [[0, 0, 0]];
 const LIGHT_SETTINGS = {
   lightsPosition: [0, 0, 5000, -100, 40, 1000],
@@ -180,7 +181,7 @@ export default class Core3DViewer extends PureComponent {
         new MeshLayer({
           id: 'car',
           coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-          coordinateOrigin: origin,
+          coordinateOrigin: origin || DEFAULT_ORIGIN,
           // Adjust for car center position relative to GPS/IMU
           modelMatrix: vehicleRelativeTransform.clone().translate(car.origin || DEFAULT_CAR.origin),
           mesh: carMesh,
@@ -298,7 +299,7 @@ export default class Core3DViewer extends PureComponent {
   }
 
   render() {
-    const {mapboxApiAccessToken, mapStyle, viewMode, showMap} = this.props;
+    const {mapboxApiAccessToken, frame, mapStyle, viewMode, showMap} = this.props;
 
     return (
       <DeckGL
@@ -313,15 +314,16 @@ export default class Core3DViewer extends PureComponent {
         onLayerClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
       >
-        {showMap && (
-          <StaticMap
-            reuseMap={true}
-            attributionControl={false}
-            mapboxApiAccessToken={mapboxApiAccessToken}
-            mapStyle={mapStyle}
-            visible={!viewMode.firstPerson}
-          />
-        )}
+        {frame.origin &&
+          showMap && (
+            <StaticMap
+              reuseMap={true}
+              attributionControl={false}
+              mapboxApiAccessToken={mapboxApiAccessToken}
+              mapStyle={mapStyle}
+              visible={!viewMode.firstPerson}
+            />
+          )}
 
         {this.props.children}
       </DeckGL>
