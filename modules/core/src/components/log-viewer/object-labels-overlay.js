@@ -106,7 +106,9 @@ export default class ObjectLabelsOverlay extends Component {
 
     const trackingPoint = this._getTrackingPoint(object);
     // compensate for camera offset
-    trackingPoint[2] -= frame.origin[2];
+    if (frame.origin) {
+      trackingPoint[2] -= frame.origin[2];
+    }
 
     return (
       <PerspectivePopup
