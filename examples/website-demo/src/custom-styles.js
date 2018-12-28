@@ -161,11 +161,22 @@ export const XVIZ_PANEL_STYLE = {
     tooltip: TOOLTIP_STYLE
   },
   video: {
+    wrapper: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      paddingTop: 26
+    },
     selector: {
       wrapper: {
         position: 'absolute',
+        width: 140,
         top: 0,
-        left: 0
+        left: '50%',
+        transform: 'translateX(-50%)'
+      },
+      border: {
+        border: 'none'
       }
     }
   }
