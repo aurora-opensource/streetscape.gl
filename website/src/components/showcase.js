@@ -24,33 +24,31 @@ import styled from 'styled-components';
 
 import {SHOWCASE_ITEMS} from '../contents/content';
 import {media} from '../styles';
-import Carousel from './common/carousel';
-import Nav from './common/nav';
+import {VerticalCard} from './common/card';
+import StaggeredScrollAnimation from './common/staggered-scroll-animation';
 
-const CarouselContainer = styled.div`
-  height: 360px;
+const CardsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: ${props => props.theme.margins.large};
   ${media.palm`
-    height: 240px;
-  `} ${media.desk`
-    height: 480px;
+    display: block;
   `};
 `;
 
-const Image = styled.img`
-  width: 100%;
-  height: 100%;
-  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.25);
-  object-fit: scale-down;
-
-  width: 420px;
-  height: 320px;
-
+const StyledCardContainer = styled.div`
+  display: block;
+  margin: ${props => props.theme.margins.small};
+  color: black;
+  cursor: pointer;
+  transition: transform 350ms;
+  :hover {
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
   ${media.palm`
-    width: 300px;
-    height: 200px;
-  `} ${media.desk`
-    width: 560px;
-    height: 420px;
+    margin: 0px;
+    margin-bottom: ${props => props.theme.margins.small}
   `};
 `;
 
@@ -62,21 +60,18 @@ class Showcase extends PureComponent {
   render() {
     return (
       <div>
-        <CarouselContainer>
-          <Carousel
-            selectedIndex={this.state.selectedIndex}
-            onChange={i => this.setState({selectedIndex: i})}
-          >
-            {SHOWCASE_ITEMS.map(({image}, i) => (
-              <Image key={`showcase-image-${i}`} src={image} />
-            ))}
-          </Carousel>
-        </CarouselContainer>
-        <Nav
-          items={SHOWCASE_ITEMS}
-          selectedIndex={this.state.selectedIndex}
-          onClick={i => this.setState({selectedIndex: i})}
-        />
+        <StaggeredScrollAnimation Container={CardsContainer}>
+          {SHOWCASE_ITEMS.map(({title, description, image}, i) => (
+            <StyledCardContainer key={`example-${i}`}>
+              <VerticalCard
+                isDark={true}
+                title={title}
+                description={description || title}
+                image={image}
+              />
+            </StyledCardContainer>
+          ))}
+        </StaggeredScrollAnimation>
       </div>
     );
   }
