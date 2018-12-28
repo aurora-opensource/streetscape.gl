@@ -195,14 +195,13 @@ export default class Hero extends PureComponent {
           <Logo src={STREETSCAPE_GL_LOGO} />
           <StyledCaption>
             <div className="sg-home__caption__subtitle">
-              Make an leap with your autonomous vehicle data
+              Make a leap with your autonomous and robotics data
             </div>
             <div className="sg-home__caption__description">
-              <span>streetscape.gl is a powerful </span>
-              <span className="t-bold">open source </span>
-              <span>web-based 3D visualization framework for </span>
-              <span className="t-bold">full-stack </span>
-              <span>autonomous development data sets.</span>
+              <span>
+                AVS is a fast, powerful, web-based 3D visualization toolkit for building
+                applications from your autonomous and robotics data.
+              </span>
             </div>
             <ButtonContainer>
               <LinkButton large href={DEMO_LINK}>
