@@ -149,7 +149,31 @@ export const STREAM_SETTINGS_STYLE = {
   })
 };
 
-export const FLOAT_PANEL_STYLE = {};
+export const LOG_VIEWER_STYLE = {
+  objectLabelColor: '#D0D0D1',
+  objectLabelTipSize: props => (props.isSelected ? 30 : 8),
+  objectLabelTip: props => (props.isSelected ? null : {display: 'none'}),
+  objectLabelLine: props => (props.isSelected ? null : {display: 'none'}),
+  objectLabelBody: props => ({
+    borderRadius: 12,
+    padding: 8,
+    color: '#222',
+    background: props.isSelected ? '#F8F8F9' : '#D0D0D1'
+  }),
+
+  tooltip: {
+    background: 'rgba(0,0,0,0.9)',
+    '>div': {
+      marginTop: 4
+    }
+  }
+};
+
+export const FLOAT_PANEL_STYLE = {
+  wrapper: {
+    zIndex: 9999
+  }
+};
 
 export const XVIZ_PANEL_STYLE = {
   metric: {

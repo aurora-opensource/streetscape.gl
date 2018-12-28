@@ -11,7 +11,7 @@ import CameraPanel from './camera-panel';
 import Toolbar from './toolbar';
 
 import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR, LOGS} from './constants';
-import {UI_THEME, PLAYBACK_CONTROL_STYLE} from './custom-styles';
+import {UI_THEME, PLAYBACK_CONTROL_STYLE, LOG_VIEWER_STYLE} from './custom-styles';
 
 import './stylesheets/main.scss';
 
@@ -57,13 +57,29 @@ class Example extends PureComponent {
     this._onSettingsChange({viewOffset});
   };
 
-  _renderObjectLabel = ({id, object}) => {
+  _renderObjectLabel = ({id, object, isSelected}) => {
+    const {classes} = object.base;
+
+    if (!isSelected) {
+      let type = 'car';
+      if (classes.includes('Pedestrian')) {
+        type = 'pedestrian';
+      } else if (classes.includes('Cyclist')) {
+        type = 'bike';
+      }
+      return (
+        <div>
+          <i className={`icon-${type}`} />
+        </div>
+      );
+    }
+
     return (
       <div>
         <div>
           <b>id: {id.slice(-12)}</b>
         </div>
-        <div>{object.base.classes.join(' ')}</div>
+        <div>{classes.join(' ')}</div>
       </div>
     );
   };
@@ -79,12 +95,12 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           xvizStyles={XVIZ_STYLE}
+          style={LOG_VIEWER_STYLE}
           showTooltip={settings.showTooltip}
           viewMode={VIEW_MODE[settings.viewMode]}
           viewOffset={settings.viewOffset}
           onViewStateChange={this._onViewStateChange}
           renderObjectLabel={this._renderObjectLabel}
-          objectLabelColor="#fff"
         />
 
         <div id="timeline">
