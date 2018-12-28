@@ -139,7 +139,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
   _onMessage = message => {
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
-        this.set('logSynchronizer', new StreamSynchronizer(message.start_time, this.streamBuffer));
+        this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
         this._setMetadata(message);
         this.emit('ready', message);
         break;
