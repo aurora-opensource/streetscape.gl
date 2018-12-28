@@ -57,6 +57,10 @@ const DEFAULT_CAR = {
 
 const noop = () => {};
 
+function getStreamMetadata(metadata, streamName) {
+  return (metadata && metadata.streams && metadata.streams[streamName]) || {};
+}
+
 export default class Core3DViewer extends PureComponent {
   static propTypes = {
     // Props from loader
@@ -193,7 +197,9 @@ export default class Core3DViewer extends PureComponent {
     const featuresAndFutures = new Set(
       Object.keys(streams)
         .concat(Object.keys(lookAheads))
-        .filter(streamName => streamFilter(streamName) && streamSettings[streamName])
+        .filter(
+          streamName => streamFilter(streamName) && (!streamSettings || streamSettings[streamName])
+        )
     );
 
     return [
@@ -218,7 +224,7 @@ export default class Core3DViewer extends PureComponent {
           // Check lookAheads first because it will contain the selected futures
           // while streams would contain the full futures array
           const stream = lookAheads[streamName] || streams[streamName];
-          const streamMetadata = metadata.streams[streamName];
+          const streamMetadata = getStreamMetadata(metadata, streamName);
           const coordinateProps = resolveCoordinateTransform(
             frame,
             streamMetadata,
@@ -241,7 +247,7 @@ export default class Core3DViewer extends PureComponent {
 
               // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
-              zIndex: streamMetadata.primitive_type === 'polygon' ? 2 : 0,
+              zIndex: streamMetadata && streamMetadata.primitive_type === 'polygon' ? 2 : 0,
 
               // Selection props (app defined, not used by deck.gl)
               streamName
@@ -275,7 +281,7 @@ export default class Core3DViewer extends PureComponent {
         if (props.streamName) {
           // Use log data
           const stream = streams[props.streamName];
-          const streamMetadata = metadata.streams[props.streamName];
+          const streamMetadata = getStreamMetadata(metadata, props.streamName);
           Object.assign(
             props,
             resolveCoordinateTransform(frame, streamMetadata, getTransformMatrix),
