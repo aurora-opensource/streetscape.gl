@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 
 import {StaticMap} from 'react-map-gl';
 import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
-import {CubeGeometry} from 'luma.gl';
 
 import MeshLayer from '../../layers/mesh-layer/mesh-layer';
 import {XVIZStyleParser} from '@xviz/parser';
 
-import {loadOBJMesh} from '../../loaders/obj-loader';
 import XVIZLayer from '../../layers/xviz-layer';
 
 import {VIEW_MODE} from '../../constants';
@@ -17,23 +15,7 @@ import {resolveCoordinateTransform} from '../../utils/transform';
 import {mergeXVIZStyles} from '../../utils/style';
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 
-const DEFAULT_ORIGIN = [0, 0, 0];
-const CAR_DATA = [[0, 0, 0]];
-const LIGHT_SETTINGS = {
-  lightsPosition: [0, 0, 5000, -100, 40, 1000],
-  ambientRatio: 0.5,
-  diffuseRatio: 0.2,
-  specularRatio: 0.4,
-  lightsStrength: [1.0, 0.0, 1.0, 0.0],
-  numberOfLights: 2
-};
-const DEFAULT_CAR = {
-  mesh: new CubeGeometry(),
-  texture: null,
-  wireframe: false,
-  scale: 1,
-  origin: [0, 0, 0]
-};
+import {DEFAULT_ORIGIN, CAR_DATA, LIGHT_SETTINGS, DEFAULT_CAR} from './constants';
 
 const noop = () => {};
 
@@ -93,15 +75,8 @@ export default class Core3DViewer extends PureComponent {
     super(props);
 
     this.state = {
-      styleParser: this._getStyleParser(props),
-      carMesh: null
+      styleParser: this._getStyleParser(props)
     };
-
-    if (typeof props.car.mesh === 'string') {
-      loadOBJMesh(props.car.mesh).then(carMesh => this.setState({carMesh}));
-    } else {
-      this.state.carMesh = props.car.mesh || DEFAULT_CAR.mesh;
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -171,7 +146,7 @@ export default class Core3DViewer extends PureComponent {
     }
 
     const {streams, origin, lookAheads = {}, vehicleRelativeTransform} = frame;
-    const {styleParser, carMesh} = this.state;
+    const {styleParser} = this.state;
 
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
     const featuresAndFutures = new Set(
@@ -183,22 +158,25 @@ export default class Core3DViewer extends PureComponent {
     );
 
     return [
-      carMesh &&
-        new MeshLayer({
-          id: 'car',
-          coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
-          coordinateOrigin: origin || DEFAULT_ORIGIN,
-          // Adjust for car center position relative to GPS/IMU
-          modelMatrix: vehicleRelativeTransform.clone().translate(car.origin || DEFAULT_CAR.origin),
-          mesh: carMesh,
-          texture: car.texture || DEFAULT_CAR.texture,
-          sizeScale: car.scale || DEFAULT_CAR.scale,
-          data: CAR_DATA,
-          getPosition: d => d,
-          getColor: [160, 160, 160],
-          wireframe: car.wireframe || DEFAULT_CAR.wireframe,
-          lightSettings: LIGHT_SETTINGS
-        }),
+      new MeshLayer({
+        id: 'car',
+        coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+        coordinateOrigin: origin || DEFAULT_ORIGIN,
+        // Adjust for car center position relative to GPS/IMU
+        modelMatrix: vehicleRelativeTransform.clone().translate(car.origin || DEFAULT_CAR.origin),
+        mesh: car.mesh || DEFAULT_CAR.mesh,
+        texture: car.texture || DEFAULT_CAR.texture,
+        // Support number or array scales
+        getSize: d =>
+          Number.isFinite(car.scale)
+            ? [car.scale, car.scale, car.scale]
+            : car.scale || DEFAULT_CAR.scale,
+        data: CAR_DATA,
+        getPosition: d => d,
+        getColor: [160, 160, 160],
+        wireframe: car.wireframe || DEFAULT_CAR.wireframe,
+        lightSettings: LIGHT_SETTINGS
+      }),
       Array.from(featuresAndFutures)
         .map(streamName => {
           // Check lookAheads first because it will contain the selected futures

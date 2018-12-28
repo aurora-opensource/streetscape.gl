@@ -33,10 +33,18 @@ For more information, see
 
 Defines the car asset. May contain the following fields:
 
-- `mesh` (String) - path to a .OBJ file that is the car model
+- `mesh` (Object|Promise) - a descriptor of the car model. If supplied, must contain the following fields:
+  - `indices` (Uint16Array|Uint32Array)
+  - `positions` (Float32Array)
+  - `normals` (Float32Array)
+  - `texCoords` (Float32Array)
 - `texture` (String) - path to an image file that is the texture for the model
-- `scale` (Number) - size scale of the car
-- `origin` ([Number, Number, Number]) - offset of the model origin
+- `scale` (Number|[Number, Number, Number]) - size scale of the car relative to the mesh. If an array is supplied, it is interpreted as `[scale_x, scale_y, scale_z]`.
+- `origin` ([Number, Number, Number]) - offset of the model origin in meters.
+
+The x axis points from the front to the back of the car, the y axis points from the left to the right of the car, and the z axis is up.
+
+If not specified, `mesh` defaults to a nondescript car shape that measures 1m x 1m x 1m. To use the default mesh, one can set `scale` to `[length, width, height]` of the car in meters.
 
 ##### streamFilter (Array|String|Object|Function, optional)
 

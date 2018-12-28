@@ -1,3 +1,5 @@
+import loadOBJMesh from './utils/load-obj-mesh';
+
 /* eslint-disable camelcase */
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
@@ -7,7 +9,7 @@ export const MAP_STYLE = 'mapbox://styles/uberdata/cive485h000192imn6c6cc8fc';
 // OBJ model width 2073mm, length 4946mm
 // Volkswagen Passat: width 1820mm, length 4780mm
 export const CAR = {
-  mesh: 'assets/car.obj',
+  mesh: loadOBJMesh('assets/car.obj'),
   origin: [1.08, -0.32, 0],
   scale: 0.0009,
   wireframe: true

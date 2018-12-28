@@ -61,7 +61,10 @@ function getTextureFromData(gl, data, opts) {
 }
 
 function validateGeometryAttributes(attributes) {
-  assert(attributes.positions && attributes.normals && attributes.texCoords);
+  assert(attributes.positions && attributes.normals);
+  if (!attributes.texCoords) {
+    attributes.texCoords = {size: 2, constant: true, value: new Float32Array(2)};
+  }
 }
 
 /*
@@ -83,7 +86,7 @@ function getGeometry(data) {
 
 const DEFAULT_COLOR = [0, 0, 0, 255];
 const defaultProps = {
-  mesh: null,
+  mesh: {type: 'object', value: null, async: true},
   texture: null,
   sizeScale: {type: 'number', value: 1, min: 0},
   desaturate: {type: 'number', value: 0, min: 0},
@@ -96,7 +99,7 @@ const defaultProps = {
 
   getPosition: {type: 'accessor', value: x => x.position},
   getColor: {type: 'accessor', value: DEFAULT_COLOR},
-
+  getSize: {type: 'accessor', value: [1, 1, 1]},
   // yaw, pitch and roll are in degrees
   // https://en.wikipedia.org/wiki/Euler_angles
   getYaw: {type: 'accessor', value: d => d.yaw || 0},
@@ -122,6 +125,11 @@ export default class MeshLayer extends Layer {
         size: 2,
         accessor: 'getPosition',
         update: this.calculateInstancePositions64xyLow
+      },
+      instanceSizes: {
+        size: 3,
+        transition: true,
+        accessor: 'getSize'
       },
       instanceRotations: {
         size: 3,
@@ -152,7 +160,7 @@ export default class MeshLayer extends Layer {
   updateState({props, oldProps, changeFlags}) {
     super.updateState({props, oldProps, changeFlags});
 
-    if (props.fp64 !== oldProps.fp64) {
+    if (props.fp64 !== oldProps.fp64 || props.mesh !== oldProps.mesh) {
       const {gl} = this.context;
       if (this.state.model) {
         this.state.model.delete();
@@ -166,31 +174,39 @@ export default class MeshLayer extends Layer {
     }
 
     if (props.wireframe !== oldProps.wireframe) {
-      this.state.model.setDrawMode(props.wireframe ? GL.LINE_STRIP : GL.TRIANGLES);
+      if (this.state.model) {
+        this.state.model.setDrawMode(props.wireframe ? GL.LINE_STRIP : GL.TRIANGLES);
+      }
     }
   }
 
   draw({uniforms}) {
     const {sizeScale, desaturate, brightness} = this.props;
-    const {texture, emptyTexture} = this.state;
+    const {model, texture, emptyTexture} = this.state;
 
-    this.state.model.render(
-      Object.assign({}, uniforms, {
-        sampler: texture || emptyTexture,
-        hasTexture: Boolean(texture),
-        sizeScale,
-        desaturate,
-        brightness
-      })
-    );
+    if (model) {
+      model.render(
+        Object.assign({}, uniforms, {
+          sampler: texture || emptyTexture,
+          hasTexture: Boolean(texture),
+          sizeScale,
+          desaturate,
+          brightness
+        })
+      );
+    }
   }
 
   _getModel(gl) {
+    if (!this.props.mesh) {
+      return null;
+    }
     return new Model(
       gl,
       Object.assign({}, this.getShaders(), {
         id: this.props.id,
         geometry: getGeometry(this.props.mesh),
+        drawMode: this.props.wireframe ? GL.LINE_STRIP : GL.TRIANGLES,
         isInstanced: true,
         shaderCache: this.context.shaderCache
       })
