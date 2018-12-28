@@ -340,16 +340,15 @@ export default class Core3DViewer extends PureComponent {
         onLayerClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
       >
-        {frame.origin &&
-          showMap && (
-            <StaticMap
-              reuseMap={true}
-              attributionControl={false}
-              mapboxApiAccessToken={mapboxApiAccessToken}
-              mapStyle={mapStyle}
-              visible={!viewMode.firstPerson}
-            />
-          )}
+        {showMap && (
+          <StaticMap
+            reuseMap={true}
+            attributionControl={false}
+            mapboxApiAccessToken={mapboxApiAccessToken}
+            mapStyle={mapStyle}
+            visible={frame && frame.origin && !viewMode.firstPerson}
+          />
+        )}
 
         {this.props.children}
       </DeckGL>

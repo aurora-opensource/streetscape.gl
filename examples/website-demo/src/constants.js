@@ -22,7 +22,7 @@
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 // export const MAP_STYLE = 'mapbox://styles/uberdata/cj04kmyzw003t2rml6zf8pe59';
-export const MAP_STYLE = 'mapbox://styles/mapbox/dark-v9';
+export const MAP_STYLE = 'mapbox://styles/uberdata/cive485h000192imn6c6cc8fc';
 
 // OBJ model width 2073mm, length 4946mm
 // Volkswagen Passat: width 1820mm, length 4780mm

@@ -21,13 +21,20 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import {Dropdown} from '@streetscape.gl/monochrome';
+import styled from '@emotion/styled';
+import {Dropdown, withTheme, evaluateStyle} from '@streetscape.gl/monochrome';
 import ImageSequence from './image-sequence';
 import connectToLog from '../connect';
 
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 
-export class XVIZVideoComponent extends PureComponent {
+const WrapperComponent = styled.span(props => ({
+  ...props.theme.__reset__,
+  position: 'relative',
+  ...evaluateStyle(props.userStyle, props)
+}));
+
+class BaseComponent extends PureComponent {
   static propTypes = {
     // User configuration
     style: PropTypes.object,
@@ -117,7 +124,7 @@ export class XVIZVideoComponent extends PureComponent {
   }
 
   render() {
-    const {currentTime, imageFrames, width, height} = this.props;
+    const {currentTime, imageFrames, width, height, style, theme} = this.props;
     const {selectedStreamName} = this.state;
 
     if (!currentTime || !selectedStreamName) {
@@ -125,7 +132,7 @@ export class XVIZVideoComponent extends PureComponent {
     }
 
     return (
-      <div>
+      <WrapperComponent theme={theme} userStyle={style.wrapper}>
         <ImageSequence
           width={width}
           height={height}
@@ -134,7 +141,7 @@ export class XVIZVideoComponent extends PureComponent {
         />
 
         {this._renderVideoSelector()}
-      </div>
+      </WrapperComponent>
     );
   }
 }
@@ -143,5 +150,7 @@ const getLogState = log => ({
   currentTime: log.getCurrentTime(),
   imageFrames: log.getImageFrames()
 });
+
+export const XVIZVideoComponent = withTheme(BaseComponent);
 
 export default connectToLog({getLogState, Component: XVIZVideoComponent});
