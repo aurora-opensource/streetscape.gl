@@ -10,7 +10,6 @@ body {
 
 #container {
   position: fixed;
-  flex-direction: column;
   top: 0;
   left: 0;
   width: 100vw;
@@ -19,11 +18,9 @@ body {
 }
 #timeline {
   position: fixed;
-  width: 100vw;
-  max-width: 600px;
-  left: 50%;
+  left: 320px;
+  right: 0;
   bottom: 0;
-  transform: translateX(-50%);
 }
 
 @import 'inputs';

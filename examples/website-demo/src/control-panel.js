@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
-import {Tooltip, Popover} from '@streetscape.gl/monochrome';
+import {Tooltip} from '@streetscape.gl/monochrome';
 
 import {TOOLTIP_STYLE, XVIZ_PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
 import MetadataPanel from './metadata-panel';
@@ -22,9 +22,18 @@ export default class ControlPanel extends PureComponent {
         return <StreamSettingsPanel log={log} style={STREAM_SETTINGS_STYLE} />;
 
       case 'charts':
-        return <XVIZPanel log={log} name="Metrics" style={XVIZ_PANEL_STYLE} />;
+        return (
+          <XVIZPanel
+            log={log}
+            name="Metrics"
+            style={XVIZ_PANEL_STYLE}
+            componentProps={{
+              metric: {getColor: '#ccc'}
+            }}
+          />
+        );
 
-      case 'metadata':
+      case 'info':
         return <MetadataPanel log={log} selectedLog={selectedLog} onLogChange={onLogChange} />;
 
       default:
@@ -32,15 +41,13 @@ export default class ControlPanel extends PureComponent {
     }
   }
 
-  _renderTab({id, displayName, icon}) {
+  _renderTab({id, description}) {
     const {tab} = this.state;
 
     return (
-      <Tooltip content={displayName} position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
-        <div className={`btn ${id === tab ? 'active' : ''}`} onClick={() => this._gotoTab(id)}>
-          <i className={`icon-${icon}`} />
-        </div>
-      </Tooltip>
+      <div className={`tab ${id === tab ? 'active' : ''}`} onClick={() => this._gotoTab(id)}>
+        {id}
+      </div>
     );
   }
 
@@ -48,13 +55,13 @@ export default class ControlPanel extends PureComponent {
     return (
       <div id="control-panel">
         <header>
-          <div>
+          <div id="logo">
             <img src="assets/logo.png" />
           </div>
-          <div>
-            {this._renderTab({id: 'metadata', displayName: 'Log Info', icon: 'content'})}
-            {this._renderTab({id: 'streams', displayName: 'Stream Settings', icon: 'streams'})}
-            {this._renderTab({id: 'charts', displayName: 'Charts', icon: 'car'})}
+          <div id="tabs">
+            {this._renderTab({id: 'info', description: 'Log Info'})}
+            {this._renderTab({id: 'streams', description: 'Stream Settings'})}
+            {this._renderTab({id: 'charts', description: 'Charts'})}
           </div>
         </header>
 

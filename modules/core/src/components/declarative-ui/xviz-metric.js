@@ -5,6 +5,8 @@ import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
 
+const defaultFormatValue = x => (Number.isFinite(x) ? x.toFixed(3) : String(x));
+
 export class XVIZMetricComponent extends PureComponent {
   static propTypes = {
     // User configuration
@@ -16,6 +18,7 @@ export class XVIZMetricComponent extends PureComponent {
     yTicks: PropTypes.number,
     formatXTick: PropTypes.func,
     formatYTick: PropTypes.func,
+    formatValue: PropTypes.func,
     horizontalGridLines: PropTypes.number,
     verticalGridLines: PropTypes.number,
     onClick: PropTypes.func,
@@ -48,6 +51,7 @@ export class XVIZMetricComponent extends PureComponent {
     },
     xTicks: 0,
     yTicks: 3,
+    formatValue: defaultFormatValue,
     horizontalGridLines: 3,
     verticalGridLines: 0,
     getColor: DEFAULT_COLOR_SERIES
@@ -101,6 +105,7 @@ export class XVIZMetricComponent extends PureComponent {
       yTicks,
       formatXTick,
       formatYTick,
+      formatValue,
       horizontalGridLines,
       verticalGridLines,
       getColor
@@ -122,6 +127,7 @@ export class XVIZMetricComponent extends PureComponent {
             yTicks={yTicks}
             formatXTick={formatXTick}
             formatYTick={formatYTick}
+            formatValue={formatValue}
             xDomain={timeDomain}
             onClick={this._onClick}
             horizontalGridLines={horizontalGridLines}

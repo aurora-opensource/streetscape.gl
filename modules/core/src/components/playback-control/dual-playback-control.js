@@ -16,6 +16,7 @@ const LookAheadContainer = styled.div(props => ({
 
 const LookAheadTimestamp = styled.span(props => ({
   marginLeft: props.theme.spacingNormal,
+  marginRight: props.theme.spacingNormal,
   ...evaluateStyle(props.userStyle, props)
 }));
 
@@ -30,6 +31,9 @@ const lookAheadMarkerStyle = props => ({
   borderRightColor: 'transparent',
   borderTopColor: '#888',
   borderBottomStyle: 'none',
+
+  transitionProperty: 'left',
+  transitionDuration: props.isPlaying ? '0s' : props.theme.transitionDuration,
 
   ...evaluateStyle(props.userStyle, props)
 });
@@ -48,7 +52,9 @@ class DualPlaybackControl extends PureComponent {
     markers: [],
     lookAhead: 0,
     maxLookAhead: 10000,
-    formatLookAhead: String,
+    formatTick: null,
+    formatTimestamp: null,
+    formatLookAhead: x => PlaybackControl.formatTimeCode(x, '{ss}.{S}'),
     onLookAheadChange: () => {}
   };
 
@@ -57,6 +63,13 @@ class DualPlaybackControl extends PureComponent {
 
     return (
       <LookAheadContainer theme={theme} isPlaying={isPlaying} userStyle={style.lookAhead}>
+        <LookAheadTimestamp
+          theme={theme}
+          isPlaying={isPlaying}
+          userStyle={style.lookAheadTimestamp}
+        >
+          Look ahead: {formatLookAhead(lookAhead)}
+        </LookAheadTimestamp>
         <Slider
           style={style.lookAheadSlider}
           value={lookAhead}
@@ -66,13 +79,6 @@ class DualPlaybackControl extends PureComponent {
           size={16}
           onChange={this.props.onLookAheadChange}
         />
-        <LookAheadTimestamp
-          theme={theme}
-          isPlaying={isPlaying}
-          userStyle={style.lookAheadTimestamp}
-        >
-          Look ahead: {formatLookAhead(lookAhead)}
-        </LookAheadTimestamp>
       </LookAheadContainer>
     );
   }
