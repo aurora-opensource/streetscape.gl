@@ -102,6 +102,10 @@ An object mapping from stream names to objects in the following shape:
 - `getY` (Function) - accessor of y value from each item in `data`
 - `unit` (String) - unit of the metric
 
-##### timeDomain (Array)
+##### startTime (Number, optional)
 
-Domain of the x axis in the shape of `[startTime, endTime]`.
+Lower bound of the x axis.
+
+##### endTime (Number, optional)
+
+Upper bound of the x axis.

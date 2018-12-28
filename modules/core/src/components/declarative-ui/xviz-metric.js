@@ -35,7 +35,8 @@ export class XVIZMetricComponent extends PureComponent {
         unit: PropTypes.string
       })
     ),
-    timeDomain: PropTypes.arrayOf(PropTypes.number)
+    startTime: PropTypes.number,
+    endTime: PropTypes.number
   };
 
   static defaultProps = {
@@ -90,7 +91,8 @@ export class XVIZMetricComponent extends PureComponent {
     const {
       title,
       description,
-      timeDomain,
+      startTime,
+      endTime,
       currentTime,
       width,
       height,
@@ -104,6 +106,7 @@ export class XVIZMetricComponent extends PureComponent {
       getColor
     } = this.props;
     const isLoading = currentTime === null;
+    const timeDomain = Number.isFinite(startTime) ? [startTime, endTime] : null;
 
     return (
       <MetricCard title={title} description={description} isLoading={isLoading} style={style}>
@@ -133,7 +136,8 @@ export class XVIZMetricComponent extends PureComponent {
 const getLogState = log => ({
   currentTime: log.getCurrentTime(),
   timeSeries: log.getTimeSeries(),
-  timeDomain: log.getTimeDomain()
+  startTime: log.getBufferStart(),
+  endTime: log.getBufferEnd()
 });
 
 export default connectToLog({getLogState, Component: XVIZMetricComponent});

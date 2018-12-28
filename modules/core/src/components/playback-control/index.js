@@ -114,7 +114,7 @@ class PlaybackControl extends PureComponent {
       const {startTime, endTime, bufferRange, timestamp} = this.props;
       const {timeScale} = this.state;
       const lastUpdate = this._lastAnimationUpdate;
-      const {PLAYBACK_FRAME_RATE} = getXVIZSettings();
+      const {PLAYBACK_FRAME_RATE, TIME_WINDOW} = getXVIZSettings();
 
       // avoid skipping frames - cap delta at resolution
       let timeDeltaMs = lastUpdate > 0 ? now - lastUpdate : 0;
@@ -126,7 +126,7 @@ class PlaybackControl extends PureComponent {
       }
 
       // check buffer availability
-      if (bufferRange.some(r => newTimestamp >= r[0] && newTimestamp <= r[1])) {
+      if (bufferRange.some(r => newTimestamp >= r[0] && newTimestamp <= r[1] + TIME_WINDOW)) {
         // only move forward if buffer is loaded
         // otherwise pause and wait
         this._onTimeChange(newTimestamp);
