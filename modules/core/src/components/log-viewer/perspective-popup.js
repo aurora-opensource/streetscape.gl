@@ -22,6 +22,7 @@ const PopupTip = styled.div(props => ({
   height: 4,
   margin: -2,
   borderRadius: 2,
+  background: props.color,
   ...evaluateStyle(props.userStyle, props)
 }));
 
@@ -29,11 +30,13 @@ const PopupLine = styled.div(props => ({
   position: 'absolute',
   borderLeftStyle: 'solid',
   borderLeftWidth: 1,
+  borderColor: props.color,
   ...evaluateStyle(props.userStyle, props)
 }));
 
 const PopupContent = styled.div(props => ({
   ...props.theme.__reset__,
+  background: props.color,
   ...evaluateStyle(props.userStyle, props)
 }));
 
@@ -41,17 +44,20 @@ const PopupContent = styled.div(props => ({
 class PerspectivePopup extends Popup {
   _renderTip(positionType) {
     const anchorPosition = ANCHOR_POSITION[positionType];
-    const {theme, style} = this.props;
+    const {theme, style, isSelected} = this.props;
     const {objectLabelTipSize = 30, objectLabelColor = theme.background} = style;
+
+    const tipSize = evaluateStyle(objectLabelTipSize, {theme, isSelected});
+
     const tipStyle = {
-      width: objectLabelTipSize,
-      height: objectLabelTipSize,
+      width: tipSize,
+      height: tipSize,
       position: 'relative',
       border: 'none'
     };
 
-    const tipCircleStyle = {background: objectLabelColor};
-    const tipLineStyle = {borderColor: objectLabelColor};
+    const tipCircleStyle = {};
+    const tipLineStyle = {};
 
     switch (anchorPosition.x) {
       case 0.5:
@@ -86,12 +92,16 @@ class PerspectivePopup extends Popup {
         <PopupTip
           style={tipCircleStyle}
           theme={theme}
+          isSelected={isSelected}
+          color={objectLabelColor}
           position={positionType}
           userStyle={style.objectLabelTip}
         />
         <PopupLine
           style={tipLineStyle}
           theme={theme}
+          isSelected={isSelected}
+          color={objectLabelColor}
           position={positionType}
           userStyle={style.objectLabelLine}
         />
@@ -100,7 +110,7 @@ class PerspectivePopup extends Popup {
   }
 
   _renderContent() {
-    const {theme, style} = this.props;
+    const {theme, isSelected, style} = this.props;
 
     return (
       <PopupContent
@@ -108,7 +118,8 @@ class PerspectivePopup extends Popup {
         ref={this._contentLoaded}
         className="mapboxgl-popup-content"
         theme={theme}
-        style={{background: style.objectLabelColor}}
+        isSelected={isSelected}
+        color={style.objectLabelColor}
         userStyle={style.objectLabelBody}
       >
         {this.props.children}

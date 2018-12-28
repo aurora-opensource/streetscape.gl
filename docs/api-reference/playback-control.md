@@ -75,7 +75,7 @@ Custom CSS overrides of the control. Supports all
 [PlaybackControl styling](https://github.com/uber-web/monochrome/blob/master/src/playback-control/README.md#styling)
 options, plus the following:
 
-- `lookAheadMarker` (Object|Function) - the marker that indicates the
+- `lookAheadMarker` (Object|Function) - the marker that indicates the look ahead time.
 - `lookAhead` (Object|Function) - the container around the look ahead control.
 - `lookAheadSlider` (Object) - the look ahead slider. See
   [styling a slider](https://github.com/uber-web/monochrome/blob/master/src/shared/slider/README.md#styling).

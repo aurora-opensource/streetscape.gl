@@ -10,7 +10,7 @@ import PerspectivePopup from './perspective-popup';
 import {getCentroid} from '../../utils/geometry';
 import {resolveCoordinateTransform, positionToLngLat} from '../../utils/transform';
 
-const renderDefaultObjectLabel = ({id}) => <div>ID: {id}</div>;
+const renderDefaultObjectLabel = ({id, isSelected}) => isSelected && <div>ID: {id}</div>;
 
 export default class ObjectLabelsOverlay extends Component {
   static propTypes = {
@@ -78,9 +78,19 @@ export default class ObjectLabelsOverlay extends Component {
   }
 
   _renderPerspectivePopup = object => {
-    const {objectSelection, frame, metadata, style, renderObjectLabel: ObjectLabel} = this.props;
+    const {objectSelection, frame, metadata, style, renderObjectLabel} = this.props;
 
-    if (!objectSelection[object.id]) {
+    const isSelected = Boolean(objectSelection[object.id]);
+
+    const labelContent = renderObjectLabel({
+      id: object.id,
+      isSelected,
+      object,
+      frame,
+      metadata
+    });
+
+    if (!labelContent) {
       return null;
     }
 
@@ -98,12 +108,13 @@ export default class ObjectLabelsOverlay extends Component {
         altitude={trackingPoint[2]}
         anchor="bottom-left"
         dynamicPosition={true}
+        isSelected={isSelected}
         style={style}
         sortByDepth={true}
         closeButton={false}
         closeOnClick={false}
       >
-        <ObjectLabel id={object.id} object={object} frame={frame} metadata={metadata} />
+        {labelContent}
       </PerspectivePopup>
     );
   };

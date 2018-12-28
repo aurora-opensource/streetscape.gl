@@ -3,32 +3,72 @@
   display: flex;
   flex-direction: column;
   width: 320px;
-  top: 40px;
-  bottom: 40px;
-  background: rgba($background, 0.95);
+  top: 0;
+  bottom: 0;
+  background: $background;
   box-shadow: 0 0 8px rgba(0,0,0,0.3);
   color: #F8F8F9;
 
+  #logo {
+    text-align: left;
+    margin: 20px 0;
+
+    img {
+      width: 120px;
+    }
+  }
+
   header, footer {
     flex: 0 0 auto;
-    background: $background-alt;
-    padding: $spacing-tiny $spacing-normal;
     text-align: center;
   }
   header {
-    padding-bottom: 0;
+    padding: $spacing-normal;
 
-    .btn {
-      padding: $spacing-small $spacing-normal;
-      margin: -$spacing-tiny 0;
+    #tabs {
+      display: flex;
+      width: 100%;
     }
+
+    .tab {
+      flex-grow: 1;
+      background: #000;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 0;
+      border: solid 1px transparent;
+      padding: $spacing-normal;
+      margin: -$spacing-tiny 0;
+      color: $color-control-inactive;
+
+      &:hover {
+        color: $color-control-hover;
+      }
+
+      &.active {
+        border-color: #000;
+        background: $color-control-subtle;
+        color: #fff;
+      }
+    }
+
   }
   main {
     flex: 1 1 auto;
     padding: $spacing-normal;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      background: none;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $background-alt;
+    }
   }
   footer {
+    background: $background-alt;
+    padding: $spacing-tiny $spacing-normal;
     font-size: 9px;
     text-align: right;
   }

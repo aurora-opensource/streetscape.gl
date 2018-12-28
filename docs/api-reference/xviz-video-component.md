@@ -19,6 +19,14 @@ The width of the video. Default `100%`.
 
 The height of the video. Default `auto`.
 
+##### style (Object, optional)
+
+Custom CSS overrides.
+
+- `wrapper` (Object|Function) - the wrapper component.
+- `selector` (Object) - See
+[styling Dropdown](https://github.com/uber-web/monochrome/blob/master/src/shared/dropdown/README.md#styling).
+
 ### Declarative UI Component Descriptor
 
 The following props are automatically populated when this component is rendered via `XVIZPanel`. See

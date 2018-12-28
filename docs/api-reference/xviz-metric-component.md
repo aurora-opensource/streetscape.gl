@@ -48,13 +48,19 @@ Number of ticks to show on the y axis. Default `3`.
 
 Format the label along the x axis.
 
-Default: `x => String(x)``
+Default: `x => String(x)`
 
 ##### formatYTick (Function, optional)
 
 Format the label along the y axis.
 
-Default: `y => String(y)``
+Default: `y => String(y)`
+
+##### formatValue (Function, optional)
+
+Format the value in the tooltip.
+
+Default: `x => x.toFixed(3)`
 
 ##### horizontalGridLines (Number, optional)
 

@@ -5,6 +5,7 @@ import {FloatPanel} from '@streetscape.gl/monochrome';
 import {XVIZ_PANEL_STYLE, FLOAT_PANEL_STYLE} from './custom-styles';
 
 const ASPECT_RATIO = 10 / 3;
+const TITLE_HEIGHT = 26;
 
 export default class CameraPanel extends PureComponent {
   state = {
@@ -12,13 +13,15 @@ export default class CameraPanel extends PureComponent {
       x: 800,
       y: 50,
       width: 400,
-      height: 120,
+      height: 400 / ASPECT_RATIO + TITLE_HEIGHT,
       minimized: false
     }
   };
 
   _onUpdate = panelState => {
-    this.setState({panelState: {...panelState, width: panelState.height * ASPECT_RATIO}});
+    this.setState({
+      panelState: {...panelState, height: panelState.width / ASPECT_RATIO + TITLE_HEIGHT}
+    });
   };
 
   render() {
@@ -28,7 +31,6 @@ export default class CameraPanel extends PureComponent {
     return (
       <FloatPanel
         {...panelState}
-        title="Camera"
         movable={true}
         minimizable={false}
         resizable={true}

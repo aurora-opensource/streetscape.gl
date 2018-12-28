@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
-import {Tooltip, Popover} from '@streetscape.gl/monochrome';
+import {Tooltip, Popover, Button} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE} from './custom-styles';
+import {TOOLTIP_STYLE, BUTTON_STYLE} from './custom-styles';
 
 export default class Toolbar extends PureComponent {
   _gotoViewMode = viewMode => {
@@ -46,24 +46,26 @@ export default class Toolbar extends PureComponent {
             this._viewModePopover = ref;
           }}
         >
-          <Tooltip content="View" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
-            <div className="btn">
+          <Tooltip content="View" position={Popover.LEFT} style={TOOLTIP_STYLE}>
+            <Button type={Button.MUTED} style={BUTTON_STYLE}>
               <i className="icon-camera_alt" />
-            </div>
+            </Button>
           </Tooltip>
         </Popover>
-        <Tooltip content="Reset Camera" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
-          <div className="btn" onClick={this._resetView}>
+        <Tooltip content="Reset Camera" position={Popover.LEFT} style={TOOLTIP_STYLE}>
+          <Button type={Button.MUTED} style={BUTTON_STYLE} onClick={this._resetView}>
             <i className="icon-recenter" />
-          </div>
+          </Button>
         </Tooltip>
-        <Tooltip content="Get Info" position={Popover.BOTTOM} style={TOOLTIP_STYLE}>
-          <div
-            className={`btn ${settings.showTooltip ? 'active' : ''}`}
+        <Tooltip content="Get Info" position={Popover.LEFT} style={TOOLTIP_STYLE}>
+          <Button
+            type={Button.MUTED}
+            style={BUTTON_STYLE}
+            className={settings.showTooltip ? 'active' : ''}
             onClick={() => this._toggleTooltip(!settings.showTooltip)}
           >
             <i className="icon-cursor" />
-          </div>
+          </Button>
         </Tooltip>
       </div>
     );

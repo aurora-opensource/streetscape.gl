@@ -6,17 +6,18 @@ import styled from '@emotion/styled';
 const TooltipContainer = styled.div(props => ({
   ...props.theme.__reset__,
   position: 'absolute',
-  zIndex: 1,
   pointerEvents: 'none',
   margin: props.theme.spacingNormal,
-  padding: props.theme.spacingSmall,
+  padding: props.theme.spacingNormal,
   maxWidth: 320,
+  overflow: 'hidden',
   background: props.theme.background,
   color: props.theme.textColorPrimary,
+  zIndex: 100001,
   ...evaluateStyle(props.userStyle, props)
 }));
 
-const KEY_BLACKLIST = ['vertices', 'base'];
+const KEY_BLACKLIST = ['vertices', 'base', 'style', 'state', 'object_id'];
 
 class HoverTooltip extends PureComponent {
   _renderEntries(object) {
@@ -27,23 +28,23 @@ class HoverTooltip extends PureComponent {
       .filter(key => !KEY_BLACKLIST.includes(key) && object[key] !== undefined)
       .map(key => (
         <div key={key}>
-          <b>{key}: </b>
+          <div>
+            <b>{key}</b>
+          </div>
           {String(object[key])}
         </div>
       ));
   }
 
   _renderContent = info => {
-    return (
-      <div>
+    return [
+      <div key="-stream-">
         <div>
-          <b>Stream: </b>
-          {info.layer.props.streamName}
+          <b>Stream</b>
         </div>
-        {this._renderEntries(info.object.base)}
-        {this._renderEntries(info.object)}
+        {info.layer.props.streamName}
       </div>
-    );
+    ].concat(this._renderEntries(info.object.base), this._renderEntries(info.object));
   };
 
   render() {

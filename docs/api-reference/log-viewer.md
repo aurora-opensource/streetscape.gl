@@ -190,20 +190,21 @@ A custom function / React component to render the content of the popup for selec
 receive the following props:
 
 - `id` (String) - object id
+- `isSelected` (Boolean) - if object is selected
 - `object` (Object) - selected object
 - `metadata` (Object) - log metadata
 - `frame` (Object) - current log frame
 
 Popups will be disabled if this prop is set to `false`.
 
-Default: `(props) => <div>{props.id}</div>`
+Default: `(props) => props.isSelected && <div>{props.id}</div>`
 
 ##### style (Object, optional)
 
 Custom CSS overrides. May contain the following fields:
 
 - `objectLabelColor` (String) - color of the object labels
-- `objectLabelTipSize` (Number) - size of the object labels
+- `objectLabelTipSize` (Number|Function) - size of the object labels
 - `objectLabelTip` (Object|Function) - the pointer on the object
 - `objectLabelLine` (Object|Function) - the line connecting the object and its label
 - `objectLabelBody` (Object|Function) - the body of the object label.
@@ -213,6 +214,7 @@ A custom style callback function will receive the following arguments:
 
 - `props` (Object)
   - `theme` (Object) - the current theme
+  - `isSelected` (Boolean) - if the object is selected
   - `position` (String) - position of the label relative to the object
 
 ##### showMap (Boolean, Optional)
