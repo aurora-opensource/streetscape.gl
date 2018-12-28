@@ -214,7 +214,9 @@ export default class XVIZLoaderInterface {
 
   _setMetadata(metadata) {
     this.set('metadata', metadata);
-    this.set('streamSettings', metadata.streams);
+    if (metadata.streams && Object.keys(metadata.streams) > 0) {
+      this.set('streamSettings', metadata.streams);
+    }
     const timestamp = this.get('timestamp');
     const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
     if (Number.isFinite(newTimestamp)) {
