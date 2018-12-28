@@ -104,7 +104,7 @@ const PRIMITIVE_TYPE_TO_ICON = {
   circle: '\\e907',
   image: '\\e90a',
   polyline: '\\e90e',
-  polygon: '\\e909',
+  polygon: '\\e90d',
   float: '\\e917',
   text: '\\e913',
   group: '\\e909'
