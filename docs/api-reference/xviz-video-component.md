@@ -25,7 +25,7 @@ Custom CSS overrides.
 
 - `wrapper` (Object|Function) - the wrapper component.
 - `selector` (Object) - See
-[styling Dropdown](https://github.com/uber-web/monochrome/blob/master/src/shared/dropdown/README.md#styling).
+  [styling Dropdown](https://github.com/uber-web/monochrome/blob/master/src/shared/dropdown/README.md#styling).
 
 ### Declarative UI Component Descriptor
 
@@ -44,6 +44,10 @@ with a Redux store.
 
 The current playback position of the log.
 
-##### imageFrames (Object)
+##### streamMetadata (Object)
 
-An object mapping from stream names to the loaded image frames.
+A map from stream names to their metadata.
+
+##### streams (Object)
+
+Currently loaded streams.
