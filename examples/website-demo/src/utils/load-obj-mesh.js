@@ -21,7 +21,7 @@
 /* global fetch */
 import OBJ from 'webgl-obj-loader';
 
-export function loadOBJMesh(url) {
+export default function loadOBJMesh(url) {
   return fetch(url)
     .then(resp => resp.text())
     .then(text => {
