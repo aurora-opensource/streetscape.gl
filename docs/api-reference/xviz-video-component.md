@@ -25,7 +25,7 @@ Custom CSS overrides.
 
 - `wrapper` (Object|Function) - the wrapper component.
 - `selector` (Object) - See
-[styling Dropdown](https://github.com/uber-web/monochrome/blob/master/src/shared/dropdown/README.md#styling).
+  [styling Dropdown](https://github.com/uber-web/monochrome/blob/master/src/shared/dropdown/README.md#styling).
 
 ### Declarative UI Component Descriptor
 
