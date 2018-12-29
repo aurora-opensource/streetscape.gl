@@ -15,7 +15,8 @@
     "pbf": "^3.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "streetscape.gl": "^0.0.1"
+    "streetscape.gl": "^0.0.1",
+    "webgl-obj-loader": "^0.1.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

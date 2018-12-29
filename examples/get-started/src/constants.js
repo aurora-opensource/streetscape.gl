@@ -12,12 +12,9 @@ export const XVIZ_SETTINGS = {
   PLAYBACK_FRAME_RATE: 10
 };
 
-// OBJ model width 2073mm, length 4946mm
-// Volkswagen Passat: width 1820mm, length 4780mm
 export const CAR = {
-  mesh: 'assets/car.obj',
   origin: [1.08, -0.32, 0],
-  scale: 0.0009
+  scale: [4.3, 1.8, 1.5]
 };
 
 export const APP_SETTINGS = {

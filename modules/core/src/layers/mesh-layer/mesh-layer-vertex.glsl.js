@@ -13,6 +13,7 @@ attribute vec2 texCoords;
 attribute vec3 instancePositions;
 attribute vec2 instancePositions64xy;
 attribute vec3 instanceRotations;
+attribute vec3 instanceSizes;
 attribute vec4 instanceColors;
 attribute vec3 instancePickingColors;
 
@@ -47,10 +48,10 @@ mat3 getRotationMatrix(vec3 rotation) {
 void main(void) {
   mat3 rotationMatrix = getRotationMatrix(instanceRotations);
 
-  vec3 pos = positions;
+  vec3 pos = positions * instanceSizes * sizeScale;
   pos = rotationMatrix * pos;
   pos = (project_uModelMatrix * vec4(pos, 0.0)).xyz;
-  pos = project_scale(pos * sizeScale);
+  pos = project_scale(pos);
 
   vec4 worldPosition;
   gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xy, pos, worldPosition);
