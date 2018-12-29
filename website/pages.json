@@ -70,8 +70,16 @@
         "name": "React Components",
         "children": [
           {
+            "name": "BaseWidget",
+            "markdown": "api-reference/base-widget.md"
+          },
+          {
             "name": "LogViewer",
             "markdown": "api-reference/log-viewer.md"
+          },
+          {
+            "name": "MeterWidget",
+            "markdown": "api-reference/meter-widget.md"
           },
           {
             "name": "PlaybackControl",
@@ -80,6 +88,14 @@
           {
             "name": "StreamSettingsPanel",
             "markdown": "api-reference/stream-settings-panel.md"
+          },
+          {
+            "name": "TrafficLightWidget",
+            "markdown": "api-reference/traffic-light-widget.md"
+          },
+          {
+            "name": "TurnSignalWidget",
+            "markdown": "api-reference/turn-signal-widget.md"
           },
           {
             "name": "XVIZPanel",
