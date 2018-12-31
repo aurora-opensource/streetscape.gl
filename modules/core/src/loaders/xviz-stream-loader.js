@@ -146,6 +146,10 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
       randomize: true
     };
 
+    // Flag for when we do not have a known start time for the log
+    // and will leave the time up to the server
+    this.liveMode = false;
+
     // Handler object for the websocket events
     // Note: needs to be last due to member dependencies
     this.WebSocketClass = options.WebSocketClass || WebSocket;
@@ -280,6 +284,11 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
     }
   }
 
+  _enableLiveMode() {
+    this.liveMode = true;
+    this.xvizHandler.transformLog();
+  }
+
   // Notifications and metric reporting
   _onWSOpen = () => {
     // Request data if we are restarting, otherwise wait for metadata
@@ -294,6 +303,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
   };
 
   // Handle dispatching events, triggering probes, and delegating to the XVIZ handler
+  /* eslint-disable complexity */
   _onWSMessage = message => {
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
@@ -305,11 +315,29 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
         this._setMetadata(message);
         this.emit('ready', message);
 
+        if (!this.getCurrentTime()) {
+          // We enable liveMode if _setMetadata() did not set the timestamp
+          this._enableLiveMode();
+        }
+
         break;
 
       case LOG_STREAM_MESSAGE.TIMESLICE:
         const oldVersion = this.streamBuffer.valueOf();
         this.streamBuffer.insert(message);
+
+        // Setup the lastRequest since it was not set in seek() due to the live mode
+        if (this.liveMode && !this.lastRequest) {
+          const bufferLength =
+            this.options.bufferLength || DEFAULT_BUFFER_LENGTH[getXVIZConfig().TIMESTAMP_FORMAT];
+          this.lastRequest = {
+            startTimestamp: message.timestamp,
+            endTime: message.timestamp + bufferLength,
+            bufferStart: message.timestamp,
+            bufferEnd: message.timestamp + bufferLength
+          };
+        }
+
         if (this.streamBuffer.valueOf() !== oldVersion) {
           this.set('streams', this.streamBuffer.getStreams());
           this.bufferRange = rangeUtils.add(
@@ -317,6 +345,12 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
             this.bufferRange
           );
         }
+
+        // Fire initial seek to set timestamp so rendering starts
+        if (this.liveMode && !this.getCurrentTime()) {
+          this.seek(message.timestamp);
+        }
+
         this.emit('update', message);
         break;
 
@@ -328,6 +362,7 @@ export default class XVIZStreamLoader extends XVIZLoaderInterface {
         this.emit('error', message);
     }
   };
+  /* eslint-enable complexity */
 
   _onWSError = error => {
     this.emit('error', error);

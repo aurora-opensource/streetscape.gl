@@ -202,12 +202,24 @@ class PlaybackControl extends PureComponent {
   }
 }
 
-const getLogState = log => ({
-  timestamp: log.getCurrentTime(),
-  lookAhead: log.getLookAhead(),
-  startTime: log.getLogStartTime(),
-  endTime: log.getLogEndTime(),
-  bufferRange: log.getBufferRange()
-});
+const getLogState = log => {
+  let startTime = log.getLogStartTime();
+  if (!Number.isFinite(startTime)) {
+    startTime = log.getBufferStart();
+  }
+
+  let endTime = log.getLogEndTime();
+  if (!Number.isFinite(endTime)) {
+    endTime = log.getBufferEnd();
+  }
+
+  return {
+    timestamp: log.getCurrentTime(),
+    lookAhead: log.getLookAhead(),
+    startTime,
+    endTime,
+    bufferRange: log.getBufferRange()
+  };
+};
 
 export default connectToLog({getLogState, Component: PlaybackControl});
