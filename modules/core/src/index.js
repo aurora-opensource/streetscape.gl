@@ -51,6 +51,11 @@ export {XVIZPlotComponent} from './components/declarative-ui/xviz-plot';
 export {XVIZTableComponent} from './components/declarative-ui/xviz-table';
 export {XVIZVideoComponent} from './components/declarative-ui/xviz-video';
 
+export {default as BaseWidget} from './components/hud/base-widget';
+export {default as MeterWidget} from './components/hud/meter-widget';
+export {default as TrafficLightWidget} from './components/hud/traffic-light-widget';
+export {default as TurnSignalWidget} from './components/hud/turn-signal-widget';
+
 // Constants
 export * from './constants';
 
