@@ -41,12 +41,12 @@ function TestImageHandler() {
 
 const testFrames = [
   {
-    timestamp: 1000,
-    imageData: 'not a real image 1'
+    time: 1000,
+    images: [{imageData: 'not a real image 1'}]
   },
   {
-    timestamp: 1100,
-    imageData: 'not a real image 2'
+    time: 1100,
+    images: [{imageData: 'not a real image 2'}]
   }
 ];
 
@@ -66,7 +66,7 @@ test('ImageBuffer#set & get frames', t => {
 
   const frame = imageBuffer.get(currentFrame);
   frame.promise.then(x => {
-    t.equal(frame.image.imageData, testFrames[0].imageData, 'Returns correct data from get()');
+    t.equal(frame.image.imageData, 'not a real image 1', 'Returns correct data from get()');
     t.end();
   });
 });

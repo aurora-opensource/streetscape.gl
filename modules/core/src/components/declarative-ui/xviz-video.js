@@ -51,7 +51,8 @@ class BaseComponent extends PureComponent {
 
     // From connected log
     currentTime: PropTypes.number,
-    imageFrames: PropTypes.object
+    streamMetadata: PropTypes.object,
+    streams: PropTypes.object
   };
 
   static defaultProps = {
@@ -70,22 +71,26 @@ class BaseComponent extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (
-      this.props.imageFrames !== nextProps.imageFrames ||
+      this.props.streamMetadata !== nextProps.streamMetadata ||
       this.props.cameras !== nextProps.cameras
     ) {
       this.setState(this._getStreamNames(nextProps));
     }
   }
 
-  _getStreamNames({imageFrames, cameras}) {
-    if (!imageFrames) {
+  _getStreamNames({streamMetadata, cameras}) {
+    if (!streamMetadata) {
       return {
         streamNames: null,
         selectedStreamName: null
       };
     }
 
-    const streamNames = Object.keys(imageFrames)
+    const streamNames = Object.keys(streamMetadata)
+      .filter(
+        streamName =>
+          streamMetadata[streamName] && streamMetadata[streamName].primitive_type === 'image'
+      )
       .filter(normalizeStreamFilter(cameras))
       .sort();
     let {selectedStreamName} = this.state || {};
@@ -124,10 +129,10 @@ class BaseComponent extends PureComponent {
   }
 
   render() {
-    const {currentTime, imageFrames, width, height, style, theme} = this.props;
+    const {currentTime, streams, width, height, style, theme} = this.props;
     const {selectedStreamName} = this.state;
 
-    if (!currentTime || !selectedStreamName) {
+    if (!streams || !currentTime || !selectedStreamName) {
       return null;
     }
 
@@ -136,7 +141,7 @@ class BaseComponent extends PureComponent {
         <ImageSequence
           width={width}
           height={height}
-          src={imageFrames[selectedStreamName]}
+          src={streams[selectedStreamName]}
           currentTime={currentTime}
         />
 
@@ -146,10 +151,14 @@ class BaseComponent extends PureComponent {
   }
 }
 
-const getLogState = log => ({
-  currentTime: log.getCurrentTime(),
-  imageFrames: log.getImageFrames()
-});
+const getLogState = log => {
+  const metadata = log.getMetadata();
+  return {
+    currentTime: log.getCurrentTime(),
+    streamMetadata: metadata && metadata.streams,
+    streams: log.getStreams()
+  };
+};
 
 export const XVIZVideoComponent = withTheme(BaseComponent);
 

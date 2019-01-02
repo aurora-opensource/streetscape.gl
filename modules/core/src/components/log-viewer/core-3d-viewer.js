@@ -158,7 +158,6 @@ export default class Core3DViewer extends PureComponent {
       showTooltip,
       objectStates,
       customLayers,
-      streamSettings,
       getTransformMatrix
     } = this.props;
     if (!frame || !metadata) {
@@ -172,9 +171,7 @@ export default class Core3DViewer extends PureComponent {
     const featuresAndFutures = new Set(
       Object.keys(streams)
         .concat(Object.keys(lookAheads))
-        .filter(
-          streamName => streamFilter(streamName) && (!streamSettings || streamSettings[streamName])
-        )
+        .filter(streamFilter)
     );
 
     return [

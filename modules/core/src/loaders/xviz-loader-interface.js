@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {getXVIZSettings, getXVIZConfig} from '@xviz/parser';
+import {getXVIZSettings} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
@@ -141,7 +141,24 @@ export default class XVIZLoaderInterface {
 
   getLogSynchronizer = () => this.get('logSynchronizer');
 
-  getStreams = () => this.get('streams');
+  _getStreams = () => this.get('streams');
+
+  getStreams = createSelector(
+    this,
+    [this.getStreamSettings, this._getStreams],
+    (streamSettings, streams) => {
+      if (!streamSettings || !streams) {
+        return streams;
+      }
+      const result = {};
+      for (const streamName in streams) {
+        if (streamSettings[streamName]) {
+          result[streamName] = streams[streamName];
+        }
+      }
+      return result;
+    }
+  );
 
   getBufferRange() {
     throw new Error('not implemented');
@@ -167,18 +184,18 @@ export default class XVIZLoaderInterface {
     this,
     [
       this.getLogSynchronizer,
-      this.getMetadata,
+      this.getStreamSettings,
       this.getCurrentTime,
       this.getLookAhead,
       this.getStreams
     ],
     // `getStreams` is only needed to trigger recomputation.
     // The logSynchronizer has access to the streamBuffer.
-    (logSynchronizer, metadata, timestamp, lookAhead) => {
-      if (logSynchronizer && metadata && Number.isFinite(timestamp)) {
+    (logSynchronizer, streamSettings, timestamp, lookAhead) => {
+      if (logSynchronizer && Number.isFinite(timestamp)) {
         logSynchronizer.setTime(timestamp);
         logSynchronizer.setLookAheadTimeOffset(lookAhead);
-        return logSynchronizer.getCurrentFrame(metadata.streams);
+        return logSynchronizer.getCurrentFrame(streamSettings);
       }
       return null;
     }
@@ -189,43 +206,6 @@ export default class XVIZLoaderInterface {
     getTimeSeries({metadata, streams})
   );
 
-  getTimestamps = createSelector(this, this.getStreams, streams => {
-    const {PRIMARY_POSE_STREAM} = getXVIZConfig();
-    const vehiclePoses = streams && streams[PRIMARY_POSE_STREAM];
-    if (vehiclePoses) {
-      // TODO(twojtasz): normalize 'time' vs 'timestamp' in parsing
-      return vehiclePoses.map(pose => pose.time || pose.timestamp);
-    }
-    return null;
-  });
-
-  getImageFrames = createSelector(
-    this,
-    [this.getMetadata, this.getStreams, this.getTimestamps],
-    (metadata, streams, timestamps) => {
-      if (streams && metadata) {
-        const frames = {};
-        Object.keys(streams).forEach(streamName => {
-          const streamMetadata = metadata.streams[streamName];
-          if (!streamMetadata || streamMetadata.primitive_type !== 'image') {
-            return;
-          }
-          frames[streamName] = streams[streamName].map((frame, i) => {
-            const timestamp = timestamps[i];
-            if (frame && frame.images[0]) {
-              // assign timestamp of vehicle pose to image frame
-              Object.assign(frame.images[0], {timestamp});
-            }
-            return frame && frame.images[0];
-          });
-        });
-        return frames;
-      }
-
-      return null;
-    }
-  );
-
   /* Private actions */
   _update = () => {
     this._updateTimer = null;
@@ -234,7 +214,7 @@ export default class XVIZLoaderInterface {
 
   _setMetadata(metadata) {
     this.set('metadata', metadata);
-    if (metadata.streams && Object.keys(metadata.streams) > 0) {
+    if (metadata.streams && Object.keys(metadata.streams).length > 0) {
       this.set('streamSettings', metadata.streams);
     }
     const timestamp = this.get('timestamp');
