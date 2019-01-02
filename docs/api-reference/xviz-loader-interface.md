@@ -117,12 +117,6 @@ Returns all
 [time_series](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set)
 streams.
 
-##### getImageFrames()
-
-Returns all
-[image](https://github.com/uber/xviz/blob/master/docs/protocol-schema/geometry-primitives.md#image-primitive)
-streams.
-
 ## Implementations
 
 - [XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md)

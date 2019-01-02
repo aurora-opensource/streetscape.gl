@@ -50,8 +50,8 @@ export default class ImageBuffer {
     for (const frame of buffer.keys()) {
       if (
         bufferedFrames.length === 0 ||
-        frame.timestamp < bufferedFrames[0].timestamp ||
-        frame.timestamp > bufferedFrames[bufferedFrames.length - 1].timestamp
+        frame.time < bufferedFrames[0].time ||
+        frame.time > bufferedFrames[bufferedFrames.length - 1].time
       ) {
         this.imageDeleter(buffer.get(frame));
         buffer.delete(frame);
@@ -63,7 +63,7 @@ export default class ImageBuffer {
       if (!buffer.has(frame)) {
         const data = {};
 
-        data.promise = this.imageLoader(frame).then(image => {
+        data.promise = this.imageLoader(frame.images[0]).then(image => {
           data.image = image;
           return image;
         });
@@ -82,7 +82,7 @@ export default class ImageBuffer {
 
     // Find the frame closest to the current timestamp
     allFrames.forEach((frame, i) => {
-      const delta = currentTime - frame.timestamp;
+      const delta = currentTime - frame.time;
       if (delta >= 0 && delta < bestDelta) {
         bestDelta = delta;
         currentFrame = frame;
