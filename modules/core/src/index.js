@@ -11,7 +11,6 @@ export {default as TrafficLightLayer} from './layers/traffic-light-layer/traffic
 export {default as ImageryLayer} from './layers/imagery-layer/imagery-layer';
 
 // Generic layers (should be moved back to deck.gl)
-export {default as BitmapLayer} from './layers/bitmap-layer/bitmap-layer';
 export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
 
 // COMPONENTS
