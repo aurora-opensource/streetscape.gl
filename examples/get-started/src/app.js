@@ -4,7 +4,15 @@ import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
 import {setXVIZConfig, setXVIZSettings} from '@xviz/parser';
-import {LogViewer, PlaybackControl, XVIZPanel, VIEW_MODE} from 'streetscape.gl';
+import {
+  LogViewer,
+  PlaybackControl,
+  MeterWidget,
+  TrafficLightWidget,
+  TurnSignalWidget,
+  XVIZPanel,
+  VIEW_MODE
+} from 'streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
 import {
@@ -67,6 +75,28 @@ class Example extends PureComponent {
               xvizStyles={XVIZ_STYLE}
               viewMode={VIEW_MODE[settings.viewMode]}
             />
+            <div id="hud">
+              <TurnSignalWidget log={log} streamName="/vehicle/turn_signal" />
+              <hr />
+              <TrafficLightWidget log={log} streamName="/vehicle/traffic_light" />
+              <hr />
+              <MeterWidget
+                log={log}
+                streamName="/vehicle/acceleration"
+                label="Acceleration"
+                min={-4}
+                max={4}
+              />
+              <hr />
+              <MeterWidget
+                log={log}
+                streamName="/vehicle/velocity"
+                label="Speed"
+                getWarning={x => (x > 6 ? 'FAST' : '')}
+                min={0}
+                max={20}
+              />
+            </div>
           </div>
           <div id="timeline">
             <PlaybackControl
