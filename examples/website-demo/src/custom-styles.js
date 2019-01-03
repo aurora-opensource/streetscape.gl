@@ -14,8 +14,8 @@ export const UI_THEME = {
   textColorDisabled: '#717172',
   textColorInvert: '#1B1B1C',
 
-  fontFamily: 'ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif',
-  fontSize: 11,
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
+  fontSize: 12,
   shadow: '0 2px 4px 0 rgba(0, 0, 0, 0.15)'
 };
 
@@ -80,7 +80,7 @@ export const PLAYBACK_CONTROL_STYLE = {
   timestamp: {
     color: '#fff',
     position: 'absolute',
-    fontSize: 12,
+    fontSize: 14,
     left: 12,
     top: 12
   }
@@ -89,13 +89,35 @@ export const PLAYBACK_CONTROL_STYLE = {
 export const TOOLTIP_STYLE = {
   arrowSize: 0,
   borderWidth: 0,
-  background: 'rgba(0,0,0,0.9)'
+  background: '#CCCCCC',
+  body: {
+    color: '#141414',
+    whiteSpace: 'nowrap'
+  }
 };
 
-export const BUTTON_STYLE = {
-  size: 48,
+export const TOOLBAR_BUTTON_STYLE = {
+  size: 60,
+  wrapper: props => ({
+    fontSize: 32,
+    background: props.isHovered ? 'rgba(129,133,138,0.3)' : props.theme.background
+  })
+};
+
+export const TOOLBAR_MENU_STYLE = {
+  arrowSize: 0,
+  borderWidth: 0,
+  body: {
+    left: 56,
+    boxShadow: 'none'
+  }
+};
+
+export const HELP_BUTTON_STYLE = {
+  size: 20,
   wrapper: {
-    fontSize: 20
+    background: 'none',
+    fontSize: 14
   }
 };
 
@@ -139,7 +161,7 @@ export const STREAM_SETTINGS_STYLE = {
       props.type in PRIMITIVE_TYPE_TO_ICON
         ? {
             fontFamily: 'streetscape',
-            fontSize: 14,
+            fontSize: 16,
             paddingRight: 12,
             content: `"${PRIMITIVE_TYPE_TO_ICON[props.type]}"`
           }
@@ -169,6 +191,41 @@ export const LOG_VIEWER_STYLE = {
   }
 };
 
+const OBJECT_COLORS = {
+  van: '#5B91F4',
+  car: '#5B91F4',
+  cyclist: '#957FCE',
+  pedestrian: '#FFC6AF',
+  unknown: '#E2E2E2'
+};
+
+/* eslint-disable camelcase */
+const TRACKLET_STYLES = [
+  {style: {fill_color: `${OBJECT_COLORS.unknown}88`, stroke_color: OBJECT_COLORS.unknown}},
+  {
+    name: 'Pedestrian',
+    style: {fill_color: `${OBJECT_COLORS.pedestrian}88`, stroke_color: OBJECT_COLORS.pedestrian}
+  },
+  {
+    name: 'Cyclist',
+    style: {fill_color: `${OBJECT_COLORS.cyclist}88`, stroke_color: OBJECT_COLORS.cyclist}
+  },
+  {name: 'Car', style: {fill_color: `${OBJECT_COLORS.car}88`, stroke_color: OBJECT_COLORS.car}},
+  {name: 'Van', style: {fill_color: `${OBJECT_COLORS.van}88`, stroke_color: OBJECT_COLORS.van}}
+];
+
+export const XVIZ_STYLE = {
+  '/tracklets/objects': [
+    ...TRACKLET_STYLES,
+    {name: 'selected', style: {fill_color: '#ff800088', stroke_color: '#ff8000'}}
+  ],
+  '/tracklets/objects/futures': TRACKLET_STYLES,
+  '/vehicle/trajectory': [{style: {stroke_color: '#47B27588'}}],
+  '/tracklets/trajectory': [{style: {stroke_color: '#FFC043'}}],
+  '/tracklets/tracking_point': [{style: {fill_color: '#FFC043'}}]
+};
+/* eslint-enable camelcase */
+
 export const FLOAT_PANEL_STYLE = {
   wrapper: {
     zIndex: 9999
@@ -179,13 +236,14 @@ export const XVIZ_PANEL_STYLE = {
   metric: {
     title: {
       textAlign: 'left',
-      fontSize: 12,
+      fontSize: 14,
       fontWeight: 500
     },
     tooltip: TOOLTIP_STYLE
   },
   video: {
     wrapper: {
+      cursor: 'grab',
       position: 'absolute',
       width: '100%',
       height: '100%',
