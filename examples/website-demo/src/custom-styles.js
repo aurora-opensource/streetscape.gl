@@ -14,7 +14,7 @@ export const UI_THEME = {
   textColorDisabled: '#717172',
   textColorInvert: '#1B1B1C',
 
-  fontFamily: 'ff-clan-web-pro, "Helvetica Neue", Helvetica, sans-serif',
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
   fontSize: 11,
   shadow: '0 2px 4px 0 rgba(0, 0, 0, 0.15)'
 };
@@ -157,6 +157,14 @@ export const STREAM_SETTINGS_STYLE = {
   })
 };
 
+const OBJECT_COLORS = {
+  van: '#5B91F4',
+  car: '#5B91F4',
+  cyclist: '#957FCE',
+  pedestrian: '#FFC6AF',
+  unknown: '#E2E2E2'
+};
+
 export const LOG_VIEWER_STYLE = {
   objectLabelColor: '#D0D0D1',
   objectLabelTipSize: props => (props.isSelected ? 30 : 8),
@@ -176,6 +184,28 @@ export const LOG_VIEWER_STYLE = {
     }
   }
 };
+
+/* eslint-disable camelcase */
+export const XVIZ_STYLE = {
+  '/tracklets/objects': [
+    {style: {fill_color: `${OBJECT_COLORS.unknown}88`, stroke_color: OBJECT_COLORS.unknown}},
+    {
+      name: 'Pedestrian',
+      style: {fill_color: `${OBJECT_COLORS.pedestrian}88`, stroke_color: OBJECT_COLORS.pedestrian}
+    },
+    {
+      name: 'Cyclist',
+      style: {fill_color: `${OBJECT_COLORS.cyclist}88`, stroke_color: OBJECT_COLORS.cyclist}
+    },
+    {name: 'Car', style: {fill_color: `${OBJECT_COLORS.car}88`, stroke_color: OBJECT_COLORS.car}},
+    {name: 'Van', style: {fill_color: `${OBJECT_COLORS.van}88`, stroke_color: OBJECT_COLORS.van}},
+    {name: 'selected', style: {fill_color: '#ff800088', stroke_color: '#ff8000'}}
+  ],
+  '/vehicle/trajectory': [{style: {stroke_color: '#47B27588'}}],
+  '/tracklets/trajectory': [{style: {stroke_color: '#FFC043'}}],
+  '/tracklets/tracking_point': [{style: {fill_color: '#FFC043'}}]
+};
+/* eslint-enable camelcase */
 
 export const FLOAT_PANEL_STYLE = {
   wrapper: {

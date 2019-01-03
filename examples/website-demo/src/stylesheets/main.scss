@@ -2,7 +2,7 @@
 
 body {
   user-select: none;
-  background: $background;
+  background: #000;
   font-family: $font-family;
   font-size: 12px;
   line-height: 24px;
@@ -20,7 +20,8 @@ body {
 #control-panel {
   flex: 0 0 auto;
   width: 348px;
-  height: calc(100vh - 144px);
+  border-right: solid 1px #000;
+  padding-bottom: 144px;
 }
 #map {
   flex-grow: 1;

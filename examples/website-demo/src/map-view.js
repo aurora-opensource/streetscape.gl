@@ -3,8 +3,8 @@ import React, {PureComponent} from 'react';
 
 import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 
-import {MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
-import {PLAYBACK_CONTROL_STYLE, LOG_VIEWER_STYLE} from './custom-styles';
+import {MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
+import {XVIZ_STYLE, PLAYBACK_CONTROL_STYLE, LOG_VIEWER_STYLE} from './custom-styles';
 
 const formatTimestamp = x => new Date(x).toUTCString();
 const renderObjectLabel = ({id, object, isSelected}) => {

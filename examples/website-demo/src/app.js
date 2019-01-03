@@ -38,7 +38,13 @@ class Example extends PureComponent {
       getFilePath: index => `${logSettings.path}/${index + 1}-frame.glb`,
       worker: true,
       maxConcurrency: 4
-    }).on('error', console.error); // eslint-disable-line
+    })
+      .on('ready', () =>
+        loader.updateStreamSettings({
+          '/tracklets/label': false
+        })
+      )
+      .on('error', console.error); // eslint-disable-line
 
     loader.connect();
 

@@ -35,6 +35,7 @@
       padding: $spacing-normal;
       margin: -$spacing-tiny 0;
       color: $color-control-inactive;
+      text-transform: capitalize;
 
       &:hover {
         color: $color-control-hover;
