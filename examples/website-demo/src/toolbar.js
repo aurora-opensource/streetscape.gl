@@ -105,12 +105,12 @@ export default class Toolbar extends PureComponent {
             onClick: noop
           })}
         </Popover>
-        <Tooltip content="Recenter Camera" position={Popover.LEFT} style={TOOLTIP_STYLE}>
+        <Tooltip content="Recenter Camera (R)" position={Popover.LEFT} style={TOOLTIP_STYLE}>
           <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE} onClick={this._resetView}>
             <i className="icon-recenter" />
           </Button>
         </Tooltip>
-        <Tooltip content="Get Info" position={Popover.LEFT} style={TOOLTIP_STYLE}>
+        <Tooltip content="Get Info (I)" position={Popover.LEFT} style={TOOLTIP_STYLE}>
           <Button
             type={Button.MUTED}
             style={TOOLBAR_BUTTON_STYLE}
