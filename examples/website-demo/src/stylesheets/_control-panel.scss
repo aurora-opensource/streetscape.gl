@@ -53,6 +53,7 @@
     flex: 1 1 auto;
     padding: $spacing-normal;
     overflow-y: auto;
+    overflow-x: hidden;
 
     &::-webkit-scrollbar {
       width: 8px;
