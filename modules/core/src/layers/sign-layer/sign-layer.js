@@ -24,8 +24,7 @@ import vertex from './sign-layer-vertex.glsl';
 
 const defaultProps = {
   ...IconLayer.defaultProps,
-  render3D: false,
-  getAngle: {type: 'accessor', value: 0}
+  render3D: true
 };
 
 export default class SignLayer extends IconLayer {

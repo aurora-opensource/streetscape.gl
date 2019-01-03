@@ -251,14 +251,15 @@ export default class Core3DViewer extends PureComponent {
         .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex),
       customLayers.map(layer => {
         // Clone layer props
-        const props = {...layer.props};
+        const {props} = layer;
+        const additionalProps = {};
 
         if (props.streamName) {
           // Use log data
           const stream = streams[props.streamName];
           const streamMetadata = getStreamMetadata(metadata, props.streamName);
           Object.assign(
-            props,
+            additionalProps,
             resolveCoordinateTransform(frame, streamMetadata, getTransformMatrix),
             {
               data: stream && stream.features
@@ -266,10 +267,15 @@ export default class Core3DViewer extends PureComponent {
           );
         } else if (props.coordinate) {
           // Apply log-specific coordinate props
-          Object.assign(props, resolveCoordinateTransform(frame, props, getTransformMatrix));
+          Object.assign(
+            additionalProps,
+            resolveCoordinateTransform(frame, props, getTransformMatrix)
+          );
+        } else {
+          return layer;
         }
 
-        return layer.clone(props);
+        return new layer.constructor(props, additionalProps);
       })
     ];
   }
