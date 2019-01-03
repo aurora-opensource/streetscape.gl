@@ -89,13 +89,27 @@ export const PLAYBACK_CONTROL_STYLE = {
 export const TOOLTIP_STYLE = {
   arrowSize: 0,
   borderWidth: 0,
-  background: 'rgba(0,0,0,0.9)'
+  background: '#CCCCCC',
+  body: {
+    color: '#141414',
+    whiteSpace: 'nowrap'
+  }
 };
 
 export const TOOLBAR_BUTTON_STYLE = {
-  size: 48,
-  wrapper: {
-    fontSize: 20
+  size: 60,
+  wrapper: props => ({
+    fontSize: 32,
+    background: props.isHovered ? 'rgba(129,133,138,0.3)' : props.theme.background
+  })
+};
+
+export const TOOLBAR_MENU_STYLE = {
+  arrowSize: 0,
+  borderWidth: 0,
+  body: {
+    left: 56,
+    boxShadow: 'none'
   }
 };
 
@@ -229,6 +243,7 @@ export const XVIZ_PANEL_STYLE = {
   },
   video: {
     wrapper: {
+      cursor: 'grab',
       position: 'absolute',
       width: '100%',
       height: '100%',

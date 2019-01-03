@@ -7,9 +7,23 @@
   top: 50%;
   right: 0;
   transform: translateY(-50%);
+  z-index: 9999;
 
   .active {
     background: $color-control-active !important;
     color: $color-text-primary !important;
   }
+  .selected {
+    .path1:before {
+      color: $color-control-active !important;
+    }
+    .path2:before {
+      color: #fff !important;
+    }
+  }
+  .menu {
+    width: 168px;
+    display: flex;
+  }
+
 }

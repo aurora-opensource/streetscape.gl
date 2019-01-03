@@ -2,7 +2,15 @@
 import React, {PureComponent} from 'react';
 import {Tooltip, Popover, Button} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE, TOOLBAR_BUTTON_STYLE} from './custom-styles';
+import {TOOLTIP_STYLE, TOOLBAR_MENU_STYLE, TOOLBAR_BUTTON_STYLE} from './custom-styles';
+
+const VIEW_MODE = {
+  TOP_DOWN: {desc: 'Top down (T)', icon: 'top'},
+  PERSPECTIVE: {desc: 'Perspective (P)', icon: 'perspective'},
+  DRIVER: {desc: 'Driver (D)', icon: 'driver'}
+};
+
+const noop = () => {};
 
 export default class Toolbar extends PureComponent {
   componentDidMount() {
@@ -14,26 +22,26 @@ export default class Toolbar extends PureComponent {
   }
 
   _onKeyDown = evt => {
-    switch (evt.keyCode) {
-      case 86: {
-        // V
-        let {viewMode} = this.props.settings;
-        if (viewMode === 'TOP_DOWN') {
-          viewMode = 'PERSPECTIVE';
-        } else if (viewMode === 'PERSPECTIVE') {
-          viewMode = 'DRIVER';
-        } else {
-          viewMode = 'TOP_DOWN';
-        }
-        this._gotoViewMode(viewMode);
-        break;
-      }
+    const key = String.fromCharCode(evt.keyCode);
 
-      case 82: // R
+    switch (key) {
+      case 'T':
+        this._gotoViewMode('TOP_DOWN');
+        break;
+
+      case 'P':
+        this._gotoViewMode('PERSPECTIVE');
+        break;
+
+      case 'D':
+        this._gotoViewMode('DRIVER');
+        break;
+
+      case 'R':
         this._resetView();
         break;
 
-      case 73: // I
+      case 'I':
         this._toggleTooltip(!this.props.settings.showTooltip);
         break;
 
@@ -43,7 +51,6 @@ export default class Toolbar extends PureComponent {
 
   _gotoViewMode = viewMode => {
     this.props.onSettingsChange({viewMode});
-    // this._viewModePopover._hidePopover();
   };
 
   _resetView = () => {
@@ -54,19 +61,30 @@ export default class Toolbar extends PureComponent {
     this.props.onSettingsChange({showTooltip});
   };
 
+  _renderViewButton(mode, opts = {}) {
+    const {
+      tooltip = VIEW_MODE[mode].desc,
+      position = Popover.TOP,
+      onClick = () => this._gotoViewMode(mode)
+    } = opts;
+    const isSelected = mode === this.props.settings.viewMode;
+
+    return (
+      <Tooltip key={mode} content={tooltip} position={position} style={TOOLTIP_STYLE}>
+        <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE} onClick={onClick}>
+          <i className={`icon-camera_${VIEW_MODE[mode].icon} ${isSelected ? 'selected' : ''}`}>
+            <path className="path1" />
+            <path className="path2" />
+            <path className="path3" />
+          </i>
+        </Button>
+      </Tooltip>
+    );
+  }
+
   _renderViewModeSelector = () => {
     return (
-      <div className="menu">
-        <div className="menu--item" onClick={() => this._gotoViewMode('TOP_DOWN')}>
-          Top-down
-        </div>
-        <div className="menu--item" onClick={() => this._gotoViewMode('PERSPECTIVE')}>
-          Perspective
-        </div>
-        <div className="menu--item" onClick={() => this._gotoViewMode('DRIVER')}>
-          Driver
-        </div>
-      </div>
+      <div className="menu">{Object.keys(VIEW_MODE).map(item => this._renderViewButton(item))}</div>
     );
   };
 
@@ -79,17 +97,15 @@ export default class Toolbar extends PureComponent {
           content={this._renderViewModeSelector}
           trigger={Popover.CLICK}
           arrowSize={0}
-          ref={ref => {
-            this._viewModePopover = ref;
-          }}
+          style={TOOLBAR_MENU_STYLE}
         >
-          <Tooltip content="View" position={Popover.LEFT} style={TOOLTIP_STYLE}>
-            <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE}>
-              <i className="icon-camera_alt" />
-            </Button>
-          </Tooltip>
+          {this._renderViewButton(settings.viewMode, {
+            tooltip: 'Camera',
+            position: Popover.LEFT,
+            onClick: noop
+          })}
         </Popover>
-        <Tooltip content="Reset Camera" position={Popover.LEFT} style={TOOLTIP_STYLE}>
+        <Tooltip content="Recenter Camera" position={Popover.LEFT} style={TOOLTIP_STYLE}>
           <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE} onClick={this._resetView}>
             <i className="icon-recenter" />
           </Button>
@@ -101,7 +117,7 @@ export default class Toolbar extends PureComponent {
             className={settings.showTooltip ? 'active' : ''}
             onClick={() => this._toggleTooltip(!settings.showTooltip)}
           >
-            <i className="icon-cursor" />
+            <i className="icon-select" />
           </Button>
         </Tooltip>
       </div>

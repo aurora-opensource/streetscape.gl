@@ -11,7 +11,7 @@ export default class ControlPanel extends PureComponent {
   };
 
   _gotoTab(tab) {
-    this.setState({tab});
+    this.setState({tab, lastTab: this.state.tab});
   }
 
   _renderTabContent() {
@@ -55,6 +55,7 @@ export default class ControlPanel extends PureComponent {
   }
 
   render() {
+    const {tab} = this.state;
     return (
       <div id="control-panel">
         <header>
@@ -71,7 +72,12 @@ export default class ControlPanel extends PureComponent {
         </header>
 
         <main>{this._renderTabContent()}</main>
-        <footer>{HelpPanel.renderButton({onClick: () => this._gotoTab('help')})}</footer>
+        <footer>
+          {HelpPanel.renderButton({
+            isOpen: tab === 'help',
+            onClick: () => this._gotoTab(tab === 'help' ? this.state.lastTab : 'help')
+          })}
+        </footer>
       </div>
     );
   }

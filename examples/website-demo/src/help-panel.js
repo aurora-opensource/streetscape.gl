@@ -8,7 +8,7 @@ export default class HelpPanel extends PureComponent {
     return (
       <Tooltip content="Help" style={TOOLTIP_STYLE}>
         <Button type={Button.MUTED} style={HELP_BUTTON_STYLE} {...props}>
-          <i className="icon-info" />
+          <i className={props.isOpen ? 'icon-close' : 'icon-info'} />
         </Button>
       </Tooltip>
     );
@@ -37,12 +37,20 @@ export default class HelpPanel extends PureComponent {
               <td>Shift + Mouse Left</td>
             </tr>
             <tr>
-              <td>Camera Mode</td>
-              <td>Toolbar > View (V)</td>
+              <td>Top-down Camera</td>
+              <td>T</td>
             </tr>
             <tr>
-              <td>Reset Camera</td>
-              <td>Toolbar > Reset Camera (R)</td>
+              <td>Perspective Camera</td>
+              <td>P</td>
+            </tr>
+            <tr>
+              <td>Driver Camera</td>
+              <td>D</td>
+            </tr>
+            <tr>
+              <td>Recenter Camera</td>
+              <td>R</td>
             </tr>
 
             <tr>
@@ -56,7 +64,7 @@ export default class HelpPanel extends PureComponent {
             </tr>
             <tr>
               <td>Show/Hide Tooltip</td>
-              <td>Toolbar > Get Info (I)</td>
+              <td>I</td>
             </tr>
 
             <tr>

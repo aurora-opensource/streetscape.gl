@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'streetscape';
-  src:  url('fonts/streetscape.eot?igkf9v');
-  src:  url('fonts/streetscape.eot?igkf9v#iefix') format('embedded-opentype'),
-    url('fonts/streetscape.ttf?igkf9v') format('truetype'),
-    url('fonts/streetscape.woff?igkf9v') format('woff'),
-    url('fonts/streetscape.svg?igkf9v#streetscape') format('svg');
+  src:  url('fonts/streetscape.eot?b6wk8t');
+  src:  url('fonts/streetscape.eot?b6wk8t#iefix') format('embedded-opentype'),
+    url('fonts/streetscape.ttf?b6wk8t') format('truetype'),
+    url('fonts/streetscape.woff?b6wk8t') format('woff'),
+    url('fonts/streetscape.svg?b6wk8t#streetscape') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,8 +24,29 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-close:before {
+  content: "\e906";
+}
+.icon-info:before {
+  content: "\e911";
+}
+.icon-launch:before {
+  content: "\e922";
+}
+.icon-eye_off:before {
+  content: "\e900";
+}
+.icon-building:before {
+  content: "\e921";
+}
 .icon-circle:before {
   content: "\e907";
+}
+.icon-export:before {
+  content: "\e919";
+}
+.icon-eye:before {
+  content: "\e91c";
 }
 .icon-group:before {
   content: "\e909";
@@ -33,23 +54,71 @@
 .icon-image:before {
   content: "\e90a";
 }
-.icon-points:before {
-  content: "\e90c";
+.icon-road:before {
+  content: "\e912";
+}
+.icon-map:before {
+  content: "\e90f";
 }
 .icon-polygon:before {
   content: "\e90d";
 }
+.icon-point:before {
+  content: "\e90c";
+}
 .icon-polyline:before {
   content: "\e90e";
 }
-.icon-road:before {
-  content: "\e912";
+.icon-settings:before {
+  content: "\e923";
 }
 .icon-text:before {
   content: "\e913";
 }
-.icon-time-series:before {
+.icon-time_series:before {
   content: "\e917";
+}
+.icon-recenter:before {
+  content: "\e915";
+}
+.icon-select:before {
+  content: "\e908";
+}
+.icon-camera_driver .path1:before {
+  content: "\e924";
+}
+.icon-camera_driver .path2:before {
+  content: "\e925";
+  margin-left: -1em;
+  color: rgb(32, 32, 32);
+}
+.icon-camera_driver .path3:before {
+  content: "\e926";
+  margin-left: -1em;
+}
+.icon-camera_perspective .path1:before {
+  content: "\e927";
+}
+.icon-camera_perspective .path2:before {
+  content: "\e928";
+  margin-left: -1em;
+  color: rgb(32, 32, 32);
+}
+.icon-camera_perspective .path3:before {
+  content: "\e929";
+  margin-left: -1em;
+}
+.icon-camera_top .path1:before {
+  content: "\e92a";
+}
+.icon-camera_top .path2:before {
+  content: "\e92b";
+  margin-left: -1em;
+  color: rgb(32, 32, 32);
+}
+.icon-camera_top .path3:before {
+  content: "\e92c";
+  margin-left: -1em;
 }
 .icon-github:before {
   content: "\e920";
@@ -72,33 +141,9 @@
 .icon-pedestrian:before {
   content: "\e90b";
 }
-.icon-eye:before {
-  content: "\e91c";
-}
 .icon-car:before {
   content: "\e916";
 }
-.icon-cursor:before {
-  content: "\e908";
-}
-.icon-recenter:before {
-  content: "\e915";
-}
-.icon-camera:before {
-  content: "\e906";
-}
 .icon-bike:before {
   content: "\e914";
-}
-.icon-eye_off:before {
-  content: "\e900";
-}
-.icon-camera_alt:before {
-  content: "\e910";
-}
-.icon-map:before {
-  content: "\e90f";
-}
-.icon-info:before {
-  content: "\e911";
 }
