@@ -2,12 +2,18 @@ import React, {PureComponent} from 'react';
 import {BaseWidget, TurnSignalWidget, MeterWidget} from 'streetscape.gl';
 
 const WHEEL_WIDGET_STYLE = {
-  arcRadius: 0
+  arcRadius: 0,
+  units: {
+    fontSize: 12
+  }
 };
 const METER_WIDGET_STYLE = {
   arcRadius: 42,
   msrValue: {
-    paddingTop: 6
+    paddingTop: 8
+  },
+  units: {
+    fontSize: 12
   }
 };
 const TURN_SIGNAL_WIDGET_STYLE = {
