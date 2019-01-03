@@ -92,10 +92,18 @@ export const TOOLTIP_STYLE = {
   background: 'rgba(0,0,0,0.9)'
 };
 
-export const BUTTON_STYLE = {
+export const TOOLBAR_BUTTON_STYLE = {
   size: 48,
   wrapper: {
     fontSize: 20
+  }
+};
+
+export const HELP_BUTTON_STYLE = {
+  size: 20,
+  wrapper: {
+    background: 'none',
+    fontSize: 14
   }
 };
 

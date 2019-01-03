@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Tooltip, Popover, Button} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE, BUTTON_STYLE} from './custom-styles';
+import {TOOLTIP_STYLE, TOOLBAR_BUTTON_STYLE} from './custom-styles';
 
 export default class Toolbar extends PureComponent {
   _gotoViewMode = viewMode => {
@@ -47,20 +47,20 @@ export default class Toolbar extends PureComponent {
           }}
         >
           <Tooltip content="View" position={Popover.LEFT} style={TOOLTIP_STYLE}>
-            <Button type={Button.MUTED} style={BUTTON_STYLE}>
+            <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE}>
               <i className="icon-camera_alt" />
             </Button>
           </Tooltip>
         </Popover>
         <Tooltip content="Reset Camera" position={Popover.LEFT} style={TOOLTIP_STYLE}>
-          <Button type={Button.MUTED} style={BUTTON_STYLE} onClick={this._resetView}>
+          <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE} onClick={this._resetView}>
             <i className="icon-recenter" />
           </Button>
         </Tooltip>
         <Tooltip content="Get Info" position={Popover.LEFT} style={TOOLTIP_STYLE}>
           <Button
             type={Button.MUTED}
-            style={BUTTON_STYLE}
+            style={TOOLBAR_BUTTON_STYLE}
             className={settings.showTooltip ? 'active' : ''}
             onClick={() => this._toggleTooltip(!settings.showTooltip)}
           >

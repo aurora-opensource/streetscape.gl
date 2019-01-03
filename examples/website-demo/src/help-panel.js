@@ -1,15 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Tooltip, Button} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE} from './custom-styles';
-
-const HELP_BUTTON_STYLE = {
-  size: 20,
-  wrapper: {
-    background: 'none',
-    fontSize: 14
-  }
-};
+import {TOOLTIP_STYLE, HELP_BUTTON_STYLE} from './custom-styles';
 
 export default class HelpPanel extends PureComponent {
   static renderButton(props) {
