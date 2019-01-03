@@ -13,7 +13,7 @@ export class XVIZMetricComponent extends PureComponent {
     style: PropTypes.object,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    getColor: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    getColor: PropTypes.oneOfType([PropTypes.func, PropTypes.string, PropTypes.object]),
     xTicks: PropTypes.number,
     yTicks: PropTypes.number,
     formatXTick: PropTypes.func,

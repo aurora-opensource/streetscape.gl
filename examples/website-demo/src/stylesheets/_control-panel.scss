@@ -1,12 +1,7 @@
 #control-panel {
-  position: fixed;
   display: flex;
   flex-direction: column;
-  width: 320px;
-  top: 0;
-  bottom: 0;
   background: $background;
-  box-shadow: 0 0 8px rgba(0,0,0,0.3);
   color: #F8F8F9;
 
   #logo {
@@ -69,10 +64,16 @@
   footer {
     background: $background-alt;
     padding: $spacing-tiny $spacing-normal;
-    font-size: 9px;
     text-align: right;
+    line-height: 0;
   }
   h4 {
     margin-bottom: 0;
+  }
+
+  #help {
+    td {
+      width: 50%;
+    }
   }
 }

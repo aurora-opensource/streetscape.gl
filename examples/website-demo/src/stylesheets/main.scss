@@ -10,19 +10,35 @@ body {
 
 #container {
   position: fixed;
+  display: flex;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   overflow:hidden;
 }
+#control-panel {
+  flex: 0 0 auto;
+  width: 348px;
+  height: calc(100vh - 144px);
+}
+#map {
+  flex-grow: 1;
+  position: relative;
+}
 #timeline {
-  position: fixed;
-  left: 320px;
-  right: 0;
+  position: absolute;
+  width: 100%;
   bottom: 0;
+}
+#hud {
+  position: fixed;
+  left: 4px;
+  bottom: 8px;
+  height: 122px;
 }
 
 @import 'inputs';
 @import 'control-panel';
 @import 'toolbar';
+@import 'hud';

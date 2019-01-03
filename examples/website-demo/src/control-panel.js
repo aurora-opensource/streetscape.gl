@@ -1,9 +1,9 @@
 import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
-import {Tooltip} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE, XVIZ_PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
+import {XVIZ_PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
 import MetadataPanel from './metadata-panel';
+import HelpPanel from './help-panel';
 
 export default class ControlPanel extends PureComponent {
   state = {
@@ -36,6 +36,9 @@ export default class ControlPanel extends PureComponent {
       case 'info':
         return <MetadataPanel log={log} selectedLog={selectedLog} onLogChange={onLogChange} />;
 
+      case 'help':
+        return <HelpPanel />;
+
       default:
         return null;
     }
@@ -66,13 +69,7 @@ export default class ControlPanel extends PureComponent {
         </header>
 
         <main>{this._renderTabContent()}</main>
-        <footer>
-          <Tooltip content="Help" style={TOOLTIP_STYLE}>
-            <div className="btn">
-              <i className="icon-info" />
-            </div>
-          </Tooltip>
-        </footer>
+        <footer>{HelpPanel.renderButton({onClick: () => this._gotoTab('help')})}</footer>
       </div>
     );
   }
