@@ -1,9 +1,46 @@
+/* global document */
 import React, {PureComponent} from 'react';
 import {Tooltip, Popover, Button} from '@streetscape.gl/monochrome';
 
 import {TOOLTIP_STYLE, TOOLBAR_BUTTON_STYLE} from './custom-styles';
 
 export default class Toolbar extends PureComponent {
+  componentDidMount() {
+    document.addEventListener('keydown', this._onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this._onKeyDown);
+  }
+
+  _onKeyDown = evt => {
+    switch (evt.keyCode) {
+      case 86: {
+        // V
+        let {viewMode} = this.props.settings;
+        if (viewMode === 'TOP_DOWN') {
+          viewMode = 'PERSPECTIVE';
+        } else if (viewMode === 'PERSPECTIVE') {
+          viewMode = 'DRIVER';
+        } else {
+          viewMode = 'TOP_DOWN';
+        }
+        this._gotoViewMode(viewMode);
+        break;
+      }
+
+      case 82: // R
+        this._resetView();
+        break;
+
+      case 73: // I
+        this._toggleTooltip(!this.props.settings.showTooltip);
+        break;
+
+      default:
+    }
+  };
+
   _gotoViewMode = viewMode => {
     this.props.onSettingsChange({viewMode});
     // this._viewModePopover._hidePopover();

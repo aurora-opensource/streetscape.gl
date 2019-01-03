@@ -38,11 +38,11 @@ export default class HelpPanel extends PureComponent {
             </tr>
             <tr>
               <td>Camera Mode</td>
-              <td>Toolbar > View</td>
+              <td>Toolbar > View (V)</td>
             </tr>
             <tr>
               <td>Reset Camera</td>
-              <td>Toolbar > Reset Camera</td>
+              <td>Toolbar > Reset Camera (R)</td>
             </tr>
 
             <tr>
@@ -56,7 +56,7 @@ export default class HelpPanel extends PureComponent {
             </tr>
             <tr>
               <td>Show/Hide Tooltip</td>
-              <td>Toolbar > Get Info</td>
+              <td>Toolbar > Get Info (I)</td>
             </tr>
 
             <tr>
@@ -65,7 +65,7 @@ export default class HelpPanel extends PureComponent {
               </td>
             </tr>
             <tr>
-              <td>Play / Pause</td>
+              <td>Play/Pause</td>
               <td>Space</td>
             </tr>
             <tr>
