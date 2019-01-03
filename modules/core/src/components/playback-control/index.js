@@ -110,7 +110,7 @@ class PlaybackControl extends PureComponent {
     this._onTimeChange(timestamp);
 
     if (this.state.isPlaying) {
-      this.setState({isPlaying: false});
+      this._onPause();
     }
   };
 

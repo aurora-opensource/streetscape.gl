@@ -30,8 +30,8 @@ const TITLE_HEIGHT = 26;
 export default class CameraPanel extends PureComponent {
   state = {
     panelState: {
-      x: 800,
-      y: 50,
+      x: 400,
+      y: 20,
       width: 400,
       height: 400 / ASPECT_RATIO + TITLE_HEIGHT,
       minimized: false

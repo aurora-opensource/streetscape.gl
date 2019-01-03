@@ -20,10 +20,10 @@
 
 import React, {PureComponent} from 'react';
 import {StreamSettingsPanel, XVIZPanel} from 'streetscape.gl';
-import {Tooltip} from '@streetscape.gl/monochrome';
 
-import {TOOLTIP_STYLE, XVIZ_PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
+import {XVIZ_PANEL_STYLE, STREAM_SETTINGS_STYLE} from './custom-styles';
 import MetadataPanel from './metadata-panel';
+import HelpPanel from './help-panel';
 
 export default class ControlPanel extends PureComponent {
   state = {
@@ -31,7 +31,7 @@ export default class ControlPanel extends PureComponent {
   };
 
   _gotoTab(tab) {
-    this.setState({tab});
+    this.setState({tab, lastTab: this.state.tab});
   }
 
   _renderTabContent() {
@@ -56,6 +56,9 @@ export default class ControlPanel extends PureComponent {
       case 'info':
         return <MetadataPanel log={log} selectedLog={selectedLog} onLogChange={onLogChange} />;
 
+      case 'help':
+        return <HelpPanel />;
+
       default:
         return null;
     }
@@ -72,11 +75,14 @@ export default class ControlPanel extends PureComponent {
   }
 
   render() {
+    const {tab} = this.state;
     return (
       <div id="control-panel">
         <header>
           <div id="logo">
-            <img src="assets/logo.png" />
+            <a href="../index.html">
+              <img src="assets/logo.png" />
+            </a>
           </div>
           <div id="tabs">
             {this._renderTab({id: 'info', description: 'Log Info'})}
@@ -87,11 +93,10 @@ export default class ControlPanel extends PureComponent {
 
         <main>{this._renderTabContent()}</main>
         <footer>
-          <Tooltip content="Help" style={TOOLTIP_STYLE}>
-            <div className="btn">
-              <i className="icon-info" />
-            </div>
-          </Tooltip>
+          {HelpPanel.renderButton({
+            isOpen: tab === 'help',
+            onClick: () => this._gotoTab(tab === 'help' ? this.state.lastTab : 'help')
+          })}
         </footer>
       </div>
     );
