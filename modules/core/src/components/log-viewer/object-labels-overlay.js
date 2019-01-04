@@ -78,7 +78,7 @@ export default class ObjectLabelsOverlay extends Component {
     const {objectSelection, frame, xvizStyleParser, style, renderObjectLabel} = this.props;
 
     const isSelected = Boolean(objectSelection[object.id]);
-    const stylesheet = xvizStyleParser.getStylesheet(streamName) || null;
+    const stylesheet = xvizStyleParser.getStylesheet(streamName);
     const styleProps = {
       id: object.id,
       isSelected,
