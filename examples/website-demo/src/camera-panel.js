@@ -23,7 +23,7 @@ export default class CameraPanel extends PureComponent {
       this.setState({
         panelState: {
           ...panelState,
-          width: panelState.height * nextProps.videoAspectRatio + TITLE_HEIGHT
+          height: panelState.width / nextProps.videoAspectRatio + TITLE_HEIGHT
         }
       });
     }
@@ -31,7 +31,12 @@ export default class CameraPanel extends PureComponent {
 
   _onUpdate = panelState => {
     const {videoAspectRatio} = this.props;
-    this.setState({panelState: {...panelState, width: panelState.height * videoAspectRatio + TITLE_HEIGHT}});
+    this.setState({
+      panelState: {
+        ...panelState,
+        height: panelState.width / videoAspectRatio + TITLE_HEIGHT
+      }
+    });
   };
 
   render() {

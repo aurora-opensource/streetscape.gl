@@ -3,18 +3,6 @@
 The [Website Demo](https://github.com/uber/streetscape.gl/tree/master/examples/website-demo) is a
 standalone app that provides a way to play around with the example dataset (kitti, nutonomy).
 
-## Running Website Demo
-
-```bash
-# clone the repo
-git clone https://github.com/uber/streetscape.gl.git
-cd streetscape.gl/examples/website-demo
-# install dependencies
-yarn
-# start the app
-yarn start
-```
-
 ### Use example dataset from local
 
 **Download dataset** Website demo app loads data files from remote github repo
@@ -42,6 +30,20 @@ location.
 
 ```bash
 cd streetscape.gl/examples/website-demo
+yarn start-local
+```
+
+## Running Website Demo
+
+After `xviz-data` is downloaded to local and `webpack.config.js` is correctly setup.
+
+```bash
+# clone the repo
+git clone https://github.com/uber/streetscape.gl.git
+cd streetscape.gl/examples/website-demo
+# install dependencies
+yarn
+# start the app
 yarn start-local
 ```
 
