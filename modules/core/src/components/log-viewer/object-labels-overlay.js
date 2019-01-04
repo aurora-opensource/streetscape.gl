@@ -80,15 +80,15 @@ export default class ObjectLabelsOverlay extends Component {
   _renderPerspectivePopup = object => {
     const {objectSelection, frame, metadata, style, renderObjectLabel} = this.props;
 
-    const isSelected = Boolean(objectSelection[object.id]);
-
-    const labelContent = renderObjectLabel({
+    const styleProps = {
       id: object.id,
-      isSelected,
+      isSelected: Boolean(objectSelection[object.id]),
       object,
       frame,
       metadata
-    });
+    };
+
+    const labelContent = renderObjectLabel(styleProps);
 
     if (!labelContent) {
       return null;
@@ -108,7 +108,7 @@ export default class ObjectLabelsOverlay extends Component {
         altitude={trackingPoint[2]}
         anchor="bottom-left"
         dynamicPosition={true}
-        isSelected={isSelected}
+        styleProps={styleProps}
         style={style}
         sortByDepth={true}
         closeButton={false}
