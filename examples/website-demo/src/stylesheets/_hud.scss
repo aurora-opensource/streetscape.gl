@@ -1,5 +1,9 @@
 #hud {
   display: flex;
+  background: $background;
+  opacity: 0.9;
+  box-sizing: border-box;
+  padding: 12px 8px;
 
   .hud-column {
     width: 108px;
@@ -10,6 +14,7 @@
   }
 
   .autonomy-state {
+    font-size: 12px;
     width: 92px;
     text-align: center;
     text-transform: capitalize;
