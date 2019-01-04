@@ -204,8 +204,7 @@ receive the following props:
 - `id` (String) - object id
 - `isSelected` (Boolean) - if object is selected
 - `object` (Object) - selected object
-- `metadata` (Object) - log metadata
-- `frame` (Object) - current log frame
+- `stylesheet` (Object) - the XVIZ stylesheet
 
 Popups will be disabled if this prop is set to `false`.
 

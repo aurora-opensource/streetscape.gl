@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {getXVIZConfig} from '@xviz/parser';
 import {_MapContext as MapContext} from 'react-map-gl';
 
 import PerspectivePopup from './perspective-popup';
@@ -17,6 +16,7 @@ export default class ObjectLabelsOverlay extends Component {
     objectSelection: PropTypes.object,
     frame: PropTypes.object,
     metadata: PropTypes.object,
+    xvizStyleParser: PropTypes.object,
 
     renderObjectLabel: PropTypes.func,
     style: PropTypes.object,
@@ -32,7 +32,7 @@ export default class ObjectLabelsOverlay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...this._getCoordinateProps(props)
+      coordinateProps: this._getCoordinateProps(props)
     };
   }
 
@@ -40,52 +40,50 @@ export default class ObjectLabelsOverlay extends Component {
     const {frame} = nextProps;
 
     if (frame && frame !== this.props.frame) {
-      this.setState(this._getCoordinateProps(nextProps));
+      this.setState({
+        coordinateProps: this._getCoordinateProps(nextProps)
+      });
     }
   }
 
   _getCoordinateProps(props) {
     const {frame, metadata, getTransformMatrix} = props;
 
-    if (frame) {
-      const objectStreamName = this._findObjectGeometryStream(frame.streams);
-      const result = {objectStreamName};
-
-      if (objectStreamName) {
-        const streamMetadata = metadata.streams[objectStreamName];
-        result.coordinateProps = resolveCoordinateTransform(
-          frame,
-          streamMetadata,
-          getTransformMatrix
-        );
-      }
-      return result;
+    if (!frame) {
+      return null;
     }
-    return null;
+
+    const coordinateProps = {};
+
+    for (const streamName in frame.streams) {
+      const features = frame.streams[streamName].features;
+
+      if (!features || !features[0] || !features[0].id || features[0].type !== 'polygon') {
+        // not an object stream
+        continue; // eslint-disable-line
+      }
+
+      const streamMetadata = (metadata.streams && metadata.streams[streamName]) || {};
+      coordinateProps[streamName] = resolveCoordinateTransform(
+        frame,
+        streamMetadata,
+        getTransformMatrix
+      );
+    }
+
+    return coordinateProps;
   }
 
-  _findObjectGeometryStream(streams) {
-    // TODO - deal with multiple streams
-    const {OBJECT_STREAM} = getXVIZConfig();
-    return streams[OBJECT_STREAM] ? OBJECT_STREAM : null;
-  }
+  _renderPerspectivePopup = (object, streamName) => {
+    const {objectSelection, frame, xvizStyleParser, style, renderObjectLabel} = this.props;
 
-  _getTrackingPoint(object) {
-    const point = object.center || getCentroid(object.vertices);
-    const lngLatZ = positionToLngLat(point, this.state.coordinateProps);
-    lngLatZ[2] += object.height || 1.5;
-    return lngLatZ;
-  }
-
-  _renderPerspectivePopup = object => {
-    const {objectSelection, frame, metadata, style, renderObjectLabel} = this.props;
-
+    const isSelected = Boolean(objectSelection[object.id]);
+    const stylesheet = xvizStyleParser.getStylesheet(streamName) || null;
     const styleProps = {
       id: object.id,
-      isSelected: Boolean(objectSelection[object.id]),
+      isSelected,
       object,
-      frame,
-      metadata
+      stylesheet
     };
 
     const labelContent = renderObjectLabel(styleProps);
@@ -94,7 +92,14 @@ export default class ObjectLabelsOverlay extends Component {
       return null;
     }
 
-    const trackingPoint = this._getTrackingPoint(object);
+    const trackingPoint = positionToLngLat(
+      getCentroid(object.vertices),
+      this.state.coordinateProps[streamName]
+    );
+
+    const objectHeight = stylesheet.getProperty('height', object);
+    trackingPoint[2] += objectHeight || 0;
+
     // compensate for camera offset
     if (frame.origin) {
       trackingPoint[2] -= frame.origin[2];
@@ -121,17 +126,17 @@ export default class ObjectLabelsOverlay extends Component {
 
   render() {
     const {frame, viewport, renderObjectLabel} = this.props;
-    const {objectStreamName} = this.state;
+    const {coordinateProps} = this.state;
 
-    if (!frame || !objectStreamName || !renderObjectLabel) {
+    if (!frame || !coordinateProps || !renderObjectLabel) {
       return null;
     }
 
-    const objects = frame.streams[objectStreamName].features;
-
     return (
       <MapContext.Provider value={{viewport}}>
-        {objects.map(this._renderPerspectivePopup)}
+        {Object.keys(coordinateProps).map(streamName =>
+          frame.streams[streamName].features.map(f => this._renderPerspectivePopup(f, streamName))
+        )}
       </MapContext.Provider>
     );
   }

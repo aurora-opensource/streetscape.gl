@@ -186,14 +186,24 @@ export const LOG_VIEWER_STYLE = {
   objectLabelTip: props => (props.isSelected ? null : {display: 'none'}),
   objectLabelLine: props => (props.isSelected ? null : {display: 'none'}),
   objectLabelBody: props => {
-    const {classes} = props.object.base;
-    const objectType = classes && classes.join('');
+    const {object, stylesheet, isSelected} = props;
 
+    let background = '#F8F8F9';
+    let color = '#222';
+    if (!isSelected) {
+      const strokeColor = stylesheet.getProperty('stroke_color', object);
+      if (strokeColor) {
+        background = `rgb(${strokeColor.slice(0, 3).join(',')})`;
+        const brightness = (strokeColor[0] + strokeColor[1] + strokeColor[2]) / 3;
+        color = brightness < 170 ? '#fff' : color;
+      }
+    }
     return {
       borderRadius: 12,
-      padding: 8,
-      color: props.isSelected ? '#222' : '#fff',
-      background: props.isSelected ? '#F8F8F9' : OBJECT_COLORS[objectType] || OBJECT_COLORS.Unknown
+      padding: '4px 8px',
+      fontSize: isSelected ? 12 : 14,
+      color,
+      background
     };
   },
 
