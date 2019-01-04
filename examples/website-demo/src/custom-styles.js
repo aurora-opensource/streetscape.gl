@@ -15,7 +15,7 @@ export const UI_THEME = {
   textColorInvert: '#1B1B1C',
 
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
-  fontSize: 12,
+  fontSize: 14,
   shadow: '0 2px 4px 0 rgba(0, 0, 0, 0.15)'
 };
 
@@ -24,6 +24,9 @@ export const PLAYBACK_CONTROL_STYLE = {
     paddingTop: 44
   },
   slider: {
+    wrapper: {
+      background: 'none'
+    },
     track: {
       height: 8,
       background: '#4b4b4b',
@@ -80,7 +83,6 @@ export const PLAYBACK_CONTROL_STYLE = {
   timestamp: {
     color: '#fff',
     position: 'absolute',
-    fontSize: 14,
     left: 12,
     top: 12
   }
@@ -92,7 +94,8 @@ export const TOOLTIP_STYLE = {
   background: '#CCCCCC',
   body: {
     color: '#141414',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    fontSize: 12
   }
 };
 
@@ -116,8 +119,7 @@ export const TOOLBAR_MENU_STYLE = {
 export const HELP_BUTTON_STYLE = {
   size: 20,
   wrapper: {
-    background: 'none',
-    fontSize: 14
+    background: 'none'
   }
 };
 
@@ -140,7 +142,7 @@ export const STREAM_SETTINGS_STYLE = {
       opacity: props.value === 'off' ? 0.4 : 1
     }),
     border: props => ({
-      display: props.isHovered ? 'block' : 'none',
+      display: props.isHovered || props.value === 'off' ? 'block' : 'none',
       position: 'absolute',
       borderStyle: 'none',
       right: 0,
@@ -171,47 +173,66 @@ export const STREAM_SETTINGS_STYLE = {
   })
 };
 
+const OBJECT_COLORS = {
+  Van: '#5B91F4',
+  Cyclist: '#957FCE',
+  Pedestrian: '#FFC6AF',
+  Unknown: '#E2E2E2'
+};
+
 export const LOG_VIEWER_STYLE = {
   objectLabelColor: '#D0D0D1',
   objectLabelTipSize: props => (props.isSelected ? 30 : 8),
   objectLabelTip: props => (props.isSelected ? null : {display: 'none'}),
   objectLabelLine: props => (props.isSelected ? null : {display: 'none'}),
-  objectLabelBody: props => ({
-    borderRadius: 12,
-    padding: 8,
-    color: '#222',
-    background: props.isSelected ? '#F8F8F9' : '#D0D0D1'
-  }),
+  objectLabelBody: props => {
+    const {classes} = props.object.base;
+    const objectType = classes && classes.join('');
+
+    return {
+      borderRadius: 12,
+      padding: 8,
+      color: props.isSelected ? '#222' : '#fff',
+      background: props.isSelected ? '#F8F8F9' : OBJECT_COLORS[objectType] || OBJECT_COLORS.Unknown
+    };
+  },
 
   tooltip: {
-    background: 'rgba(0,0,0,0.9)',
+    maxWidth: 276,
+    fontSize: 12,
+    background: 'rgba(0,0,0,0.8)',
+    borderRadius: 4,
+    '>hr': {
+      width: '100%',
+      float: 'left',
+      margin: '12px -12px',
+      padding: '0 12px',
+      opacity: 0.2
+    },
+    ' b': {
+      textTransform: 'capitalize',
+      fontSize: 14
+    },
     '>div': {
-      marginTop: 4
+      minWidth: '50%',
+      float: 'left',
+      margin: '2px 0'
     }
   }
 };
 
-const OBJECT_COLORS = {
-  van: '#5B91F4',
-  car: '#5B91F4',
-  cyclist: '#957FCE',
-  pedestrian: '#FFC6AF',
-  unknown: '#E2E2E2'
-};
-
 /* eslint-disable camelcase */
 const TRACKLET_STYLES = [
-  {style: {fill_color: `${OBJECT_COLORS.unknown}88`, stroke_color: OBJECT_COLORS.unknown}},
+  {style: {fill_color: `${OBJECT_COLORS.Unknown}88`, stroke_color: OBJECT_COLORS.Unknown}},
   {
     name: 'Pedestrian',
-    style: {fill_color: `${OBJECT_COLORS.pedestrian}88`, stroke_color: OBJECT_COLORS.pedestrian}
+    style: {fill_color: `${OBJECT_COLORS.Pedestrian}88`, stroke_color: OBJECT_COLORS.Pedestrian}
   },
   {
     name: 'Cyclist',
-    style: {fill_color: `${OBJECT_COLORS.cyclist}88`, stroke_color: OBJECT_COLORS.cyclist}
+    style: {fill_color: `${OBJECT_COLORS.Cyclist}88`, stroke_color: OBJECT_COLORS.Cyclist}
   },
-  {name: 'Car', style: {fill_color: `${OBJECT_COLORS.car}88`, stroke_color: OBJECT_COLORS.car}},
-  {name: 'Van', style: {fill_color: `${OBJECT_COLORS.van}88`, stroke_color: OBJECT_COLORS.van}}
+  {name: 'Van', style: {fill_color: `${OBJECT_COLORS.Van}88`, stroke_color: OBJECT_COLORS.Van}}
 ];
 
 export const XVIZ_STYLE = {
@@ -252,10 +273,13 @@ export const XVIZ_PANEL_STYLE = {
     selector: {
       wrapper: {
         position: 'absolute',
-        width: 140,
+        width: 160,
         top: 0,
         left: '50%',
         transform: 'translateX(-50%)'
+      },
+      select: {
+        fontSize: 14
       },
       border: {
         border: 'none'

@@ -73,9 +73,9 @@ export default class Toolbar extends PureComponent {
       <Tooltip key={mode} content={tooltip} position={position} style={TOOLTIP_STYLE}>
         <Button type={Button.MUTED} style={TOOLBAR_BUTTON_STYLE} onClick={onClick}>
           <i className={`icon-camera_${VIEW_MODE[mode].icon} ${isSelected ? 'selected' : ''}`}>
-            <path className="path1" />
-            <path className="path2" />
-            <path className="path3" />
+            <span className="path1" />
+            <span className="path2" />
+            <span className="path3" />
           </i>
         </Button>
       </Tooltip>

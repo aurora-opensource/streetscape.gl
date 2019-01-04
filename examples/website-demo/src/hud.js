@@ -3,17 +3,24 @@ import {BaseWidget, TurnSignalWidget, MeterWidget} from 'streetscape.gl';
 
 const WHEEL_WIDGET_STYLE = {
   arcRadius: 0,
+  msrValue: {
+    fontSize: 18,
+    fontWeight: 700,
+    paddingTop: 0
+  },
   units: {
-    fontSize: 12
+    fontSize: 14
   }
 };
 const METER_WIDGET_STYLE = {
   arcRadius: 42,
   msrValue: {
-    paddingTop: 8
+    fontSize: 18,
+    fontWeight: 700,
+    paddingTop: 3
   },
   units: {
-    fontSize: 12
+    fontSize: 14
   }
 };
 const TURN_SIGNAL_WIDGET_STYLE = {

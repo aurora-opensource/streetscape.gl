@@ -17,7 +17,7 @@ const TooltipContainer = styled.div(props => ({
   ...evaluateStyle(props.userStyle, props)
 }));
 
-const KEY_BLACKLIST = ['vertices', 'base', 'style', 'state', 'object_id'];
+const KEY_BLACKLIST = ['vertices', 'base', 'style', 'state', 'id', 'object_id'];
 
 class HoverTooltip extends PureComponent {
   _renderEntries(object) {
@@ -37,13 +37,24 @@ class HoverTooltip extends PureComponent {
   }
 
   _renderContent = info => {
+    const objectId = info.object.base && info.object.base.object_id;
+
     return [
       <div key="-stream-">
         <div>
-          <b>Stream</b>
+          <b>stream</b>
         </div>
         {info.layer.props.streamName}
-      </div>
+      </div>,
+      objectId ? (
+        <div key="-id-">
+          <div>
+            <b>id</b>
+          </div>
+          {objectId}
+        </div>
+      ) : null,
+      <hr key="-separator-" />
     ].concat(this._renderEntries(info.object.base), this._renderEntries(info.object));
   };
 

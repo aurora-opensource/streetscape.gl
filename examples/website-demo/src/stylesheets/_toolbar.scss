@@ -1,12 +1,8 @@
 #toolbar {
   background: $background-alt;
-  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
   z-index: 9999;
 
   .active {
