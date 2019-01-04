@@ -22,7 +22,7 @@
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {setXVIZConfig} from '@xviz/parser';
+import {setXVIZConfig, setXVIZSettings} from '@xviz/parser';
 import {XVIZFileLoader} from 'streetscape.gl';
 import {ThemeProvider} from '@streetscape.gl/monochrome';
 
@@ -48,7 +48,12 @@ class Example extends PureComponent {
   };
 
   _loadLog(logSettings) {
-    setXVIZConfig(logSettings.xvizConfig);
+    if (logSettings.xvizConfig) {
+      setXVIZConfig(logSettings.xvizConfig);
+    }
+    if (logSettings.xvizSettings) {
+      setXVIZSettings(logSettings.xvizSettings);
+    }
 
     const loader = new XVIZFileLoader({
       timingsFilePath: `${logSettings.path}/0-frame.json`,
@@ -93,7 +98,7 @@ class Example extends PureComponent {
 
         <Toolbar settings={settings} onSettingsChange={this._onSettingsChange} />
 
-        <CameraPanel log={log} />
+        <CameraPanel log={log} videoAspectRatio={selectedLog.videoAspectRatio} />
       </div>
     );
   }
