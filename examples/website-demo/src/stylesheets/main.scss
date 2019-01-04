@@ -4,13 +4,12 @@ body {
   user-select: none;
   background: #000;
   font-family: $font-family;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 24px;
 }
 
 #container {
   position: fixed;
-  display: flex;
   top: 0;
   left: 0;
   width: 100vw;
@@ -18,25 +17,34 @@ body {
   overflow:hidden;
 }
 #control-panel {
-  flex: 0 0 auto;
+  position: fixed;
   width: 348px;
-  border-right: solid 1px #000;
-  padding-bottom: 146px;
-}
-#map {
-  flex-grow: 1;
-  position: relative;
+  height: calc(100vh - 149px);
 }
 #timeline {
-  position: absolute;
-  width: 100%;
+  position: fixed;
+  left: 348px;
+  right: 0;
   bottom: 0;
+  border-left: solid 1px #000;
 }
 #hud {
   position: fixed;
-  left: 4px;
-  bottom: 12px;
-  height: 122px;
+  width: 348px;
+  height: 149px;
+  left: 0;
+  bottom: 0;
+}
+#toolbar {
+  position: fixed;
+  top: calc(50vh - 74px);
+  right: 0;
+  transform: translateY(-50%);
+}
+.mapboxgl-ctrl-logo {
+  margin-left: 350px !important;
+  margin-bottom: 2px !important;
+  opacity: 0.4;
 }
 
 @import 'control-panel';

@@ -3,6 +3,7 @@
   flex-direction: column;
   background: $background;
   color: #F8F8F9;
+  opacity: 0.9;
 
   #logo {
     text-align: left;
@@ -70,8 +71,10 @@
     line-height: 0;
   }
   h4 {
+    text-transform: uppercase;
+    opacity: 0.4;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 12px;
     margin-bottom: 0;
   }
 

@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* global window */
 import React, {PureComponent} from 'react';
 import {XVIZPanel} from 'streetscape.gl';
 import {FloatPanel} from '@streetscape.gl/monochrome';
@@ -30,7 +31,7 @@ const TITLE_HEIGHT = 26;
 export default class CameraPanel extends PureComponent {
   state = {
     panelState: {
-      x: 400,
+      x: window.innerWidth - 420,
       y: 20,
       width: 400,
       height: 400 / ASPECT_RATIO + TITLE_HEIGHT,

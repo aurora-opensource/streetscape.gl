@@ -29,6 +29,7 @@ import {ThemeProvider} from '@streetscape.gl/monochrome';
 import ControlPanel from './control-panel';
 import CameraPanel from './camera-panel';
 import MapView from './map-view';
+import Timeline from './timeline';
 import Toolbar from './toolbar';
 import HUD from './hud';
 
@@ -45,10 +46,6 @@ class Example extends PureComponent {
       showTooltip: false
     }
   };
-
-  componentDidMount() {
-    this.state.log.connect();
-  }
 
   _loadLog(logSettings) {
     setXVIZConfig(logSettings.xvizConfig);
@@ -81,20 +78,18 @@ class Example extends PureComponent {
     });
   };
 
-  _onViewStateChange = ({viewOffset}) => {
-    this._onSettingsChange({viewOffset});
-  };
-
   render() {
     const {log, selectedLog, settings} = this.state;
 
     return (
       <div id="container">
+        <MapView log={log} settings={settings} onSettingsChange={this._onSettingsChange} />
+
         <ControlPanel selectedLog={selectedLog} onLogChange={this._onLogChange} log={log} />
 
         <HUD log={log} />
 
-        <MapView log={log} settings={settings} onViewStateChange={this._onViewStateChange} />
+        <Timeline log={log} />
 
         <Toolbar settings={settings} onSettingsChange={this._onSettingsChange} />
 
