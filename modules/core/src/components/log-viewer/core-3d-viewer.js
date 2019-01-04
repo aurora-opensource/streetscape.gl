@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import {StaticMap} from 'react-map-gl';
 import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
 
+import ObjectLabelsOverlay from './object-labels-overlay';
+
 import MeshLayer from '../../layers/mesh-layer/mesh-layer';
 import {XVIZStyleParser} from '@xviz/parser';
 
@@ -44,6 +46,7 @@ export default class Core3DViewer extends PureComponent {
       PropTypes.func
     ]),
     customLayers: PropTypes.array,
+    renderObjectLabel: PropTypes.func,
     getTransformMatrix: PropTypes.func,
 
     // Callbacks
@@ -202,7 +205,7 @@ export default class Core3DViewer extends PureComponent {
 
               // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
-              zIndex: streamMetadata && streamMetadata.primitive_type === 'polygon' ? 2 : 0,
+              zIndex: primitives[0].type === 'polygon' ? 2 : 0,
 
               // Selection props (app defined, not used by deck.gl)
               streamName
@@ -286,7 +289,19 @@ export default class Core3DViewer extends PureComponent {
   }
 
   render() {
-    const {mapboxApiAccessToken, frame, mapStyle, viewMode, showMap} = this.props;
+    const {
+      mapboxApiAccessToken,
+      frame,
+      metadata,
+      objectStates,
+      renderObjectLabel,
+      getTransformMatrix,
+      style,
+      mapStyle,
+      viewMode,
+      showMap
+    } = this.props;
+    const {styleParser} = this.state;
 
     return (
       <DeckGL
@@ -310,6 +325,16 @@ export default class Core3DViewer extends PureComponent {
             visible={frame && frame.origin && !viewMode.firstPerson}
           />
         )}
+
+        <ObjectLabelsOverlay
+          objectSelection={objectStates.selected}
+          frame={frame}
+          metadata={metadata}
+          renderObjectLabel={renderObjectLabel}
+          xvizStyleParser={styleParser}
+          style={style}
+          getTransformMatrix={getTransformMatrix}
+        />
 
         {this.props.children}
       </DeckGL>

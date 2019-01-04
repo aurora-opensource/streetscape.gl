@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {setObjectState} from '../../utils/object-state';
 
 import Core3DViewer from './core-3d-viewer';
-import ObjectLabelsOverlay from './object-labels-overlay';
 import HoverTooltip from './hover-tooltip';
 
 import connectToLog from '../connect';
@@ -21,9 +20,7 @@ class LogViewer extends PureComponent {
     metadata: PropTypes.object,
 
     // Rendering options
-    renderObjectLabel: PropTypes.func,
     renderTooltip: PropTypes.func,
-    getTransformMatrix: PropTypes.func,
     style: PropTypes.object,
 
     // Callbacks
@@ -121,7 +118,6 @@ class LogViewer extends PureComponent {
   }
 
   render() {
-    const {frame, metadata, renderObjectLabel, style, getTransformMatrix} = this.props;
     const viewState = this.props.viewState || this.state.viewState;
     const viewOffset = this.props.viewOffset || this.state.viewOffset;
     const objectStates = this.props.objectStates || this.state.objectStates;
@@ -138,15 +134,6 @@ class LogViewer extends PureComponent {
           viewOffset={viewOffset}
           objectStates={objectStates}
         >
-          <ObjectLabelsOverlay
-            objectSelection={objectStates.selected}
-            frame={frame}
-            metadata={metadata}
-            renderObjectLabel={renderObjectLabel}
-            style={style}
-            getTransformMatrix={getTransformMatrix}
-          />
-
           {this._renderTooltip()}
         </Core3DViewer>
       </div>
