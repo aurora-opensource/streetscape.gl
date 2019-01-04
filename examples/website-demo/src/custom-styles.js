@@ -16,6 +16,8 @@ export const UI_THEME = {
 
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
   fontSize: 14,
+  fontWeight: 200,
+
   shadow: '0 2px 4px 0 rgba(0, 0, 0, 0.15)'
 };
 

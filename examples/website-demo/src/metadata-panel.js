@@ -63,6 +63,7 @@ class MetadataPanel extends PureComponent {
               </p>
             </div>
 
+            <h4>Data Source</h4>
             <div>
               <p>
                 <a href={extractLink(metadata.log_info.source.link)}>
