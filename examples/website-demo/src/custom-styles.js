@@ -173,13 +173,6 @@ export const STREAM_SETTINGS_STYLE = {
   })
 };
 
-const OBJECT_COLORS = {
-  Van: '#5B91F4',
-  Cyclist: '#957FCE',
-  Pedestrian: '#FFC6AF',
-  Unknown: '#E2E2E2'
-};
-
 export const LOG_VIEWER_STYLE = {
   objectLabelColor: '#D0D0D1',
   objectLabelTipSize: props => (props.isSelected ? 30 : 8),
@@ -232,28 +225,10 @@ export const LOG_VIEWER_STYLE = {
 };
 
 /* eslint-disable camelcase */
-const TRACKLET_STYLES = [
-  {style: {fill_color: `${OBJECT_COLORS.Unknown}88`, stroke_color: OBJECT_COLORS.Unknown}},
-  {
-    name: 'Pedestrian',
-    style: {fill_color: `${OBJECT_COLORS.Pedestrian}88`, stroke_color: OBJECT_COLORS.Pedestrian}
-  },
-  {
-    name: 'Cyclist',
-    style: {fill_color: `${OBJECT_COLORS.Cyclist}88`, stroke_color: OBJECT_COLORS.Cyclist}
-  },
-  {name: 'Van', style: {fill_color: `${OBJECT_COLORS.Van}88`, stroke_color: OBJECT_COLORS.Van}}
-];
-
 export const XVIZ_STYLE = {
   '/tracklets/objects': [
-    ...TRACKLET_STYLES,
     {name: 'selected', style: {fill_color: '#ff800088', stroke_color: '#ff8000'}}
-  ],
-  '/tracklets/objects/futures': TRACKLET_STYLES,
-  '/vehicle/trajectory': [{style: {stroke_color: '#47B27588'}}],
-  '/tracklets/trajectory': [{style: {stroke_color: '#FFC043'}}],
-  '/tracklets/tracking_point': [{style: {fill_color: '#FFC043'}}]
+  ]
 };
 /* eslint-enable camelcase */
 
