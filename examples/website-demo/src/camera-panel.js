@@ -5,7 +5,6 @@ import {FloatPanel} from '@streetscape.gl/monochrome';
 
 import {XVIZ_PANEL_STYLE, FLOAT_PANEL_STYLE} from './custom-styles';
 
-const ASPECT_RATIO = 10 / 3;
 const TITLE_HEIGHT = 26;
 
 export default class CameraPanel extends PureComponent {
@@ -14,14 +13,30 @@ export default class CameraPanel extends PureComponent {
       x: window.innerWidth - 420,
       y: 20,
       width: 400,
-      height: 400 / ASPECT_RATIO + TITLE_HEIGHT,
+      height: 150,
       minimized: false
     }
   };
 
+  componentWillReceiveProps(nextProps) {
+    const {panelState} = this.state;
+    if (this.props.videoAspectRatio !== nextProps.videoAspectRatio) {
+      this.setState({
+        panelState: {
+          ...panelState,
+          height: panelState.width / nextProps.videoAspectRatio + TITLE_HEIGHT
+        }
+      });
+    }
+  }
+
   _onUpdate = panelState => {
+    const {videoAspectRatio} = this.props;
     this.setState({
-      panelState: {...panelState, height: panelState.width / ASPECT_RATIO + TITLE_HEIGHT}
+      panelState: {
+        ...panelState,
+        height: panelState.width / videoAspectRatio + TITLE_HEIGHT
+      }
     });
   };
 
