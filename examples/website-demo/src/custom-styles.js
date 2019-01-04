@@ -253,7 +253,7 @@ export const XVIZ_PANEL_STYLE = {
       position: 'absolute',
       width: '100%',
       height: '100%',
-      paddingTop: 26
+      paddingTop: 28
     },
     selector: {
       wrapper: {

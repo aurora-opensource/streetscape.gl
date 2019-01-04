@@ -21,7 +21,7 @@
     "build": "npm run clean && npm run build-es6 && npm run build-esm && npm run build-es5"
   },
   "dependencies": {
-    "@streetscape.gl/monochrome": "^1.0.0-alpha.1",
+    "@streetscape.gl/monochrome": "^1.0.0-alpha.2",
     "@xviz/parser": "./../xviz/modules/parser",
     "deck.gl": "^6.3.0",
     "lodash.merge": "^4.6.1",
