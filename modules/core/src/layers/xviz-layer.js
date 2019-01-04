@@ -96,12 +96,9 @@ const STYLE_TO_LAYER_PROP = {
 
 const EMPTY_OBJECT = {};
 
-// Access V1 and V2 style properties
+// Access V1 style properties
 const getInlineProperty = (context, propertyName, objectState) => {
-  let inlineProp = objectState[propertyName];
-  if (inlineProp === undefined) {
-    inlineProp = objectState.base && objectState.base.style && objectState.base.style[propertyName];
-  }
+  const inlineProp = objectState[propertyName];
   return inlineProp === undefined ? null : inlineProp;
 };
 const getStylesheetProperty = (context, propertyName, objectState) =>
@@ -154,19 +151,20 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
       break;
   }
 
-  // 1a. Property from stylesheet
+  // 1a. Property from inline style (v2) or stylesheet
   let property = getStylesheetProperty(context, propertyName, objectState);
 
-  // 1b. Alt property from stylesheet
+  // 1b. Alt property from inline style (v2) or stylesheet
   if (property === null && altPropertyName) {
     property = getStylesheetProperty(context, altPropertyName, objectState);
   }
 
+  // Backward compatibility
   if (property === null && !context.disableInlineStyling) {
-    // 2a. Property from inline style
+    // 2a. Property from inline style (v1)
     property = getInlineProperty(context, propertyName, objectState);
 
-    // 2b. Alt property from inline style
+    // 2b. Alt property from inline style (v1)
     if (property === null && altPropertyName) {
       property = getInlineProperty(context, altPropertyName, objectState);
     }
