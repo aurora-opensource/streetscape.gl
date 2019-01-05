@@ -22,7 +22,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import {getXVIZConfig, getXVIZSettings} from '@xviz/parser';
+import {getXVIZConfig} from '@xviz/parser';
 import DualPlaybackControl from './dual-playback-control';
 
 import connectToLog from '../connect';
@@ -134,7 +134,7 @@ class PlaybackControl extends PureComponent {
       const {startTime, endTime, bufferRange, timestamp} = this.props;
       const {timeScale} = this.state;
       const lastUpdate = this._lastAnimationUpdate;
-      const {PLAYBACK_FRAME_RATE, TIME_WINDOW} = getXVIZSettings();
+      const {PLAYBACK_FRAME_RATE, TIME_WINDOW} = getXVIZConfig();
 
       // avoid skipping frames - cap delta at resolution
       let timeDeltaMs = lastUpdate > 0 ? now - lastUpdate : 0;

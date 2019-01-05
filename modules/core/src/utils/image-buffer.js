@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 /* global createImageBitmap, Blob, Image, URL  */
-import {getXVIZSettings} from '@xviz/parser';
+import {getXVIZConfig} from '@xviz/parser';
 
 /* Loads the image data from a frame of a XVIZ image stream */
 function loadImage(frame) {
@@ -98,7 +98,7 @@ export default class ImageBuffer {
   _getCurrentFrames(allFrames, currentTime) {
     let currentFrame = null;
     let currentFrameIndex = -1;
-    let bestDelta = getXVIZSettings().TIME_WINDOW;
+    let bestDelta = getXVIZConfig().TIME_WINDOW;
 
     // Find the frame closest to the current timestamp
     allFrames.forEach((frame, i) => {

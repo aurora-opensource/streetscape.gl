@@ -25,7 +25,7 @@ import {FloatPanel} from '@streetscape.gl/monochrome';
 
 import {XVIZ_PANEL_STYLE, FLOAT_PANEL_STYLE} from './custom-styles';
 
-const TITLE_HEIGHT = 26;
+const TITLE_HEIGHT = 28;
 
 export default class CameraPanel extends PureComponent {
   state = {
@@ -33,7 +33,7 @@ export default class CameraPanel extends PureComponent {
       x: window.innerWidth - 420,
       y: 20,
       width: 400,
-      height: 150,
+      height: 148,
       minimized: false
     }
   };

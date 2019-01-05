@@ -24,7 +24,7 @@ import {PlaybackControl} from 'streetscape.gl';
 
 import {PLAYBACK_CONTROL_STYLE} from './custom-styles';
 
-const formatTimestamp = x => new Date(x).toUTCString();
+const formatTimestamp = x => new Date(x * 1000).toUTCString();
 
 export default class Timeline extends PureComponent {
   state = {

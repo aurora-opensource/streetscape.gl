@@ -78,6 +78,13 @@
     margin-bottom: 0;
   }
 
+  #log-info {
+    a {
+      text-decoration: none;
+      color: $color-control-active;
+    }
+  }
+
   #help {
     table {
       width: 100%;

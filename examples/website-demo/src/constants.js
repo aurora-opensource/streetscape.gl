@@ -49,7 +49,7 @@ export const LOGS = [
     name: 'KITTI-0005',
     path: `${LOG_DIR}/kitti/2011_09_26_drive_0005_sync`,
     xvizConfig: {
-      OBJECT_STREAM: '/tracklets/objects'
+      TIME_WINDOW: 0.4
     },
     videoAspectRatio: 10 / 3
   },
@@ -57,10 +57,7 @@ export const LOGS = [
     name: 'nuTonomy-0006',
     path: `${LOG_DIR}/nutonomy/scene-0006`,
     xvizConfig: {
-      OBJECT_STREAM: '/objects/objects'
-    },
-    xvizSettings: {
-      TIME_WINDOW: 600
+      TIME_WINDOW: 0.6
     },
     videoAspectRatio: 16 / 9
   }

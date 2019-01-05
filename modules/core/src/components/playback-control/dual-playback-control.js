@@ -71,7 +71,7 @@ class DualPlaybackControl extends PureComponent {
     ...PlaybackControl.defaultProps,
     markers: [],
     lookAhead: 0,
-    maxLookAhead: 10000,
+    maxLookAhead: 10,
     formatTick: null,
     formatTimestamp: null,
     formatLookAhead: x => PlaybackControl.formatTimeCode(x, '{ss}.{S}'),

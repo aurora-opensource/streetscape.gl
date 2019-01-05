@@ -21,7 +21,7 @@
 /* global setTimeout */
 import test from 'tape-catch';
 
-import {setXVIZConfig, getXVIZSettings, setXVIZSettings, LOG_STREAM_MESSAGE} from '@xviz/parser';
+import {setXVIZConfig, getXVIZConfig, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {XVIZStreamLoader} from 'streetscape.gl';
 import {updateSocketRequestParams} from 'streetscape.gl/loaders/xviz-stream-loader';
 
@@ -188,8 +188,6 @@ test('updateSocketRequestParams', t => {
 });
 
 test('XVIZStreamLoader#connect, seek', t => {
-  setXVIZConfig({});
-
   const loader = new XVIZStreamLoader({
     WebSocketClass: MockSocket,
     serverConfig: {
@@ -200,8 +198,8 @@ test('XVIZStreamLoader#connect, seek', t => {
     bufferLength: 10
   });
 
-  const oldSettings = getXVIZSettings();
-  setXVIZSettings({
+  const oldConfig = getXVIZConfig();
+  setXVIZConfig({
     TIME_WINDOW: 1
   });
 
@@ -245,7 +243,7 @@ test('XVIZStreamLoader#connect, seek', t => {
       'seek: update with correct parameters'
     );
 
-    setXVIZSettings(oldSettings);
+    setXVIZConfig(oldConfig);
     t.end();
   });
 });

@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {getXVIZSettings} from '@xviz/parser';
+import {getXVIZConfig} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
@@ -173,7 +173,7 @@ export default class XVIZLoaderInterface {
   }
 
   getLogStartTime = createSelector(this, this.getMetadata, metadata => {
-    return metadata && metadata.start_time && metadata.start_time + getXVIZSettings().TIME_WINDOW;
+    return metadata && metadata.start_time && metadata.start_time + getXVIZConfig().TIME_WINDOW;
   });
 
   getLogEndTime = createSelector(this, this.getMetadata, metadata => {
