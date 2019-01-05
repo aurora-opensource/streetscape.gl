@@ -3,7 +3,7 @@
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {setXVIZConfig, setXVIZSettings} from '@xviz/parser';
+import {setXVIZConfig} from '@xviz/parser';
 import {
   LogViewer,
   PlaybackControl,
@@ -15,18 +15,9 @@ import {
 } from 'streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
-import {
-  XVIZ_CONFIG,
-  XVIZ_SETTINGS,
-  APP_SETTINGS,
-  MAPBOX_TOKEN,
-  MAP_STYLE,
-  XVIZ_STYLE,
-  CAR
-} from './constants';
+import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
-setXVIZSettings(XVIZ_SETTINGS);
 
 // __IS_STREAMING__ is defined in webpack.config.js
 const exampleLog = require(__IS_STREAMING__ ? './log-from-stream' : './log-from-file').default;

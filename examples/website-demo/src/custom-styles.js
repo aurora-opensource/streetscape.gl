@@ -16,6 +16,8 @@ export const UI_THEME = {
 
   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
   fontSize: 14,
+  fontWeight: 200,
+
   shadow: '0 2px 4px 0 rgba(0, 0, 0, 0.15)'
 };
 
@@ -253,7 +255,7 @@ export const XVIZ_PANEL_STYLE = {
       position: 'absolute',
       width: '100%',
       height: '100%',
-      paddingTop: 26
+      paddingTop: 28
     },
     selector: {
       wrapper: {

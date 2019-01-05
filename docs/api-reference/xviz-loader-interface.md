@@ -45,7 +45,7 @@ Parameters:
 
 ##### setLookAhead(lookAhead) {
 
-Set the look ahead time. This is used to retrieve a slice from the
+Set the look ahead offset in seconds. This is used to retrieve a slice from the
 [future states](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set)
 for display.
 
@@ -71,7 +71,7 @@ Returns the current timestamp.
 
 ##### getLookAhead()
 
-Returns the current look ahead offset.
+Returns the current look ahead offset in seconds.
 
 ##### getMetadata()
 

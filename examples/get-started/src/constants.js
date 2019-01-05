@@ -4,11 +4,6 @@ export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-lin
 export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 
 export const XVIZ_CONFIG = {
-  PRIMARY_POSE_STREAM: '/vehicle_pose',
-  OBJECT_STREAM: '/tracklets/objects'
-};
-
-export const XVIZ_SETTINGS = {
   PLAYBACK_FRAME_RATE: 10
 };
 

@@ -61,7 +61,7 @@ Default formats the value into `ss.S`.
 
 ##### maxLookAhead (Number, optional)
 
-Max value of the look ahead offset. If `0`, the look ahead slider will be hidden.
+Max value of the look ahead offset in seconds. If `0`, the look ahead slider will be hidden.
 
 Default `10000`.
 
