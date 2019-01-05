@@ -54,7 +54,7 @@ export default class HUD extends PureComponent {
     return (
       <div id="hud">
         <div className="hud-column">
-          <BaseWidget log={log} streamNames={{state: '/vehicle/autonomous_state'}}>
+          <BaseWidget log={log} streamNames={{state: '/vehicle/autonomy_state'}}>
             {this._renderAutonomyState}
           </BaseWidget>
           <TurnSignalWidget
