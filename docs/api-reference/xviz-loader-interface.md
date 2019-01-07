@@ -1,10 +1,8 @@
 # XVIZLoaderInterface
 
-An interface that handles the loading and synchronization of a log.
-
-## Members
-
-##### metadata
+An interface that handles the loading and synchronization of a log. This is the base class of
+[XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md) and
+[XVIZFileLoader](/docs/api-reference/xviz-file-loader.md).
 
 ## Methods
 
@@ -117,7 +115,88 @@ Returns all
 [time_series](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set)
 streams.
 
-## Implementations
+## Implement A Custom Loader (experimental)
 
-- [XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md)
-- [XVIZFileLoader](/docs/api-reference/xviz-file-loader.md)
+> Warning: this section is experimental and may change between minor versions. Refer to the
+> CHANGELOG if you encounter any issues.
+
+```js
+import {_XVIZLoaderInterface as XVIZLoaderInterface} from 'streetscape.gl';
+import {XVIZStreamBuffer, StreamSynchronizer} from '@xviz/parser';
+
+function getMetadata(options) {
+  // returns promise that resolves to metadata
+}
+
+function getTimeslices(options, callback) {
+  // invokes callback when each timeslice is loaded
+  // returns promise that resolves when done
+}
+
+class MyLoader extends XVIZLoaderInterface {
+  connect() {
+    const streamBuffer = new XVIZStreamBuffer();
+    this.streamBuffer = streamBuffer;
+
+    getMetadata(this.options)
+      .then(metadata => {
+        this.set('logSynchronizer', new StreamSynchronizer(streamBuffer));
+        this._setMetadata(metadata);
+        this.emit('ready', metadata);
+      })
+      .then(() =>
+        getTimeslices(this.options, timeslice => {
+          streamBuffer.insert(timeslice);
+          this.set('streams', streamBuffer.getStreams());
+          this.emit('update', timeslice);
+        })
+      )
+      .then(() => this.emit('done'))
+      .catch(error => this.emit('error', error));
+  }
+
+  getBufferRange() {
+    const {start, end} = this.streamBuffer.getBufferRange();
+    return [start, end];
+  }
+
+  close() {}
+}
+```
+
+### Required Methods
+
+The following methods must be implemented in a custom loader.
+
+##### connect()
+
+##### close()
+
+##### getBufferRange()
+
+### Private Members
+
+##### options
+
+The options object passed into the constructor.
+
+### Private Methods
+
+The following methods are utilities for subclasses.
+
+##### set(key, value)
+
+Save a key-value pair into the current loader state. Calling `set` will trigger an update in all
+React components that subscribe to this loader.
+
+##### get(key)
+
+Retrieve a saved value from the current state.
+
+##### emit(eventType, eventArgs)
+
+Fire an event with the specified arguments.
+
+##### \_setMetadata(metadata)
+
+Update the log metadata.

@@ -1,4 +1,4 @@
-# XVIZTableComponent (React Component)
+# XVIZTableComponent (React Component) (experimental)
 
 The base component for rendering a Declarative UI
 [table](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Table) or
@@ -6,8 +6,15 @@ The base component for rendering a Declarative UI
 component.
 
 > Do not use this component directly unless implementing your own UI component. See
-> [XVIZPanel](/docs/api-reference/xviz-panel) for how to render generic Declarative UI
+> [XVIZPanel](/docs/api-reference/xviz-panel.md) for how to render generic Declarative UI
 > configurations.
+
+> Warning: this component is experimental and may change between minor versions. Refer to the
+> CHANGELOG if you encounter any issues.
+
+```js
+import {_XVIZTableComponent as XVIZTableComponent} from 'streetscape.gl';
+```
 
 ## Properties
 
