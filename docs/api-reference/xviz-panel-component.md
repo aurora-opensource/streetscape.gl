@@ -1,10 +1,13 @@
-# XVIZPanelComponent (React Component)
+# XVIZPanelComponent (React Component) (experimental)
 
-The base component for [XVIZPanel](/docs/api-reference/xviz-panel). This component can be used
+The base component for [XVIZPanel](/docs/api-reference/xviz-panel.md). This component can be used
 without a `XVIZLoader` instance.
 
+> Warning: this component is experimental and may change between minor versions. Refer to the
+> CHANGELOG if you encounter any issues.
+
 ```jsx
-import {XVIZPanelComponent} from 'streetscape.gl';
+import {_XVIZPanelComponent as XVIZPanelComponent} from 'streetscape.gl';
 
 const UI_CONFIG = {
   type: 'panel',
@@ -23,7 +26,7 @@ const UI_CONFIG = {
   name: 'Metrics Panel'
 };
 
-<XVIZPanel name="Metrics" uiConfig={UI_CONFIG}} />
+<XVIZPanelComponent name="Metrics" uiConfig={UI_CONFIG}} />
 ```
 
 ## Properties
