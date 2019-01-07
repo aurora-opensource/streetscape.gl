@@ -1,9 +1,12 @@
-# BaseWidget (React Component)
+# BaseWidget (React Component) (experimental)
 
 Renders a widget that updates with the data in specified streams.
 
+> Warning: this component is experimental and may change between minor versions. Refer to the
+> CHANGELOG if you encounter any issues.
+
 ```jsx
-import {BaseWidget} from 'streetscape.gl';
+import {_BaseWidget as BaseWidget} from 'streetscape.gl';
 
 <BaseWidget log={log}
   streamNames={{a: '/vehicle/acceleration', v: '/vehicle/velocity'}} />

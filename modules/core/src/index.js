@@ -44,13 +44,13 @@ export {default as StreamSettingsPanel} from './components/stream-settings-panel
 
 export {default as XVIZPanel} from './components/declarative-ui/xviz-panel';
 
-export {XVIZPanelComponent} from './components/declarative-ui/xviz-panel';
-export {XVIZMetricComponent} from './components/declarative-ui/xviz-metric';
-export {XVIZPlotComponent} from './components/declarative-ui/xviz-plot';
-export {XVIZTableComponent} from './components/declarative-ui/xviz-table';
-export {XVIZVideoComponent} from './components/declarative-ui/xviz-video';
+export {XVIZPanelComponent as _XVIZPanelComponent} from './components/declarative-ui/xviz-panel';
+export {XVIZMetricComponent as _XVIZMetricComponent} from './components/declarative-ui/xviz-metric';
+export {XVIZPlotComponent as _XVIZPlotComponent} from './components/declarative-ui/xviz-plot';
+export {XVIZTableComponent as _XVIZTableComponent} from './components/declarative-ui/xviz-table';
+export {XVIZVideoComponent as _XVIZVideoComponent} from './components/declarative-ui/xviz-video';
 
-export {default as BaseWidget} from './components/hud/base-widget';
+export {default as _BaseWidget} from './components/hud/base-widget';
 export {default as MeterWidget} from './components/hud/meter-widget';
 export {default as TrafficLightWidget} from './components/hud/traffic-light-widget';
 export {default as TurnSignalWidget} from './components/hud/turn-signal-widget';
@@ -60,5 +60,6 @@ export * from './constants';
 
 export * from './layers/layer-utils';
 
+export {default as _XVIZLoaderInterface} from './loaders/xviz-loader-interface';
 export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
 export {default as XVIZFileLoader} from './loaders/xviz-file-loader';

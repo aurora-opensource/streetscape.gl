@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import React, {PureComponent} from 'react';
-import {BaseWidget, TurnSignalWidget, MeterWidget} from 'streetscape.gl';
+import {_BaseWidget as BaseWidget, TurnSignalWidget, MeterWidget} from 'streetscape.gl';
 
 const WHEEL_WIDGET_STYLE = {
   arcRadius: 0,

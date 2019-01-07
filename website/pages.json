@@ -70,8 +70,8 @@
         "name": "React Components",
         "children": [
           {
-            "name": "BaseWidget",
-            "markdown": "api-reference/base-widget.md"
+            "name": "connectToLog",
+            "markdown": "api-reference/connect-to-log.md"
           },
           {
             "name": "LogViewer",
@@ -100,6 +100,15 @@
           {
             "name": "XVIZPanel",
             "markdown": "api-reference/xviz-panel.md"
+          }
+        ]
+      },
+      {
+        "name": "React Components (experimental)",
+        "children": [
+          {
+            "name": "BaseWidget",
+            "markdown": "api-reference/base-widget.md"
           },
           {
             "name": "XVIZMetricComponent",
