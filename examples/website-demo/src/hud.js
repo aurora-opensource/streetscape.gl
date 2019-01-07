@@ -40,8 +40,7 @@ const AUTONOMY_STATE = {
 
 export default class HUD extends PureComponent {
   _renderAutonomyState({streams}) {
-    // TODO - change fallback to 'unknown' when the stream is available
-    const state = streams.state.variable || 'autonomous';
+    const state = (streams.state.data && streams.state.data.variable) || 'unknown';
     return (
       <div className="autonomy-state" style={{background: AUTONOMY_STATE[state]}}>
         {state}
@@ -68,8 +67,8 @@ export default class HUD extends PureComponent {
             style={WHEEL_WIDGET_STYLE}
             streamName="/vehicle/wheel_angle"
             units="Wheel"
-            min={-360}
-            max={360}
+            min={-180}
+            max={180}
           />
         </div>
         <MeterWidget
