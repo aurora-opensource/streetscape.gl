@@ -1,17 +1,20 @@
-# XVIZStreamLoader
+# XVIZLiveLoader
 
-Loads a streamed XVIZ log using WebSocket. Implements
+Connects to a live XVIZ system using a WebSocket. Implements
 [XVIZLoaderInterface](/docs/api-reference/xviz-loader-interface.md).
+
+A **live** XVIZ system describes a running system does not have a start and end time available in
+the metadata and will send XVIZ data immediately upon connection.
+
+The XVIZLiveLoader will also immediately update the scene to the timestamp of the latest received
+XVIZ message.
 
 ## Constructor
 
 ```js
-import {XVIZStreamLoader} from 'streetscape.gl';
+import {XVIZLiveLoader} from 'streetscape.gl';
 
-new XVIZStreamLoader({
-  logGuid: 'da8b1c9c-cbfb-4ddd-c14c-4692b36456ef',
-  timestamp: 1194278450,
-  duration: 30,
+new XVIZLiveLoader({
   serverConfig: {
     serverUrl: 'ws://localhost:8081'
   }
@@ -28,10 +31,7 @@ new XVIZStreamLoader({
     not specified.
   - `serverConfig.retryAttempts` (Number, optional) - number of retries if a connection error is
     encountered. Default `3`.
-- `logGuid` (String) - Id of the log to load
 - `logProfile` (String, optional) - Name of the profile to load the log with
-- `duration` (Number, optional) - Length of the log
-- `timestamp` (Number, optional) - the timestamp to start loading at
 - `bufferLength` (Number, optional) - the length of the buffer to keep in memory. Uses the same unit
   as timestamp. If specified, older frames may be discarded during playback, to avoid crashes due to
   excessive memory usage. Default 30 seconds.

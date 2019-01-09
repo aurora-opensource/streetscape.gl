@@ -63,6 +63,10 @@
           {
             "name": "XVIZStreamLoader",
             "markdown": "api-reference/xviz-stream-loader.md"
+          },
+          {
+            "name": "XVIZLiveLoader",
+            "markdown": "api-reference/xviz-live-loader.md"
           }
         ]
       },

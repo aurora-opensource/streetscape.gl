@@ -1,8 +1,9 @@
 # XVIZLoaderInterface
 
 An interface that handles the loading and synchronization of a log. This is the base class of
-[XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md) and
-[XVIZFileLoader](/docs/api-reference/xviz-file-loader.md).
+[XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md),
+[XVIZLiveLoader](/docs/api-reference/xviz-live-loader.md),
+and [XVIZFileLoader](/docs/api-reference/xviz-file-loader.md).
 
 ## Methods
 
