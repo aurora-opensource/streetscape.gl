@@ -20,9 +20,6 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
       coordinateSystem = COORDINATE_SYSTEM.LNGLAT;
       break;
 
-    case COORDINATE.IDENTITY:
-      break;
-
     case COORDINATE.DYNAMIC:
       // cache calculated transform matrix for each frame
       transforms[transform] = transforms[transform] || getTransformMatrix(transform, frame);
@@ -32,8 +29,11 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
       break;
 
     case COORDINATE.VEHICLE_RELATIVE:
-    default:
       modelMatrix = vehicleRelativeTransform;
+      break;
+
+    case COORDINATE.IDENTITY:
+    default:
   }
 
   if (pose) {
