@@ -90,7 +90,9 @@ export default class XVIZLoaderInterface {
     if (metadata) {
       const startTime = this.getLogStartTime();
       const endTime = this.getLogEndTime();
-      timestamp = clamp(timestamp, startTime, endTime);
+      if (Number.isFinite(startTime) && Number.isFinite(endTime)) {
+        timestamp = clamp(timestamp, startTime, endTime);
+      }
     }
 
     this.set('timestamp', timestamp);

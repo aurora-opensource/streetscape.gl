@@ -28,7 +28,7 @@ export default class XVIZControllerV2 {
     this.socket.send(JSON.stringify(msg));
   }
 
-  transformLog({startTimestamp, endTimestamp}) {
+  transformLog({startTimestamp, endTimestamp} = {}) {
     const msg = {};
     if (startTimestamp) {
       msg.start_timestamp = startTimestamp; // eslint-disable-line camelcase
