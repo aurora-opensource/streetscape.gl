@@ -158,7 +158,7 @@ class MyLoader extends XVIZLoaderInterface {
 
   getBufferRange() {
     const {start, end} = this.streamBuffer.getBufferRange();
-    return [start, end];
+    return [[start, end]];
   }
 
   close() {}
@@ -171,9 +171,15 @@ The following methods must be implemented in a custom loader.
 
 ##### connect()
 
+Called to start loading data.
+
 ##### close()
 
+Called to stop loading data.
+
 ##### getBufferRange()
+
+Called to get the loaded time range, an array of `[start, end]` timestamps.
 
 ### Private Members
 
@@ -198,6 +204,6 @@ Retrieve a saved value from the current state.
 
 Fire an event with the specified arguments.
 
-##### \_setMetadata(metadata)
+##### _setMetadata(metadata)
 
 Update the log metadata.

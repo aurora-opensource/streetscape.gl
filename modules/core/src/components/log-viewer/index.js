@@ -36,6 +36,8 @@ class LogViewer extends PureComponent {
   };
 
   static defaultProps = {
+    ...Core3DViewer.defaultProps,
+
     style: {},
     onViewStateChange: noop,
     onObjectStateChange: noop,
