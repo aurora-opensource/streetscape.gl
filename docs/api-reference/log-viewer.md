@@ -203,8 +203,12 @@ receive the following props:
 
 - `id` (String) - object id
 - `isSelected` (Boolean) - if object is selected
-- `object` (Object) - selected object
-- `stylesheet` (Object) - the XVIZ stylesheet
+- `object`
+  ([XVIZObject](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-object.md)) - the
+  selected object
+- `xvizStyles`
+  ([XVIZStyleParser](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-style-parser.md)) -
+  the XVIZ stylesheets.
 
 Popups will be disabled if this prop is set to `false`.
 

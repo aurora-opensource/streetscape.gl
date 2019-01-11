@@ -181,12 +181,15 @@ export const LOG_VIEWER_STYLE = {
   objectLabelTip: props => (props.isSelected ? null : {display: 'none'}),
   objectLabelLine: props => (props.isSelected ? null : {display: 'none'}),
   objectLabelBody: props => {
-    const {object, stylesheet, isSelected} = props;
+    const {object, xvizStyles, isSelected} = props;
 
     let background = '#F8F8F9';
     let color = '#222';
     if (!isSelected) {
-      const strokeColor = stylesheet.getProperty('stroke_color', object);
+      const feature = object.getFeature('/tracklets/objects');
+      const strokeColor = xvizStyles
+        .getStylesheet('/tracklets/objects')
+        .getProperty('stroke_color', feature);
       if (strokeColor) {
         background = `rgb(${strokeColor.slice(0, 3).join(',')})`;
         const brightness = (strokeColor[0] + strokeColor[1] + strokeColor[2]) / 3;

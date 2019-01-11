@@ -197,6 +197,6 @@ Retrieve a saved value from the current state.
 
 Fire an event with the specified arguments.
 
-##### _setMetadata(metadata)
+##### \_setMetadata(metadata)
 
 Update the log metadata.
