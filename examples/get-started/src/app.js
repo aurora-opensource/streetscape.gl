@@ -39,8 +39,12 @@ import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} fro
 
 setXVIZConfig(XVIZ_CONFIG);
 
-// __IS_STREAMING__ is defined in webpack.config.js
-const exampleLog = require(__IS_STREAMING__ ? './log-from-stream' : './log-from-file').default;
+// __IS_STREAMING__ and __IS_LIVE__ are defined in webpack.config.js
+const exampleLog = require(__IS_STREAMING__
+  ? './log-from-stream'
+  : __IS_LIVE__
+    ? './log-from-live'
+    : './log-from-file').default;
 
 class Example extends PureComponent {
   state = {

@@ -18,11 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {XVIZStreamLoader} from 'streetscape.gl';
+import {XVIZLiveLoader} from 'streetscape.gl';
 
-export default new XVIZStreamLoader({
+export default new XVIZLiveLoader({
   logGuid: 'mock',
-  // bufferLength: 15,
+  bufferLength: 10,
   serverConfig: {
     defaultLogLength: 30,
     serverUrl: 'ws://localhost:8081'

@@ -73,7 +73,8 @@ module.exports = env => {
     config = require('../webpack.config.local')(config)(env);
     // This switch between streaming and static file loading
     config.plugins = config.plugins.concat([
-      new webpack.DefinePlugin({__IS_STREAMING__: JSON.stringify(Boolean(env.stream))})
+      new webpack.DefinePlugin({__IS_STREAMING__: JSON.stringify(Boolean(env.stream))}),
+      new webpack.DefinePlugin({__IS_LIVE__: JSON.stringify(Boolean(env.live))})
     ]);
   }
 
