@@ -192,7 +192,7 @@ class PlaybackControl extends PureComponent {
   render() {
     const {startTime, endTime, timestamp, lookAhead, bufferRange, ...otherProps} = this.props;
 
-    if (!Number.isFinite(timestamp)) {
+    if (!Number.isFinite(timestamp) || !Number.isFinite(startTime)) {
       return null;
     }
 
