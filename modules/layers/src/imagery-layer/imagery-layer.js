@@ -20,13 +20,58 @@
 
 
 import {Layer} from '@deck.gl/core';
-import {Model, Geometry} from 'luma.gl';
+import {Model, Geometry, loadTextures, Texture2D} from 'luma.gl';
 
 import IMAGERY_VERTEX_SHADER from './imagery-layer-vertex';
 import IMAGERY_FRAGMENT_SHADER from './imagery-layer-fragment';
 
-import {getTexture} from '../layer-utils';
 import GridGeometry from './grid-geometry';
+
+/*
+ * Load image data into luma.gl Texture2D objects
+ * @param {WebGLContext} gl
+ * @param {String|Texture2D|HTMLImageElement|Uint8ClampedArray} src - source of image data
+ *   can be url string, Texture2D object, HTMLImageElement or pixel array
+ * @returns {Promise} resolves to an object with name -> texture mapping
+ */
+function getTexture(gl, src, opts) {
+  if (typeof src === 'string') {
+    // Url, load the image
+    return loadTextures(gl, {urls: [src], ...opts})
+      .then(textures => textures[0])
+      .catch(error => {
+        throw new Error(`Could not load texture from ${src}: ${error}`);
+      });
+  }
+  return new Promise(resolve => resolve(getTextureFromData(gl, src, opts)));
+}
+
+/*
+ * Convert image data into texture
+ * @returns {Texture2D} texture
+ */
+function getTextureFromData(gl, data, opts) {
+  if (data instanceof Texture2D) {
+    return data;
+  }
+  return new Texture2D(gl, {data, ...opts});
+}
+
+const defaultProps = {
+  heightMap: null,
+  heightMapBounds: {type: 'array', value: [0, 0, 1, 1], compare: true},
+  heightRange: {type: 'array', value: [0, 1], compare: true},
+  imagery: null,
+  imageryBounds: {type: 'array', value: [0, 0, 1, 1], compare: true},
+  uCount: {type: 'number', value: 1, min: 0},
+  vCount: {type: 'number', value: 1, min: 0},
+  desaturate: {type: 'number', value: 0, min: 0, max: 1},
+  // More context: because of the blending mode we're using for ground imagery,
+  // alpha is not effective when blending the bitmap layers with the base map.
+  // Instead we need to manually dim/blend rgb values with a background color.
+  transparentColor: {type: 'color', value: [0, 0, 0, 0]},
+  tintColor: {type: 'color', value: [255, 255, 255]}
+};
 
 /*
  * @class
@@ -35,21 +80,6 @@ import GridGeometry from './grid-geometry';
  * @param {number} props.tintColor - color bias
  */
 export default class ImageryLayer extends Layer {
-  static layerName = 'ImageryLayer';
-  static defaultProps = {
-    heightMap: null,
-    heightMapBounds: [0, 0, 1, 1],
-    heightRange: [0, 1],
-    imagery: null,
-    imageryBounds: [0, 0, 1, 1],
-    desaturate: 0,
-    // More context: because of the blending mode we're using for ground imagery,
-    // alpha is not effective when blending the bitmap layers with the base map.
-    // Instead we need to manually dim/blend rgb values with a background color.
-    transparentColor: [0, 0, 0, 0],
-    tintColor: [255, 255, 255]
-  };
-
   initializeState() {
     const {gl} = this.context;
     // TODO/ib - Enabled to allow debugging of heightmaps, not perfect but really helps
@@ -111,3 +141,6 @@ export default class ImageryLayer extends Layer {
     });
   }
 }
+
+ImageryLayer.layerName = 'ImageryLayer';
+ImageryLayer.defaultProps = defaultProps;

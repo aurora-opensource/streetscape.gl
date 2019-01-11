@@ -25,11 +25,6 @@
 // The generic XVIZ layer
 export {default as XVIZLayer} from './layers/xviz-layer';
 
-// streetscape.gl custom layers
-export {default as SignLayer} from './layers/sign-layer/sign-layer';
-export {default as TrafficLightLayer} from './layers/traffic-light-layer/traffic-light-layer';
-export {default as ImageryLayer} from './layers/imagery-layer/imagery-layer';
-
 // Generic layers (should be moved back to deck.gl)
 export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
 
@@ -57,8 +52,6 @@ export {default as TurnSignalWidget} from './components/hud/turn-signal-widget';
 
 // Constants
 export * from './constants';
-
-export * from './layers/layer-utils';
 
 export {default as _XVIZLoaderInterface} from './loaders/xviz-loader-interface';
 export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
