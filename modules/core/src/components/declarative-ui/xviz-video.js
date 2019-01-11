@@ -160,6 +160,6 @@ const getLogState = log => {
   };
 };
 
-export const XVIZVideoComponent = withTheme(BaseComponent);
+const XVIZVideoComponent = withTheme(BaseComponent);
 
 export default connectToLog({getLogState, Component: XVIZVideoComponent});

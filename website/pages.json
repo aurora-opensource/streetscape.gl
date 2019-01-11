@@ -115,24 +115,20 @@
             "markdown": "api-reference/base-widget.md"
           },
           {
-            "name": "XVIZMetricComponent",
-            "markdown": "api-reference/xviz-metric-component.md"
+            "name": "XVIZMetric",
+            "markdown": "api-reference/xviz-metric.md"
           },
           {
-            "name": "XVIZPanelComponent",
-            "markdown": "api-reference/xviz-panel-component.md"
+            "name": "XVIZPlot",
+            "markdown": "api-reference/xviz-plot.md"
           },
           {
-            "name": "XVIZPlotComponent",
-            "markdown": "api-reference/xviz-plot-component.md"
+            "name": "XVIZTable",
+            "markdown": "api-reference/xviz-table.md"
           },
           {
-            "name": "XVIZTableComponent",
-            "markdown": "api-reference/xviz-table-component.md"
-          },
-          {
-            "name": "XVIZVideoComponent",
-            "markdown": "api-reference/xviz-video-component.md"
+            "name": "XVIZVideo",
+            "markdown": "api-reference/xviz-video.md"
           }
         ]
       }

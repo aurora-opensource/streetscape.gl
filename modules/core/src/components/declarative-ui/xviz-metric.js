@@ -27,7 +27,7 @@ import connectToLog from '../connect';
 
 const defaultFormatValue = x => (Number.isFinite(x) ? x.toFixed(3) : String(x));
 
-export class XVIZMetricComponent extends PureComponent {
+class XVIZMetricComponent extends PureComponent {
   static propTypes = {
     // User configuration
     style: PropTypes.object,
