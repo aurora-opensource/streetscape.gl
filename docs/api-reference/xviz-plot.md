@@ -1,4 +1,4 @@
-# XVIZPlotComponent (React Component) (experimental)
+# XVIZPlot (React Component) (experimental)
 
 The base component for rendering a Declarative UI
 [plot](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Plot) component.
@@ -11,7 +11,7 @@ The base component for rendering a Declarative UI
 > CHANGELOG if you encounter any issues.
 
 ```js
-import {_XVIZPlotComponent as XVIZPlotComponent} from 'streetscape.gl';
+import {_XVIZPlot as XVIZPlot} from 'streetscape.gl';
 ```
 
 ## Properties

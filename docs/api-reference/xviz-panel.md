@@ -25,11 +25,11 @@ metadata of the log.
 
 Custom CSS overrides. May contain the following keys:
 
-- `metric`: passed to [XvizMetricComponent](/docs/api-reference/xviz-metric.md)'s `style` prop
-- `plot`: passed to [XvizPlotComponent](/docs/api-reference/xviz-plot.md)'s `style` prop
-- `table` and `treetable`: passed to [XvizTableComponent](/docs/api-reference/xviz-table.md)'s
+- `metric`: passed to [XvizMetric](/docs/api-reference/xviz-metric.md)'s `style` prop
+- `plot`: passed to [XvizPlot](/docs/api-reference/xviz-plot.md)'s `style` prop
+- `table` and `treetable`: passed to [XvizTable](/docs/api-reference/xviz-table.md)'s
   `style` prop
-- `video`: passed to [XvizVideoComponent](/docs/api-reference/xviz-video.md)'s `style` prop
+- `video`: passed to [XvizVideo](/docs/api-reference/xviz-video.md)'s `style` prop
 
 ##### components (Object, optional)
 
@@ -54,10 +54,10 @@ and value is an object of custom props.
 
 For a list of customizable props, see the documentation for each component:
 
-- `metric`: [XvizMetricComponent](/docs/api-reference/xviz-metric.md)
-- `plot`: [XvizPlotComponent](/docs/api-reference/xviz-plot.md)
-- `table` and `treetable`: [XvizTableComponent](/docs/api-reference/xviz-table.md)
-- `video`: [XvizVideoComponent](/docs/api-reference/xviz-video.md)
+- `metric`: [XvizMetric](/docs/api-reference/xviz-metric.md)
+- `plot`: [XvizPlot](/docs/api-reference/xviz-plot.md)
+- `table` and `treetable`: [XvizTable](/docs/api-reference/xviz-table.md)
+- `video`: [XvizVideo](/docs/api-reference/xviz-video.md)
 
 ```jsx
 // Support an additional component type `text`

@@ -1,4 +1,4 @@
-# XVIZTableComponent (React Component) (experimental)
+# XVIZTable (React Component) (experimental)
 
 The base component for rendering a Declarative UI
 [table](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Table) or
@@ -13,7 +13,7 @@ component.
 > CHANGELOG if you encounter any issues.
 
 ```js
-import {_XVIZTableComponent as XVIZTableComponent} from 'streetscape.gl';
+import {_XVIZTable as XVIZTable} from 'streetscape.gl';
 ```
 
 ## Properties
