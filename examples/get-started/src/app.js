@@ -93,15 +93,13 @@ class Example extends PureComponent {
               />
             </div>
           </div>
-          {!__IS_LIVE__ && (
-            <div id="timeline">
-              <PlaybackControl
-                width="100%"
-                log={log}
-                formatTimestamp={x => new Date(x).toUTCString()}
-              />
-            </div>
-          )}
+          <div id="timeline">
+            <PlaybackControl
+              width="100%"
+              log={log}
+              formatTimestamp={x => new Date(x).toUTCString()}
+            />
+          </div>
         </div>
       </div>
     );
