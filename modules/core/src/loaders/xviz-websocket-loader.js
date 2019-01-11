@@ -1,12 +1,26 @@
 /* global WebSocket,ArrayBuffer */
 /* eslint-disable camelcase */
 import assert from 'assert';
-import {parseStreamMessage, LOG_STREAM_MESSAGE} from '@xviz/parser';
+import {
+  XVIZStreamBuffer,
+  StreamSynchronizer,
+  parseStreamMessage,
+  LOG_STREAM_MESSAGE
+} from '@xviz/parser';
 import PromiseRetry from 'promise-retry';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
 import XVIZController from './xviz-controller-v2';
 
+/**
+ * Connect to XVIZ 2 websocket manage storage of XVIZ data into a XVIZStreamBuffer
+ *
+ * This class is a Websocket base class and is expected to be subclassed with
+ * the following methods overridden:
+ *
+ * - _onOpen()
+ * - _onXVIZTimeslice()
+ */
 export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
   /**
    * constructor
@@ -33,6 +47,8 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
       minTimeout: 500,
       randomize: true
     };
+
+    this.streamBuffer = new XVIZStreamBuffer();
 
     // Handler object for the websocket events
     // Note: needs to be last due to member dependencies
@@ -117,13 +133,18 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
     throw new Error('_onOpen() method must be overridden');
   }
 
-  _onXVIZMetadata() {
-    throw new Error('_onXVIZMetadata() method must be overridden');
-  }
+  /**
+   * Subclass hook for xviz message
+   *
+   * The messages will be inserted into the 'streamBuffer'
+   * prior to this hook being called.
+   *
+   * @params message {Object} Parsed XVIZ message
+   * @params bufferUpdated {Boolean} True if streamBuffer has changed
+   */
+  _onXVIZTimeslice(message, bufferUpdated) {}
 
-  _onXVIZTimeslice() {
-    throw new Error('_onXVIZTimeslice() method must be overridden');
-  }
+  // PRIVATE Methods
 
   // Notifications and metric reporting
   _onWSOpen = () => {
@@ -140,12 +161,27 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
   _onWSMessage = message => {
     switch (message.type) {
       case LOG_STREAM_MESSAGE.METADATA:
-        this._onXVIZMetadata(message);
+        if (this.get('metadata')) {
+          // already has metadata
+          return;
+        }
+
+        this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
+        this._setMetadata(message);
         this.emit('ready', message);
         break;
 
       case LOG_STREAM_MESSAGE.TIMESLICE:
-        this._onXVIZTimeslice(message);
+        const oldVersion = this.streamBuffer.valueOf();
+        this.streamBuffer.insert(message);
+
+        const bufferUpdated = this.streamBuffer.valueOf() !== oldVersion;
+        if (bufferUpdated) {
+          this.set('streams', this.streamBuffer.getStreams());
+        }
+
+        this._onXVIZTimeslice(message, bufferUpdated);
+
         this.emit('update', message);
         break;
 

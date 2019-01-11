@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import assert from 'assert';
-import {XVIZStreamBuffer, StreamSynchronizer, getXVIZConfig} from '@xviz/parser';
+import {getXVIZConfig} from '@xviz/parser';
 
 import XVIZWebsocketLoader from './xviz-websocket-loader';
 import * as rangeUtils from '../utils/buffer-range';
@@ -91,22 +91,6 @@ export function updateSocketRequestParams(timestamp, metadata, bufferLength, buf
   };
 }
 
-// WebSocket constants used since WebSocket is not defined on Node
-// const WEB_SOCKET_OPEN_STATE = 1;
-
-/*
- * Handle connecting to XVIZ socket and negotiation of the XVIZ protocol version
- *
- * TODO: Direction is to move into the XVIZ module, but right now it has too many
- *       dependencies tied to the store.
- *
- * Open questions:
- * - specifics of protocol negotiation
- * - should auto reconnect happen at this level or the XVIZSocket
- *   - I think the management of data will greatly fluence this, so probably @ the XVIZSocket level
- * - better separate of protocol handling from XVIZ message handling
- *
- */
 export default class XVIZStreamLoader extends XVIZWebsocketLoader {
   /**
    * constructor
@@ -136,11 +120,8 @@ export default class XVIZStreamLoader extends XVIZWebsocketLoader {
       randomize: true
     };
 
+    // Reconnection state
     this.lastRequest = null;
-
-    // Handler object for the websocket events
-    // Note: needs to be last due to member dependencies
-    this.streamBuffer = new XVIZStreamBuffer();
     this.bufferRange = rangeUtils.empty();
   }
 
@@ -208,21 +189,8 @@ export default class XVIZStreamLoader extends XVIZWebsocketLoader {
     }
   };
 
-  _onXVIZMetadata = message => {
-    if (this.get('metadata')) {
-      // already has metadata
-      return;
-    }
-    this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
-    this._setMetadata(message);
-  };
-
-  _onXVIZTimeslice = message => {
-    const oldVersion = this.streamBuffer.valueOf();
-    this.streamBuffer.insert(message);
-
-    if (this.streamBuffer.valueOf() !== oldVersion) {
-      this.set('streams', this.streamBuffer.getStreams());
+  _onXVIZTimeslice = (message, bufferUpdated) => {
+    if (bufferUpdated) {
       this.bufferRange = rangeUtils.add(
         [this.lastRequest.startTimestamp, message.timestamp],
         this.bufferRange

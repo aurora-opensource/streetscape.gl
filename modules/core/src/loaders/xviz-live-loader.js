@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import assert from 'assert';
-import {XVIZStreamBuffer, StreamSynchronizer} from '@xviz/parser';
+import {XVIZStreamBuffer} from '@xviz/parser';
 
 import XVIZWebsocketLoader from './xviz-websocket-loader';
 
@@ -66,6 +66,8 @@ export default class XVIZLiveLoader extends XVIZWebsocketLoader {
 
     // Setup relative stream buffer storage by splitting bufferLength 1/3 : 2/3
     const bufferChunk = this.requestParams.bufferLength / 3;
+
+    // Replace base class object
     this.streamBuffer = new XVIZStreamBuffer({
       startOffset: -2 * bufferChunk,
       endOffset: bufferChunk
@@ -94,27 +96,7 @@ export default class XVIZLiveLoader extends XVIZWebsocketLoader {
 
   _onOpen = () => {};
 
-  // Handle dispatching events, triggering probes, and delegating to the XVIZ handler
-  /* eslint-disable complexity */
-  _onXVIZMetadata = message => {
-    if (this.get('metadata')) {
-      // already has metadata
-      return;
-    }
-
-    this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
-    this._setMetadata(message);
-    this.emit('ready', message);
-  };
-
-  _onXVIZTimeslice = message => {
-    const oldVersion = this.streamBuffer.valueOf();
-    this.streamBuffer.insert(message);
-
-    if (this.streamBuffer.valueOf() !== oldVersion) {
-      this.set('streams', this.streamBuffer.getStreams());
-    }
-
+  _onXVIZTimeslice = (message, bufferUpdated) => {
     // Live loader always shows latest data
     this.seek(message.timestamp);
   };
