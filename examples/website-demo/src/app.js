@@ -51,6 +51,7 @@ class Example extends PureComponent {
   }
 
   _onLogChange = selectedLog => {
+    this.state.log.close();
     this.setState(this._loadLog(selectedLog));
   };
 

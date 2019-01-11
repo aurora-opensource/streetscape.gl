@@ -105,15 +105,18 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
         return Promise.reject('Unknown file format');
     }
 
-    return file.then(data =>
-      parseStreamMessage({
-        message: data,
-        onResult: this._onMessage,
-        onError: this._onError,
-        worker: options.worker,
-        maxConcurrency: options.maxConcurrency
-      })
-    );
+    return file.then(data => {
+      // if not open, do not parse the message
+      if (this._isOpen) {
+        parseStreamMessage({
+          message: data,
+          onResult: this._onMessage,
+          onError: this._onError,
+          worker: options.worker,
+          maxConcurrency: options.maxConcurrency
+        });
+      }
+    });
   }
 
   _onMessage = message => {
