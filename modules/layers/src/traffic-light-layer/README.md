@@ -3,7 +3,8 @@
 The TrafficLightLayer renders traffic faces.
 
 ```js
-import {LogViewer, TrafficLightLayer} from 'streetscape.gl';
+import {LogViewer} from 'streetscape.gl';
+import {TrafficLightLayer} from '@streetscape.gl/layers';
 
 /**
  * Data format:

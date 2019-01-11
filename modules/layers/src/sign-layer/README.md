@@ -3,7 +3,8 @@
 The SignLayer renders traffic signs.
 
 ```js
-import {LogViewer, SignLayer} from 'streetscape.gl';
+import {LogViewer} from 'streetscape.gl';
+import {SignLayer} from '@streetscape.gl/layers';
 
 /**
  * Data format:
