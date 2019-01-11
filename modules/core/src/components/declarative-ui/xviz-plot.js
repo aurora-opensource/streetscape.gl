@@ -9,7 +9,7 @@ const GET_X = d => d[0];
 const GET_Y = d => d[1];
 const DATA_LOADING = {isLoading: true};
 
-export class XVIZPlotComponent extends PureComponent {
+class XVIZPlotComponent extends PureComponent {
   static propTypes = {
     // User configuration
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

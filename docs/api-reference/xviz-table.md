@@ -69,9 +69,11 @@ Declarative UI specification for details.
 
 ### Log Info
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`.
-Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected
-with a Redux store.
+> Advanced warning: this section is for developing customized components only.
+
+The following props are automatically populated when the `log` prop is provided. Supply these props
+manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux
+store:
 
 ##### columns (Array)
 

@@ -110,3 +110,31 @@ slider. Will receive the following parameters:
 
 If the callback returns `true`, the event is considered "handled" and prevents the default behavior
 (log frame update).
+
+### Log Info
+
+> Advanced warning: this section is for developing customized components only.
+
+The following props are automatically populated when the `log` prop is provided. Supply these props
+manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux
+store:
+
+##### timestamp (Number)
+
+The current timestamp of the playhead.
+
+##### lookAhead (Number)
+
+The lookahead offset.
+
+##### startTime (Number)
+
+The start timestamp of the playback control.
+
+##### endTime (Number)
+
+The end timestamp of the playback control.
+
+##### bufferRange (Array)
+
+The loaded time ranges, as an array of `[start, end]` timestamps.

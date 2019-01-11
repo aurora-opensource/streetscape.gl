@@ -23,12 +23,10 @@ export {default as PerspectivePopup} from './components/log-viewer/perspective-p
 export {default as StreamSettingsPanel} from './components/stream-settings-panel';
 
 export {default as XVIZPanel} from './components/declarative-ui/xviz-panel';
-
-export {XVIZPanelComponent as _XVIZPanelComponent} from './components/declarative-ui/xviz-panel';
-export {XVIZMetricComponent as _XVIZMetricComponent} from './components/declarative-ui/xviz-metric';
-export {XVIZPlotComponent as _XVIZPlotComponent} from './components/declarative-ui/xviz-plot';
-export {XVIZTableComponent as _XVIZTableComponent} from './components/declarative-ui/xviz-table';
-export {XVIZVideoComponent as _XVIZVideoComponent} from './components/declarative-ui/xviz-video';
+export {default as _XVIZMetric} from './components/declarative-ui/xviz-metric';
+export {default as _XVIZPlot} from './components/declarative-ui/xviz-plot';
+export {default as _XVIZTable} from './components/declarative-ui/xviz-table';
+export {default as _XVIZVideo} from './components/declarative-ui/xviz-video';
 
 export {default as _BaseWidget} from './components/hud/base-widget';
 export {default as MeterWidget} from './components/hud/meter-widget';

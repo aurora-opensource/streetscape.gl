@@ -19,7 +19,7 @@ const DEFAULT_COMPONENTS = {
   treetable: XVIZTable
 };
 
-export class XVIZPanelComponent extends PureComponent {
+class XVIZPanelComponent extends PureComponent {
   static propTypes = {
     // User configuration
     name: PropTypes.string.isRequired,

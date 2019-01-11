@@ -239,3 +239,19 @@ Render base map. Default is `true`.
 ##### showTooltip (Boolean, optional)
 
 Render hover tooltip. Default is `false`.
+
+### Log Info
+
+> Advanced warning: this section is for developing customized components only.
+
+The following props are automatically populated when the `log` prop is provided. Supply these props
+manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux
+store:
+
+##### frame (Object)
+
+The current frame of the log.
+
+##### metadata (Object)
+
+The metadata of the log.
