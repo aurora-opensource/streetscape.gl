@@ -56,6 +56,22 @@ function getTextureFromData(gl, data, opts) {
   return new Texture2D(gl, {data, ...opts});
 }
 
+const defaultProps = {
+  heightMap: null,
+  heightMapBounds: {type: 'array', value: [0, 0, 1, 1], compare: true},
+  heightRange: {type: 'array', value: [0, 1], compare: true},
+  imagery: null,
+  imageryBounds: {type: 'array', value: [0, 0, 1, 1], compare: true},
+  uCount: {type: 'number', value: 1, min: 0},
+  vCount: {type: 'number', value: 1, min: 0},
+  desaturate: {type: 'number', value: 0, min: 0, max: 1},
+  // More context: because of the blending mode we're using for ground imagery,
+  // alpha is not effective when blending the bitmap layers with the base map.
+  // Instead we need to manually dim/blend rgb values with a background color.
+  transparentColor: {type: 'color', value: [0, 0, 0, 0]},
+  tintColor: {type: 'color', value: [255, 255, 255]}
+};
+
 /*
  * @class
  * @param {object} props
@@ -63,21 +79,6 @@ function getTextureFromData(gl, data, opts) {
  * @param {number} props.tintColor - color bias
  */
 export default class ImageryLayer extends Layer {
-  static layerName = 'ImageryLayer';
-  static defaultProps = {
-    heightMap: null,
-    heightMapBounds: [0, 0, 1, 1],
-    heightRange: [0, 1],
-    imagery: null,
-    imageryBounds: [0, 0, 1, 1],
-    desaturate: 0,
-    // More context: because of the blending mode we're using for ground imagery,
-    // alpha is not effective when blending the bitmap layers with the base map.
-    // Instead we need to manually dim/blend rgb values with a background color.
-    transparentColor: [0, 0, 0, 0],
-    tintColor: [255, 255, 255]
-  };
-
   initializeState() {
     const {gl} = this.context;
     // TODO/ib - Enabled to allow debugging of heightmaps, not perfect but really helps
@@ -139,3 +140,6 @@ export default class ImageryLayer extends Layer {
     });
   }
 }
+
+ImageryLayer.layerName = 'ImageryLayer';
+ImageryLayer.defaultProps = defaultProps;
