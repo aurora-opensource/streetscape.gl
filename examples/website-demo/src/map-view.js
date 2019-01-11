@@ -13,13 +13,19 @@ const OBJECT_ICONS = {
 };
 
 const renderObjectLabel = ({id, object, isSelected}) => {
-  const {classes} = object.base;
+  const feature = object.getFeature('/tracklets/objects');
+
+  if (!feature) {
+    return isSelected && <b>{id}</b>;
+  }
+
+  const {classes} = feature.base;
 
   if (isSelected) {
     return (
       <div>
         <div>
-          <b>id: {id.slice(-12)}</b>
+          <b>{id}</b>
         </div>
         <div>{classes.join(' ')}</div>
       </div>

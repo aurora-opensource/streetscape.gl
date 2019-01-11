@@ -107,7 +107,7 @@ Returns the end timestamps of the current buffer.
 ##### getCurrentFrame()
 
 Returns the log
-[frame](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-synchronizer.md) at the
+[frame](https://github.com/uber/xviz/blob/master/docs/api-reference/stream-synchronizer.md#getCurrentFrame-streamFilter-) at the
 current timestamp.
 
 ##### getTimeSeries()

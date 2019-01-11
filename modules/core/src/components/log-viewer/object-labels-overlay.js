@@ -6,7 +6,6 @@ import {_MapContext as MapContext} from 'react-map-gl';
 
 import PerspectivePopup from './perspective-popup';
 
-import {getCentroid} from '../../utils/geometry';
 import {resolveCoordinateTransform, positionToLngLat} from '../../utils/transform';
 
 const renderDefaultObjectLabel = ({id, isSelected}) => isSelected && <div>ID: {id}</div>;
@@ -32,7 +31,7 @@ export default class ObjectLabelsOverlay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      coordinateProps: this._getCoordinateProps(props)
+      coordinateProps: {}
     };
   }
 
@@ -41,49 +40,37 @@ export default class ObjectLabelsOverlay extends Component {
 
     if (frame && frame !== this.props.frame) {
       this.setState({
-        coordinateProps: this._getCoordinateProps(nextProps)
+        coordinateProps: {}
       });
     }
   }
 
-  _getCoordinateProps(props) {
-    const {frame, metadata, getTransformMatrix} = props;
+  _getCoordinateProps(streamName) {
+    const {coordinateProps} = this.state;
+    let result = coordinateProps[streamName];
 
-    if (!frame) {
-      return null;
+    if (result) {
+      return result;
     }
 
-    const coordinateProps = {};
+    const {frame, metadata, getTransformMatrix} = this.props;
+    const streamMetadata = metadata.streams && metadata.streams[streamName];
+    result = resolveCoordinateTransform(frame, streamMetadata, getTransformMatrix);
+    // cache calculated coordinate props by stream name
+    coordinateProps[streamName] = result;
 
-    for (const streamName in frame.streams) {
-      const features = frame.streams[streamName].features;
-
-      if (!features || !features[0] || !features[0].id || features[0].type !== 'polygon') {
-        // not an object stream
-        continue; // eslint-disable-line
-      }
-
-      const streamMetadata = (metadata.streams && metadata.streams[streamName]) || {};
-      coordinateProps[streamName] = resolveCoordinateTransform(
-        frame,
-        streamMetadata,
-        getTransformMatrix
-      );
-    }
-
-    return coordinateProps;
+    return result;
   }
 
-  _renderPerspectivePopup = (object, streamName) => {
+  _renderPerspectivePopup = object => {
     const {objectSelection, frame, xvizStyleParser, style, renderObjectLabel} = this.props;
 
     const isSelected = Boolean(objectSelection[object.id]);
-    const stylesheet = xvizStyleParser.getStylesheet(streamName);
     const styleProps = {
       id: object.id,
       isSelected,
       object,
-      stylesheet
+      xvizStyles: xvizStyleParser
     };
 
     const labelContent = renderObjectLabel(styleProps);
@@ -92,12 +79,19 @@ export default class ObjectLabelsOverlay extends Component {
       return null;
     }
 
-    const trackingPoint = positionToLngLat(
-      getCentroid(object.vertices),
-      this.state.coordinateProps[streamName]
-    );
+    let trackingPoint;
+    let objectHeight;
 
-    const objectHeight = stylesheet.getProperty('height', object);
+    for (const streamName of object.streamNames) {
+      const feature = object.getFeature(streamName);
+      if (!trackingPoint && (feature.center || feature.vertices)) {
+        trackingPoint = positionToLngLat(object.position, this._getCoordinateProps(streamName));
+      }
+      if (!objectHeight && feature.vertices) {
+        objectHeight = xvizStyleParser.getStylesheet(streamName).getProperty('height', feature);
+      }
+    }
+
     trackingPoint[2] += objectHeight || 0;
 
     // compensate for camera offset
@@ -126,17 +120,14 @@ export default class ObjectLabelsOverlay extends Component {
 
   render() {
     const {frame, viewport, renderObjectLabel} = this.props;
-    const {coordinateProps} = this.state;
 
-    if (!frame || !coordinateProps || !renderObjectLabel) {
+    if (!frame || !renderObjectLabel) {
       return null;
     }
 
     return (
       <MapContext.Provider value={{viewport}}>
-        {Object.keys(coordinateProps).map(streamName =>
-          frame.streams[streamName].features.map(f => this._renderPerspectivePopup(f, streamName))
-        )}
+        {Object.values(frame.objects).map(this._renderPerspectivePopup)}
       </MapContext.Provider>
     );
   }
