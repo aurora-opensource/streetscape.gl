@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import connectToLog from '../connect';
 
-export class XVIZTableComponent extends PureComponent {
+class XVIZTableComponent extends PureComponent {
   static propTypes = {
     // UI configuration
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

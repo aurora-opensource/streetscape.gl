@@ -1,4 +1,4 @@
-# XVIZVideoComponent (React Component) (experimental)
+# XVIZVideo (React Component) (experimental)
 
 The base component for rendering a Declarative UI
 [video](https://github.com/uber/xviz/blob/master/docs/declarative-ui/components.md#Video) component.
@@ -11,7 +11,7 @@ The base component for rendering a Declarative UI
 > CHANGELOG if you encounter any issues.
 
 ```js
-import {_XVIZVideoComponent as XVIZVideoComponent} from 'streetscape.gl';
+import {_XVIZVideo as XVIZVideo} from 'streetscape.gl';
 ```
 
 ## Properties
@@ -43,9 +43,11 @@ Declarative UI specification for details.
 
 ### Log Info
 
-The following props are automatically populated when this component is rendered via `XVIZPanel`.
-Supply these props manually if the component is used without a `XVIZLoader` instance, e.g. connected
-with a Redux store.
+> Advanced warning: this section is for developing customized components only.
+
+The following props are automatically populated when the `log` prop is provided. Supply these props
+manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux
+store:
 
 ##### currentTime (number)
 
