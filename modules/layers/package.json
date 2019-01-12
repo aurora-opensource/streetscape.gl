@@ -1,6 +1,6 @@
 {
   "name": "@streetscape.gl/layers",
-  "description": "A collection of useful deck.gl layers for autonomy visualization",
+  "description": "A collection of deck.gl map layers for autonomy visualization",
   "version": "0.1.0",
   "repository": {
     "type": "git",
@@ -11,7 +11,8 @@
   "esnext": "dist/es6/index.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "README.md"
   ],
   "scripts": {
     "clean": "rm -fr dist && mkdir -p dist",
