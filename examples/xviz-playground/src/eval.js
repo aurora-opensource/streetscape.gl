@@ -1,7 +1,16 @@
 /* eslint-disable no-eval */
 import {XVIZMetadataBuilder, XVIZBuilder, XVIZWriter} from '@xviz/builder';
 
-const writer = new XVIZWriter({});
+class DataSink {
+  message = null;
+
+  writeSync(dir, filename, json) {
+    this.message = JSON.parse(json);
+  }
+}
+const dataSink = new DataSink();
+
+const writer = new XVIZWriter({dataSink, binary: false, json: true});
 
 export function evaluateCode(code, type) {
   let builder;
@@ -40,19 +49,14 @@ export function evaluateCode(code, type) {
 }
 
 export function createMessage(data, type) {
-  let message = null;
-  writer.sink.writeSync = (dir, filename, json) => {
-    message = JSON.parse(json);
-  };
-
   switch (type) {
     case 'metadata':
-      writer.writeMetadata('', data, {writeBinary: false, writeJson: true});
-      return message;
+      writer.writeMetadata('', data);
+      return dataSink.message;
 
     case 'frame':
-      writer.writeFrame('', 1, data, {writeBinary: false, writeJson: true});
-      return message;
+      writer.writeFrame('', 1, data);
+      return dataSink.message;
 
     default:
       return null;

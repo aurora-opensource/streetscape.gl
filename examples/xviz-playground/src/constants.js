@@ -11,10 +11,22 @@ export const CODE_SAMPLE_METADATA = `// metadata
 xvizMetadataBuilder
   .stream('/vehicle_pose')
   .category('pose')
-  
+
   .stream('/object/tracking_point')
   .category('primitive')
   .type('circle')
+  .coordinate('VEHICLE_RELATIVE')
+  .streamStyle({
+    fill_color: '#fb0'
+  })
+
+  .stream('/object/shape')
+  .category('primitive')
+  .type('polygon')
+  .coordinate('VEHICLE_RELATIVE')
+  .streamStyle({
+    extruded: true
+  })
  
   .startTime(1000)
   .endTime(1010);
@@ -30,14 +42,13 @@ xvizBuilder.pose('/vehicle_pose')
   
 xvizBuilder.primitive('/object/tracking_point')
   .circle([10, 10, 0])
-  .style({
-    fill_color: '#fb0'
-  })
-  .id('object-1')
+  .id('object-1');
 
-  .circle([-5, 20, 0])
+xvizBuilder.primitive('/object/shape')
+  .polygon([[-5, 20, 0], [5, 14, 0], [8, 18, 0]])
   .style({
-    fill_color: '#08f'
+    fill_color: '#08f',
+    height: 2
   })
   .id('object-2');
 `;
