@@ -37,7 +37,8 @@ export const LOGS = [
     name: 'nuTonomy-0006',
     path: `${LOG_DIR}/nutonomy/scene-0006`,
     xvizConfig: {
-      TIME_WINDOW: 0.6
+      TIME_WINDOW: 0.2,
+      PLAYBACK_FRAME_RATE: 16
     },
     videoAspectRatio: 16 / 9
   }
