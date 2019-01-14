@@ -29,7 +29,11 @@ function makeLocalDevConfig() {
 
     resolve: {
       // mainFields: ['esnext', 'module', 'main'],
-      modules: [resolve(ROOT_DIR, './node_modules'), resolve('./node_modules')],
+      modules: [
+        resolve(ROOT_DIR, './node_modules'),
+        resolve('./node_modules'),
+        resolve(ROOT_DIR, '../xviz/node_modules')
+      ],
       alias: ALIASES
     },
     module: {

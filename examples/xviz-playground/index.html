@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>XVIZ Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+body { margin: 0; font-family: Helvetica, Arial, sans-serif;}
+#container { position: fixed; display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+.editor { width: 480px; height: 100%; display: flex; flex-direction: column; }
+.editor .javascript-editor { flex-grow: 1; }
+.editor .javascript-console { height: 300px; border-top: solid 1px #000; }
+.editor .push-btn { padding: 8px 12px; background: #0b6; color: #fff; text-align: center; cursor: pointer; text-transform: capitalize; font-size: 14px; }
+.editor .push-btn:hover { background: #084; }
+.editor .push-btn.disabled { background: #888 !important; opacity: 0.5; cursor: default; }
+.editor-error { background: #c00; }
+.editor .tabs { background: #2f3129; color: #666; display: flex; font-size: 12px; justify-content: flex-end; padding: 8px; }
+.editor .tab { padding: 4px 8px; margin: 2px; border: solid 1px #666; cursor: pointer; opacity: 0.7; }
+.editor .tab:hover { opacity: 1; }
+.editor .tab.active { color: #eee; border-color: #eee; }
+#map-view { flex-grow: 1; position: relative; }
+#timeline { box-sizing: border-box; position: absolute; width: 100%; bottom: 0; padding: 20px; background: #fff; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src='bundle.js'></script>
+  </body>
+</html>
