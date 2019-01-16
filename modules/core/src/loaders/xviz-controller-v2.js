@@ -20,7 +20,7 @@ export default class XVIZControllerV2 {
   constructor(socket) {
     assert(socket, 'XVIZ socket');
     this.socket = socket;
-    this.transformCounter = 0;
+    this.transformCounter = '91ca533305224254d536cd71530330a9';
   }
 
   _send(type, message) {
