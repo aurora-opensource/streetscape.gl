@@ -49,6 +49,7 @@ class DualPlaybackControl extends PureComponent {
 
   static defaultProps = {
     ...PlaybackControl.defaultProps,
+    step: 0,
     markers: [],
     lookAhead: 0,
     maxLookAhead: 10,

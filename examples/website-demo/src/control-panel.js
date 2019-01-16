@@ -56,6 +56,9 @@ export default class ControlPanel extends PureComponent {
 
   render() {
     const {tab} = this.state;
+
+    const isHelpOpen = tab === 'help';
+
     return (
       <div id="control-panel">
         <header>
@@ -64,20 +67,22 @@ export default class ControlPanel extends PureComponent {
               <img src="assets/logo.png" />
             </a>
           </div>
-          <div id="tabs">
-            {this._renderTab({id: 'info', description: 'Log Info'})}
-            {this._renderTab({id: 'streams', description: 'Stream Settings'})}
-            {this._renderTab({id: 'charts', description: 'Charts'})}
+          <div id="help-btn">
+            {HelpPanel.renderButton({
+              isOpen: isHelpOpen,
+              onClick: () => this._gotoTab(isHelpOpen ? this.state.lastTab : 'help')
+            })}
           </div>
+          {!isHelpOpen && (
+            <div id="tabs">
+              {this._renderTab({id: 'info', description: 'Log Info'})}
+              {this._renderTab({id: 'streams', description: 'Stream Settings'})}
+              {this._renderTab({id: 'charts', description: 'Charts'})}
+            </div>
+          )}
         </header>
 
         <main>{this._renderTabContent()}</main>
-        <footer>
-          {HelpPanel.renderButton({
-            isOpen: tab === 'help',
-            onClick: () => this._gotoTab(tab === 'help' ? this.state.lastTab : 'help')
-          })}
-        </footer>
       </div>
     );
   }
