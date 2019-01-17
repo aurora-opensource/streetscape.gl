@@ -8,7 +8,7 @@ export default class HelpPanel extends PureComponent {
     return (
       <Tooltip content="Help" style={TOOLTIP_STYLE}>
         <Button type={Button.MUTED} style={HELP_BUTTON_STYLE} {...props}>
-          <i className={props.isOpen ? 'icon-close' : 'icon-info'} />
+          <i className={props.isOpen ? 'icon-close' : 'icon-help'} />
         </Button>
       </Tooltip>
     );

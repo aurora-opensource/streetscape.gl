@@ -193,7 +193,7 @@ export const LOG_VIEWER_STYLE = {
       if (strokeColor) {
         background = `rgb(${strokeColor.slice(0, 3).join(',')})`;
         const brightness = (strokeColor[0] + strokeColor[1] + strokeColor[2]) / 3;
-        color = brightness < 170 ? '#fff' : color;
+        color = brightness < 190 ? '#fff' : color;
       }
     }
     return {

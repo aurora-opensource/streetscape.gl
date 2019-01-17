@@ -14,6 +14,12 @@
     }
   }
 
+  #help-btn {
+    position: absolute;
+    top: 30px;
+    right: 12px;
+  }
+
   header, footer {
     flex: 0 0 auto;
     text-align: center;
@@ -64,21 +70,18 @@
       background: $background-alt;
     }
   }
-  footer {
-    background: $background-alt;
-    padding: $spacing-tiny $spacing-normal;
-    text-align: right;
-    line-height: 0;
-  }
+
   h4 {
     text-transform: uppercase;
     opacity: 0.4;
     font-weight: 500;
     font-size: 12px;
+    margin-top: 16px;
     margin-bottom: 0;
   }
 
   #log-info {
+    margin-top: -12px;
     a {
       text-decoration: none;
       color: $color-control-active;
@@ -86,6 +89,7 @@
   }
 
   #help {
+    margin-top: -12px;
     table {
       width: 100%;
     }
