@@ -37,7 +37,7 @@ const TooltipContainer = styled.div(props => ({
   ...evaluateStyle(props.userStyle, props)
 }));
 
-const KEY_BLACKLIST = ['vertices', 'base', 'style', 'state', 'id', 'object_id'];
+const KEY_BLACKLIST = new Set(['vertices', 'base', 'style', 'state', 'index', 'id', 'object_id']);
 
 class HoverTooltip extends PureComponent {
   _renderEntries(object) {
@@ -45,7 +45,7 @@ class HoverTooltip extends PureComponent {
       return null;
     }
     return Object.keys(object)
-      .filter(key => !KEY_BLACKLIST.includes(key) && object[key] !== undefined)
+      .filter(key => !KEY_BLACKLIST.has(key) && object[key] !== undefined)
       .map(key => (
         <div key={key}>
           <div>

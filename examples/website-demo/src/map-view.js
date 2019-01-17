@@ -27,7 +27,7 @@ import {XVIZ_STYLE, LOG_VIEWER_STYLE} from './custom-styles';
 
 const OBJECT_ICONS = {
   Car: 'car',
-  Van: 'car',
+  Van: 'bus',
   Pedestrian: 'pedestrian',
   Cyclist: 'bike'
 };
