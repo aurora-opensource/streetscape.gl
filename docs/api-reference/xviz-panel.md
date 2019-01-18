@@ -27,8 +27,7 @@ Custom CSS overrides. May contain the following keys:
 
 - `metric`: passed to [XvizMetric](/docs/api-reference/xviz-metric.md)'s `style` prop
 - `plot`: passed to [XvizPlot](/docs/api-reference/xviz-plot.md)'s `style` prop
-- `table` and `treetable`: passed to [XvizTable](/docs/api-reference/xviz-table.md)'s
-  `style` prop
+- `table` and `treetable`: passed to [XvizTable](/docs/api-reference/xviz-table.md)'s `style` prop
 - `video`: passed to [XvizVideo](/docs/api-reference/xviz-video.md)'s `style` prop
 
 ##### components (Object, optional)
