@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@streetscape.gl/monochrome": "^1.0.0-alpha.3",
-    "@xviz/parser": "./../xviz/modules/parser",
+    "@xviz/parser": "^1.0.0-alpha.1",
     "deck.gl": "^6.3.0",
     "lodash.merge": "^4.6.1",
     "promise-retry": "^1.1.1",

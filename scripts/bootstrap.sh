@@ -10,9 +10,6 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# setup XVIZ first!
-(cd "${SCRIPT_DIR}/../../xviz" && yarn bootstrap)
-
 # install dependencies
 yarn --check-files
 
