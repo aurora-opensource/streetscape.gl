@@ -1,6 +1,7 @@
 {
   "name": "@streetscape.gl/layers",
   "description": "A collection of deck.gl map layers for autonomy visualization",
+  "license": "MIT",
   "version": "0.1.0",
   "repository": {
     "type": "git",
@@ -11,7 +12,6 @@
   "esnext": "dist/es6/index.js",
   "files": [
     "dist",
-    "src",
     "README.md"
   ],
   "scripts": {
@@ -30,6 +30,5 @@
     "node": ">= 8",
     "npm": ">= 5",
     "yarn": ">= 1"
-  },
-  "private": true
+  }
 }
