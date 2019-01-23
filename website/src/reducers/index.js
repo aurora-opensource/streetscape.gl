@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
 // import {taskMiddleware} from 'react-palm/tasks';
 import thunk from 'redux-thunk';

@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import {Layer} from '@deck.gl/core';
 import {Cube, Sphere, fp64} from 'luma.gl';
 const {fp64LowPart} = fp64;

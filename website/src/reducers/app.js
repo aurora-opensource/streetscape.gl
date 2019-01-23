@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import {handleActions} from 'redux-actions';
 
 const DEFAULT_APP_STATE = {};

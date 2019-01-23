@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import {Layer} from '@deck.gl/core';
 import {Model, Geometry, loadTextures, Texture2D} from 'luma.gl';
 
