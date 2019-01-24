@@ -29,7 +29,7 @@ export const XVIZ_CONFIG = {
 
 export const CAR = {
   origin: [1.08, -0.32, 0],
-  scale: [4.3, 1.8, 1.5]
+  scale: [4.3, 2.2, 1.5]
 };
 
 export const APP_SETTINGS = {
