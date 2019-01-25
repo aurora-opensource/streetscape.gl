@@ -17,24 +17,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {CubeGeometry} from 'luma.gl';
+import sedan from './sedan';
 
-export const DEFAULT_CAR = {
-  mesh: new CubeGeometry(),
-  origin: [0, 0, 0.7],
-  color: [128, 128, 128],
-  scale: [2, 1, 0.7]
-};
+function createCar(makeMesh, opts) {
+  const {length, width, height, color = [128, 128, 128], origin = [0, 0, 0]} = opts;
 
-export const DEFAULT_ORIGIN = [0, 0, 0];
+  const mesh = makeMesh(length, width, height);
 
-export const CAR_DATA = [[0, 0, 0]];
+  return {color, origin, mesh, scale: [1, 1, 1]};
+}
 
-export const LIGHT_SETTINGS = {
-  lightsPosition: [0, 0, 5000, -1000, 400, 1000],
-  ambientRatio: 0.5,
-  diffuseRatio: 0.2,
-  specularRatio: 0.4,
-  lightsStrength: [0.68, 0.0, 1.2, 0.0],
-  numberOfLights: 2
+export default {
+  sedan: opts => createCar(sedan, opts)
 };

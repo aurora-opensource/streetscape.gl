@@ -36,9 +36,8 @@ import {getViewStateOffset, getViews, getViewStates} from '../../utils/viewport'
 import {resolveCoordinateTransform} from '../../utils/transform';
 import {mergeXVIZStyles} from '../../utils/style';
 import {normalizeStreamFilter} from '../../utils/stream-utils';
-import getCarMesh from './get-car-mesh';
 
-import {DEFAULT_ORIGIN, CAR_DATA, LIGHT_SETTINGS} from './constants';
+import {DEFAULT_ORIGIN, CAR_DATA, LIGHT_SETTINGS, DEFAULT_CAR} from './constants';
 
 const noop = () => {};
 
@@ -83,7 +82,7 @@ export default class Core3DViewer extends PureComponent {
   };
 
   static defaultProps = {
-    car: {},
+    car: DEFAULT_CAR,
     viewMode: VIEW_MODE.PERSPECTIVE,
     xvizStyles: {},
     customLayers: [],
@@ -158,10 +157,10 @@ export default class Core3DViewer extends PureComponent {
     const {
       origin = DEFAULT_ORIGIN,
       mesh,
-      scale,
+      scale = [1, 1, 1],
       wireframe = false,
       texture = null,
-      color = [160, 160, 160]
+      color = [0, 0, 0]
     } = car;
 
     return new MeshLayer({
@@ -171,12 +170,12 @@ export default class Core3DViewer extends PureComponent {
       coordinateOrigin: frame.origin || DEFAULT_ORIGIN,
       // Adjust for car center position relative to GPS/IMU
       modelMatrix: frame.vehicleRelativeTransform.clone().translate(origin),
-      mesh: mesh || getCarMesh(scale),
+      mesh,
       data: CAR_DATA,
       getPosition: d => d,
       getColor: color,
       // Support old scale format
-      getSize: (mesh && (Number.isFinite(scale) ? [scale, scale, scale] : scale)) || [1, 1, 1],
+      getSize: Number.isFinite(scale) ? [scale, scale, scale] : scale,
       texture,
       wireframe,
       lightSettings: LIGHT_SETTINGS

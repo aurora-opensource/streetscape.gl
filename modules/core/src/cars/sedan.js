@@ -1,13 +1,25 @@
-const DEFAULT_SCALE = [4.6, 2.4, 1.5];
+// Copyright (c) 2019 Uber Technologies, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+import {mirrorMesh} from './utils';
 
-let generatedMesh = null;
-
-export default function getDefaultCarMesh(scale = DEFAULT_SCALE) {
-  if (generatedMesh) {
-    // only generate mesh once
-    return generatedMesh;
-  }
-
+export default (length = 4.6, width = 2.4, height = 1.5) => {
   /* eslint-disable max-length */
   // prettier-ignore
   const indices = [0,1,2,1,3,2,4,5,6,7,6,5,8,9,10,9,11,10,12,13,14,13,15,14,16,13,17,13,12,17,18,16,19,16,17,19,20,21,19,21,18,19,22,23,20,23,21,20,24,23,25,23,22,25,26,27,25,27,24,25,28,27,29,27,26,29,30,31,32,31,33,32,34,35,36,35,34,37,38,39,40,39,41,40,42,43,44,43,45,44,46,42,47,42,44,47,48,46,49,46,47,49,50,51,49,51,48,49,52,53,50,53,51,50,54,53,55,53,52,55,56,54,57,54,55,57,58,59,57,59,56,57,60,61,62,61,63,62,64,65,66,65,67,66,68,69,70,69,71,70,72,73,74,73,75,74,76,77,78,77,79,78,80,81,82,81,83,82,84,85,86,85,87,86,88,85,89,85,84,89,90,91,92,91,93,92,94,95,96,94,96,97,98,99,100,99,101,100,102,103,104,103,105,104,106,107,108,107,109,108,110,111,112,111,113,112,114,115,116,117,118,119,120,119,118,117,119,121,118,117,122,123,124,125,126,116,124,127,128,129,129,130,131,132,117,133,132,133,131,117,121,133,130,132,131,129,134,127,127,115,135,129,131,134,136,129,128,137,138,139,138,137,140,124,123,126,123,125,141,142,143,144,140,142,138,144,138,142,136,128,145,126,114,116,135,115,114,135,146,128,135,128,127,146,147,128,147,148,139,148,137,139,146,148,147,149,150,151,151,152,149,153,154,155,155,156,153,157,158,159,160,161,162,163,164,165,165,166,163,167,168,169,169,170,167,171,172,173,174,175,176,177,178,179,179,180,177,181,182,183,182,181,184,183,185,181,186,187,188,188,189,186,190,191,192,191,190,193,192,194,190,195,196,197,197,198,195,199,200,201,201,202,199,203,204,205,206,205,204,207,203,205,205,206,208,205,208,207,209,210,211,211,212,209,213,214,215,213,216,217,214,213,218,219,220,214,214,221,219,222,221,214,223,213,217,213,224,225,225,218,213,218,226,214,227,222,214,228,227,214,214,226,228,213,223,224,229,230,231,229,232,233,231,234,229,235,231,236,231,235,237,238,231,237,239,232,229,229,240,241,240,229,234,234,231,242,243,231,238,244,231,243,231,244,242,229,241,239,245,246,247,247,248,245,249,250,246,246,245,249,251,252,250,250,249,251,253,254,252,252,251,253,255,256,254,254,253,255,257,258,256,256,255,257,259,260,258,258,257,259,261,262,260,260,259,261,263,264,262,262,261,263,265,266,264,264,263,265,267,268,266,266,265,267,269,270,268,268,267,269,271,272,270,270,269,271,273,274,272,272,271,273,275,276,274,274,273,275,277,278,276,276,275,277,279,280,281,279,282,283,279,284,285,285,286,280,279,285,280,287,285,288,283,289,279,284,279,289,284,290,285,285,290,291,288,285,292,292,285,291,291,290,293,294,289,283,295,296,297,295,298,299,295,300,301,300,297,302,295,297,300,303,304,300,298,295,305,301,305,295,301,300,306,300,307,306,304,308,300,308,307,300,307,309,306,310,298,305,311,312,313,313,314,311,315,316,312,312,311,315,317,318,316,316,315,317,319,320,318,318,317,319,321,322,320,320,319,321,323,324,322,322,321,323,325,326,324,324,323,325,327,328,326,326,325,327,329,330,328,328,327,329,331,332,330,330,329,331,333,334,332,332,331,333,335,336,334,334,333,335,337,338,336,336,335,337,339,340,338,338,337,339,341,342,340,340,339,341,343,344,342,342,341,343];
@@ -18,9 +30,9 @@ export default function getDefaultCarMesh(scale = DEFAULT_SCALE) {
   /* eslint-enable max-length */
   const meshSize = [4, 2, 1.5];
 
-  const halfDeltaX = ((scale[0] || scale) - meshSize[0]) / 2;
-  const halfDeltaY = ((scale[1] || scale) - meshSize[1]) / 2;
-  const deltaZ = (scale[2] || scale) - meshSize[2];
+  const halfDeltaX = (length - meshSize[0]) / 2;
+  const halfDeltaY = (width - meshSize[1]) / 2;
+  const deltaZ = height - meshSize[2];
 
   const vertexSize = positions.length;
   // Stretch to desired model size
@@ -34,36 +46,5 @@ export default function getDefaultCarMesh(scale = DEFAULT_SCALE) {
     positions[i + 2] = z > 1.2 ? z + deltaZ : z;
   }
 
-  generatedMesh = mirrorMesh({indices, positions, normals});
-
-  return generatedMesh;
-}
-
-// The default mesh is only half a car. Flip Y and append to the vertices.
-function mirrorMesh({indices, positions, normals}) {
-  const indexSize = indices.length;
-  const vertexSize = positions.length;
-  const vertexCount = vertexSize / 3;
-
-  const indices2 = new Uint16Array(indexSize * 2);
-  const positions2 = new Float32Array(vertexSize * 2);
-  const normals2 = new Float32Array(vertexSize * 2);
-
-  indices2.set(indices);
-  indices2.set(indices, indexSize);
-  positions2.set(positions);
-  positions2.set(positions, vertexSize);
-  normals2.set(normals);
-  normals2.set(normals, vertexSize);
-
-  // Flip y
-  for (let i = 0; i < vertexSize; i += 3) {
-    positions2[i + 1] *= -1;
-    normals2[i + 1] *= -1;
-  }
-  // Indices for the 2nd half
-  for (let i = 0; i < indexSize; i++) {
-    indices2[i] += vertexCount;
-  }
-  return {indices: indices2, positions: positions2, normals: normals2};
-}
+  return mirrorMesh({indices, positions, normals});
+};

@@ -48,6 +48,9 @@ export {default as MeterWidget} from './components/hud/meter-widget';
 export {default as TrafficLightWidget} from './components/hud/traffic-light-widget';
 export {default as TurnSignalWidget} from './components/hud/turn-signal-widget';
 
+// Assets
+export {default as CarMesh} from './cars';
+
 // Constants
 export * from './constants';
 
