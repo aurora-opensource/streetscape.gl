@@ -50,6 +50,15 @@
     "name": "API Reference",
     "children": [
       {
+        "name": "Assets",
+        "children": [
+          {
+            "name": "CarMesh",
+            "markdown": "api-reference/car-mesh.md"
+          }
+        ]
+      },
+      {
         "name": "Loaders",
         "children": [
           {
