@@ -31,24 +31,32 @@ For more information, see
 
 ##### car (Object, optional)
 
+![Default Car](../images/default-car.png)
+
 Defines the car asset. May contain the following fields:
 
-- `mesh` (Object|Promise) - a descriptor of the car model. If supplied, must contain the following
+- `mesh` (Object|Promise) - a descriptor of the car model, usually loaded from an external file. If supplied, must contain the following
   fields:
   - `indices` (Uint16Array|Uint32Array)
   - `positions` (Float32Array)
   - `normals` (Float32Array)
   - `texCoords` (Float32Array)
-- `texture` (String) - path to an image file that is the texture for the model
-- `scale` (Number|[Number, Number, Number]) - size scale of the car relative to the mesh. If an
-  array is supplied, it is interpreted as `[scale_x, scale_y, scale_z]`.
-- `origin` ([Number, Number, Number]) - offset of the model origin in meters.
 
-The x axis points from the front to the back of the car, the y axis points from the left to the
-right of the car, and the z axis is up.
+  The x axis points from the front to the back of the car, the y axis points from the left to the
+  right of the car, and the z axis is up. Unit is meters.
+  
+  If not specified, defaults to a nondescript car.
+- `scale` (Number|[Number, Number, Number]) - size of the car, either an uniform scale or `[scale_x, scale_y, scale_z]`.
+  - If a custom `mesh` is supplied, the scale is relative to the mesh. Default `1`.
+  - Otherwise, a default mesh is generated using the scale value, interpreted as `[length, width, height]` in meters. Default `[4.6, 2.4, 1.5]`.
+- `texture` (String) - path to an image file that is the texture for the model. Default `null`.
+- `color` (Array) - RGBA value in the 0-255 range. Ignored if `texture` is present. Default `[160, 160, 160, 255]`.
+- `origin` ([Number, Number, Number]) - offset of the model origin in meters. Default `[0, 0, 0]`.
 
-If not specified, `mesh` defaults to a nondescript car shape that measures 1m x 1m x 1m. To use the
-default mesh, one can set `scale` to `[length, width, height]` of the car in meters.
+
+To stretch the
+default mesh to fit a specific dimension, one can set `scale` to `[length, width, height]` of the car in meters.
+
 
 ##### streamFilter (Array|String|Object|Function, optional)
 

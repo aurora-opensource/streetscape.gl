@@ -42,8 +42,15 @@ vec3 color_transform(vec3 color) {
 }
 
 void main(void) {
-  vec4 color = hasTexture ? texture2D(sampler, vTexCoord) : vColor / 255.;
-  gl_FragColor = vec4(color_transform(color.rgb) * vLightWeight, color.a * opacity);
+  vec4 color;
+
+  if (hasTexture) {
+    color = texture2D(sampler, vTexCoord);
+    color.rgb = color_transform(color.rgb);
+  } else {
+    color = vColor;
+  }
+  gl_FragColor = vec4(color.rgb * vLightWeight, color.a * opacity);
   
   // use highlight color if this fragment belongs to the selected object.
   gl_FragColor = picking_filterHighlightColor(gl_FragColor);

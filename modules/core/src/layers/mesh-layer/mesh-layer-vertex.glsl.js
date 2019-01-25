@@ -76,12 +76,13 @@ void main(void) {
   vec4 worldPosition;
   gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xy, pos, worldPosition);
 
-  // TODO - transform normals
+  vec3 normal = rotationMatrix * normals;
+  normal = project_normal(normal);
 
   picking_setPickingColor(instancePickingColors);
 
   vTexCoord = texCoords;
-  vColor = instanceColors;
-  vLightWeight = lighting_getLightWeight(worldPosition.xyz, project_normal(normals));
+  vColor = instanceColors / 255.;
+  vLightWeight = lighting_getLightWeight(worldPosition.xyz, normal);
 }
 `;
