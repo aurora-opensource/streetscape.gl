@@ -59,7 +59,13 @@ const STYLE_TO_LAYER_PROP = {
     radius_min_pixels: 'radiusMinPixels',
     radius_max_pixels: 'radiusMaxPixels',
     radius: 'getRadius',
-    fill_color: 'getColor'
+    stroked: 'stroked',
+    filled: 'filled',
+    stroke_width_min_pixels: 'widthMinPixels',
+    stroke_width_max_pixels: 'widthMaxPixels',
+    stroke_width: 'getLineWidth',
+    stroke_color: 'getLineColor',
+    fill_color: 'getFillColor'
   },
   pointcloud: {
     opacity: 'opacity',
@@ -286,7 +292,7 @@ export default class XVIZLayer extends CompositeLayer {
             // `vertices` is used xviz V1 and `center` is used by xviz V2
             getPosition: f => f.vertices || f.center,
             updateTriggers: deepExtend(updateTriggers, {
-              getColor: {useSemanticColor: this.props.useSemanticColor}
+              getFillColor: {useSemanticColor: this.props.useSemanticColor}
             })
           })
         );
