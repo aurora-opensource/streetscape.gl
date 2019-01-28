@@ -17,6 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+import {CarMesh} from 'streetscape.gl';
 
 /* eslint-disable camelcase */
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
@@ -27,10 +28,13 @@ export const XVIZ_CONFIG = {
   PLAYBACK_FRAME_RATE: 10
 };
 
-export const CAR = {
+export const CAR = CarMesh.sedan({
   origin: [1.08, -0.32, 0],
-  scale: [4.3, 2.2, 1.5]
-};
+  length: 4.3,
+  width: 2.2,
+  height: 1.5,
+  color: [160, 160, 160]
+});
 
 export const APP_SETTINGS = {
   viewMode: {
