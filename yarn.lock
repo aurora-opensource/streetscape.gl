@@ -787,35 +787,35 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@deck.gl/core@^6.4.0-alpha.3":
-  version "6.4.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-6.4.0-alpha.3.tgz#01d9b69ccd58998afb0eb1ebe883b191db06068c"
-  integrity sha512-vWJvSCx8u6QBFE3uZYllmdhGFyfaPaCPO4PhPRNJtZGoFNvOXnfEMdw+qtFsivpxoM/oK5gBZVeojZOyDw+nyw==
+"@deck.gl/core@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-6.4.0.tgz#82e5d0adbf1316b68e7a864c0eaee77f1a6069d8"
+  integrity sha512-2UlJCQFJ0GUMvXkUhMkghTs8sNlNBQNBFwlCPMUH8e/FJQa4xNS8+zVc7iPtVUqAKSgyGs/sk3G7sUAdeXPk5w==
   dependencies:
     gl-matrix "^3.0.0"
-    luma.gl "^6.4.0-alpha.3"
-    math.gl "^2.3.0-beta.1"
-    mjolnir.js "^2.0.2"
+    luma.gl "^6.4.0"
+    math.gl "^2.3.0"
+    mjolnir.js "^2.0.3"
     probe.gl "^2.0.1"
     seer "^0.2.4"
-    viewport-mercator-project "^6.0.0"
+    viewport-mercator-project "^6.1.0"
 
-"@deck.gl/layers@^6.4.0-alpha.3":
-  version "6.4.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.4.0-alpha.3.tgz#022aec0e4cf0724821fe2d941e809a1130e79995"
-  integrity sha512-H9vlLFAYgHQ++crMnqW9doXWFu8+cdMu2HbFNE6iAkZIqv/WLsgW0ljiEu7G6oyiA8sqY77e65pGhKOKQkEPig==
+"@deck.gl/layers@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.4.0.tgz#cf26a6e075b83dc01ac1a9db54309ad5c8d6c383"
+  integrity sha512-4/AUq7v+yUZP7glXL8gamoXRhJlc+bhNbM2cI3kkxE3LFecXHuRbi+/6e7HJcByZwrOlNZuACE0hA8w+jKBQ4g==
   dependencies:
-    "@deck.gl/core" "^6.4.0-alpha.3"
+    "@deck.gl/core" "^6.4.0"
     "@mapbox/tiny-sdf" "^1.1.0"
     d3-hexbin "^0.2.1"
     earcut "^2.0.6"
 
-"@deck.gl/react@^6.4.0-alpha.3":
-  version "6.4.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-6.4.0-alpha.3.tgz#5bf9c09eea5e3dee8ec4af1287d5ea8b3e3ef289"
-  integrity sha512-FYBcmeg0gqdwl+RQrYOvbujPtE0OHPIiglC6Sh2hYmgTu03YF2cYiabZFWyhlibdm0gRHCQ/xuU0iLxsVtiyqw==
+"@deck.gl/react@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-6.4.0.tgz#85ae5289197bbeb9e6f120bf20a790be58b3eb7a"
+  integrity sha512-MSREKdC+820y3l9xn7g/d06xFgFrIsWhd0O2bXNWdUcgFGK5TLW/vpd/PKEiHI+/K2vNedoSFORCS0VStCYPkA==
   dependencies:
-    "@deck.gl/core" "^6.4.0-alpha.3"
+    "@deck.gl/core" "^6.4.0"
     prop-types "^15.6.0"
 
 "@emotion/cache@10.0.0":
@@ -2843,14 +2843,14 @@ decamelize@^2.0.0:
   dependencies:
     xregexp "4.0.0"
 
-deck.gl@^6.4.0-alpha:
-  version "6.4.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-6.4.0-alpha.3.tgz#7e2fc467b79c3d269a65bcbaaae8da0db6f93faa"
-  integrity sha512-2791SHearEb+SJGHLzMez6ZSUpBjtvaF3cvjH+usySdxcJd+AA81FiVTriLLUNfTHO2f9uWnCK9XwQd2wjYJSg==
+deck.gl@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-6.4.0.tgz#89fec63ba7aedd25e0b54417f907cd539d96fede"
+  integrity sha512-ACW3GhvNRUS+q7w2akpngkiU3i/3HCFmewbEPiTZIBpa1BiIRYEyn9laZieC+vyFOijQd+kNteGqMF/A/BIGbA==
   dependencies:
-    "@deck.gl/core" "^6.4.0-alpha.3"
-    "@deck.gl/layers" "^6.4.0-alpha.3"
-    "@deck.gl/react" "^6.4.0-alpha.3"
+    "@deck.gl/core" "^6.4.0"
+    "@deck.gl/layers" "^6.4.0"
+    "@deck.gl/react" "^6.4.0"
 
 decode-uri-component@^0.2.0:
   version "0.2.0"
@@ -5496,13 +5496,13 @@ lru-cache@^4.0.1, lru-cache@^4.1.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-luma.gl@^6.4.0-alpha.3:
-  version "6.4.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/luma.gl/-/luma.gl-6.4.0-alpha.3.tgz#5d4ac242ce436314b690ddc9dd9c2b740cc0561d"
-  integrity sha512-bk/ScnfDXjHFzP7XmXNZ620A8YlRPygohmGBEFJyJOAEIHBfhISBflHqfNhQGTMDDcSJ3nPYNVaLszj1hYF+zA==
+luma.gl@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/luma.gl/-/luma.gl-6.4.0.tgz#ac915602f60d723861da19cfe30855493bd492e1"
+  integrity sha512-z/1OY9N0CWvKaLlKmAPycvjfHYmCJlKHjS/2/xrz7ccva1yEJR/PEpq4tSNjqQjcZ3/BoOIM+oAA6e2eOzk+dw==
   dependencies:
     "@babel/runtime" "^7.0.0"
-    math.gl "^2.3.0-beta.1"
+    math.gl "^2.3.0"
     probe.gl "^2.0.1"
     seer "^0.2.4"
     webgl-debug "^2.0.0"
@@ -5589,10 +5589,10 @@ math.gl@^2.1.0, math.gl@^2.2.0:
     gl-vec3 "^1.0.3"
     gl-vec4 "^1.0.1"
 
-math.gl@^2.3.0-beta.1:
-  version "2.3.0-beta.2"
-  resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-2.3.0-beta.2.tgz#adecbe16fb3d9643482e4ce3798d6e014ee22057"
-  integrity sha512-WuMF//1ze2Q6UhKeVYsNPJValxV9PHJbhe8L8VbU7CezBV/UM4WHl7ifxPp45KSYyrsWROzPQSzGx8XiU0OH7A==
+math.gl@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-2.3.0.tgz#d6312eb2b28e4e72116ab845fbebc482b6fea5ba"
+  integrity sha512-6a2II4xlYg4k0Z9KLh0u9LzVjb/17/viobJlyI1GzzK2COF3SF28VlYH0I4O8MduObZjlJR+E7Y9OM7d8VuZlw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     gl-matrix "^3.0.0"
@@ -5854,7 +5854,7 @@ mixin-deep@^1.2.0:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
 
-mjolnir.js@^2.0.2, mjolnir.js@^2.0.3:
+mjolnir.js@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/mjolnir.js/-/mjolnir.js-2.0.3.tgz#2354d31bc966a13f18d3bc350d5491acfb562914"
   integrity sha512-3AvoMwJCR3m9QQYzsE+D+LWZ9N2uWbl7prixSJGRZNOpaagRgiXJeVvDEHTiXAGmNhdn/VAtgWrx3lpdrj2sIQ==

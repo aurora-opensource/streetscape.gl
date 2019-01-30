@@ -24,7 +24,7 @@
   "dependencies": {
     "@streetscape.gl/monochrome": "^1.0.0-alpha.3",
     "@xviz/parser": "^1.0.0-alpha.1",
-    "deck.gl": "^6.4.0-alpha",
+    "deck.gl": "^6.4.0",
     "lodash.merge": "^4.6.1",
     "promise-retry": "^1.1.1",
     "prop-types": "^15.6.2",
