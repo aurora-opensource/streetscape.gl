@@ -69,32 +69,33 @@ export const SHOWCASE_ITEMS = [
 
 export const ELEMENTS = [
   {
-    title: 'Map',
+    title: 'Maps',
     description: 'Geospatial context including roads, lanes, traffic lights, and signs.',
     icon: 'data_map'
   },
   {
-    title: 'Lidar',
-    description: '360-degree, high-precision 3D point clouds.',
+    title: 'Sensors',
+    description: 'High-precision 3D LIDAR point clouds, radar returns and ultrasonic echos.',
     icon: 'data_lidar'
   },
   {
-    title: 'Camera',
+    title: 'Cameras',
     description: 'Video feeds of the surrounding environment.',
     icon: 'data_camera'
   },
   {
-    title: 'Metric',
-    description: 'Rich measurements from the sensors onboard the vehicle.',
+    title: 'Metrics',
+    description: 'Rich measurements from devices and software onboard the vehicle.',
     icon: 'data_metric'
   },
   {
-    title: 'ML',
-    description: 'Decision making process behind perception, prediction, and motion planning.',
+    title: 'Actions',
+    description:
+      'Machine learning powered decision making process behind perception, prediction, and motion planning.',
     icon: 'data_ML'
   },
   {
-    title: 'Event',
+    title: 'Events',
     description: 'Machine and human flagged events for future investigation.',
     icon: 'data_event'
   }
