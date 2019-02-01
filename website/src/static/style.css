@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'streetscape';
-  src:  url('fonts/streetscape.eot?cuhbjv');
-  src:  url('fonts/streetscape.eot?cuhbjv#iefix') format('embedded-opentype'),
-    url('fonts/streetscape.ttf?cuhbjv') format('truetype'),
-    url('fonts/streetscape.woff?cuhbjv') format('woff'),
-    url('fonts/streetscape.svg?cuhbjv#streetscape') format('svg');
+  src:  url('fonts/streetscape.eot?2nmdd3');
+  src:  url('fonts/streetscape.eot?2nmdd3#iefix') format('embedded-opentype'),
+    url('fonts/streetscape.ttf?2nmdd3') format('truetype'),
+    url('fonts/streetscape.woff?2nmdd3') format('woff'),
+    url('fonts/streetscape.svg?2nmdd3#streetscape') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -126,20 +126,26 @@
 .icon-github:before {
   content: "\e920";
 }
-.icon-data_icon_lidar:before {
+.icon-data_lidar:before {
   content: "\e901";
 }
-.icon-data_icon_map:before {
+.icon-data_map:before {
   content: "\e902";
 }
-.icon-data_icon_ML:before {
+.icon-data_ML:before {
   content: "\e903";
 }
-.icon-data_icon_radar:before {
+.icon-data_radar:before {
   content: "\e904";
 }
-.icon-data_icon_videocamera:before {
+.icon-data_camera:before {
   content: "\e905";
+}
+.icon-data_metric:before {
+  content: "\e91a";
+}
+.icon-data_event:before {
+  content: "\e91b";
 }
 .icon-pedestrian:before {
   content: "\e90b";

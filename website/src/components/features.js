@@ -33,18 +33,20 @@ const Container = styled.div`
 const BackgroundImage = styled.img`
   width: 100%;
   height: 100%;
-  max-width: 1319px;
-  margin-bottom: ${props => props.theme.margins.small};
+  max-width: 1200px;
+  margin-bottom: ${props => props.theme.margins.large};
 `;
 
 class Features extends PureComponent {
   render() {
     return (
       <Container>
-        <BackgroundImage src={getImageUrl('ui-controls.png')} />
+        <BackgroundImage
+          src={getImageUrl(this.props.isPalm ? 'ui-controls-palm.png' : 'ui-controls.png')}
+        />
         <CenteredContent>
-          <LinkButton large outline href="https://github.com/uber/streetscape.gl">
-            See More
+          <LinkButton large outline href="#/streetscape.gl/getting-started/starter-kit">
+            Get Started
           </LinkButton>
         </CenteredContent>
       </Container>

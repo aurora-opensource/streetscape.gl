@@ -20,8 +20,9 @@
 
 import React, {PureComponent} from 'react';
 import {ThemeProvider} from 'styled-components';
+import {window} from 'global';
 
-import {theme} from '../styles';
+import {theme, breakPoints} from '../styles';
 import {SECTIONS} from '../contents/content';
 import Hero from './hero';
 import Showcase from './showcase';
@@ -44,7 +45,31 @@ const Container = styled.div`
 `;
 
 export default class Home extends PureComponent {
+  state = {
+    selectedIndex: 0,
+    width: window.innerWidth,
+    height: window.innerHeight
+  };
+
+  componentDidMount() {
+    window.addEventListener('resize', this.resize);
+    this.resize();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resize);
+  }
+
+  resize = () => {
+    this.setState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+  };
+
   render() {
+    const isPalm = this.state.width <= breakPoints.palm;
+
     return (
       <ThemeProvider theme={theme}>
         <Container>
@@ -61,7 +86,7 @@ export default class Home extends PureComponent {
                 marginBottom={'0px'}
                 background={background}
               >
-                <SectionContent />
+                <SectionContent isPalm={isPalm} />
               </Section>
             );
           })}

@@ -66,7 +66,7 @@ class App extends Component {
         <Header />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/avs">{props => <MarkdownPage {...props} page={aboutPage} />}</Route>
+          <Route path="/about">{props => <MarkdownPage {...props} page={aboutPage} />}</Route>
           <Route path="/xviz">{props => <Gallery {...props} pages={xvizDocPages} />}</Route>
           <Route path="/streetscape.gl">
             {props => <Gallery {...props} pages={streetscapeDocPages} />}

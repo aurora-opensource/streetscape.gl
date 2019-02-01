@@ -65,7 +65,7 @@ export const SectionTitle = styled.div`
 export const SectionDescription = styled.div`
   font-size: 20px;
   font-weight: 400;
-  max-width: 500px;
+  max-width: 600px;
   ${media.palm`
     font-size: 16px;
   `};

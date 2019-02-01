@@ -72,7 +72,13 @@ export default class TableOfContents extends Component {
       // is external link
       return (
         <li key={`page-${i}`}>
-          <a className="link" style={{paddingLeft: indent}} href={page.external} target="_blank">
+          <a
+            className="link"
+            style={{paddingLeft: indent}}
+            href={page.external}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {page.name}
           </a>
           {tag}
