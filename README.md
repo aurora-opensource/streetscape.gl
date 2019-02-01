@@ -1,111 +1,40 @@
-_Uber Confidential Information_
-
 # streetscape.gl
 
-### Dependencies
+streetscape.gl is a toolkit for visualizing autonomous and robotics data in the [XVIZ](https://github.com/uber/xviz) protocol. It is built on top of React and Uber’s [WebGL-powered visualization frameworks](http://vis.gl).
 
-To build this repository you need:
+![UI Components](docs/images/ui-controls.png)
 
-- Node.js, tested with 8.11.3, compatible with 8.x
-- Yarn, tested with 1.10.0, compatible with 1.x
+## Install
+
+```bash
+npm install streetscape.gl
+# or
+yarn add streetscape.gl
+```
+
+## Documentation and demo
+
+[AVS Website](http://avs.auto)
 
 ## Quick start
 
-Set up to run KITTI XVIZ example
+You need [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/lang/en/docs/install) to run the [example app](examples/get-started).
 
 ```bash
-# Set up XVIZ
-# TODO - remove when XVIZ is published to npm
-$ git clone https://github.com/uber/xviz.git
-
-# Set up streetscape.gl
+# Clone streetscape.gl
 $ git clone https://github.com/uber/streetscape.gl.git
 $ cd streetscape.gl
 
-# Install dependencies and build projects
+# Install dependencies
 $ yarn bootstrap
 
 # Run example
-$ cd examples/xviz-viewer
+$ cd examples/get-started
 $ yarn
-$ yarn start-local
-```
-
-## Documentation
-
-To read the documentation look in the docs folder (e.g. locally or on github), or build and run the
-website:
-
-```
-yarn
-cd website
-yarn
-yarn start
-```
-
-## Development
-
-To install dependencies, run:
-
-```bash
-# Pull and build XVIZ locally
-# TODO - remove when XVIZ is published to npm
-$ git clone https://github.com/uber/xviz.git
-$ cd xviz
-$ yarn bootstrap
-$ cd ..
-
-# Set up streetscape.gl
-$ git clone https://github.com/uber/streetscape.gl.git
-$ cd streetscape.gl
-$ yarn bootstrap
-```
-
-## Test
-
-Run tests under Node.js:
-
-```
-$ yarn test
-```
-
-Run tests in a browser:
-
-```
-$ yarn test-browser
-```
-
-## Dependency setup for Local Development
-
-To improve the development flow while working on both XVIZ and streetscape.gl it is useful to
-directly link the dependencies rather than use packages.
-
-We have some utility script to use yarn linking between XVIZ
-
-### Setup yarn link
-
-Assumes your environment is already setup following the _Quick Start_ sequence.
-
-```
-$ ./scripts/dev-link-dependencies.sh link
-```
-
-### Remove yarn link
-
-This will remove the yarn link, then run yarn again to make sure your packages correctly installed.
-
-```
-$ ./scripts/dev-link-dependencies.sh link
-$ yarn bootstrap
+$ yarn start
 ```
 
 ## Contributions
 
-streetscape.gl welcomes contributions. If you have an idea, it is always a good idea to open a
-github issue to get some feedback before you start implementing, to make sure maintainers are ready
-to accept it.
-
-## Coding Standard
-
-xviz uses a pinned version of the
-[uber-es2015](https://www.npmjs.com/package/eslint-config-uber-es2015) linter rules.
+streetscape.gl welcomes contributions. If you have an idea, open a
+Github issue to get some feedback before you start implementing, to make sure that the maintainers are ready to accept it.
