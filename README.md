@@ -8,6 +8,8 @@ streetscape.gl is a toolkit for visualizing autonomous and robotics data in the 
 
 ```bash
 npm install streetscape.gl
+# or
+yarn add streetscape.gl
 ```
 
 ## Documentation and demo
@@ -16,7 +18,7 @@ npm install streetscape.gl
 
 ## Quick start
 
-You need [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/lang/en/docs/install) to run the example app.
+You need [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/lang/en/docs/install) to run the [example app](examples/get-started).
 
 ```bash
 # Clone streetscape.gl
