@@ -180,8 +180,9 @@ export default class Hero extends PureComponent {
             </div>
             <div className="sg-home__caption__description">
               <span>
-                AVS is a fast, powerful, web-based 3D visualization toolkit for building
-                applications from your autonomous and robotics data.
+                Autonomous Visualization System (AVS) is a fast, powerful, web-based 3D
+                visualization toolkit for building applications from your autonomous and robotics
+                data.
               </span>
             </div>
             <ButtonContainer>
