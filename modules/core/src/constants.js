@@ -33,6 +33,7 @@ export const VIEW_MODE = {
       maxZoom: 24,
       minPitch: 0,
       maxPitch: 0,
+      bearing: 0,
       pitch: 0,
       zoom: 20
     },

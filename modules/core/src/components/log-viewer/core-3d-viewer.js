@@ -105,15 +105,12 @@ export default class Core3DViewer extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
       const viewState = {...this.props.viewState, ...nextProps.viewMode.initialProps};
-      let viewOffset = this.props.viewOffset;
-      if (nextProps.viewMode.firstPerson) {
-        // Reset offset if switching to first person mode
-        viewOffset = {
-          x: 0,
-          y: 0,
-          bearing: 0
-        };
-      }
+      // Reset offset
+      const viewOffset = {
+        x: 0,
+        y: 0,
+        bearing: 0
+      };
 
       nextProps.onViewStateChange({viewState, viewOffset});
     }

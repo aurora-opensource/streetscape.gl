@@ -107,16 +107,20 @@ export function getViewStates({viewState, trackedPosition, viewMode, offset}) {
     viewStates[name] = viewState;
   } else {
     viewState = {...viewState};
+    offset = {...offset};
 
     // Track car position & heading
     if (tracked.position && trackedPosition) {
       viewState.longitude = trackedPosition.longitude;
       viewState.latitude = trackedPosition.latitude;
+    } else {
+      offset.x = 0;
+      offset.y = 0;
     }
     if (tracked.heading && trackedPosition) {
       viewState.bearing = trackedPosition.bearing;
     } else {
-      viewState.bearing = 0;
+      offset.bearing = 0;
     }
 
     viewStates[name] = offsetViewState(viewState, offset);
