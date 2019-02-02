@@ -52,7 +52,7 @@ export {default as TurnSignalWidget} from './components/hud/turn-signal-widget';
 export {default as CarMesh} from './cars';
 
 // Constants
-export * from './constants';
+export {COORDINATE, VIEW_MODE} from './constants';
 
 export {default as _XVIZLoaderInterface} from './loaders/xviz-loader-interface';
 export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
