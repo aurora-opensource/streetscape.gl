@@ -27,7 +27,7 @@ export const COORDINATE = {
 
 export const VIEW_MODE = {
   TOP_DOWN: {
-    name: 'map',
+    name: 'top-down',
     initialProps: {
       minZoom: 12,
       maxZoom: 24,
@@ -36,10 +36,13 @@ export const VIEW_MODE = {
       pitch: 0,
       zoom: 20
     },
-    orthographic: true
+    orthographic: true,
+    tracked: {
+      position: true
+    }
   },
   PERSPECTIVE: {
-    name: 'map',
+    name: 'perspective',
     initialProps: {
       minZoom: 12,
       maxZoom: 24,
@@ -47,6 +50,10 @@ export const VIEW_MODE = {
       maxPitch: 85,
       pitch: 60,
       zoom: 20
+    },
+    tracked: {
+      position: true,
+      heading: true
     }
   },
   DRIVER: {
@@ -62,7 +69,6 @@ export const VIEW_MODE = {
     mapInteraction: {
       dragPan: false,
       scrollZoom: false
-    },
-    tracked: true
+    }
   }
 };

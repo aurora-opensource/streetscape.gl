@@ -89,7 +89,7 @@ export function getViews(viewMode) {
 
 // Creates viewports that contains information about car position and heading
 export function getViewStates({viewState, trackedPosition, viewMode, offset}) {
-  const {name, firstPerson} = viewMode;
+  const {name, firstPerson, tracked = {}} = viewMode;
 
   const viewStates = {};
 
@@ -106,7 +106,20 @@ export function getViewStates({viewState, trackedPosition, viewMode, offset}) {
     }
     viewStates[name] = viewState;
   } else {
-    viewStates[name] = offsetViewState({...viewState, ...trackedPosition}, offset);
+    viewState = {...viewState};
+
+    // Track car position & heading
+    if (tracked.position && trackedPosition) {
+      viewState.longitude = trackedPosition.longitude;
+      viewState.latitude = trackedPosition.latitude;
+    }
+    if (tracked.heading && trackedPosition) {
+      viewState.bearing = trackedPosition.bearing;
+    } else {
+      viewState.bearing = 0;
+    }
+
+    viewStates[name] = offsetViewState(viewState, offset);
   }
 
   return viewStates;
