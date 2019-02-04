@@ -22,14 +22,8 @@ import React, {PureComponent} from 'react';
 import styled, {keyframes} from 'styled-components';
 import {window} from 'global';
 
-import {media, breakPoints} from '../styles';
-import {
-  HERO_BACKGROUND,
-  STREETSCAPE_GL_LOGO,
-  HERO_IMAGES,
-  HERO_IMAGES_SCALED,
-  DEMO_LINK
-} from '../contents/content';
+import {media} from '../styles';
+import {HERO_BACKGROUND, HERO_IMAGES, DEMO_LINK} from '../contents/content';
 import SlideShow from './common/slideshow';
 import {LinkButton} from './common/styled-components';
 
@@ -53,46 +47,47 @@ const FadeIn = styled.div`
 `;
 
 const Container = styled.div`
-  padding: ${props => props.theme.margins.huge};
   color: white;
   background: ${props => props.theme.darkBackgroundColor};
   position: relative;
-
-  ${media.palm`
-    padding-top: ${props => props.theme.margins.large};
-  `};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: ${props => props.theme.margins.huge};
 `;
 
 const Content = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-sizing: 'border-box';
+  padding: ${props => props.theme.margins.huge};
+  width: 100vw;
+  height: ${props => `${(1 - Math.sin(props.scrollTop * Math.PI) / 2) * 100}vh`};
 
   ${media.palm`
-    margin-top: 3rem;
+    height: ${props => `${(0.9 - Math.sin(props.scrollTop * Math.PI) / 5) * 100}vh`};
   `};
 `;
 
-const BackgroundImage = styled.img`
+const BackgroundImage = styled.div`
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100%;
-  height: 70%;
-  object-fit: scale-dowm;
-  background: #0f1d29;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.15;
+  background-image: url('${HERO_BACKGROUND}');
+  background-position: center;
+  background-size: cover;
 `;
 
 const StyledCaption = styled.div`
+  position: relative;
   max-width: 600px;
+  margin: 0 auto;
   text-align: center;
-  margin-bottom: 32px;
-  margin-top: 6rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
 
   ${media.palm`
     width: auto;
@@ -133,18 +128,6 @@ const StyledCaption = styled.div`
   }
 `;
 
-const Logo = styled.img`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 120px;
-  ${media.palm`
-    position: inherit;
-    margin-top: ${props => props.theme.margins.normal};
-    margin-bottom: ${props => props.theme.margins.small};
-  `};
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -166,56 +149,55 @@ const ButtonContainer = styled.div`
 
 export default class Hero extends PureComponent {
   state = {
-    window: window.innerWidth,
-    height: window.innerHeight
+    scrollTop: 0
   };
 
   componentDidMount() {
-    window.addEventListener('resize', this.resize);
-    this.resize();
+    window.addEventListener('scroll', this.onScroll);
+    window.addEventListener('resize', this.onScroll);
+    this.onScroll();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.resize);
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
   }
 
-  resize = () => {
+  onScroll = () => {
     this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
+      scrollTop: Math.min(window.scrollY / window.innerHeight, 0.5)
     });
   };
 
   render() {
-    const isPalm = this.state.width <= breakPoints.palm;
     return (
       <Container>
-        <BackgroundImage src={HERO_BACKGROUND} />
-        <Content>
-          <Logo src={STREETSCAPE_GL_LOGO} />
+        <BackgroundImage />
+        <Content scrollTop={this.state.scrollTop}>
           <StyledCaption>
             <div className="sg-home__caption__subtitle">
-              Make a leap with your autonomous and robotics data
+              Make a leap with your autonomous and robotics data.
             </div>
             <div className="sg-home__caption__description">
               <span>
-                AVS is a fast, powerful, web-based 3D visualization toolkit for building
-                applications from your autonomous and robotics data.
+                Autonomous Visualization System (AVS) is a fast, powerful, web-based 3D
+                visualization toolkit for building applications from your autonomous and robotics
+                data.
               </span>
             </div>
             <ButtonContainer>
               <LinkButton large href={DEMO_LINK}>
                 Try demo
               </LinkButton>
-              <LinkButton large outlineDark href="#avs" style={{marginLeft: '5px'}}>
+              <LinkButton large outlineDark href="#/about" style={{marginLeft: '5px'}}>
                 About AVS
               </LinkButton>
             </ButtonContainer>
           </StyledCaption>
-          <FadeIn>
-            <SlideShow images={isPalm ? HERO_IMAGES_SCALED : HERO_IMAGES} />
-          </FadeIn>
         </Content>
+        <FadeIn>
+          <SlideShow images={HERO_IMAGES} />
+        </FadeIn>
       </Container>
     );
   }

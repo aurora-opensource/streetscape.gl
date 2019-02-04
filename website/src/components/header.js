@@ -60,8 +60,8 @@ export default class Header extends Component {
             <i className={`icon icon-${isMenuOpen ? 'close' : 'menu'}`} />
           </div>
           <div className="links">
-            <NavLink activeClassName="active" to="/avs">
-              AVS
+            <NavLink activeClassName="active" to="/about">
+              About
             </NavLink>
             <NavLink activeClassName="active" to="/xviz">
               XVIZ

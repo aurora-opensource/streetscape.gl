@@ -24,8 +24,8 @@ import {media} from '../../styles';
 export const buttonStyles = css`
   align-items: center;
   background-color: ${props =>
-    props.none
-      ? 'transparent'
+    props.background
+      ? props.background
       : props.negative
         ? props.theme.negativeBtnBgd
         : props.secondary
@@ -77,8 +77,8 @@ export const buttonStyles = css`
   :visited,
   &.active {
     background-color: ${props =>
-      props.none
-        ? 'transparent'
+      props.background
+        ? props.background
         : props.negative
           ? props.theme.negativeBtnBgdHover
           : props.secondary

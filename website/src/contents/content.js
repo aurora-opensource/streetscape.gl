@@ -34,29 +34,23 @@ export const SECTIONS = [
   {
     id: 'elements',
     title: 'Tangible Data',
-    description: 'Gain data insights.'
+    description: 'Gain data insights in context.'
   },
   {
     id: 'features',
     title: 'Suite of Controls',
     description: 'Streamline your workflow with reusable components.',
     background: '#F8F8F9'
-  },
-  {
-    id: 'showcase',
-    title: 'Success Stories',
-    description: 'See what other companies have created with streetscape.gl and xviz builder.',
-    isDark: true
   }
+  // {
+  //   id: 'showcase',
+  //   title: 'Success Stories',
+  //   description: 'See what other companies have created with streetscape.gl and xviz builder.',
+  //   isDark: true
+  // }
 ];
 
-export const HERO_IMAGES = [getImageUrl('example-demoapp.png'), getImageUrl('example-mapping.png')];
-
-// TODO replace with scaled images
-export const HERO_IMAGES_SCALED = [
-  getImageUrl('example-demoapp.png'),
-  getImageUrl('example-mapping.png')
-];
+export const HERO_IMAGES = [getImageUrl('demo.jpg')];
 
 export const SHOWCASE_ITEMS = [
   {
@@ -76,34 +70,34 @@ export const SHOWCASE_ITEMS = [
 export const ELEMENTS = [
   {
     title: 'Maps',
-    description: 'Persistent Geo-Spatial elements like traffic lights, stop, signs...',
-    image: getImageUrl('data-map.png'),
-    icon: 'data_icon_map'
+    description: 'Geospatial context including roads, lanes, traffic lights, and signs.',
+    icon: 'data_map'
   },
   {
-    title: 'Lidar',
-    description: 'Use to reconstruct 3D world with more precision',
-    image: getImageUrl('data-lidar.png'),
-    icon: 'data_icon_lidar'
+    title: 'Sensors',
+    description: 'High-precision 3D LIDAR point clouds, radar returns and ultrasonic echos.',
+    icon: 'data_lidar'
   },
   {
-    title: 'ML',
-    description: 'AI helps detect lane lines and identify cyclists.',
-    image: getImageUrl('data-ML.png'),
-    icon: 'data_icon_ML'
+    title: 'Cameras',
+    description: 'Video feeds of the surrounding environment.',
+    icon: 'data_camera'
   },
   {
-    title: 'Camera',
+    title: 'Metrics',
+    description: 'Rich measurements from devices and software onboard the vehicle.',
+    icon: 'data_metric'
+  },
+  {
+    title: 'Actions',
     description:
-      'Discover things like lane lines on the highway, speed signs, and traffic lights...',
-    image: getImageUrl('data-videocamera.png'),
-    icon: 'data_icon_videocamera'
+      'Machine learning powered decision making process behind perception, prediction, and motion planning.',
+    icon: 'data_ML'
   },
   {
-    title: 'Radar',
-    description: 'Spot big metallic objects-other vehicles.',
-    image: getImageUrl('data-radar.png'),
-    icon: 'data_icon_radar'
+    title: 'Events',
+    description: 'Machine and human flagged events for future investigation.',
+    icon: 'data_event'
   }
 ];
 
@@ -112,17 +106,17 @@ export const STEPS = [
     title: 'Convert',
     description: 'Convert data into the XVIZ protocol.',
     link: {
-      title: 'Explore XVIZ',
-      url: 'https://github.com/uber/xviz'
+      title: 'XVIZ Overview',
+      url: '#/xviz'
     }
   },
   {
     title: 'Visualize',
     description:
-      'Render your converted data using the streetscape.gl framework (part of the deck.gl family).',
+      'Visualize your converted data as 3D scenes, plots and more using the streetscape.gl framework.',
     link: {
-      title: 'Explore streetscape.gl',
-      url: 'https://github.com/uber/streetscape.gl'
+      title: 'streetscape.gl Overview',
+      url: '#/streetscape.gl'
     }
   },
   {
@@ -130,7 +124,7 @@ export const STEPS = [
     description:
       'Interact, inspect and drive insights with your data in a custom, autonomous-specific workflow.',
     link: {
-      title: 'Explore the triage demo application',
+      title: 'Try the demo application',
       // TODO update url when data repo is ready
       url: DEMO_LINK
     }
@@ -140,4 +134,4 @@ export const STEPS = [
 export const VIS_LOGO = getImageUrl('viz_logo_bw.png');
 export const UBER_LOGO = getImageUrl('uber-logo.png');
 export const STREETSCAPE_GL_LOGO = getImageUrl('logo.png');
-export const HERO_BACKGROUND = getImageUrl('hero-background.png');
+export const HERO_BACKGROUND = getImageUrl('hero-background.gif');

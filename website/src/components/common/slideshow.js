@@ -24,7 +24,7 @@ import styled from 'styled-components';
 import {setInterval, clearInterval} from 'global/window';
 import {media} from '../../styles';
 
-const imageRatio = 469 / 800;
+const imageRatio = 0.6;
 
 const StyledImgContainer = styled.div`
   box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.5);

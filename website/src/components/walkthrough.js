@@ -20,12 +20,11 @@
 
 import React, {PureComponent} from 'react';
 import styled from 'styled-components';
-import {window} from 'global';
 
 import Nav from './common/nav';
 import StaggeredScrollAnimation from './common/staggered-scroll-animation';
 import {LinkButton} from './common/styled-components';
-import {media, breakPoints} from '../styles';
+import {media} from '../styles';
 import {STEPS} from '../contents/content';
 
 const StepsContainer = styled.div`
@@ -43,11 +42,12 @@ const StepsRow = styled.div`
 const StepColumn = styled.div`
   display: flex;
   text-align: center;
+  justify-content: space-between;
   width: 350px;
   padding: 24px;
   margin: ${props => props.theme.margins.small};
   ${media.palm`
-    margin: 0px;
+    margin: 0 auto;
     margin-bottom: ${props => props.theme.margins.small}
   `};
 `;
@@ -70,7 +70,10 @@ const StepTitle = styled.div`
 `;
 
 const StepDescription = styled.div`
+  flex-grow: 1;
   font-size: 16px;
+  line-height: 1.5em;
+  min-height: 4.5em;
   color: #c7cbcf;
   margin-bottom: ${props => props.theme.margins.small};
 `;
@@ -116,7 +119,7 @@ const Step = ({showStep = false, index, title, description, link}) => (
     </StepTitle>
     <StepDescription>{description}</StepDescription>
     {link && (
-      <LinkButton secondary none link href={link.url}>
+      <LinkButton secondary background="transparent" link href={link.url}>
         {link.title} &nbsp; &rarr;
       </LinkButton>
     )}
@@ -125,31 +128,12 @@ const Step = ({showStep = false, index, title, description, link}) => (
 
 class Walkthrough extends PureComponent {
   state = {
-    selectedIndex: 0,
-    window: window.innerWidth,
-    height: window.innerHeight
-  };
-
-  componentDidMount() {
-    window.addEventListener('resize', this.resize);
-    this.resize();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resize);
-  }
-
-  resize = () => {
-    this.setState({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
+    selectedIndex: 0
   };
 
   _renderSteps = () => {
-    const isPalm = this.state.width <= breakPoints.palm;
     const selectedIndex = this.state.selectedIndex;
-    if (isPalm) {
+    if (this.props.isPalm) {
       const {title, description, link} = STEPS[selectedIndex];
       return (
         <div>
