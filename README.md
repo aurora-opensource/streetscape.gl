@@ -1,6 +1,8 @@
 # streetscape.gl
 
-streetscape.gl is a toolkit for visualizing autonomous and robotics data in the [XVIZ](https://github.com/uber/xviz) protocol. It is built on top of React and Uber’s [WebGL-powered visualization frameworks](http://vis.gl).
+streetscape.gl is a toolkit for visualizing autonomous and robotics data in the
+[XVIZ](https://github.com/uber/xviz) protocol. It is built on top of React and Uber’s
+[WebGL-powered visualization frameworks](http://vis.gl).
 
 ![UI Components](docs/images/ui-controls.png)
 
@@ -18,7 +20,8 @@ yarn add streetscape.gl
 
 ## Quick start
 
-You need [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/lang/en/docs/install) to run the [example app](examples/get-started).
+You need [Node.js](https://nodejs.org/en/) and [yarn](https://yarnpkg.com/lang/en/docs/install) to
+run the [example app](examples/get-started).
 
 ```bash
 # Clone streetscape.gl
@@ -36,5 +39,5 @@ $ yarn start
 
 ## Contributions
 
-streetscape.gl welcomes contributions. If you have an idea, open a
-Github issue to get some feedback before you start implementing, to make sure that the maintainers are ready to accept it.
+streetscape.gl welcomes contributions. If you have an idea, open a Github issue to get some feedback
+before you start implementing, to make sure that the maintainers are ready to accept it.

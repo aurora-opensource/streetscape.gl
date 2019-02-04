@@ -1135,10 +1135,10 @@
     "@webassemblyjs/wast-parser" "1.5.13"
     long "^3.2.0"
 
-"@xviz/parser@^1.0.0-alpha.1":
-  version "1.0.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-alpha.1.tgz#37ceecce048a5413e5f4c5635088c241ce4532b4"
-  integrity sha512-O8wTIY5AT/5XQTkRd4zwQG6MITqH6EmVzfkP5BvORdF33RdcJe9g953OaKGO0aSfI68Hk+059DWaNOd7ce+rgQ==
+"@xviz/parser@^1.0.0-alpha.2":
+  version "1.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-alpha.2.tgz#4239a7ef6eb47b9b0a504717d0f6d099ac05e77e"
+  integrity sha512-dzW1Su4auDCz7BjZ+aJqjtCDAlKL7HEYRy2FgWXdP+IuxEaeiTWzVZlFOtx3VRDMXPYKo1UWigRhtCJ15+TpCQ==
   dependencies:
     base64-js "^1.3.0"
     color "^3.0.0"

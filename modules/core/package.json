@@ -2,7 +2,7 @@
   "name": "@streetscape.gl/core",
   "description": "Visualizaton toolkit for 3D maps autonomous XVIZ protocol data",
   "license": "MIT",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@streetscape.gl/monochrome": "^1.0.0-alpha.3",
-    "@xviz/parser": "^1.0.0-alpha.1",
+    "@xviz/parser": "^1.0.0-alpha.2",
     "deck.gl": "^6.4.0",
     "lodash.merge": "^4.6.1",
     "promise-retry": "^1.1.1",
