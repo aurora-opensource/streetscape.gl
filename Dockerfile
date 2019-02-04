@@ -19,8 +19,4 @@ RUN chmod a+x /etc/init.d/xvfb
 
 COPY . /streetscape/
 
-RUN mv /streetscape/xviz /xviz && \
-  cd /xviz && \
-  yarn bootstrap
-
 RUN cd /streetscape/ && yarn bootstrap

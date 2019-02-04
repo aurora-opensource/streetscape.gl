@@ -1,9 +1,0 @@
-#!/bin/sh
-
-set -x
-
-# Clone xviz
-git clone git@github.com:uber/xviz.git xviz || true
-
-# Update xviz to latest
-cd xviz && git pull origin master && cd ../
