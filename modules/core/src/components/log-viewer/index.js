@@ -27,6 +27,7 @@ import Core3DViewer from './core-3d-viewer';
 import HoverTooltip from './hover-tooltip';
 
 import connectToLog from '../connect';
+import {DEFAULT_VIEW_STATE} from '../../constants';
 
 const noop = () => {};
 const preventDefault = evt => evt.preventDefault();
@@ -75,10 +76,8 @@ class LogViewer extends PureComponent {
         height: 1,
         longitude: 0,
         latitude: 0,
-        zoom: 18,
-        pitch: 20,
-        bearing: 0,
-        ...props.viewMode.initialProps
+        ...DEFAULT_VIEW_STATE,
+        ...props.viewMode.initialViewState
       },
       viewOffset: {
         x: 0,

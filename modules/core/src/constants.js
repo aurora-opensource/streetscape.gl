@@ -25,36 +25,40 @@ export const COORDINATE = {
   DYNAMIC: 'DYNAMIC'
 };
 
+export const DEFAULT_VIEW_STATE = {
+  minZoom: 12,
+  maxZoom: 24,
+  minPitch: 0,
+  maxPitch: 0,
+  bearing: 0,
+  pitch: 0,
+  zoom: 20
+};
+
 export const VIEW_MODE = {
   TOP_DOWN: {
-    name: 'map',
-    initialProps: {
-      minZoom: 12,
-      maxZoom: 24,
-      minPitch: 0,
-      maxPitch: 0,
-      pitch: 0,
-      zoom: 20
-    },
-    orthographic: true
+    name: 'top-down',
+    initialViewState: {},
+    orthographic: true,
+    tracked: {
+      position: true
+    }
   },
   PERSPECTIVE: {
-    name: 'map',
-    initialProps: {
-      minZoom: 12,
-      maxZoom: 24,
-      minPitch: 0,
+    name: 'perspective',
+    initialViewState: {
       maxPitch: 85,
-      pitch: 60,
-      zoom: 20
+      pitch: 60
+    },
+    tracked: {
+      position: true,
+      heading: true
     }
   },
   DRIVER: {
     name: 'driver',
     initialProps: {
-      minPitch: 0,
-      maxPitch: 0,
-      pitch: 0
+      maxPitch: 0
     },
     firstPerson: {
       position: [0, 0, 1.5]
@@ -62,7 +66,6 @@ export const VIEW_MODE = {
     mapInteraction: {
       dragPan: false,
       scrollZoom: false
-    },
-    tracked: true
+    }
   }
 };

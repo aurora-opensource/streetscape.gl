@@ -31,7 +31,7 @@ import {XVIZStyleParser} from '@xviz/parser';
 
 import XVIZLayer from '../../layers/xviz-layer';
 
-import {VIEW_MODE} from '../../constants';
+import {VIEW_MODE, DEFAULT_VIEW_STATE} from '../../constants';
 import {getViewStateOffset, getViews, getViewStates} from '../../utils/viewport';
 import {resolveCoordinateTransform} from '../../utils/transform';
 import {mergeXVIZStyles} from '../../utils/style';
@@ -104,16 +104,17 @@ export default class Core3DViewer extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
-      const viewState = {...this.props.viewState, ...nextProps.viewMode.initialProps};
-      let viewOffset = this.props.viewOffset;
-      if (nextProps.viewMode.firstPerson) {
-        // Reset offset if switching to first person mode
-        viewOffset = {
-          x: 0,
-          y: 0,
-          bearing: 0
-        };
-      }
+      const viewState = {
+        ...this.props.viewState,
+        ...DEFAULT_VIEW_STATE,
+        ...nextProps.viewMode.initialViewState
+      };
+      // Reset offset
+      const viewOffset = {
+        x: 0,
+        y: 0,
+        bearing: 0
+      };
 
       nextProps.onViewStateChange({viewState, viewOffset});
     }
