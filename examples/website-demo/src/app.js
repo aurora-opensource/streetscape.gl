@@ -22,6 +22,7 @@
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
+import {isMobile} from 'react-device-detect';
 import {setXVIZConfig} from '@xviz/parser';
 import {XVIZFileLoader} from 'streetscape.gl';
 import {ThemeProvider} from '@streetscape.gl/monochrome';
@@ -32,8 +33,9 @@ import MapView from './map-view';
 import Timeline from './timeline';
 import Toolbar from './toolbar';
 import HUD from './hud';
+import NotificationPanel from './notification-panel';
 
-import {LOGS} from './constants';
+import {LOGS, MOBILE_NOTIFICATION} from './constants';
 import {UI_THEME} from './custom-styles';
 
 import './stylesheets/main.scss';
@@ -83,6 +85,9 @@ class Example extends PureComponent {
 
   render() {
     const {log, selectedLog, settings} = this.state;
+    if (isMobile) {
+      return <NotificationPanel notifications={[MOBILE_NOTIFICATION]} />;
+    }
 
     return (
       <div id="container">

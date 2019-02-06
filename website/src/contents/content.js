@@ -50,7 +50,10 @@ export const SECTIONS = [
   // }
 ];
 
-export const HERO_IMAGES = [getImageUrl('demo.jpg')];
+export const DEMO_VIDEO = {
+  poster: getImageUrl('demo.jpg'),
+  url: getImageUrl('kitti_sm.mp4')
+};
 
 export const SHOWCASE_ITEMS = [
   {
