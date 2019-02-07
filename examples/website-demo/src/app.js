@@ -22,7 +22,6 @@
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {isMobile} from 'react-device-detect';
 import {setXVIZConfig} from '@xviz/parser';
 import {XVIZFileLoader} from 'streetscape.gl';
 import {ThemeProvider} from '@streetscape.gl/monochrome';
@@ -34,6 +33,7 @@ import Timeline from './timeline';
 import Toolbar from './toolbar';
 import HUD from './hud';
 import NotificationPanel from './notification-panel';
+import isMobile from './is-mobile';
 
 import {LOGS, MOBILE_NOTIFICATION} from './constants';
 import {UI_THEME} from './custom-styles';
