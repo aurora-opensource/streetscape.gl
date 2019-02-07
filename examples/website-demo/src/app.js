@@ -42,7 +42,7 @@ import './stylesheets/main.scss';
 
 class Example extends PureComponent {
   state = {
-    ...this._loadLog(LOGS[0]),
+    ...(!isMobile && this._loadLog(LOGS[0])),
     settings: {
       viewMode: 'PERSPECTIVE',
       showTooltip: false
@@ -84,10 +84,11 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, selectedLog, settings} = this.state;
     if (isMobile) {
       return <NotificationPanel notifications={[MOBILE_NOTIFICATION]} />;
     }
+
+    const {log, selectedLog, settings} = this.state;
 
     return (
       <div id="container">

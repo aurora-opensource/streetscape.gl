@@ -24,6 +24,8 @@ export function getImageUrl(filename) {
 
 export const DEMO_LINK = './demo/index.html';
 
+const XVIZ_DATA_URL = 'https://uber.github.io/xviz-data';
+
 export const SECTIONS = [
   {
     id: 'walkthrough',
@@ -52,7 +54,7 @@ export const SECTIONS = [
 
 export const DEMO_VIDEO = {
   poster: getImageUrl('demo.jpg'),
-  url: getImageUrl('kitti_sm.mp4')
+  url: `${XVIZ_DATA_URL}/kitti/video/kitti_sm.mp4`
 };
 
 export const SHOWCASE_ITEMS = [
