@@ -85,7 +85,7 @@ class Example extends PureComponent {
 
   render() {
     if (isMobile) {
-      return <NotificationPanel notifications={[MOBILE_NOTIFICATION]} />;
+      return <NotificationPanel notification={MOBILE_NOTIFICATION} />;
     }
 
     const {log, selectedLog, settings} = this.state;

@@ -90,20 +90,15 @@ export default class Video extends PureComponent {
   }
 
   state = {
-    playState: 'ended'
-  };
-
-  _onVideoEnded = () => {
-    this.videoElement.load();
-    this.setState({playState: 'ended'});
+    playing: false
   };
 
   _onVideoClick = () => {
-    if (this.state.playState === 'playing') {
-      this.setState({playState: 'paused'});
+    if (this.state.playing) {
+      this.setState({playing: false});
       this.videoElement.pause();
     } else {
-      this.setState({playState: 'playing'});
+      this.setState({playing: true});
       this.videoElement.play();
     }
   };
@@ -125,18 +120,18 @@ export default class Video extends PureComponent {
 
   render() {
     const {url, poster} = this.props;
-    const {playState} = this.state;
+    const {playing} = this.state;
     return (
       <VideoWrapper key={url}>
         <VideoContainer onClick={this._onVideoClick}>
-          {playState !== 'playing' && this._renderPlayButton()}
+          {!playing && this._renderPlayButton()}
           <video
             muted
             src={url}
             poster={poster}
             autoPlay={false}
+            loop={true}
             ref={elt => this._assignVideoRef(elt)}
-            onEnded={this._onVideoEnded}
           />
         </VideoContainer>
       </VideoWrapper>
