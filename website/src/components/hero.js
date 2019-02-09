@@ -23,9 +23,9 @@ import styled, {keyframes} from 'styled-components';
 import {window} from 'global';
 
 import {media} from '../styles';
-import {HERO_BACKGROUND, HERO_IMAGES, DEMO_LINK} from '../contents/content';
-import SlideShow from './common/slideshow';
+import {HERO_BACKGROUND, DEMO_VIDEO, DEMO_LINK} from '../contents/content';
 import {LinkButton} from './common/styled-components';
+import Video from './common/video';
 
 const SlideShowAnimation = keyframes`
   0% {
@@ -196,7 +196,7 @@ export default class Hero extends PureComponent {
           </StyledCaption>
         </Content>
         <FadeIn>
-          <SlideShow images={HERO_IMAGES} />
+          <Video url={DEMO_VIDEO.url} poster={DEMO_VIDEO.poster} />
         </FadeIn>
       </Container>
     );

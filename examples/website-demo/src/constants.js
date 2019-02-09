@@ -63,3 +63,8 @@ export const LOGS = [
     videoAspectRatio: 16 / 9
   }
 ];
+
+export const MOBILE_NOTIFICATION = {
+  id: 'mobile',
+  message: 'Streetscape.gl demo can not run on mobile devices.'
+};

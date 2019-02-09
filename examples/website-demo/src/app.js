@@ -32,15 +32,17 @@ import MapView from './map-view';
 import Timeline from './timeline';
 import Toolbar from './toolbar';
 import HUD from './hud';
+import NotificationPanel from './notification-panel';
+import isMobile from './is-mobile';
 
-import {LOGS} from './constants';
+import {LOGS, MOBILE_NOTIFICATION} from './constants';
 import {UI_THEME} from './custom-styles';
 
 import './stylesheets/main.scss';
 
 class Example extends PureComponent {
   state = {
-    ...this._loadLog(LOGS[0]),
+    ...(!isMobile && this._loadLog(LOGS[0])),
     settings: {
       viewMode: 'PERSPECTIVE',
       showTooltip: false
@@ -82,6 +84,10 @@ class Example extends PureComponent {
   };
 
   render() {
+    if (isMobile) {
+      return <NotificationPanel notification={MOBILE_NOTIFICATION} />;
+    }
+
     const {log, selectedLog, settings} = this.state;
 
     return (
