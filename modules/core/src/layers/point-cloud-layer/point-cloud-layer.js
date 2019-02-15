@@ -17,34 +17,45 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {CarMesh} from 'streetscape.gl';
 
-/* eslint-disable camelcase */
-export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+import {PointCloudLayer as CorePointCloudLayer} from '@deck.gl/layers';
 
-export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
+import vs from './point-cloud-layer-vertex.glsl';
 
-export const XVIZ_CONFIG = {
-  PLAYBACK_FRAME_RATE: 10
+const COLOR_MODE = {
+  inline: 0,
+  z: 1,
+  distance: 2
 };
 
-export const CAR = CarMesh.sedan({
-  origin: [1.08, -0.32, 0],
-  length: 4.3,
-  width: 2.2,
-  height: 1.5,
-  color: [160, 160, 160]
-});
+const DEFAULT_COLOR_DOMAIN = {
+  z: [-1.5, 1.5],
+  distance: [0, 60]
+};
 
-export const APP_SETTINGS = {
-  viewMode: {
-    type: 'select',
-    title: 'View Mode',
-    data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
+const defaultProps = {
+  colorMode: 'inline',
+  colorDomain: null
+};
+
+export default class PointCloudLayer extends CorePointCloudLayer {
+  getShaders() {
+    const shaders = super.getShaders();
+    shaders.vs = vs;
+    return shaders;
   }
-};
 
-export const XVIZ_STYLE = {
-  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}],
-  '/lidar/points': [{style: {color_mode: 'z'}}]
-};
+  draw({uniforms}) {
+    const {radiusPixels, colorMode, colorDomain} = this.props;
+    this.state.model.render(
+      Object.assign({}, uniforms, {
+        radiusPixels,
+        colorMode: COLOR_MODE[colorMode] || 0,
+        colorDomain: colorDomain || DEFAULT_COLOR_DOMAIN[colorMode] || [0, 0]
+      })
+    );
+  }
+}
+
+PointCloudLayer.layerName = 'PointCloudLayer';
+PointCloudLayer.defaultProps = defaultProps;

@@ -22,11 +22,12 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import {StaticMap} from 'react-map-gl';
-import DeckGL, {COORDINATE_SYSTEM, PointCloudLayer} from 'deck.gl';
+import DeckGL, {COORDINATE_SYSTEM} from 'deck.gl';
 
 import ObjectLabelsOverlay from './object-labels-overlay';
 
 import MeshLayer from '../../layers/mesh-layer/mesh-layer';
+import PointCloudLayer from '../../layers/point-cloud-layer/point-cloud-layer';
 import {XVIZStyleParser} from '@xviz/parser';
 
 import XVIZLayer from '../../layers/xviz-layer';
@@ -186,7 +187,6 @@ export default class Core3DViewer extends PureComponent {
   _getLayers() {
     const {
       frame,
-      viewMode,
       metadata,
       showTooltip,
       objectStates,
@@ -221,6 +221,8 @@ export default class Core3DViewer extends PureComponent {
             getTransformMatrix
           );
 
+          const stylesheet = styleParser.getStylesheet(streamName);
+
           // Support both features and lookAheads, respectively
           const primitives = stream.features || stream;
           if (primitives && primitives.length) {
@@ -232,7 +234,7 @@ export default class Core3DViewer extends PureComponent {
               lightSettings: LIGHT_SETTINGS,
 
               data: primitives,
-              style: styleParser.getStylesheet(streamName),
+              style: stylesheet,
               objectStates,
 
               // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
@@ -249,11 +251,12 @@ export default class Core3DViewer extends PureComponent {
               ...coordinateProps,
               numInstances: stream.pointCloud.numInstances,
               instancePositions: stream.pointCloud.positions,
-              instanceNormals: stream.pointCloud.normals,
               instanceColors: stream.pointCloud.colors,
               instancePickingColors: stream.pointCloud.colors,
-              radiusPixels: viewMode.firstPerson ? 4 : 1,
-              lightSettings: LIGHT_SETTINGS,
+
+              radiusPixels: stylesheet.getProperty('radius') || 1,
+              opacity: stylesheet.getProperty('opacity') || 1,
+              colorMode: stylesheet.getProperty('color_mode'),
 
               // Hack: draw point clouds before polygons to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers

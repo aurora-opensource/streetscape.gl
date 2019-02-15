@@ -75,7 +75,7 @@ export function getViews(viewMode) {
       fovy: 75,
       near: 1,
       far: 10000,
-      focalDistance: 10,
+      focalDistance: 6,
       controller: controllerProps
     });
   }
