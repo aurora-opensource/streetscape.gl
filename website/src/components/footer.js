@@ -24,7 +24,7 @@ import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton} from
 
 import {media} from '../styles';
 import MapboxLogo from './mapbox-logo';
-import {UBER_LOGO, VIS_LOGO} from '../contents/content';
+import {UBER_LOGO, ATG_LOGO, VIS_LOGO, AI_LOGO} from '../contents/content';
 
 const Container = styled.div`
   background: #242730;
@@ -42,10 +42,8 @@ const SectionContainer = styled.div`
   display: inline-flex;
   align-items: center;
 
-  .SocialMediaShareButton {
-    margin-left: 5px;
-    outline: none;
-    cursor: pointer;
+  > *:not(:last-child) {
+    margin-right: 10px;
   }
 
   ${media.palm`
@@ -57,7 +55,6 @@ const SectionContainer = styled.div`
 
 const SectionText = styled.div`
   display: inline-flex;
-  margin-left: 20px;
   align-items: center;
   color: ${props => props.theme.footerColor};
   font-size: 11px;
@@ -69,13 +66,13 @@ const SectionText = styled.div`
 
 const StyledLogo = styled.div`
   display: inline-flex;
-  margin-left: 0.8rem;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 4px;
   position: relative;
   margin-top: 0;
   margin-bottom: 0;
+  line-height: 0;
 
   a {
     color: #e5e5e4;
@@ -92,8 +89,8 @@ const VisGLLogo = styled(StyledLogo)`
     height: 20px;
     width: 24px;
     position: absolute;
-    top: -5px;
-    left: -25px;
+    top: -12px;
+    left: -28px;
   }
 `;
 
@@ -112,10 +109,11 @@ export default class Footer extends PureComponent {
     return (
       <Container>
         <SectionContainer>
-          <a target="_blank" rel="noopener noreferrer" href="https://www.uber.com">
-            <img src={UBER_LOGO} height={16} />
-          </a>
           <SectionText>created by</SectionText>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.uber.com/info/atg/">
+            <img src={ATG_LOGO} height={16} />
+          </a>
+          <SectionText>and</SectionText>
           <VisGLLogo logo={VIS_LOGO}>
             <a target="_blank" rel="noopener noreferrer" href="http://vis.gl">
               VIS.GL
@@ -125,19 +123,17 @@ export default class Footer extends PureComponent {
 
         <SectionContainer>
           <SectionText>partnership with</SectionText>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            <StyledLogo>
-              <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
-                Voyage Auto
-              </a>
-            </StyledLogo>
-            <MapboxLogo target="_blank" rel="noopener noreferrer" href="https://mapbox.com/" />
-          </div>
+          <StyledLogo>
+            <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
+              Voyage Auto
+            </a>
+          </StyledLogo>
+          <MapboxLogo target="_blank" rel="noopener noreferrer" href="https://mapbox.com/" />
+          <StyledLogo>
+            <a target="_blank" rel="noopener noreferrer" href="https://www.appliedintuition.com/">
+              <img src={AI_LOGO} height={24} />
+            </a>
+          </StyledLogo>
         </SectionContainer>
 
         <SectionContainer>

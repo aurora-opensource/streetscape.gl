@@ -39,8 +39,7 @@ const PaginationBarWrapper = styled.div`
 const PaginationBar = styled.div`
   width: 50px;
   height: 4px;
-  background: white;
-  opacity: ${props => (props.isActive ? '1.0' : '0.5')};
+  background: ${props => (props.isActive ? '#005CD2' : '#ccc')};
   transition: opacity 200ms;
 `;
 
@@ -59,7 +58,7 @@ export default class Swipeable extends PureComponent {
     const {children, onChange, selectedIndex} = this.props;
     return (
       <div>
-        <SwipeableViews enableMouseEvents index={selectedIndex} onChange={onChange}>
+        <SwipeableViews enableMouseEvents index={selectedIndex} onChangeIndex={onChange}>
           {children}
         </SwipeableViews>
         <Pagination items={children} selectedIndex={selectedIndex} onChange={onChange} />

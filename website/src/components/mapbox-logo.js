@@ -28,7 +28,6 @@ const MapboxLogo = styled.a`
   display: inline-block;
   height: 28px;
   flex-shrink: 0;
-  margin-left: 12px;
 `;
 
 export default MapboxLogo;

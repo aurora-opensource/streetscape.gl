@@ -25,7 +25,7 @@ import {window} from 'global';
 import {theme, breakPoints} from '../styles';
 import {SECTIONS} from '../contents/content';
 import Hero from './hero';
-import Showcase from './showcase';
+import Usecases from './usecases';
 import Elements from './elements';
 import Walkthrough from './walkthrough';
 import Features from './features';
@@ -35,9 +35,9 @@ import styled from 'styled-components';
 
 const SECTION_CONTENT = {
   walkthrough: Walkthrough,
+  usecases: Usecases,
   elements: Elements,
-  features: Features,
-  showcase: Showcase
+  features: Features
 };
 
 const Container = styled.div`

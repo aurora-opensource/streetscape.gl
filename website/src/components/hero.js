@@ -187,7 +187,7 @@ export default class Hero extends PureComponent {
             </div>
             <ButtonContainer>
               <LinkButton large href={DEMO_LINK}>
-                Try demo
+                Live demo
               </LinkButton>
               <LinkButton large outlineDark href="#/about" style={{marginLeft: '5px'}}>
                 About AVS

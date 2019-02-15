@@ -43,6 +43,11 @@ export const SECTIONS = [
     title: 'Suite of Controls',
     description: 'Streamline your workflow with reusable components.',
     background: '#F8F8F9'
+  },
+  {
+    id: 'usecases',
+    title: 'Powerful Applications',
+    description: 'Build for a new world powered by autonomous data.'
   }
   // {
   //   id: 'showcase',
@@ -56,6 +61,12 @@ export const DEMO_VIDEO = {
   poster: getImageUrl('demo.jpg'),
   url: `${XVIZ_DATA_URL}/kitti/video/kitti_sm.mp4`
 };
+
+export const SLIDESHOW_IMAGES = [
+  getImageUrl('usecase-view.jpg'),
+  getImageUrl('usecase-triage.jpg'),
+  getImageUrl('usecase-debug.jpg')
+];
 
 export const SHOWCASE_ITEMS = [
   {
@@ -138,5 +149,7 @@ export const STEPS = [
 
 export const VIS_LOGO = getImageUrl('viz_logo_bw.png');
 export const UBER_LOGO = getImageUrl('uber-logo.png');
+export const ATG_LOGO = getImageUrl('atg-logo.png');
+export const AI_LOGO = getImageUrl('AppliedIntuition_wht.svg');
 export const STREETSCAPE_GL_LOGO = getImageUrl('logo.png');
 export const HERO_BACKGROUND = getImageUrl('hero-background.gif');

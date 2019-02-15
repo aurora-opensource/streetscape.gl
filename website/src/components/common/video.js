@@ -6,6 +6,8 @@ import {media} from '../../styles';
 const VideoContainer = styled.div`
   position: relative;
   width: 800px;
+  background: #000;
+  line-height: 0;
   ${media.portable`
     width: 500px;
   `} ${media.palm`
@@ -62,12 +64,12 @@ const VideoOverlayPlayButton = styled.svg`
   top: 0;
   left: 0;
   display: block;
-  opacity: 0.95;
+  opacity: 0.6;
   cursor: pointer;
-  background-image: linear-gradient(transparent, #000);
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
   transition: opacity 150ms;
 
-  :hover: {
+  :hover {
     opacity: 1;
   }
 `;
@@ -124,7 +126,6 @@ export default class Video extends PureComponent {
     return (
       <VideoWrapper key={url}>
         <VideoContainer onClick={this._onVideoClick}>
-          {!playing && this._renderPlayButton()}
           <video
             muted
             src={url}
@@ -133,6 +134,7 @@ export default class Video extends PureComponent {
             loop={true}
             ref={elt => this._assignVideoRef(elt)}
           />
+          {!playing && this._renderPlayButton()}
         </VideoContainer>
       </VideoWrapper>
     );
