@@ -27,7 +27,6 @@ import DeckGL, {COORDINATE_SYSTEM} from 'deck.gl';
 import ObjectLabelsOverlay from './object-labels-overlay';
 
 import MeshLayer from '../../layers/mesh-layer/mesh-layer';
-import PointCloudLayer from '../../layers/point-cloud-layer/point-cloud-layer';
 import {XVIZStyleParser} from '@xviz/parser';
 
 import XVIZLayer from '../../layers/xviz-layer';
@@ -246,21 +245,20 @@ export default class Core3DViewer extends PureComponent {
             });
           }
           if (stream.pointCloud) {
-            return new PointCloudLayer({
+            return new XVIZLayer({
               id: `xviz-${streamName}`,
               ...coordinateProps,
-              numInstances: stream.pointCloud.numInstances,
-              instancePositions: stream.pointCloud.positions,
-              instanceColors: stream.pointCloud.colors,
-              instancePickingColors: stream.pointCloud.colors,
 
-              radiusPixels: stylesheet.getProperty('radius') || 1,
-              opacity: stylesheet.getProperty('opacity') || 1,
-              colorMode: stylesheet.getProperty('color_mode'),
+              pickable: showTooltip,
+              data: stream.pointCloud,
+              style: stylesheet,
+              vehicleRelativeTransform: frame.vehicleRelativeTransform,
 
               // Hack: draw point clouds before polygons to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
-              zIndex: 1
+              zIndex: 1,
+
+              streamName
             });
           }
           return null;

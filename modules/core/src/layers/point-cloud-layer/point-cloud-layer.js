@@ -22,19 +22,22 @@ import {PointCloudLayer as CorePointCloudLayer} from '@deck.gl/layers';
 
 import vs from './point-cloud-layer-vertex.glsl';
 
+/* eslint-disable camelcase */
 const COLOR_MODE = {
-  inline: 0,
-  z: 1,
-  distance: 2
+  default: 0,
+  elevation: 1,
+  distance_to_vehicle: 2
 };
 
-const DEFAULT_COLOR_DOMAIN = {
-  z: [-1.5, 1.5],
-  distance: [0, 60]
+const COLOR_DOMAIN = {
+  default: [0, 0],
+  elevation: [0, 3],
+  distance_to_vehicle: [0, 60]
 };
+/* eslint-enable camelcase */
 
 const defaultProps = {
-  colorMode: 'inline',
+  colorMode: 'default',
   colorDomain: null
 };
 
@@ -45,13 +48,34 @@ export default class PointCloudLayer extends CorePointCloudLayer {
     return shaders;
   }
 
+  updateState(params) {
+    super.updateState(params);
+
+    const {props, oldProps} = params;
+    if (
+      props.modelMatrix !== oldProps.modelMatrix ||
+      props.vehicleRelativeTransform !== oldProps.vehicleRelativeTransform
+    ) {
+      const vehicleDistanceTransform = props.vehicleRelativeTransform.clone().invert();
+      if (props.modelMatrix) {
+        vehicleDistanceTransform.multiplyRight(props.modelMatrix);
+      }
+      this.setState({
+        vehicleDistanceTransform
+      });
+    }
+  }
+
   draw({uniforms}) {
     const {radiusPixels, colorMode, colorDomain} = this.props;
+    const {vehicleDistanceTransform} = this.state;
+
     this.state.model.render(
       Object.assign({}, uniforms, {
         radiusPixels,
-        colorMode: COLOR_MODE[colorMode] || 0,
-        colorDomain: colorDomain || DEFAULT_COLOR_DOMAIN[colorMode] || [0, 0]
+        colorMode: COLOR_MODE[colorMode] || COLOR_MODE.default,
+        colorDomain: colorDomain || COLOR_DOMAIN[colorMode] || COLOR_DOMAIN.default,
+        vehicleDistanceTransform
       })
     );
   }

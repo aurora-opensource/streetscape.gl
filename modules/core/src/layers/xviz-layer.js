@@ -20,13 +20,8 @@
 
 /* eslint-disable camelcase */
 import {CompositeLayer} from '@deck.gl/core';
-import {
-  PointCloudLayer,
-  ScatterplotLayer,
-  PathLayer,
-  PolygonLayer,
-  TextLayer
-} from '@deck.gl/layers';
+import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer} from '@deck.gl/layers';
+import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 // TODO/ib - Uncomment to enable binary/flat polygon arrays
 // import PathLayer from './binary-path-layer/binary-path-layer';
 // import PolygonLayer from './binary-polygon-layer/binary-polygon-layer';
@@ -70,7 +65,9 @@ const STYLE_TO_LAYER_PROP = {
   pointcloud: {
     opacity: 'opacity',
     radius_pixels: 'radiusPixels',
-    fill_color: 'getColor'
+    fill_color: 'getColor',
+    point_color_mode: 'colorMode',
+    point_color_domain: 'colorDomain'
   },
   path: {
     opacity: 'opacity',
@@ -235,13 +232,20 @@ export default class XVIZLayer extends CompositeLayer {
     return layerProps;
   }
 
+  _getLayerType(data) {
+    if (data.length > 0) {
+      return data[0].type;
+    }
+    return data.type;
+  }
+
   updateState({props, oldProps, changeFlags}) {
     let {type} = this.state;
 
     if (changeFlags.dataChanged) {
       // Pre-process data
       let data = props.data;
-      const dataType = data.length > 0 && data[0].type;
+      const dataType = this._getLayerType(data);
       type = XVIZ_TO_LAYER_TYPE[dataType];
 
       if (type === 'scatterplot' && data[0].vertices && Array.isArray(data[0].vertices[0])) {
@@ -284,9 +288,9 @@ export default class XVIZLayer extends CompositeLayer {
     switch (type) {
       case 'scatterplot':
         return new ScatterplotLayer(
+          forwardProps,
+          layerProps,
           this.getSubLayerProps({
-            ...forwardProps,
-            ...layerProps,
             id: 'scatterplot',
             data,
             // `vertices` is used xviz V1 and `center` is used by xviz V2
@@ -299,21 +303,30 @@ export default class XVIZLayer extends CompositeLayer {
 
       case 'pointcloud':
         return new PointCloudLayer(
+          forwardProps,
+          layerProps,
+          Array.isArray(data)
+            ? {
+                data: data[0].vertices
+              }
+            : {
+                numInstances: data.numInstances,
+                instancePositions: data.positions,
+                instanceColors: data.colors,
+                instancePickingColors: data.colors
+              },
           this.getSubLayerProps({
-            ...forwardProps,
-            ...layerProps,
             id: 'pointcloud',
-            data: data[0].vertices,
-            getPosition: p => p,
-            getNormal: [0, 0, 1]
+            vehicleRelativeTransform: this.props.vehicleRelativeTransform,
+            getPosition: p => p
           })
         );
 
       case 'path':
         return new PathLayer(
+          forwardProps,
+          layerProps,
           this.getSubLayerProps({
-            ...forwardProps,
-            ...layerProps,
             id: 'path',
             data,
             getPath: f => f.vertices,
@@ -323,29 +336,28 @@ export default class XVIZLayer extends CompositeLayer {
           })
         );
 
-      case 'polygon': {
-        const props = this.getSubLayerProps({
-          ...forwardProps,
-          ...layerProps,
-          id: 'polygon',
-          opacity: this.props.opacity || 1,
-          data,
-          lightSettings,
-          getPolygon: f => f.vertices,
-          updateTriggers: deepExtend(updateTriggers, {
-            getLineColor: {useSemanticColor: this.props.useSemanticColor},
-            getFillColor: {useSemanticColor: this.props.useSemanticColor}
+      case 'polygon':
+        return new PolygonLayer(
+          forwardProps,
+          layerProps,
+          this.getSubLayerProps({
+            id: 'polygon',
+            opacity: this.props.opacity || 1,
+            data,
+            lightSettings,
+            getPolygon: f => f.vertices,
+            updateTriggers: deepExtend(updateTriggers, {
+              getLineColor: {useSemanticColor: this.props.useSemanticColor},
+              getFillColor: {useSemanticColor: this.props.useSemanticColor}
+            })
           })
-        });
-
-        return new PolygonLayer(props);
-      }
+        );
 
       case 'text':
         return new TextLayer(
+          forwardProps,
+          layerProps,
           this.getSubLayerProps({
-            ...forwardProps,
-            ...layerProps,
             id: 'text',
             data,
             getText: f => f.text,

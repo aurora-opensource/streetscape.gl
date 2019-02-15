@@ -31,6 +31,7 @@ uniform float opacity;
 uniform float radiusPixels;
 uniform float colorMode;
 uniform vec2 colorDomain;
+uniform mat4 vehicleDistanceTransform;
 
 varying vec4 vColor;
 varying vec2 unitPosition;
@@ -69,14 +70,16 @@ void main(void) {
   unitPosition = positions.xy;
 
   // Find the center of the point and add the current vertex
-  vec4 position_worldspace;
-  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, vec3(0.), position_worldspace);
+  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, vec3(0.));
   gl_Position += project_pixel_to_clipspace(positions.xy * radiusPixels) * project_uFocalDistance;
 
+  vec4 colorPosition;
   if (colorMode == COLOR_MODE_DISTANCE) {
-    vColor = vec4(distToRgb(length(instancePositions)), opacity);
+    colorPosition = vehicleDistanceTransform * vec4(instancePositions, 1.0);
+    vColor = vec4(distToRgb(length(colorPosition.xyz)), opacity);
   } else if (colorMode == COLOR_MODE_Z) {
-    vColor = vec4(distToRgb(instancePositions.z), opacity);
+    colorPosition = project_uModelMatrix * vec4(instancePositions, 1.0);
+    vColor = vec4(distToRgb(colorPosition.z), opacity);
   } else {
     vColor = vec4(instanceColors.rgb, instanceColors.a * opacity) / 255.;
   }
