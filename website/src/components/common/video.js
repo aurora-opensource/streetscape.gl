@@ -37,23 +37,6 @@ const FadeIn = styled.div`
   animation-fill-mode: both;
 `;
 
-const VideoWrapperHeader = styled.div`
-  height: 15px;
-  background: #e5e5e4;
-  border-radius: 3px 3px 0px 0px;
-  display: flex;
-  align-items: center;
-  padding: 0px 5px;
-`;
-
-const VideoWrapperHeaderCircle = styled.div`
-  width: 6px;
-  height: 6px;
-  border-radius: 10px;
-  background: ${props => props.color};
-  margin-left: 5px;
-`;
-
 const VideoOverlayPlayButton = styled.svg`
   z-index: 1000;
   box-sizing: border-box;
@@ -73,17 +56,6 @@ const VideoOverlayPlayButton = styled.svg`
     opacity: 1;
   }
 `;
-
-const VideoWrapper = ({children}) => (
-  <div>
-    <VideoWrapperHeader>
-      <VideoWrapperHeaderCircle color="#12BB00" />
-      <VideoWrapperHeaderCircle color="#D3AE00" />
-      <VideoWrapperHeaderCircle color="#DE3131" />
-    </VideoWrapperHeader>
-    {children}
-  </div>
-);
 
 export default class Video extends PureComponent {
   constructor(props) {
@@ -124,19 +96,17 @@ export default class Video extends PureComponent {
     const {url, poster} = this.props;
     const {playing} = this.state;
     return (
-      <VideoWrapper key={url}>
-        <VideoContainer onClick={this._onVideoClick}>
-          <video
-            muted
-            src={url}
-            poster={poster}
-            autoPlay={false}
-            loop={true}
-            ref={elt => this._assignVideoRef(elt)}
-          />
-          {!playing && this._renderPlayButton()}
-        </VideoContainer>
-      </VideoWrapper>
+      <VideoContainer onClick={this._onVideoClick}>
+        <video
+          muted
+          src={url}
+          poster={poster}
+          autoPlay={false}
+          loop={true}
+          ref={elt => this._assignVideoRef(elt)}
+        />
+        {!playing && this._renderPlayButton()}
+      </VideoContainer>
     );
   }
 }

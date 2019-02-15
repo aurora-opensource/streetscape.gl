@@ -24,7 +24,7 @@ import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton} from
 
 import {media} from '../styles';
 import MapboxLogo from './mapbox-logo';
-import {UBER_LOGO, ATG_LOGO, VIS_LOGO, AI_LOGO} from '../contents/content';
+import {ATG_LOGO, VIS_LOGO, AI_LOGO} from '../contents/content';
 
 const Container = styled.div`
   background: #242730;
@@ -124,7 +124,12 @@ export default class Footer extends PureComponent {
         <SectionContainer>
           <SectionText>partnership with</SectionText>
           <StyledLogo>
-            <a target="_blank" rel="noopener noreferrer" href="https://voyage.auto/">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://voyage.auto/"
+              style={{lineHeight: 1.2}}
+            >
               Voyage Auto
             </a>
           </StyledLogo>
