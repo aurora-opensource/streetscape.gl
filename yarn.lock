@@ -1004,6 +1004,28 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.2.tgz#63985d3d8b02530e0869962f4da09142ee8e200e"
   integrity sha512-n/VQ4mbfr81aqkx/XmVicOLjviMuy02eenSdJY33SVA7S2J42EU0P1H0mOogfYedb3wXA0d/LVtBrgTSm04WEA==
 
+"@loaders.gl/core@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-0.6.2.tgz#d4260e27c367e4c41ea7ba69a2d9525ee608511b"
+  integrity sha512-dG8mTy+c+xqgkYKe/We6mgLfesCy3ITlEdfWccKjWupIa6iKPBnf/CgDQE8+C4IOzKR5njDCMMKKOM0kZIdDQw==
+  dependencies:
+    text-encoding "^0.6.4"
+
+"@loaders.gl/draco@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/draco/-/draco-0.6.2.tgz#8e0268fcaa5770c421dcb7376b77405a6e13575d"
+  integrity sha512-J15/vwvroTwDwea0vJ4UhXvukqAmmCKnjmayHXcT8/UTEL4l9iDRFr3Lz9PumNzLsoQpb+0u9pcoU9hTH10Ecg==
+  dependencies:
+    "@loaders.gl/core" "^0.6.2"
+    draco3d "^1.3.4"
+
+"@loaders.gl/gltf@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@loaders.gl/gltf/-/gltf-0.6.2.tgz#03f4546840d0bf6c2e64cb0c08c3723af3106a6f"
+  integrity sha512-vZZV029K0ZOg/7lOJ/FF7mu5a1UZg0OTNrDMBpUFLlyX7gEheErGOpLD3WlDA+SxBdsdb4RLA7rCdpRLN5yyAQ==
+  dependencies:
+    "@loaders.gl/core" "^0.6.2"
+
 "@mapbox/geojson-area@0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@mapbox/geojson-area/-/geojson-area-0.2.2.tgz#18d7814aa36bf23fbbcc379f8e26a22927debf10"
@@ -1225,6 +1247,20 @@
   resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-alpha.2.tgz#4239a7ef6eb47b9b0a504717d0f6d099ac05e77e"
   integrity sha512-dzW1Su4auDCz7BjZ+aJqjtCDAlKL7HEYRy2FgWXdP+IuxEaeiTWzVZlFOtx3VRDMXPYKo1UWigRhtCJ15+TpCQ==
   dependencies:
+    base64-js "^1.3.0"
+    color "^3.0.0"
+    math.gl "^2.2.0"
+    probe.gl "^2.0.1"
+    text-encoding "^0.6.4"
+    viewport-mercator-project "^6.0.0"
+
+"@xviz/parser@^1.0.0-alpha.4":
+  version "1.0.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-alpha.4.tgz#b42ffaaa02c0abf8949c98d21c4ec7b24bee9ae2"
+  integrity sha512-eL1qdq8YEu1Epbx3mLwIiJk4E7v2IGNvRE+MbwRnfxAs7RwomY4Bb4kbNFpMS5UxRbnr9dOfHgcxR0rYOkPNDQ==
+  dependencies:
+    "@loaders.gl/draco" "^0.6.2"
+    "@loaders.gl/gltf" "^0.6.2"
     base64-js "^1.3.0"
     color "^3.0.0"
     math.gl "^2.2.0"
@@ -3217,6 +3253,11 @@ dot-prop@^3.0.0:
   integrity sha1-G3CK8JSknJoOfbyteQq6U52sEXc=
   dependencies:
     is-obj "^1.0.0"
+
+draco3d@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/draco3d/-/draco3d-1.3.4.tgz#b17e4fedd4b4b946c9eb8df2e1d2f470a953cdb8"
+  integrity sha512-I7kAKyiSIb++K5VdWGeIC9xXWkoQ1HZ8wSCQhaRMf41KKxYX5jYmy+rRna/o7o3CrunxvCGbZBl6d6bdWVcJXw==
 
 duplexer3@^0.1.4:
   version "0.1.4"
