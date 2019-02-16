@@ -31,7 +31,8 @@ export const CAR = {
   mesh: loadOBJMesh('assets/car.obj'),
   origin: [1.08, -0.32, 0],
   scale: 0.0009,
-  wireframe: true
+  wireframe: true,
+  color: [160, 160, 160]
 };
 
 export const SETTINGS = {
