@@ -64,15 +64,23 @@ export default class PointCloudLayer extends CorePointCloudLayer {
         vehicleDistanceTransform
       });
     }
+
+    if (props.instanceColors !== oldProps.instanceColors) {
+      const {instanceColors} = this.getAttributeManager().getAttributes();
+      const colorSize = props.instanceColors ? props.instanceColors.length / props.numInstances : 4;
+      instanceColors.size = colorSize;
+      this.setState({colorSize});
+    }
   }
 
   draw({uniforms}) {
     const {radiusPixels, colorMode, colorDomain} = this.props;
-    const {vehicleDistanceTransform} = this.state;
+    const {vehicleDistanceTransform, colorSize} = this.state;
 
     this.state.model.render(
       Object.assign({}, uniforms, {
         radiusPixels,
+        colorSize,
         colorMode: COLOR_MODE[colorMode] || COLOR_MODE.default,
         colorDomain: colorDomain || COLOR_DOMAIN[colorMode] || COLOR_DOMAIN.default,
         vehicleDistanceTransform
