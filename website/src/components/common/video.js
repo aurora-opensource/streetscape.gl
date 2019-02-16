@@ -6,6 +6,8 @@ import {media} from '../../styles';
 const VideoContainer = styled.div`
   position: relative;
   width: 800px;
+  background: #000;
+  line-height: 0;
   ${media.portable`
     width: 500px;
   `} ${media.palm`
@@ -35,23 +37,6 @@ const FadeIn = styled.div`
   animation-fill-mode: both;
 `;
 
-const VideoWrapperHeader = styled.div`
-  height: 15px;
-  background: #e5e5e4;
-  border-radius: 3px 3px 0px 0px;
-  display: flex;
-  align-items: center;
-  padding: 0px 5px;
-`;
-
-const VideoWrapperHeaderCircle = styled.div`
-  width: 6px;
-  height: 6px;
-  border-radius: 10px;
-  background: ${props => props.color};
-  margin-left: 5px;
-`;
-
 const VideoOverlayPlayButton = styled.svg`
   z-index: 1000;
   box-sizing: border-box;
@@ -62,26 +47,15 @@ const VideoOverlayPlayButton = styled.svg`
   top: 0;
   left: 0;
   display: block;
-  opacity: 0.95;
+  opacity: 0.6;
   cursor: pointer;
-  background-image: linear-gradient(transparent, #000);
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
   transition: opacity 150ms;
 
-  :hover: {
+  :hover {
     opacity: 1;
   }
 `;
-
-const VideoWrapper = ({children}) => (
-  <div>
-    <VideoWrapperHeader>
-      <VideoWrapperHeaderCircle color="#12BB00" />
-      <VideoWrapperHeaderCircle color="#D3AE00" />
-      <VideoWrapperHeaderCircle color="#DE3131" />
-    </VideoWrapperHeader>
-    {children}
-  </div>
-);
 
 export default class Video extends PureComponent {
   constructor(props) {
@@ -122,19 +96,17 @@ export default class Video extends PureComponent {
     const {url, poster} = this.props;
     const {playing} = this.state;
     return (
-      <VideoWrapper key={url}>
-        <VideoContainer onClick={this._onVideoClick}>
-          {!playing && this._renderPlayButton()}
-          <video
-            muted
-            src={url}
-            poster={poster}
-            autoPlay={false}
-            loop={true}
-            ref={elt => this._assignVideoRef(elt)}
-          />
-        </VideoContainer>
-      </VideoWrapper>
+      <VideoContainer onClick={this._onVideoClick}>
+        <video
+          muted
+          src={url}
+          poster={poster}
+          autoPlay={false}
+          loop={true}
+          ref={elt => this._assignVideoRef(elt)}
+        />
+        {!playing && this._renderPlayButton()}
+      </VideoContainer>
     );
   }
 }

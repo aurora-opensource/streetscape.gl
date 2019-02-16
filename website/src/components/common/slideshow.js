@@ -24,24 +24,14 @@ import styled from 'styled-components';
 import {setInterval, clearInterval} from 'global/window';
 import {media} from '../../styles';
 
-const imageRatio = 0.6;
-
 const StyledImgContainer = styled.div`
   box-shadow: 0 12px 24px 0 rgba(0, 0, 0, 0.5);
   flex-shrink: 0;
   opacity: 1;
   position: relative;
 
-  width: calc(100vw - 60px);
-  height: ${imageRatio * 100}vw;
-
-  max-width: 800px;
-  max-height: ${800 * imageRatio}px;
-
-  ${media.palm`
-    width: calc(100vw - 60px);
-    height: ${imageRatio * 100}vw;
-  `};
+  width: ${props => props.width}px;
+  height: ${props => props.height}px;
 `;
 
 const StyledImg = styled.img`
@@ -92,9 +82,9 @@ export default class SlideShow extends PureComponent {
   };
 
   render() {
-    const {images, fadeDuration} = this.props;
+    const {images, fadeDuration, width, height} = this.props;
     return (
-      <StyledImgContainer>
+      <StyledImgContainer width={width} height={height}>
         {images.map((src, i) => (
           <StyledImg
             key={src}
