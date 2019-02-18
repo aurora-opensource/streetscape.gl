@@ -45,7 +45,8 @@ const XVIZ_TO_LAYER_TYPE = {
   circle: 'scatterplot',
   polyline: 'path',
   polygon: 'polygon',
-  text: 'text'
+  text: 'text',
+  stadium: 'stadium'
 };
 
 const STYLE_TO_LAYER_PROP = {
@@ -75,6 +76,13 @@ const STYLE_TO_LAYER_PROP = {
     stroke_width_max_pixels: 'widthMaxPixels',
     stroke_color: 'getColor',
     stroke_width: 'getWidth'
+  },
+  stadium: {
+    opacity: 'opacity',
+    radius_min_pixels: 'widthMinPixels',
+    radius_max_pixels: 'widthMaxPixels',
+    fill_color: 'getColor',
+    radius: 'getWidth'
   },
   polygon: {
     opacity: 'opacity',
@@ -337,6 +345,21 @@ export default class XVIZLayer extends CompositeLayer {
             id: 'path',
             data,
             getPath: f => f.vertices,
+            updateTriggers: deepExtend(updateTriggers, {
+              getColor: {useSemanticColor: this.props.useSemanticColor}
+            })
+          })
+        );
+
+      case 'stadium':
+        return new PathLayer(
+          forwardProps,
+          layerProps,
+          this.getSubLayerProps({
+            id: 'stadium',
+            data,
+            getPath: f => [f.start, f.end],
+            lineJointRounded: true,
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })
