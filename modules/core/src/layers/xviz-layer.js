@@ -310,6 +310,7 @@ export default class XVIZLayer extends CompositeLayer {
                 data: data[0].vertices
               }
             : {
+                data: data.ids,
                 numInstances: data.numInstances,
                 instancePositions: data.positions,
                 instanceColors: data.colors,
