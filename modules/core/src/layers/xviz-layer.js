@@ -102,7 +102,7 @@ const STYLE_TO_LAYER_PROP = {
     font_family: 'fontFamily',
     font_weight: 'fontWeight',
     text_size: 'getSize',
-    text_angle: 'getAngle',
+    text_rotation: 'getAngle',
     text_anchor: 'getTextAnchor',
     text_baseline: 'getAlignmentBaseline'
   }
