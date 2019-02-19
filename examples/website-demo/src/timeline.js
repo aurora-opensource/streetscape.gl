@@ -71,11 +71,11 @@ export default class Timeline extends PureComponent {
         break;
 
       case 37: // left
-        this._seek(-100);
+        this._seek(-0.1);
         break;
 
       case 39: // right
-        this._seek(100);
+        this._seek(0.1);
         break;
 
       default:

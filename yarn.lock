@@ -1075,10 +1075,10 @@
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
   integrity sha512-Es6WcD0nO5l+2BOQS4uLfNPYQaNDfbot3X1XUoloz+x0mPDS3eeORZJl06HXjwBG1fOGwCRnzK88LMdxKRrd6Q==
 
-"@streetscape.gl/monochrome@^1.0.0-alpha.3":
-  version "1.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/@streetscape.gl/monochrome/-/monochrome-1.0.0-alpha.3.tgz#1998d6943068b2ba33678d99f085bd5edee5594d"
-  integrity sha512-PRm6WmK+0Jc1uxOp/4aavRa++sIXOzh9vGLDZQ0y6gu1XAwDQiFkOK7YscaC+OXh0EaMvl8EHE05QaplQr/D5w==
+"@streetscape.gl/monochrome@^1.0.0-beta.1":
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@streetscape.gl/monochrome/-/monochrome-1.0.0-beta.1.tgz#09f9fb8d1fb613d5c01d086f394a7ec6a2951e0b"
+  integrity sha512-6k4n7qu7VfZ/78vdyCggxwKTCFpCBwUsO3KgbwFlsSdt6vOl0xX4IB73rK03YgtmZTYjNRbHwOM0F36pgBTl+g==
   dependencies:
     "@emotion/core" "^10.0.0"
     "@emotion/styled" "^10.0.0"
@@ -1242,10 +1242,10 @@
     "@webassemblyjs/wast-parser" "1.5.13"
     long "^3.2.0"
 
-"@xviz/parser@^1.0.0-alpha.5":
-  version "1.0.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-alpha.5.tgz#36bc830f5277808685c0db73026bc1b6c39113ca"
-  integrity sha512-L5jBFTxUjM4BXx1nJpQ1J6HihkOiM3VPVmA1POluc9vtDB9ARC0naGfM2ON7wyQEpPMbavQGyspOFRzHtZjt5w==
+"@xviz/parser@^1.0.0-beta.2":
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-beta.2.tgz#b0ca87fed6e48c0134b3bd7aa145af723324045b"
+  integrity sha512-ytEVSZehgT6odlR/TL5HvV2OdrrmyS4fNbKpoWyCjwkWeBdcM0yJ5GU0wsiwo6shyu5sVPp90eoxdupHuA+oaw==
   dependencies:
     "@loaders.gl/draco" "^0.6.2"
     "@loaders.gl/gltf" "^0.6.2"
