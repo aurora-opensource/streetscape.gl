@@ -23,10 +23,10 @@ import STREETSCAPE_DOCS from '../../pages.json';
 
 // TODO: replace with github url when the repo is public
 function getXVIZDocUrl(filename) {
-  return `./xviz-docs/${filename}`;
+  return `https://raw.githubusercontent.com/uber/xviz/master/docs/${filename}`;
 }
 function getStreetscapeDocUrl(filename) {
-  return `./streetscape-docs/${filename}`;
+  return `https://raw.githubusercontent.com/uber/streetscape.gl/master/docs/${filename}`;
 }
 
 // mapping from file path in source to generated page url
