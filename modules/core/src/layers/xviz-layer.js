@@ -45,7 +45,8 @@ const XVIZ_TO_LAYER_TYPE = {
   circle: 'scatterplot',
   polyline: 'path',
   polygon: 'polygon',
-  text: 'text'
+  text: 'text',
+  stadium: 'stadium'
 };
 
 const STYLE_TO_LAYER_PROP = {
@@ -76,24 +77,34 @@ const STYLE_TO_LAYER_PROP = {
     stroke_color: 'getColor',
     stroke_width: 'getWidth'
   },
+  stadium: {
+    opacity: 'opacity',
+    radius_min_pixels: 'widthMinPixels',
+    radius_max_pixels: 'widthMaxPixels',
+    fill_color: 'getColor',
+    radius: 'getWidth'
+  },
   polygon: {
     opacity: 'opacity',
     stroked: 'stroked',
     filled: 'filled',
     extruded: 'extruded',
-    wireframe: 'wireframe',
     stroke_color: 'getLineColor',
     stroke_width: 'getLineWidth',
+    stroke_width_min_pixels: 'lineWidthMinPixels',
+    stroke_width_max_pixels: 'lineWidthMaxPixels',
     fill_color: 'getFillColor',
     height: 'getElevation'
   },
   text: {
     opacity: 'opacity',
     fill_color: 'getColor',
-    size: 'getSize',
-    angle: 'getAngle',
+    font_family: 'fontFamily',
+    font_weight: 'fontWeight',
+    text_size: 'getSize',
+    text_rotation: 'getAngle',
     text_anchor: 'getTextAnchor',
-    alignment_baseline: 'getAlignmentBaseline'
+    text_baseline: 'getAlignmentBaseline'
   }
 };
 
@@ -149,6 +160,10 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
       altPropertyName = 'thickness';
       break;
     case 'radius':
+      // v2 circle inline style
+      if (f.radius) {
+        return f.radius;
+      }
       break;
     default:
       break;
@@ -336,6 +351,21 @@ export default class XVIZLayer extends CompositeLayer {
           })
         );
 
+      case 'stadium':
+        return new PathLayer(
+          forwardProps,
+          layerProps,
+          this.getSubLayerProps({
+            id: 'stadium',
+            data,
+            getPath: f => [f.start, f.end],
+            lineJointRounded: true,
+            updateTriggers: deepExtend(updateTriggers, {
+              getColor: {useSemanticColor: this.props.useSemanticColor}
+            })
+          })
+        );
+
       case 'polygon':
         return new PolygonLayer(
           forwardProps,
@@ -345,6 +375,7 @@ export default class XVIZLayer extends CompositeLayer {
             opacity: this.props.opacity || 1,
             data,
             lightSettings,
+            wireframe: layerProps.stroked,
             getPolygon: f => f.vertices,
             updateTriggers: deepExtend(updateTriggers, {
               getLineColor: {useSemanticColor: this.props.useSemanticColor},
