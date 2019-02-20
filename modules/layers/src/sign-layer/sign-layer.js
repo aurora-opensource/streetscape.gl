@@ -31,7 +31,7 @@ export default class SignLayer extends IconLayer {
   initializeState() {
     super.initializeState();
 
-    const {attributeManager} = this.state;
+    const attributeManager = this.getAttributeManager();
     attributeManager.addInstanced({
       instanceAngles: {size: 1, accessor: 'getAngle'}
     });
