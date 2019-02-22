@@ -92,7 +92,9 @@ of ideas.
 
 ## Contact Us
 
-Join our [Slack channel](https://join.slack.com/t/streetscapexviz/shared_invite/enQtNTUyMDEwNzU4OTEyLWUyZGIzZDIxMGY2Nzc5ZjIyZWY3MWYzMjhjODM0NzE2MGYyZjkzYWUwYjZlMTkwNGU1ZDRkOWNlYzYzZWJmM2Q) for learning and discussions.
+Join our
+[Slack channel](https://join.slack.com/t/streetscapexviz/shared_invite/enQtNTUyMDEwNzU4OTEyLWUyZGIzZDIxMGY2Nzc5ZjIyZWY3MWYzMjhjODM0NzE2MGYyZjkzYWUwYjZlMTkwNGU1ZDRkOWNlYzYzZWJmM2Q)
+for learning and discussions.
 
 Interested in partnering? Contact us at
 [avs-working-group@uber.com](mailto:avs-working-group@uber.com).
