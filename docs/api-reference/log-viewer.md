@@ -150,9 +150,17 @@ Callback when the view state changes. Will be called with the following paramete
   - `state.viewState` (Object) - descriptor of the new view state.
   - `state.viewOffset` (Object) - descriptor of the new view offset.
 
+##### onClick (Function, optional)
+
+Callback when the canvas is left clicked on. Will receive the following arguments:
+
+- `info` (Object) - a descriptor of the object being clicked
+- `event` (Object) - the original pointer event
+
 ##### onSelectObject (Function, optional)
 
-Callback when an object is left clicked on. Will receive the following arguments:
+Callback when an object (i.e. a XVIZ primitive with `object_id`) is left clicked on. Will receive
+the following arguments:
 
 - `info` (Object) - a descriptor of the object being clicked
 - `event` (Object) - the original pointer event
@@ -162,7 +170,7 @@ If the callback returns `true`, the event is considered "handled" and prevents t
 
 ##### onContextMenu (Function, optional)
 
-Callback when an object is right clicked on. Will receive the following arguments:
+Callback when the canvas is right clicked on. Will receive the following arguments:
 
 - `info` (Object) - a descriptor of the object being clicked
 - `event` (Object) - the original pointer event

@@ -103,6 +103,7 @@ class LogViewer extends PureComponent {
   };
 
   _onClickObject = (info, evt) => {
+    this.props.onClick(info, evt);
     const objectId = info && info.object && info.object.id;
 
     if (objectId && !this.props.onSelectObject(info, evt)) {
