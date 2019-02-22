@@ -36,6 +36,7 @@ import {getViewStateOffset, getViews, getViewStates} from '../../utils/viewport'
 import {resolveCoordinateTransform} from '../../utils/transform';
 import {mergeXVIZStyles} from '../../utils/style';
 import {normalizeStreamFilter} from '../../utils/stream-utils';
+import stats from '../../utils/stats';
 
 import {DEFAULT_ORIGIN, CAR_DATA, LIGHT_SETTINGS, DEFAULT_CAR} from './constants';
 
@@ -74,6 +75,9 @@ export default class Core3DViewer extends PureComponent {
     onClick: PropTypes.func,
     onContextMenu: PropTypes.func,
     onViewStateChange: PropTypes.func,
+
+    // Debug info listener
+    debug: PropTypes.func,
 
     // States
     viewState: PropTypes.object,
@@ -126,7 +130,26 @@ export default class Core3DViewer extends PureComponent {
         styleParser: this._getStyleParser(nextProps)
       });
     }
+    if (this.props.frame !== nextProps.frame) {
+      stats.bump('frame-update');
+    }
   }
+
+  _onMetrics = deckMetrics => {
+    if (this.props.debug) {
+      const metrics = {
+        fps: deckMetrics.fps,
+        redraw: deckMetrics.redraw || 0
+      };
+      const table = stats.getStatsTable();
+
+      for (const key in table) {
+        metrics[key] = table[key].total;
+      }
+      this.props.debug(metrics);
+    }
+    stats.reset();
+  };
 
   _onViewStateChange = ({viewState, oldViewState}) => {
     const viewOffset = getViewStateOffset(oldViewState, viewState, this.props.viewOffset);
@@ -348,6 +371,7 @@ export default class Core3DViewer extends PureComponent {
         onLayerHover={this._onLayerHover}
         onLayerClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
+        _onMetrics={this._onMetrics}
       >
         {showMap && (
           <StaticMap

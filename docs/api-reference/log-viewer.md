@@ -238,13 +238,24 @@ A custom style callback function will receive the following arguments:
   - `isSelected` (Boolean) - if the object is selected
   - `position` (String) - position of the label relative to the object
 
-##### showMap (Boolean, Optional)
+##### showMap (Boolean, optional)
 
 Render base map. Default is `true`.
 
 ##### showTooltip (Boolean, optional)
 
 Render hover tooltip. Default is `false`.
+
+##### debug (Function, optional)
+
+Callback called once every second with debugging info. Receives the following arguments:
+
+- `metrics` (Object)
+  - `fps` (Number)
+  - `redraw` (Number) - the number of times WebGLContext was rerendered
+  - `frame-update` (Number) - the number of XVIZ frames rendered to screen
+  - `loader-update` (Number) - the number of new XVIZ messages loaded
+  - `loader-error` (Number) - the number of XVIZ errors generated during loading
 
 ### Log Info
 

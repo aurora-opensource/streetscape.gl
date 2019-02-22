@@ -872,10 +872,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@deck.gl/core@^6.4.2":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-6.4.2.tgz#7642c046891d42c4c6aec3ac481d855895f4411a"
-  integrity sha512-28Y1HjV8D65Q/z8t3TXXQRqkPFRRJaJ5ea2/sGK/dTce8fQzYvWvoXwTGOWlwtFkSW9JGHPTRuDP4Kb8yi4hpA==
+"@deck.gl/core@^6.4.5":
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-6.4.5.tgz#b64e3371c75b9dd55fd6664e4dd890d373067c09"
+  integrity sha512-7VKzlpxEfk62yl/WGsVCq6H2oYpiHGf+lWA22d2nRv2EWdU4Q0k6pDiorDGl785Hzo5fqax0Bpl/fBv/BCQxCQ==
   dependencies:
     gl-matrix "^3.0.0"
     luma.gl "^6.4.2"
@@ -885,22 +885,22 @@
     seer "^0.2.4"
     viewport-mercator-project "^6.1.0"
 
-"@deck.gl/layers@^6.4.3":
-  version "6.4.3"
-  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.4.3.tgz#d4f7607106f6b1a9f003fe30fd0a8a6285f99761"
-  integrity sha512-nQrAw9AETHcfAcKX1tOGsGCKBPqTLypBe1q5YEwJ/XaRrwNUfPoY2vXU+QTrDT+6ckCJIIMAjnG/3Tup4KM7Sg==
+"@deck.gl/layers@^6.4.5":
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-6.4.5.tgz#d027254e1e24f0445b424c71682c8059326d11f0"
+  integrity sha512-UX7F2Fr2DUjxsX4/rv0aIdjEmTr7Y7FgDst8eo0Ly6IcOcdFjr8JmZtkEGNEic8V0A1DJciAwjeZ2LitxOOxrg==
   dependencies:
-    "@deck.gl/core" "^6.4.2"
+    "@deck.gl/core" "^6.4.5"
     "@mapbox/tiny-sdf" "^1.1.0"
     d3-hexbin "^0.2.1"
     earcut "^2.0.6"
 
-"@deck.gl/react@^6.4.2":
-  version "6.4.2"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-6.4.2.tgz#2714dcea693d6d6b86307a6f22b338075622e245"
-  integrity sha512-kogs28QWQsTrHWxF37RaJg63E4Nm4wZzAl6HaPqVPjpDK5z+ovNqcbAISrs9kKgPyZpYZvhv02975JeiqAR6sg==
+"@deck.gl/react@^6.4.5":
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-6.4.5.tgz#97901e7d6529e5bae2f3c87ca52e45fae4223f64"
+  integrity sha512-zvqPINzVQG8JNa1/oTGvNJn7SFzFquexah5Np0lEQHv1qjqhneftlWO7oul35NT4ULwlZBueR9XOay7AuPN2Mw==
   dependencies:
-    "@deck.gl/core" "^6.4.2"
+    "@deck.gl/core" "^6.4.5"
     prop-types "^15.6.0"
 
 "@emotion/cache@10.0.0":
@@ -1242,10 +1242,10 @@
     "@webassemblyjs/wast-parser" "1.5.13"
     long "^3.2.0"
 
-"@xviz/parser@^1.0.0-beta.2":
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-beta.2.tgz#b0ca87fed6e48c0134b3bd7aa145af723324045b"
-  integrity sha512-ytEVSZehgT6odlR/TL5HvV2OdrrmyS4fNbKpoWyCjwkWeBdcM0yJ5GU0wsiwo6shyu5sVPp90eoxdupHuA+oaw==
+"@xviz/parser@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-beta.3.tgz#28cadc1ba3a1e3f03f5351392e1f7c0acbaf5de8"
+  integrity sha512-pp2FiomCbEkLWhTxWafpXgBAIn4O61bRcOZOIhOFvww43DPDkwdeNR7hMlWKCuKiLmwSOs1QO/jzX9TJ3WwD4A==
   dependencies:
     "@loaders.gl/draco" "^0.6.2"
     "@loaders.gl/gltf" "^0.6.2"
@@ -2959,14 +2959,14 @@ decamelize@^2.0.0:
   dependencies:
     xregexp "4.0.0"
 
-deck.gl@^6.4.3:
-  version "6.4.3"
-  resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-6.4.3.tgz#d60d09e19b5842c75db3f989052a03ae60102bd4"
-  integrity sha512-O1V+L/h7RzepxymRR/qfAsKMOJpqg5PBy5goXwvlzauvePPnnCDU5Gg4j1U1uMyksg9CskPVpYZGUweWN3GCTQ==
+deck.gl@^6.4.5:
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-6.4.5.tgz#851b9459977d63dd418da7ce1b3c96debad80c51"
+  integrity sha512-FoA2mjB4aV42Lb1XD5I+pKHtFkTpBxcoa7Hb9yQrkUPIG2ThNeK4UH+PnMIdCW88C+jlZAWcKUFEgH/MACOsmA==
   dependencies:
-    "@deck.gl/core" "^6.4.2"
-    "@deck.gl/layers" "^6.4.3"
-    "@deck.gl/react" "^6.4.2"
+    "@deck.gl/core" "^6.4.5"
+    "@deck.gl/layers" "^6.4.5"
+    "@deck.gl/react" "^6.4.5"
 
 decode-uri-component@^0.2.0:
   version "0.2.0"

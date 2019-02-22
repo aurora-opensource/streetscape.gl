@@ -23,6 +23,7 @@ import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
 import createSelector from '../utils/create-selector';
+import stats from '../utils/stats';
 
 /* eslint-disable callback-return */
 export default class XVIZLoaderInterface {
@@ -67,6 +68,7 @@ export default class XVIZLoaderInterface {
         cb(eventType, eventArgs);
       }
     }
+    stats.bump(`loader-${eventType}`);
   }
 
   subscribe(instance) {
