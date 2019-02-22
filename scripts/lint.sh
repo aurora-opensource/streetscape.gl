@@ -38,8 +38,8 @@ case $MODE in
       for f in $FILES
         do
           if [ -e "${f}" ]; then
-            prettier --write $f --loglevel warn
-            eslint $f
+            npx prettier --write $f --loglevel warn
+            npx eslint $f
           fi
       done
     fi
@@ -55,7 +55,7 @@ case $MODE in
     DOCS_PATTERN="docs/**/*.md"
     ROOT_PATTERN="*.md"
     npx prettier-check  "$JS_PATTERN" "$DOCS_PATTERN" "$ROOT_PATTERN" \
-        || echo "Running prettier." && prettier --loglevel warn --write \
+        || echo "Running prettier." && npx prettier --loglevel warn --write \
                                        "$JS_PATTERN" \
                                        "$DOCS_PATTERN" \
                                        "$ROOT_PATTERN"
