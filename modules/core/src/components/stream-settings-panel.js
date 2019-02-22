@@ -27,7 +27,7 @@ import connectToLog from './connect';
 
 const Badge = styled.div(props => ({
   '&:before': {
-    content: `"${props.type}"`
+    content: `"${props.type || ''}"`
   },
   ...evaluateStyle(props.userStyle, props)
 }));

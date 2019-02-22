@@ -27,6 +27,7 @@ import {setXVIZConfig} from '@xviz/parser';
 import {
   LogViewer,
   PlaybackControl,
+  StreamSettingsPanel,
   MeterWidget,
   TrafficLightWidget,
   TurnSignalWidget,
@@ -48,14 +49,25 @@ const exampleLog = require(__IS_STREAMING__
 
 class Example extends PureComponent {
   state = {
-    log: exampleLog.on('error', console.error),
+    log: exampleLog,
     settings: {
-      viewMode: 'PERSPECTIVE'
-    }
+      viewMode: 'PERSPECTIVE',
+      showTooltip: false
+    },
+    panels: []
   };
 
   componentDidMount() {
-    this.state.log.connect();
+    const {log} = this.state;
+    log
+      .on('ready', () => {
+        const metadata = log.getMetadata();
+        this.setState({
+          panels: Object.keys((metadata && metadata.ui_config) || {})
+        });
+      })
+      .on('error', console.error)
+      .connect();
   }
 
   _onSettingsChange = changedSettings => {
@@ -65,20 +77,21 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, settings} = this.state;
+    const {log, settings, panels} = this.state;
 
     return (
       <div id="container">
         <div id="control-panel">
-          <XVIZPanel log={log} name="Camera" />
-          <hr />
-          <XVIZPanel log={log} name="Metrics" />
-          <hr />
+          {panels.map(panelName => [
+            <XVIZPanel key={panelName} log={log} name={panelName} />,
+            <hr key={`${panelName}-divider`} />
+          ])}
           <Form
             data={APP_SETTINGS}
             values={this.state.settings}
             onChange={this._onSettingsChange}
           />
+          <StreamSettingsPanel log={log} />
         </div>
         <div id="log-panel">
           <div id="map-view">
@@ -88,6 +101,7 @@ class Example extends PureComponent {
               mapStyle={MAP_STYLE}
               car={CAR}
               xvizStyles={XVIZ_STYLE}
+              showTooltip={settings.showTooltip}
               viewMode={VIEW_MODE[settings.viewMode]}
             />
             <div id="hud">

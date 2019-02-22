@@ -41,6 +41,10 @@ export const APP_SETTINGS = {
     type: 'select',
     title: 'View Mode',
     data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
+  },
+  showTooltip: {
+    type: 'toggle',
+    title: 'Show Tooltip'
   }
 };
 
