@@ -32,7 +32,7 @@
     "babel-loader": "^8.0.0",
     "babel-plugin-istanbul": "^5.0.0",
     "babel-plugin-version-inline": "^1.0.0",
-    "coveralls": "^2.13.0",
+    "coveralls": "^3.0.0",
     "eslint": "^4.14.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-uber-es2015": "^3.1.2",
@@ -53,7 +53,7 @@
     "tape-catch": "^1.0.4",
     "webpack": "^4.3.0",
     "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.4",
+    "webpack-dev-server": "^3.1.14",
     "webworkify-webpack": "^2.0.0"
   },
   "engines": {
