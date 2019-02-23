@@ -184,10 +184,17 @@ class XVIZPlotComponent extends PureComponent {
       getColor
     } = this.props;
 
+    const dataProps = this._extractDataProps();
+
     return (
-      <MetricCard title={title} description={description} style={style}>
+      <MetricCard
+        title={title}
+        description={description}
+        style={style}
+        isLoading={dataProps.isLoading}
+      >
         <MetricChart
-          {...this._extractDataProps()}
+          {...dataProps}
           getColor={getColor}
           highlightX={0}
           width={width}
