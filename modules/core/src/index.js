@@ -51,6 +51,9 @@ export {default as TurnSignalWidget} from './components/hud/turn-signal-widget';
 // Assets
 export {default as CarMesh} from './cars';
 
+// Utils
+export {mergeXVIZStyles} from './utils/style';
+
 // Constants
 export {COORDINATE, VIEW_MODE} from './constants';
 
