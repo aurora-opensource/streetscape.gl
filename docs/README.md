@@ -1,7 +1,7 @@
 # streetscape.gl
 
 streetscape.gl is a visualization toolkit for autonomy and robotics data encoded in the
-[XVIZ protocol](https://github.com/uber/xviz/blob/master/docs/README.md). It offsers a collection of
+[XVIZ protocol](https://github.com/uber/xviz/blob/master/docs/README.md). It offers a collection of
 composable React components that let users visualize and interact with XVIZ data.
 
 ![UI Components](./images/ui-controls.png)
