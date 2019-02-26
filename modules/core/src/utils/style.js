@@ -24,7 +24,7 @@
  *
  * @param style1 {object} Secondary stylesheet
  * @param style2 {object} Primary stylesheet
- * @returns {object} Merged styleheet with Primary rules taking precedence
+ * @returns {object} Merged stylesheet with Primary rules taking precedence
  */
 export function mergeXVIZStyles(style1, style2) {
   if (!style1) {
