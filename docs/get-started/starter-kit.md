@@ -31,7 +31,9 @@ own files by tweaking the options in
 
 You can also use this application to stream XVIZ data from a server. To do this:
 
-- Follow these [instructions]() to start a local XVIZ stream server
+- Follow these
+  [instructions](https://avs.auto/#/xviz/getting-started/converting-to-xviz/viewing-the-generated-xviz)
+  to start a local XVIZ stream server
 - In the get-started example directory, run `yarn start-streaming`.
 
 You can change the streaming options in
