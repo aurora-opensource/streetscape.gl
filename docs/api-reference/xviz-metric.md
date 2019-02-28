@@ -108,14 +108,13 @@ store:
 
 The current playback position of the log.
 
-##### timeSeries (Number)
+##### metadata (Object)
 
-An object mapping from stream names to objects in the following shape:
+The log metadata.
 
-- `data` (Array) - list of objects to be rendered as a time series
-- `getX` (Function) - accessor of x value from each item in `data`
-- `getY` (Function) - accessor of y value from each item in `data`
-- `unit` (String) - unit of the metric
+##### logStreams (Object)
+
+Stream-sliced data of the current log.
 
 ##### startTime (Number, optional)
 

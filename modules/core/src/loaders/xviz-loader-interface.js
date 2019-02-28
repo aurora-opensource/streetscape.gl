@@ -21,7 +21,6 @@
 import {getXVIZConfig, StreamSynchronizer, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
-import {getTimeSeries} from '../utils/metrics-helper';
 import createSelector from '../utils/create-selector';
 import stats from '../utils/stats';
 
@@ -179,7 +178,7 @@ export default class XVIZLoaderInterface {
 
   getStreams = createSelector(
     this,
-    [this.getStreamSettings, this._getStreams],
+    [this.getStreamSettings, this._getStreams, this._getDataVersion],
     (streamSettings, streams) => {
       if (!streamSettings || !streams) {
         return streams;
@@ -219,11 +218,6 @@ export default class XVIZLoaderInterface {
       }
       return null;
     }
-  );
-
-  // TODO add declare ui metadata
-  getTimeSeries = createSelector(this, [this.getMetadata, this.getStreams], (metadata, streams) =>
-    getTimeSeries({metadata, streams})
   );
 
   /* Private actions */
@@ -266,7 +260,12 @@ export default class XVIZLoaderInterface {
   }
 
   _getDataByStream() {
-    return this.streamBuffer.getStreams();
+    // XVIZStreamBuffer.getStreams filters out missing streams. This has significant impact
+    // on performance. Here we take the unfiltered slices and only filter them if a stream
+    // is used.
+
+    // return this.streamBuffer.getStreams();
+    return this.streamBuffer.streams;
   }
 
   _getBufferedTimeRanges() {

@@ -24,6 +24,7 @@ import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
+import {getTimeSeries} from '../../utils/metrics-helper';
 
 const defaultFormatValue = x => (Number.isFinite(x) ? x.toFixed(3) : String(x));
 
@@ -44,20 +45,14 @@ class XVIZMetricComponent extends PureComponent {
     onClick: PropTypes.func,
 
     // From declarative UI metric component
-    streams: PropTypes.arrayOf(PropTypes.string),
+    streams: PropTypes.arrayOf(PropTypes.string).isRequired,
     title: PropTypes.string,
     description: PropTypes.string,
 
     // From connected log
     currentTime: PropTypes.number,
-    timeSeries: PropTypes.objectOf(
-      PropTypes.shape({
-        data: PropTypes.array,
-        getX: PropTypes.func,
-        getY: PropTypes.func,
-        unit: PropTypes.string
-      })
-    ),
+    metadata: PropTypes.object,
+    logStreams: PropTypes.objectOf(PropTypes.array),
     startTime: PropTypes.number,
     endTime: PropTypes.number
   };
@@ -77,6 +72,33 @@ class XVIZMetricComponent extends PureComponent {
     getColor: DEFAULT_COLOR_SERIES
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeSeries: this._getTimeSeries(props)
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.streams !== nextProps.streams ||
+      this.props.metadata !== nextProps.metadata ||
+      this.props.logStreams !== nextProps.logStreams
+    ) {
+      this.setState({
+        timeSeries: this._getTimeSeries(nextProps)
+      });
+    }
+  }
+
+  _getTimeSeries(props) {
+    return getTimeSeries({
+      streamNames: props.streams,
+      metadata: props.metadata,
+      streams: props.logStreams
+    });
+  }
+
   _onClick = x => {
     const {onClick, log} = this.props;
     if (onClick) {
@@ -85,31 +107,6 @@ class XVIZMetricComponent extends PureComponent {
       log.seek(x);
     }
   };
-
-  _extractDataProps() {
-    const {streams, timeSeries} = this.props;
-
-    const data = {};
-    let sampleSeries = null;
-    streams.forEach((streamName, i) => {
-      const dataSeries = timeSeries[streamName];
-      if (dataSeries) {
-        sampleSeries = dataSeries;
-        data[streamName] = dataSeries.valueSeries;
-      }
-    });
-
-    return sampleSeries
-      ? {
-          getX: sampleSeries.getX,
-          getY: sampleSeries.getY,
-          unit: sampleSeries.unit,
-          data
-        }
-      : {
-          isLoading: true
-        };
-  }
 
   render() {
     const {
@@ -137,7 +134,7 @@ class XVIZMetricComponent extends PureComponent {
       <MetricCard title={title} description={description} isLoading={isLoading} style={style}>
         {!isLoading && (
           <MetricChart
-            {...this._extractDataProps()}
+            {...this.state.timeSeries}
             getColor={getColor}
             highlightX={currentTime}
             width={width}
@@ -161,7 +158,8 @@ class XVIZMetricComponent extends PureComponent {
 
 const getLogState = log => ({
   currentTime: log.getCurrentTime(),
-  timeSeries: log.getTimeSeries(),
+  metadata: log.getMetadata(),
+  logStreams: log.getStreams(),
   startTime: log.getBufferStartTime(),
   endTime: log.getBufferEndTime()
 });
