@@ -74,16 +74,16 @@ test('XVIZLiveLoader#connect, seek', t => {
     t.deepEquals(socket.flush(), [], 'No data till metadata');
 
     // Mock metadata
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.METADATA, data: {version: '2.0.0'}});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.METADATA, data: {version: '2.0.0'}});
     t.deepEquals(socket.flush(), [], 'No client request after metadata');
 
     loader.seek(1005);
     t.deepEquals(socket.flush(), [], 'seek: no socket updates');
 
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1008});
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1009});
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1010});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1008});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1009});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1010});
 
     // t.deepEquals(loader.getBufferRange(), [[1, 2]], 'BufferRange includes all messages');
 
@@ -109,23 +109,23 @@ test('XVIZLiveLoader#metadata missing start_time', t => {
     t.deepEquals(socket.flush(), [], 'No data till metadata');
 
     // Mock metadata with missing start_time
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.METADATA});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.METADATA});
     t.deepEquals(socket.flush(), [], 'No client request after metadata');
 
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
 
     loader.seek(1007);
     t.deepEquals(socket.flush(), [], 'seek: no socket updates');
 
     t.equals(
-      loader.getBufferStart(),
+      loader.getBufferStartTime(),
       987,
-      'getBufferStart() based on first message - 30/3 * 2 preBuffer'
+      'getBufferStartTime() based on first message - 30/3 * 2 preBuffer'
     );
     t.equals(
-      loader.getBufferEnd(),
+      loader.getBufferEndTime(),
       1017,
-      'getBufferEnd() based on first message + 30/3 = 10 postBuffer'
+      'getBufferEndTime() based on first message + 30/3 = 10 postBuffer'
     );
 
     t.equals(loader.getLogStartTime(), undefined, 'getLogStartTime() is undefined in liveMode');

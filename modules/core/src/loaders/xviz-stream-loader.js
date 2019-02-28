@@ -145,18 +145,6 @@ export default class XVIZStreamLoader extends XVIZWebsocketLoader {
     this.bufferRange = rangeUtils.empty();
   }
 
-  getBufferRange() {
-    return this.bufferRange;
-  }
-
-  getBufferStart() {
-    return this.lastRequest && this.lastRequest.bufferStart;
-  }
-
-  getBufferEnd() {
-    return this.lastRequest && this.lastRequest.bufferEnd;
-  }
-
   seek(timestamp) {
     super.seek(timestamp);
 
@@ -186,11 +174,7 @@ export default class XVIZStreamLoader extends XVIZWebsocketLoader {
     this.lastRequest = params;
 
     // prune buffer
-    const oldVersion = this.streamBuffer.valueOf();
     this.streamBuffer.updateFixedBuffer(params.bufferStart, params.bufferEnd);
-    if (this.streamBuffer.valueOf() !== oldVersion) {
-      this.set('streams', this.streamBuffer.getStreams());
-    }
     this.bufferRange = rangeUtils.intersect(
       [params.bufferStart, params.bufferEnd],
       this.bufferRange
@@ -203,18 +187,32 @@ export default class XVIZStreamLoader extends XVIZWebsocketLoader {
     }
   }
 
+  /* Hook overrides */
   _onOpen = () => {
     if (this.lastRequest) {
       this.xvizHandler.transformLog(this.lastRequest);
     }
   };
 
-  _onXVIZTimeslice = (message, bufferUpdated) => {
+  _getBufferedTimeRanges() {
+    return this.bufferRange;
+  }
+
+  _getBufferStartTime() {
+    return this.lastRequest && this.lastRequest.bufferStart;
+  }
+
+  _getBufferEndTime() {
+    return this.lastRequest && this.lastRequest.bufferEnd;
+  }
+
+  _onXVIZTimeslice(message) {
+    const bufferUpdated = super._onXVIZTimeslice(message);
     if (bufferUpdated) {
       this.bufferRange = rangeUtils.add(
         [this.lastRequest.startTimestamp, message.timestamp],
         this.bufferRange
       );
     }
-  };
+  }
 }

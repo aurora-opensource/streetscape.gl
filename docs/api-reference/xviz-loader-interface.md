@@ -84,7 +84,7 @@ Returns the current stream settings.
 
 Returns all loaded streams.
 
-##### getBufferRange()
+##### getBufferedTimeRanges()
 
 Returns the loaded time ranges of the buffer, as an array of `[start, end]` timestamps.
 
@@ -96,13 +96,13 @@ Returns the start timestamp of the log.
 
 Returns the end timestamp of the log.
 
-##### getBufferStart()
+##### getBufferStartTime()
 
-Returns the start timestamps of the current buffer.
+Returns the start timestamp of the requested buffer.
 
-##### getBufferEnd()
+##### getBufferEndTime()
 
-Returns the end timestamps of the current buffer.
+Returns the end timestamp of the requested buffer.
 
 ##### getCurrentFrame()
 
@@ -141,24 +141,15 @@ class MyLoader extends XVIZLoaderInterface {
 
     getMetadata(this.options)
       .then(metadata => {
-        this.set('logSynchronizer', new StreamSynchronizer(streamBuffer));
-        this._setMetadata(metadata);
-        this.emit('ready', metadata);
+        this._onXVIZMessage(metadata);
       })
       .then(() =>
         getTimeslices(this.options, timeslice => {
-          streamBuffer.insert(timeslice);
-          this.set('streams', streamBuffer.getStreams());
-          this.emit('update', timeslice);
+          this._onXVIZMessage(timeslice);
         })
       )
       .then(() => this.emit('done'))
       .catch(error => this.emit('error', error));
-  }
-
-  getBufferRange() {
-    const {start, end} = this.streamBuffer.getBufferRange();
-    return [[start, end]];
   }
 
   close() {}
@@ -177,15 +168,17 @@ Called to start loading data.
 
 Called to stop loading data.
 
-##### getBufferRange()
-
-Called to get the loaded time range, an array of `[start, end]` timestamps.
-
 ### Private Members
 
 ##### options
 
 The options object passed into the constructor.
+
+##### streamBuffer
+
+An instance of XVIZ's
+[XVIZStreamBuffer](https://github.com/uber/xviz/blob/master/docs/api-reference/xviz-stream-buffer.md).
+Must be supplied by the subclass.
 
 ### Private Methods
 
@@ -204,6 +197,11 @@ Retrieve a saved value from the current state.
 
 Fire an event with the specified arguments.
 
-##### \_setMetadata(metadata)
+##### onXVIZMessage(message)
 
-Update the log metadata.
+Handler for a parsed XVIZ message, returned by
+[parseStreamMessage](https://github.com/uber/xviz/blob/master/docs/api-reference/parse-xviz.md).
+
+##### onError(message)
+
+Handler for errors.

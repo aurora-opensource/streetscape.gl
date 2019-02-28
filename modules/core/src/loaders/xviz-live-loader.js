@@ -94,19 +94,6 @@ export default class XVIZLiveLoader extends XVIZWebsocketLoader {
     });
   }
 
-  getBufferRange() {
-    const bufferRange = this.streamBuffer.getBufferRange();
-    return [[bufferRange.start, bufferRange.end]];
-  }
-
-  getBufferStart() {
-    return this.streamBuffer && this.streamBuffer.getBufferRange().start;
-  }
-
-  getBufferEnd() {
-    return this.streamBuffer && this.streamBuffer.getBufferRange().end;
-  }
-
   seek(timestamp) {
     super.seek(timestamp);
 
@@ -114,10 +101,21 @@ export default class XVIZLiveLoader extends XVIZWebsocketLoader {
     this.streamBuffer.setCurrentTime(timestamp);
   }
 
+  /* Hook overrides */
+
   _onOpen = () => {};
 
-  _onXVIZTimeslice = (message, bufferUpdated) => {
+  _getBufferStartTime() {
+    return this.streamBuffer.getBufferRange().start;
+  }
+
+  _getBufferEndTime() {
+    return this.streamBuffer.getBufferRange().end;
+  }
+
+  _onXVIZTimeslice(message) {
+    super._onXVIZTimeslice(message);
     // Live loader always shows latest data
     this.seek(message.timestamp);
-  };
+  }
 }

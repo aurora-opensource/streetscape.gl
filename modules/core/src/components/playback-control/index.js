@@ -39,7 +39,7 @@ class PlaybackControl extends PureComponent {
     lookAhead: PropTypes.number,
     startTime: PropTypes.number,
     endTime: PropTypes.number,
-    bufferRange: PropTypes.array,
+    buffered: PropTypes.array,
 
     // state override
     isPlaying: PropTypes.bool,
@@ -131,7 +131,7 @@ class PlaybackControl extends PureComponent {
   _animate = () => {
     if (this.state.isPlaying) {
       const now = Date.now();
-      const {startTime, endTime, bufferRange, timestamp} = this.props;
+      const {startTime, endTime, buffered, timestamp} = this.props;
       const {timeScale} = this.state;
       const lastUpdate = this._lastAnimationUpdate;
       const {PLAYBACK_FRAME_RATE, TIME_WINDOW} = getXVIZConfig();
@@ -146,7 +146,7 @@ class PlaybackControl extends PureComponent {
       }
 
       // check buffer availability
-      if (bufferRange.some(r => newTimestamp >= r[0] && newTimestamp <= r[1] + TIME_WINDOW)) {
+      if (buffered.some(r => newTimestamp >= r[0] && newTimestamp <= r[1] + TIME_WINDOW)) {
         // only move forward if buffer is loaded
         // otherwise pause and wait
         this._onTimeChange(newTimestamp);
@@ -190,13 +190,13 @@ class PlaybackControl extends PureComponent {
   };
 
   render() {
-    const {startTime, endTime, timestamp, lookAhead, bufferRange, ...otherProps} = this.props;
+    const {startTime, endTime, timestamp, lookAhead, buffered, ...otherProps} = this.props;
 
     if (!Number.isFinite(timestamp) || !Number.isFinite(startTime)) {
       return null;
     }
 
-    const buffers = bufferRange.map(r => ({
+    const bufferRange = buffered.map(r => ({
       startTime: Math.max(r[0], startTime),
       endTime: Math.min(r[1], endTime)
     }));
@@ -204,7 +204,7 @@ class PlaybackControl extends PureComponent {
     return (
       <DualPlaybackControl
         {...otherProps}
-        bufferRange={buffers}
+        bufferRange={bufferRange}
         currentTime={timestamp}
         lookAhead={lookAhead}
         startTime={startTime}
@@ -227,7 +227,7 @@ const getLogState = log => ({
   lookAhead: log.getLookAhead(),
   startTime: log.getLogStartTime(),
   endTime: log.getLogEndTime(),
-  bufferRange: log.getBufferRange()
+  buffered: log.getBufferedTimeRanges()
 });
 
 export default connectToLog({getLogState, Component: PlaybackControl});
