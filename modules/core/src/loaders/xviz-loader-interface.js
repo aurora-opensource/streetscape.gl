@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {getXVIZConfig} from '@xviz/parser';
+import {getXVIZConfig, StreamSynchronizer, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {clamp} from 'math.gl';
 
 import {getTimeSeries} from '../utils/metrics-helper';
@@ -34,6 +34,7 @@ export default class XVIZLoaderInterface {
 
     this.listeners = [];
     this.state = {};
+    this._updates = 0;
     this._version = 0;
     this._updateTimer = null;
   }
@@ -97,6 +98,31 @@ export default class XVIZLoaderInterface {
     }
   }
 
+  onXVIZMessage = message => {
+    switch (message.type) {
+      case LOG_STREAM_MESSAGE.METADATA:
+        this._onXVIZMetadata(message);
+        this.emit('ready', message);
+        break;
+
+      case LOG_STREAM_MESSAGE.TIMESLICE:
+        this._onXVIZTimeslice(message);
+        this.emit('update', message);
+        break;
+
+      case LOG_STREAM_MESSAGE.DONE:
+        this.emit('finish', message);
+        break;
+
+      default:
+        this.emit('error', message);
+    }
+  };
+
+  onError = error => {
+    this.emit('error', error);
+  };
+
   /* Connection API */
   isOpen() {
     return false;
@@ -143,9 +169,13 @@ export default class XVIZLoaderInterface {
 
   getStreamSettings = () => this.get('streamSettings');
 
-  getLogSynchronizer = () => this.get('logSynchronizer');
+  _getDataVersion = () => this.get('dataVersion');
 
-  _getStreams = () => this.get('streams');
+  _getStreams = createSelector(this, this._getDataVersion, () => this._getDataByStream());
+
+  getBufferedTimeRanges = createSelector(this, this._getDataVersion, () =>
+    this._getBufferedTimeRanges()
+  );
 
   getStreams = createSelector(
     this,
@@ -164,17 +194,8 @@ export default class XVIZLoaderInterface {
     }
   );
 
-  getBufferRange() {
-    throw new Error('not implemented');
-  }
-
-  getBufferStart() {
-    return this.getLogStartTime();
-  }
-
-  getBufferEnd() {
-    return this.getLogEndTime();
-  }
+  getBufferStartTime = createSelector(this, this.getCurrentTime, () => this._getBufferStartTime());
+  getBufferEndTime = createSelector(this, this.getCurrentTime, () => this._getBufferEndTime());
 
   getLogStartTime = createSelector(this, this.getMetadata, metadata => {
     return metadata && metadata.start_time && metadata.start_time + getXVIZConfig().TIME_WINDOW;
@@ -186,16 +207,11 @@ export default class XVIZLoaderInterface {
 
   getCurrentFrame = createSelector(
     this,
-    [
-      this.getLogSynchronizer,
-      this.getStreamSettings,
-      this.getCurrentTime,
-      this.getLookAhead,
-      this.getStreams
-    ],
-    // `getStreams` is only needed to trigger recomputation.
-    // The logSynchronizer has access to the streamBuffer.
-    (logSynchronizer, streamSettings, timestamp, lookAhead) => {
+    [this.getStreamSettings, this.getCurrentTime, this.getLookAhead, this._getDataVersion],
+    // `dataVersion` is only needed to trigger recomputation.
+    // The logSynchronizer has access to the timeslices.
+    (streamSettings, timestamp, lookAhead) => {
+      const {logSynchronizer} = this;
       if (logSynchronizer && Number.isFinite(timestamp)) {
         logSynchronizer.setTime(timestamp);
         logSynchronizer.setLookAheadTimeOffset(lookAhead);
@@ -216,15 +232,56 @@ export default class XVIZLoaderInterface {
     this.listeners.forEach(o => o(this._version));
   };
 
-  _setMetadata(metadata) {
+  _bumpDataVersion() {
+    this._updates++;
+    this.set('dataVersion', this._updates);
+  }
+
+  /* Subclass hooks */
+
+  _onXVIZMetadata(metadata) {
     this.set('metadata', metadata);
     if (metadata.streams && Object.keys(metadata.streams).length > 0) {
       this.set('streamSettings', metadata.streams);
     }
+
+    if (!this.streamBuffer) {
+      throw new Error('streamBuffer is missing');
+    }
+    this.logSynchronizer = this.logSynchronizer || new StreamSynchronizer(this.streamBuffer);
+
     const timestamp = this.get('timestamp');
     const newTimestamp = Number.isFinite(timestamp) ? timestamp : metadata.start_time;
     if (Number.isFinite(newTimestamp)) {
       this.seek(newTimestamp);
     }
+  }
+
+  _onXVIZTimeslice(timeslice) {
+    const bufferUpdated = this.streamBuffer.insert(timeslice);
+    if (bufferUpdated) {
+      this._bumpDataVersion();
+    }
+    return bufferUpdated;
+  }
+
+  _getDataByStream() {
+    return this.streamBuffer.getStreams();
+  }
+
+  _getBufferedTimeRanges() {
+    const range = this.streamBuffer.getLoadedTimeRange();
+    if (range) {
+      return [[range.start, range.end]];
+    }
+    return [];
+  }
+
+  _getBufferStartTime() {
+    return this.getLogStartTime();
+  }
+
+  _getBufferEndTime() {
+    return this.getLogEndTime();
   }
 }

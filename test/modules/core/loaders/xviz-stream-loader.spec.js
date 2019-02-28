@@ -214,7 +214,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     t.deepEquals(socket.flush(), [], 'No data till metadata');
 
     // Mock metadata
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.METADATA, start_time: 1000, end_time: 1030});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.METADATA, start_time: 1000, end_time: 1030});
     t.deepEquals(
       socket.flush(),
       [{type: 'xviz/transform_log', data: {start_timestamp: 1000, end_timestamp: 1010, id: '0'}}],
@@ -231,10 +231,10 @@ test('XVIZStreamLoader#connect, seek', t => {
       'seek: update with correct parameters'
     );
 
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1008});
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1009});
-    loader._onWSMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1010});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1007});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1008});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1009});
+    loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.TIMESLICE, timestamp: 1010});
 
     loader.seek(1001);
     t.deepEquals(

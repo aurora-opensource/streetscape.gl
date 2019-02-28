@@ -162,8 +162,8 @@ class XVIZMetricComponent extends PureComponent {
 const getLogState = log => ({
   currentTime: log.getCurrentTime(),
   timeSeries: log.getTimeSeries(),
-  startTime: log.getBufferStart(),
-  endTime: log.getBufferEnd()
+  startTime: log.getBufferStartTime(),
+  endTime: log.getBufferEndTime()
 });
 
 export default connectToLog({getLogState, Component: XVIZMetricComponent});

@@ -21,12 +21,7 @@
 /* global WebSocket,ArrayBuffer */
 /* eslint-disable camelcase */
 import assert from 'assert';
-import {
-  XVIZStreamBuffer,
-  StreamSynchronizer,
-  parseStreamMessage,
-  LOG_STREAM_MESSAGE
-} from '@xviz/parser';
+import {XVIZStreamBuffer, parseStreamMessage} from '@xviz/parser';
 import PromiseRetry from 'promise-retry';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
@@ -39,7 +34,6 @@ import XVIZController from './xviz-controller-v2';
  * the following methods overridden:
  *
  * - _onOpen()
- * - _onXVIZTimeslice()
  */
 export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
   /**
@@ -106,15 +100,15 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
 
             return parseStreamMessage({
               message: message.data,
-              onResult: this._onWSMessage,
-              onError: this._onWSError,
+              onResult: this.onXVIZMessage,
+              onError: this.onError,
               debug: this._debug.bind('parse_message'),
               worker: hasMetadata && this.options.worker,
               maxConcurrency: this.options.maxConcurrency
             });
           };
 
-          ws.onerror = this._onWSError;
+          ws.onerror = this.onError;
           ws.onclose = event => {
             this._onWSClose(event);
             reject(event);
@@ -153,17 +147,6 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
     throw new Error('_onOpen() method must be overridden');
   }
 
-  /**
-   * Subclass hook for xviz message
-   *
-   * The messages will be inserted into the 'streamBuffer'
-   * prior to this hook being called.
-   *
-   * @params message {Object} Parsed XVIZ message
-   * @params bufferUpdated {Boolean} True if streamBuffer has changed
-   */
-  _onXVIZTimeslice(message, bufferUpdated) {}
-
   // PRIVATE Methods
 
   // Notifications and metric reporting
@@ -174,49 +157,6 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
 
     this._debug('socket_open', this.requestParams);
     this._onOpen();
-  };
-
-  // Handle dispatching events, triggering probes, and delegating to the XVIZ handler
-  /* eslint-disable complexity */
-  _onWSMessage = message => {
-    switch (message.type) {
-      case LOG_STREAM_MESSAGE.METADATA:
-        if (this.get('metadata')) {
-          // already has metadata
-          return;
-        }
-
-        this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
-        this._setMetadata(message);
-        this.emit('ready', message);
-        break;
-
-      case LOG_STREAM_MESSAGE.TIMESLICE:
-        const oldVersion = this.streamBuffer.valueOf();
-        this.streamBuffer.insert(message);
-
-        const bufferUpdated = this.streamBuffer.valueOf() !== oldVersion;
-        if (bufferUpdated) {
-          this.set('streams', this.streamBuffer.getStreams());
-        }
-
-        this._onXVIZTimeslice(message, bufferUpdated);
-
-        this.emit('update', message);
-        break;
-
-      case LOG_STREAM_MESSAGE.DONE:
-        this.emit('finish', message);
-        break;
-
-      default:
-        this.emit('error', message);
-    }
-  };
-  /* eslint-enable complexity */
-
-  _onWSError = error => {
-    this.emit('error', error);
   };
 
   _onWSClose = event => {

@@ -20,12 +20,7 @@
 
 /* global fetch */
 import assert from 'assert';
-import {
-  LOG_STREAM_MESSAGE,
-  parseStreamMessage,
-  StreamSynchronizer,
-  XVIZStreamBuffer
-} from '@xviz/parser';
+import {parseStreamMessage, XVIZStreamBuffer} from '@xviz/parser';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
 
@@ -58,22 +53,14 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     });
   }
 
-  close() {
-    // Stop file loading
-    this._isOpen = false;
-  }
-
-  getBufferRange() {
-    const range = this.streamBuffer.getLoadedTimeRange();
-    if (range) {
-      return [[range.start, range.end]];
-    }
-    return [];
-  }
-
   seek(timestamp) {
     // TODO incomplete
     super.seek(timestamp);
+  }
+
+  close() {
+    // Stop file loading
+    this._isOpen = false;
   }
 
   _loadTimings() {
@@ -130,42 +117,12 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       if (this._isOpen) {
         parseStreamMessage({
           message: data,
-          onResult: this._onMessage,
-          onError: this._onError,
+          onResult: this.onXVIZMessage,
+          onError: this.onError,
           worker: options.worker,
           maxConcurrency: options.maxConcurrency
         });
       }
     });
   }
-
-  _onMessage = message => {
-    switch (message.type) {
-      case LOG_STREAM_MESSAGE.METADATA:
-        this.set('logSynchronizer', new StreamSynchronizer(this.streamBuffer));
-        this._setMetadata(message);
-        this.emit('ready', message);
-        break;
-
-      case LOG_STREAM_MESSAGE.TIMESLICE:
-        const oldVersion = this.streamBuffer.valueOf();
-        this.streamBuffer.insert(message);
-        if (this.streamBuffer.valueOf() !== oldVersion) {
-          this.set('streams', this.streamBuffer.getStreams());
-        }
-        this.emit('update', message);
-        break;
-
-      case LOG_STREAM_MESSAGE.DONE:
-        this.emit('finish', message);
-        break;
-
-      default:
-        this.emit('error', message);
-    }
-  };
-
-  _onError = error => {
-    this.emit('error', error);
-  };
 }
