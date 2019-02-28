@@ -37,7 +37,7 @@ You can also use this application to stream XVIZ data from a server. To do this:
 - In the get-started example directory, run `yarn start-streaming`.
 
 You can change the streaming options in
-[log-from-stream.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/log-from-stream.js).
+[log-from-stream.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/src/log-from-stream.js).
 
 ## Application Controls
 
@@ -54,7 +54,7 @@ You can change the streaming options in
 ## Application Walk-through
 
 This section will cover some of the key parts in the main application source code in
-[app.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/app.js).
+[app.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/src/app.js).
 
 ### XVIZ Configuration
 
@@ -80,7 +80,7 @@ componentDidMount() {
 The application uses either the [XVIZFileLoader](docs/api-reference/xviz-file-loader.md) or the
 [XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md) to obtain XVIZ data. The default
 connection parameters are defined in in
-[constants.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/constants.js).
+[constants.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/src/constants.js).
 
 ### Log Playback Components
 
