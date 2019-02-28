@@ -18,36 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// TODO add documentation and tests
+const getX = d => d.time;
+const variableNullFilter = value => value !== undefined;
 
-function getTimeSeriesForStream({metadata, streamName, stream}) {
-  // See if we have some metadata for this metric
-  if (!metadata || metadata.nograph) {
-    return null;
+function getTimeSeriesForStream(streamName, metadata, stream, target) {
+  if (metadata.nograph) {
+    return;
   }
 
   const mapper = metadata.valueMap;
   const scale = metadata.scale || 1;
-  const getX = d => d.time;
   const getY = mapper ? d => mapper[d.variable] : d => d.variable * scale;
 
-  const sampleDatum = stream[0];
+  const sampleDatum = stream.find(variableNullFilter);
   if (!sampleDatum || !Number.isFinite(getY(sampleDatum))) {
-    return null;
+    return;
   }
 
-  const metrics = {};
-  metrics[streamName] = {
-    id: streamName,
-    ...metadata,
-    getX,
-    getY,
-    title: metadata.title || streamName,
-    unit: metadata.unit || '',
-    valueSeries: stream
-  };
-
-  return metrics;
+  target.isLoading = false;
+  target.getX = getX;
+  target.getY = getY;
+  target.unit = metadata.unit || '';
+  target.data[streamName] = stream.filter(variableNullFilter);
 }
 
 /**
@@ -56,18 +48,17 @@ function getTimeSeriesForStream({metadata, streamName, stream}) {
  * @param streams array of streams data
  * @returns {Array} array of time series data
  */
-export function getTimeSeries({metadata = {}, streams}) {
-  const timeSeries = {};
-  for (const streamName in streams) {
-    // if there is ui configuration for this stream
-    if (streams.hasOwnProperty(streamName) && metadata.streams && metadata.streams[streamName]) {
-      const stream = streams[streamName];
-      const streamTimeSeries = getTimeSeriesForStream({
-        metadata: metadata.streams[streamName],
-        streamName,
-        stream
-      });
-      Object.assign(timeSeries, streamTimeSeries);
+export function getTimeSeries({metadata = {}, streamNames, streams}) {
+  const timeSeries = {
+    isLoading: true,
+    data: {}
+  };
+  for (const streamName of streamNames) {
+    // ui configuration for this stream
+    const streamMetadata = (metadata.streams && metadata.streams[streamName]) || {};
+    const stream = streams[streamName];
+    if (stream) {
+      getTimeSeriesForStream(streamName, streamMetadata, stream, timeSeries);
     }
   }
 

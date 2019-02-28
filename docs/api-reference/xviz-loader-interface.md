@@ -110,11 +110,6 @@ Returns the log
 [frame](https://github.com/uber/xviz/blob/master/docs/api-reference/stream-synchronizer.md#getCurrentFrame-streamFilter-)
 at the current timestamp.
 
-##### getTimeSeries()
-
-Returns all
-[time_series](https://github.com/uber/xviz/blob/master/docs/protocol-schema/core-types.md#stream-set)
-streams.
 
 ## Implement A Custom Loader (experimental)
 

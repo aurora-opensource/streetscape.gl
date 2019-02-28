@@ -135,15 +135,14 @@ class BaseComponent extends PureComponent {
     if (!streams || !currentTime || !selectedStreamName) {
       return null;
     }
+    let images = streams[selectedStreamName];
+    if (images) {
+      images = images.filter(Boolean);
+    }
 
     return (
       <WrapperComponent theme={theme} userStyle={style.wrapper}>
-        <ImageSequence
-          width={width}
-          height={height}
-          src={streams[selectedStreamName]}
-          currentTime={currentTime}
-        />
+        <ImageSequence width={width} height={height} src={images} currentTime={currentTime} />
 
         {this._renderVideoSelector()}
       </WrapperComponent>
