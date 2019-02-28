@@ -79,6 +79,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     }
 
     if (startFrame >= this._numberOfFrames) {
+      this.emit('done');
       return;
     }
 
