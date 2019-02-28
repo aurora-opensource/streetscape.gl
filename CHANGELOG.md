@@ -3,6 +3,12 @@
 All notable changes to XVIZ will be documented in this file. This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
+## [1.0.0-beta.3]
+
+- Export mergeXVIZStyles (#254)
+- Simplify XVIZLoaderInterface (#259)
+- Improve metrics perf (#263)
+
 ## [1.0.0-beta.2]
 
 - Fix SignLayer issue with attributeManager not being defined (#247)
