@@ -19,3 +19,4 @@
 // THE SOFTWARE.
 
 import './modules/core';
+import './website';
