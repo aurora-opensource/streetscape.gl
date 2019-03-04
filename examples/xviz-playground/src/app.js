@@ -28,7 +28,7 @@ import {LogViewer, PlaybackControl} from 'streetscape.gl';
 import XVIZJsonLoader from './xviz-json-loader';
 import Editor from './editor';
 
-import {XVIZ_CONFIG, MAPBOX_TOKEN, MAP_STYLE} from './constants';
+import {XVIZ_CONFIG, CAR, MAPBOX_TOKEN, MAP_STYLE} from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
 
@@ -42,7 +42,13 @@ class Example extends PureComponent {
       <div id="container">
         <Editor log={log} />
         <div id="map-view">
-          <LogViewer log={log} mapboxApiAccessToken={MAPBOX_TOKEN} mapStyle={MAP_STYLE} />
+          <LogViewer
+            log={log}
+            car={CAR}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+            mapStyle={MAP_STYLE}
+            showTooltip={true}
+          />
           <div id="timeline">
             <PlaybackControl width="100%" log={log} formatTimestamp={x => x.toFixed(2)} />
           </div>

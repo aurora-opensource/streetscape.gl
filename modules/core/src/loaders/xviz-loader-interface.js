@@ -196,13 +196,10 @@ export default class XVIZLoaderInterface {
   getBufferStartTime = createSelector(this, this.getCurrentTime, () => this._getBufferStartTime());
   getBufferEndTime = createSelector(this, this.getCurrentTime, () => this._getBufferEndTime());
 
-  getLogStartTime = createSelector(this, this.getMetadata, metadata => {
-    return metadata && metadata.start_time && metadata.start_time + getXVIZConfig().TIME_WINDOW;
-  });
-
-  getLogEndTime = createSelector(this, this.getMetadata, metadata => {
-    return metadata && metadata.end_time;
-  });
+  getLogStartTime = createSelector(this, this.getMetadata, metadata =>
+    this._getLogStartTime(metadata)
+  );
+  getLogEndTime = createSelector(this, this.getMetadata, metadata => this._getLogEndTime(metadata));
 
   getCurrentFrame = createSelector(
     this,
@@ -274,6 +271,14 @@ export default class XVIZLoaderInterface {
       return [[range.start, range.end]];
     }
     return [];
+  }
+
+  _getLogStartTime(metadata) {
+    return metadata && metadata.start_time && metadata.start_time + getXVIZConfig().TIME_WINDOW;
+  }
+
+  _getLogEndTime(metadata) {
+    return metadata && metadata.end_time;
   }
 
   _getBufferStartTime() {

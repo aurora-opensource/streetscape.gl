@@ -19,6 +19,8 @@
 // THE SOFTWARE.
 
 /* eslint-disable camelcase */
+import {CarMesh} from 'streetscape.gl';
+
 export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
 export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
@@ -26,6 +28,8 @@ export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 export const XVIZ_CONFIG = {
   PLAYBACK_FRAME_RATE: 10
 };
+
+export const CAR = CarMesh.sedan({length: 4.4, width: 2.4, height: 1.6});
 
 export const CODE_SAMPLE_METADATA = `// metadata
 xvizMetadataBuilder
