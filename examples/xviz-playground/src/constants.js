@@ -29,13 +29,7 @@ export const XVIZ_CONFIG = {
   PLAYBACK_FRAME_RATE: 10
 };
 
-export const CAR = CarMesh.sedan({
-  origin: [1.08, -0.32, 0],
-  length: 4.3,
-  width: 2.2,
-  height: 1.5,
-  color: [160, 160, 160]
-});
+export const CAR = CarMesh.sedan({length: 4.4, width: 2.4, height: 1.6});
 
 export const CODE_SAMPLE_METADATA = `// metadata
 xvizMetadataBuilder
