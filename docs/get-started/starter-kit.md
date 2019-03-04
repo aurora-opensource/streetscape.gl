@@ -19,13 +19,13 @@ yarn start
 ### Display the Base Map
 
 You may need a Mapbox access token to display the base map. See your
-[options](docs/get-started/mapbox-tokens.md) regarding Mapbox tokens.
+[options](/docs/get-started/mapbox-tokens.md) regarding Mapbox tokens.
 
 ### Load Data from a Different Source
 
 This example loads an XVIZ log extracted from the [KITTI](http://www.cvlibs.net/datasets/kitti/)
 dataset. By default, the data is loaded from a remote URL using the
-[XVIZFileLoader](docs/api-reference/xviz-file-loader.md). You can change the URL to point to your
+[XVIZFileLoader](/docs/api-reference/xviz-file-loader.md). You can change the URL to point to your
 own files by tweaking the options in
 [log-from-file.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/log-from-file.js).
 
@@ -77,7 +77,7 @@ componentDidMount() {
 }
 ```
 
-The application uses either the [XVIZFileLoader](docs/api-reference/xviz-file-loader.md) or the
+The application uses either the [XVIZFileLoader](/docs/api-reference/xviz-file-loader.md) or the
 [XVIZStreamLoader](/docs/api-reference/xviz-stream-loader.md) to obtain XVIZ data. The default
 connection parameters are defined in in
 [constants.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/src/constants.js).
