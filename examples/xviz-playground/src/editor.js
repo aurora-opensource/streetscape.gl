@@ -22,14 +22,18 @@ import React, {PureComponent} from 'react';
 import debounce from 'debounce';
 
 import ace from 'brace';
-const {Range} = ace.acequire('ace/range');
-const {EditSession} = ace.acequire('ace/edit_session');
 import 'brace/mode/javascript';
 import 'brace/mode/json';
 import 'brace/theme/monokai';
+import 'brace/ext/language_tools';
 
 import {CODE_SAMPLE_METADATA, CODE_SAMPLE_FRAME} from './constants';
 import {evaluateCode, createMessage} from './eval';
+import completer from './auto-complete';
+
+const {Range} = ace.acequire('ace/range');
+const {EditSession} = ace.acequire('ace/edit_session');
+const LanguageTools = ace.acequire('ace/ext/language_tools');
 
 export default class Editor extends PureComponent {
   state = {
@@ -41,7 +45,13 @@ export default class Editor extends PureComponent {
   componentDidMount() {
     const editor = ace.edit(this._editorRef.current);
     editor.setTheme('ace/theme/monokai');
+    editor.setOptions({
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true
+    });
+    LanguageTools.setCompleters([completer]);
     editor.on('change', debounce(this._evaluate, 500));
+    editor.$blockScrolling = Infinity;
     this._editor = editor;
 
     const console_ = ace.edit(this._consoleRef.current);
