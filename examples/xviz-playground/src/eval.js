@@ -33,20 +33,21 @@ const dataSink = new DataSink();
 const writer = new XVIZWriter({dataSink, binary: false, json: true});
 
 export function evaluateCode(code, type) {
-  let builder;
+  let Builder;
+  let wrappedCode;
 
   switch (type) {
     case 'metadata':
-      builder = new XVIZMetadataBuilder();
-      code = `function fn(xvizMetadataBuilder) {
+      Builder = XVIZMetadataBuilder;
+      wrappedCode = `function fn(xvizMetadataBuilder) {
         ${code}
         return xvizMetadataBuilder.getMetadata();
       }`;
       break;
 
     case 'frame':
-      builder = new XVIZBuilder();
-      code = `function fn(xvizBuilder) {
+      Builder = XVIZBuilder;
+      wrappedCode = `function fn(xvizBuilder) {
         ${code}
         return xvizBuilder.getFrame();
       }`;
@@ -56,8 +57,8 @@ export function evaluateCode(code, type) {
   }
 
   try {
-    const func = eval(`(function() { return ${code} })()`);
-    const result = func(builder);
+    const func = eval(`(function() { return ${wrappedCode} })()`);
+    const result = func(new Builder());
 
     if (!result || typeof result !== 'object') {
       throw new Error('Invalid JSON object');
