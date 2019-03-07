@@ -50,5 +50,6 @@ export const APP_SETTINGS = {
 
 export const XVIZ_STYLE = {
   '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}],
-  '/lidar/points': [{style: {point_color_mode: 'ELEVATION'}}]
+  '/lidar/points': [{style: {point_color_mode: 'ELEVATION'}}],
+  '/points': [{style: {point_color_mode: 'ELEVATION'}}]
 };

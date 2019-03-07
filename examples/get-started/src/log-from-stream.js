@@ -21,12 +21,14 @@
 import {XVIZStreamLoader} from 'streetscape.gl';
 
 export default new XVIZStreamLoader({
-  logGuid: 'mock',
+  logGuid: 'd520603a-9627-8a89-97a0-00225e6dd571',
   // bufferLength: 15,
+  // logProfile: 'ocs_lite_minimal',
   serverConfig: {
     defaultLogLength: 30,
-    serverUrl: 'ws://localhost:8081'
+    serverUrl: 'wss://xviz-dev.app.uberatc.net/',
+    queryParams: {'version': '2.0'}
   },
-  worker: true,
+  worker: false,
   maxConcurrency: 4
 });

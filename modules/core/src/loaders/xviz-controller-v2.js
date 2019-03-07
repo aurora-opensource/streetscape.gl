@@ -60,7 +60,7 @@ export default class XVIZControllerV2 {
     }
 
     // Add in a sequential id
-    msg.id = `${this.transformCounter}`;
+    msg.id = 'd520603a-9627-8a89-97a0-00225e6dd571'; //${this.transformCounter}`;
     this.transformCounter++;
 
     this._send('transform_log', msg);

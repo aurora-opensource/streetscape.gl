@@ -226,7 +226,7 @@ const getLogState = log => ({
   timestamp: log.getCurrentTime(),
   lookAhead: log.getLookAhead(),
   startTime: log.getLogStartTime(),
-  endTime: log.getLogEndTime(),
+  endTime: log.getLogStartTime() + 30, // log.getLogEndTime(),
   buffered: log.getBufferedTimeRanges()
 });
 
