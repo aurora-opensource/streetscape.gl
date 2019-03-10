@@ -131,6 +131,12 @@ export default class Core3DViewer extends PureComponent {
       });
     }
     if (this.props.frame !== nextProps.frame) {
+      const {frame} = this.props;
+      const lightSettings = {
+        ...LIGHT_SETTINGS,
+        coordinateOrigin: (frame && frame.origin) || DEFAULT_ORIGIN
+      };
+      this.setState({lightSettings});
       stats.bump('frame-update');
     }
   }
@@ -178,6 +184,7 @@ export default class Core3DViewer extends PureComponent {
 
   _getCarLayer() {
     const {frame, car} = this.props;
+    const {lightSettings} = this.state;
     const {
       origin = DEFAULT_ORIGIN,
       mesh,
@@ -202,7 +209,7 @@ export default class Core3DViewer extends PureComponent {
       getSize: Number.isFinite(scale) ? [scale, scale, scale] : scale,
       texture,
       wireframe,
-      lightSettings: LIGHT_SETTINGS
+      lightSettings
     });
   }
 
@@ -220,7 +227,7 @@ export default class Core3DViewer extends PureComponent {
     }
 
     const {streams, lookAheads = {}} = frame;
-    const {styleParser} = this.state;
+    const {styleParser, lightSettings} = this.state;
 
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
     const featuresAndFutures = new Set(
@@ -253,7 +260,7 @@ export default class Core3DViewer extends PureComponent {
               ...coordinateProps,
 
               pickable: showTooltip || primitives[0].id,
-              lightSettings: LIGHT_SETTINGS,
+              lightSettings,
 
               data: primitives,
               style: stylesheet,
@@ -273,6 +280,8 @@ export default class Core3DViewer extends PureComponent {
               ...coordinateProps,
 
               pickable: showTooltip,
+              lightSettings,
+
               data: stream.pointCloud,
               style: stylesheet,
               vehicleRelativeTransform: frame.vehicleRelativeTransform,

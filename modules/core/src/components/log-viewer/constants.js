@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import {CubeGeometry} from 'luma.gl';
+import {COORDINATE_SYSTEM} from 'deck.gl';
 
 export const DEFAULT_CAR = {
   mesh: new CubeGeometry(),
@@ -31,6 +32,8 @@ export const DEFAULT_ORIGIN = [0, 0, 0];
 export const CAR_DATA = [[0, 0, 0]];
 
 export const LIGHT_SETTINGS = {
+  coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+  coordinateOrigin: DEFAULT_ORIGIN,
   lightsPosition: [0, 0, 5000, -1000, 400, 1000],
   ambientRatio: 0.5,
   diffuseRatio: 0.2,
