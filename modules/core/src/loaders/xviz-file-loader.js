@@ -38,6 +38,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
     this.streamBuffer = new XVIZStreamBuffer();
     this._isOpen = false;
+
+    this._lastLoadFrame = -1;
   }
 
   isOpen() {
@@ -49,7 +51,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     this._loadTimings().then(data => {
       // Adding 1 is to account for the metadata file
       this._numberOfFrames = data.timing.length + 1;
-      this._loadMetadata().then(() => this._loadNextBatch(1));
+      this._loadMetadata().then(() => this._startLoad());
     });
   }
 
@@ -73,26 +75,30 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     return this._loadFile(metadataPath, {worker: false});
   }
 
-  _loadNextBatch(startFrame) {
+  _startLoad() {
+    this._lastLoadFrame = 0;
+    // fetching in parallel
+    for (let i = 0; i < this._batchSize && i < this._numberOfFrames; i++) {
+      this._loadNextFrame();
+    }
+  }
+
+  _loadNextFrame() {
     if (!this.isOpen()) {
       return;
     }
 
-    if (startFrame >= this._numberOfFrames) {
+    this._lastLoadFrame = this._lastLoadFrame + 1;
+
+    if (this._lastLoadFrame >= this._numberOfFrames) {
       this.emit('done');
       return;
     }
 
-    const promises = [];
-    for (let i = 0; i < this._batchSize && startFrame + i < this._numberOfFrames; i++) {
-      const filePath = this._getFilePath(startFrame + i);
-      assert(filePath);
-      promises.push(this._loadFile(filePath, this.options));
-    }
-
-    // if there are more frames need to fetch
-    Promise.all(promises.filter(Boolean)).then(() => {
-      this._loadNextBatch(startFrame + this._batchSize);
+    const filePath = this._getFilePath(this._lastLoadFrame);
+    assert(filePath);
+    Promise.resolve(this._loadFile(filePath, this.options)).then(() => {
+      this._loadNextFrame();
     });
   }
 
