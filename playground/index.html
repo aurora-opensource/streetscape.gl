@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>XVIZ Playground</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+body { margin: 0; font-family: Helvetica, Arial, sans-serif;}
+#container { position: fixed; display: flex; width: 100vw; height: 100vh; overflow: hidden; }
+#edit-panel { width: 480px; height: 100%; display: flex; flex-direction: column; }
+#edit-panel .editor { flex-grow: 1; transition: flex-grow 300ms; }
+#edit-panel .editor.active { flex-grow: 2; }
+#edit-panel #json-editor { border-top: solid 1px #000; }
+#edit-panel .push-btn { padding: 8px 12px; background: #0b6; color: #fff; text-align: center; cursor: pointer; font-size: 14px; }
+#edit-panel .push-btn:hover { background: #084; white-space: nowrap; }
+#edit-panel .push-btn.error { background: #c00 !important; cursor: default; }
+#edit-panel .tabs { background: #d8d8d8; color: #333; display: flex; font-size: 12px; justify-content: flex-end; padding: 8px 8px 0; }
+#edit-panel .tabs.disabled { background: #2f3129; color: #aaa; }
+#edit-panel .tab { padding: 6px 8px; margin: 0 1px; border: solid 1px rgba(128, 128, 128, 0.3); cursor: pointer; border-bottom: none; opacity: 0.7; }
+#edit-panel .tab:hover { opacity: 1; }
+#edit-panel .tabs .tab.active { background: #fff; }
+#edit-panel .tabs.disabled .tab.active { background: #1D1F21; }
+#edit-panel .tab.active { opacity: 1; }
+#map-view { flex-grow: 1; position: relative; }
+#timeline { box-sizing: border-box; position: absolute; width: 100%; bottom: 0; padding: 20px; background: #fff; }
+.frame-marker { position: absolute; cursor: pointer; margin: -3px; width: 6px; height: 6px; border-radius: 50%; background: #c80; }
+.frame-marker:hover { background: #fc0; padding: 2px; margin: -5px;}
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src='bundle.js'></script>
+  </body>
+</html>
