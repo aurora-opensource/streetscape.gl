@@ -69,7 +69,14 @@ export function evaluateCode(code, type) {
   }
 }
 
-export function createMessage(data, type) {
+export function createMessage(data) {
+  let type;
+  if (data.type && data.type.startsWith('xviz/')) {
+    type = data.type === 'xviz/metadata' ? 'metadata' : 'frame';
+    data = data.data;
+  } else {
+    type = data.update_type ? 'frame' : 'metadata';
+  }
   switch (type) {
     case 'metadata':
       writer.writeMetadata('', data);

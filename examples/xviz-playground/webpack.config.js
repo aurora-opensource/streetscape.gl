@@ -71,13 +71,13 @@ const CONFIG = {
 module.exports = env => {
   let config = Object.assign({}, CONFIG);
 
-  if (env) {
+  if (env && env.local) {
     // This line enables bundling against src in this repo rather than installed module
     config = require('../webpack.config.local')(config)(env);
-    // This switch between streaming and static file loading
-    config.plugins = config.plugins.concat([
-      new webpack.DefinePlugin({__IS_STREAMING__: JSON.stringify(Boolean(env.stream))})
-    ]);
+  }
+  if (env && env.prod) {
+    config.mode = 'production';
+    config.devtool = '';
   }
 
   return config;

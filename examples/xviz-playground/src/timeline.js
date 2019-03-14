@@ -18,44 +18,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* global document */
 import React, {PureComponent} from 'react';
-import {render} from 'react-dom';
+import {connectToLog, PlaybackControl} from 'streetscape.gl';
 
-import {setXVIZConfig} from '@xviz/parser';
-import {LogViewer} from 'streetscape.gl';
+const STYLE = {
+  markers: {
+    height: 20
+  },
+  lookAheadMarker: {
+    marginTop: 12
+  }
+};
 
-import XVIZJsonLoader from './xviz-json-loader';
-import Editor from './editor';
-import Timeline from './timeline';
+class Timeline extends PureComponent {
+  _getMarkers() {
+    const {timestamps} = this.props;
+    return timestamps.map(t => ({
+      time: t,
+      content: <div className="frame-marker" onClick={() => this._onClickMarker(t)} />
+    }));
+  }
 
-import {XVIZ_CONFIG, CAR, MAPBOX_TOKEN, MAP_STYLE} from './constants';
+  _onClickMarker(t) {
+    const {log, onLoadFrame} = this.props;
+    log.seek(t);
+    onLoadFrame(t);
+  }
 
-setXVIZConfig(XVIZ_CONFIG);
-
-class Example extends PureComponent {
-  _log = new XVIZJsonLoader();
-  _editorRef = React.createRef();
+  _formatTimeStamp(t) {
+    return t.toFixed(2);
+  }
 
   render() {
-    const log = this._log;
-
     return (
-      <div id="container">
-        <Editor log={log} ref={this._editorRef} />
-        <div id="map-view">
-          <LogViewer
-            log={log}
-            car={CAR}
-            mapboxApiAccessToken={MAPBOX_TOKEN}
-            mapStyle={MAP_STYLE}
-            showTooltip={true}
-          />
-          <Timeline log={log} onLoadFrame={t => this._editorRef.current.loadFrame(t)} />
-        </div>
+      <div id="timeline">
+        <PlaybackControl
+          width="100%"
+          style={STYLE}
+          log={this.props.log}
+          formatTimestamp={this._formatTimeStamp}
+          markers={this._getMarkers()}
+        />
       </div>
     );
   }
 }
 
-render(<Example />, document.getElementById('app'));
+const getLogState = log => ({
+  timestamps: log.getTimestamps()
+});
+
+export default connectToLog({getLogState, Component: Timeline});
