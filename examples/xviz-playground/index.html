@@ -14,10 +14,13 @@ body { margin: 0; font-family: Helvetica, Arial, sans-serif;}
 #edit-panel .push-btn { padding: 8px 12px; background: #0b6; color: #fff; text-align: center; cursor: pointer; font-size: 14px; }
 #edit-panel .push-btn:hover { background: #084; white-space: nowrap; }
 #edit-panel .push-btn.error { background: #c00 !important; cursor: default; }
-#edit-panel .tabs { background: #2f3129; color: #aaa; display: flex; font-size: 12px; justify-content: flex-end; padding: 8px 8px 0; }
-#edit-panel .tab { padding: 6px 8px; margin: 0 1px; border: solid 1px #666; background: #1D1F21; cursor: pointer; border-bottom: none;}
-#edit-panel .tab:hover { color: #fff; }
-#edit-panel .tabs:not(.disabled) .tab.active { color: #000; background: #fff; border-color: #eee; opacity: 1; }
+#edit-panel .tabs { background: #d8d8d8; color: #333; display: flex; font-size: 12px; justify-content: flex-end; padding: 8px 8px 0; }
+#edit-panel .tabs.disabled { background: #2f3129; color: #aaa; }
+#edit-panel .tab { padding: 6px 8px; margin: 0 1px; border: solid 1px rgba(128, 128, 128, 0.3); cursor: pointer; border-bottom: none; opacity: 0.7; }
+#edit-panel .tab:hover { opacity: 1; }
+#edit-panel .tabs .tab.active { background: #fff; }
+#edit-panel .tabs.disabled .tab.active { background: #1D1F21; }
+#edit-panel .tab.active { opacity: 1; }
 #map-view { flex-grow: 1; position: relative; }
 #timeline { box-sizing: border-box; position: absolute; width: 100%; bottom: 0; padding: 20px; background: #fff; }
 .frame-marker { position: absolute; cursor: pointer; margin: -3px; width: 6px; height: 6px; border-radius: 50%; background: #c80; }
