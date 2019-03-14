@@ -24,14 +24,14 @@ import debounce from 'debounce';
 import ace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/mode/json';
-import 'brace/theme/monokai';
+import 'brace/theme/tomorrow';
+import 'brace/theme/tomorrow_night';
 import 'brace/ext/language_tools';
 
 import {CODE_SAMPLE_METADATA, CODE_SAMPLE_FRAME} from './constants';
 import {evaluateCode, createMessage} from './eval';
 import completer from './auto-complete';
 
-const {Range} = ace.acequire('ace/range');
 const {EditSession} = ace.acequire('ace/edit_session');
 const LanguageTools = ace.acequire('ace/ext/language_tools');
 
@@ -43,66 +43,83 @@ export default class Editor extends PureComponent {
   };
 
   componentDidMount() {
-    const editor = ace.edit(this._editorRef.current);
-    editor.setTheme('ace/theme/monokai');
-    editor.setOptions({
+    const jsEditor = this._createEditor('javascript-editor');
+    this._jsEditor = jsEditor;
+    // behavior
+    jsEditor.setOptions({
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true
     });
     LanguageTools.setCompleters([completer]);
-    editor.on('change', debounce(this._evaluate, 500));
-    editor.$blockScrolling = Infinity;
-    this._editor = editor;
+    // events
+    jsEditor.on('change', debounce(this._evaluateJS, 500));
 
-    const console_ = ace.edit(this._consoleRef.current);
-    console_.getSession().setMode('ace/mode/json');
-    console_.setTheme('ace/theme/monokai');
-    console_.setReadOnly(true);
-    console_.$blockScrolling = Infinity;
-    console_.setHighlightActiveLine(false);
-    console_.renderer.setOption('showLineNumbers', false);
-    this._console = console_;
+    const jsonEditor = this._createEditor('json-editor');
+    this._jsonEditor = jsonEditor;
+    // behavior
+    jsonEditor.getSession().setMode('ace/mode/json');
+    jsonEditor.renderer.setOption('showLineNumbers', false);
+    // events
+    jsonEditor.on('change', debounce(this._evaluateJSON, 500));
 
     this._gotoTab('metadata');
   }
 
-  _editorRef = React.createRef();
-  _consoleRef = React.createRef();
-
-  _editor = null;
+  _activeEditor = null;
+  _jsEditor = null;
+  _jsonEditor = null;
   _sessions = {
     metadata: new EditSession(CODE_SAMPLE_METADATA),
     frame: new EditSession(CODE_SAMPLE_FRAME)
   };
-  _console = null;
+  _refs = {
+    'javascript-editor': React.createRef(),
+    'json-editor': React.createRef()
+  };
   _error = null;
 
-  _evaluate = () => {
-    const code = this._editor.getValue();
+  _evaluateJS = () => {
+    const code = this._jsEditor.getValue();
     const result = evaluateCode(code, this.state.tab);
 
-    const console_ = this._console;
-    const consoleOutput = result.data ? JSON.stringify(result.data, null, 2) : result.error.message;
+    const jsonEditor = this._jsonEditor;
+    const consoleOutput = result.data ? JSON.stringify(result.data, null, 2) : 'Invalid output';
 
-    console_.setValue(consoleOutput, 0);
-    console_.clearSelection();
-
-    if (!this._error && result.error) {
-      this._error = console_.session.addMarker(new Range(0, 0, 1, 0), 'editor-error', 'fullLine');
-    } else if (this._error && !result.error) {
-      console_.session.removeMarker(this._error);
-      this._error = null;
-    }
-
+    jsonEditor.setValue(consoleOutput, 0);
+    jsonEditor.clearSelection();
     this.setState(result);
   };
+
+  _evaluateJSON = () => {
+    const json = this._jsonEditor.getValue();
+    let error = null;
+    try {
+      JSON.parse(json);
+    } catch (e) {
+      error = e;
+    } finally {
+      this.setState({data: json, error});
+    }
+  };
+
+  _onFocus(editor) {
+    const {_activeEditor} = this;
+    if (_activeEditor) {
+      _activeEditor.setTheme('ace/theme/tomorrow_night');
+      _activeEditor.container.classList.remove('active');
+    }
+    editor.setTheme('ace/theme/tomorrow');
+    editor.container.classList.add('active');
+    this._activeEditor = editor;
+  }
 
   _gotoTab(tab) {
     this.setState({tab}, () => {
       const session = this._sessions[tab];
       session.setMode('ace/mode/javascript');
-      this._editor.setSession(session);
-      this._evaluate();
+      this._jsEditor.setSession(session);
+      this._evaluateJS();
+      this._onFocus(this._jsEditor);
     });
   }
 
@@ -112,19 +129,34 @@ export default class Editor extends PureComponent {
     log.push(message);
 
     // auto increment
-    const code = this._editor.getValue();
+    const code = this._jsEditor.getValue();
     const ts = code.match(/const timestamp =\s*([\d\.]+)/);
     if (ts) {
       const newTimestamp = parseFloat(ts[1]) + 0.1;
-      this._editor.setValue(
+      this._jsEditor.setValue(
         code.replace(
           /const timestamp =\s*([\d\.]+)/,
           `const timestamp = ${newTimestamp.toFixed(1)}`
         )
       );
-      this._editor.clearSelection();
+      this._jsEditor.clearSelection();
     }
   };
+
+  _createEditor(id) {
+    const container = this._refs[id].current;
+    const editor = ace.edit(container);
+    editor.$blockScrolling = Infinity;
+    editor.setTheme('ace/theme/tomorrow_night');
+    // events
+    editor.container.addEventListener('transitionend', () => editor.resize());
+    editor.on('focus', debounce(() => this._onFocus(editor)));
+    return editor;
+  }
+
+  _renderEditor(id) {
+    return <div id={id} ref={this._refs[id]} className="editor" />;
+  }
 
   _renderTab(name) {
     return (
@@ -142,12 +174,12 @@ export default class Editor extends PureComponent {
     const {tab, error} = this.state;
 
     return (
-      <div className="editor">
+      <div id="edit-panel">
         <div className="tabs">{Object.keys(this._sessions).map(this._renderTab, this)}</div>
-        <div className="javascript-editor" ref={this._editorRef} />
-        <div className="javascript-console" ref={this._consoleRef} />
-        <div className={`push-btn ${error ? 'disabled' : ''}`} onClick={this._onPush}>
-          push {tab}
+        {this._renderEditor('javascript-editor')}
+        {this._renderEditor('json-editor')}
+        <div className={`push-btn ${error ? 'error' : ''}`} onClick={this._onPush}>
+          {error ? error.message : `push ${tab}`}
         </div>
       </div>
     );
