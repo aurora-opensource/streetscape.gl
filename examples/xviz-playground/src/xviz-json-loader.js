@@ -26,11 +26,12 @@ export default class XVIZJsonLoader extends XVIZLoaderInterface {
   constructor(options) {
     super(options);
     this.streamBuffer = new XVIZStreamBuffer();
+    this.state.timestamps = [];
+    this._history = new Map();
   }
 
   push(message) {
-    console.log(message); // eslint-disable-line
-
+    this._rawMessage = message;
     parseStreamMessage({
       message,
       onResult: this.onXVIZMessage,
@@ -38,7 +39,28 @@ export default class XVIZJsonLoader extends XVIZLoaderInterface {
     });
   }
 
+  /* Custom data selector */
+  getTimestamps = () => this.get('timestamps');
+
+  getFrame = key => {
+    return this._history.get(key);
+  };
+
   /* Override hooks */
+  _onXVIZMetadata(message) {
+    super._onXVIZMetadata(message);
+    this._history.set('metadata', this._rawMessage);
+  }
+
+  _onXVIZTimeslice(message) {
+    super._onXVIZTimeslice(message);
+    this._history.set(message.timestamp, this._rawMessage);
+    const timestamps = Array.from(this._history.keys())
+      .filter(Number.isFinite)
+      .sort();
+    this.set('timestamps', timestamps);
+  }
+
   _getLogStartTime(metadata) {
     return metadata && metadata.start_time;
   }

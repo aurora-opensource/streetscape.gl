@@ -37,6 +37,7 @@ const LanguageTools = ace.acequire('ace/ext/language_tools');
 
 export default class Editor extends PureComponent {
   state = {
+    activeEditor: 'javascript-editor',
     data: null,
     error: null,
     tab: ''
@@ -92,13 +93,14 @@ export default class Editor extends PureComponent {
 
   _evaluateJSON = () => {
     const json = this._jsonEditor.getValue();
+    let data = null;
     let error = null;
     try {
-      JSON.parse(json);
+      data = JSON.parse(json);
     } catch (e) {
       error = e;
     } finally {
-      this.setState({data: json, error});
+      this.setState({data, error});
     }
   };
 
@@ -111,6 +113,8 @@ export default class Editor extends PureComponent {
     editor.setTheme('ace/theme/tomorrow');
     editor.container.classList.add('active');
     this._activeEditor = editor;
+
+    this.setState({activeEditor: editor.container.id});
   }
 
   _gotoTab(tab) {
@@ -125,21 +129,23 @@ export default class Editor extends PureComponent {
 
   _onPush = () => {
     const {log} = this.props;
-    const message = createMessage(this.state.data, this.state.tab);
+    const message = createMessage(this.state.data);
     log.push(message);
 
     // auto increment
-    const code = this._jsEditor.getValue();
-    const ts = code.match(/const timestamp =\s*([\d\.]+)/);
-    if (ts) {
-      const newTimestamp = parseFloat(ts[1]) + 0.1;
-      this._jsEditor.setValue(
-        code.replace(
-          /const timestamp =\s*([\d\.]+)/,
-          `const timestamp = ${newTimestamp.toFixed(1)}`
-        )
-      );
-      this._jsEditor.clearSelection();
+    if (this._activeEditor === this._jsEditor && this.state.tab === 'frame') {
+      const code = this._jsEditor.getValue();
+      const ts = code.match(/const timestamp =\s*([\d\.]+)/);
+      if (ts) {
+        const newTimestamp = parseFloat(ts[1]) + 0.1;
+        this._jsEditor.setValue(
+          code.replace(
+            /const timestamp =\s*([\d\.]+)/,
+            `const timestamp = ${newTimestamp.toFixed(1)}`
+          )
+        );
+        this._jsEditor.clearSelection();
+      }
     }
   };
 
@@ -170,16 +176,28 @@ export default class Editor extends PureComponent {
     );
   }
 
+  loadFrame(timestamp) {
+    const frame = this.props.log.getFrame(timestamp);
+
+    if (frame) {
+      this._onFocus(this._jsonEditor);
+      this._jsonEditor.setValue(JSON.stringify(frame.data, null, 2));
+      this._jsonEditor.clearSelection();
+    }
+  }
+
   render() {
-    const {tab, error} = this.state;
+    const {error, activeEditor} = this.state;
 
     return (
       <div id="edit-panel">
-        <div className="tabs">{Object.keys(this._sessions).map(this._renderTab, this)}</div>
+        <div className={`tabs ${activeEditor === 'javascript-editor' ? '' : 'disabled'}`}>
+          {Object.keys(this._sessions).map(this._renderTab, this)}
+        </div>
         {this._renderEditor('javascript-editor')}
         {this._renderEditor('json-editor')}
         <div className={`push-btn ${error ? 'error' : ''}`} onClick={this._onPush}>
-          {error ? error.message : `push ${tab}`}
+          {error ? error.message : `PUSH`}
         </div>
       </div>
     );
