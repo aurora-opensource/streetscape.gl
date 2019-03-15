@@ -27,6 +27,7 @@ import {LogViewer} from 'streetscape.gl';
 
 import XVIZJsonLoader from './xviz-json-loader';
 import Editor from './editor';
+import StreamSettings from './stream-settings';
 import Timeline from './timeline';
 
 import {XVIZ_CONFIG, CAR, MAPBOX_TOKEN, MAP_STYLE} from './constants';
@@ -34,15 +35,38 @@ import {XVIZ_CONFIG, CAR, MAPBOX_TOKEN, MAP_STYLE} from './constants';
 setXVIZConfig(XVIZ_CONFIG);
 
 class Example extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      panel: 'editor'
+    };
+  }
+
   _log = new XVIZJsonLoader();
   _editorRef = React.createRef();
 
+  _renderTab(panelId, icon) {
+    return (
+      <div
+        className={`btn ${this.state.panel === panelId ? 'active' : ''}`}
+        onClick={() => this.setState({panel: panelId})}
+      >
+        {icon}
+      </div>
+    );
+  }
+
   render() {
     const log = this._log;
+    const activePanel = this.state.panel;
 
+    // Editor needs to be always rendered to maintain documenta state
     return (
       <div id="container">
-        <Editor log={log} ref={this._editorRef} />
+        <Editor log={log} ref={this._editorRef} isVisible={activePanel === 'editor'} />
+
+        {activePanel === 'streams' && <StreamSettings log={log} />}
+
         <div id="map-view">
           <LogViewer
             log={log}
@@ -52,6 +76,10 @@ class Example extends PureComponent {
             showTooltip={true}
           />
           <Timeline log={log} onLoadFrame={t => this._editorRef.current.loadFrame(t)} />
+          <div id="panel-selectors">
+            {this._renderTab('editor', 'edit')}
+            {this._renderTab('streams', 'list')}
+          </div>
         </div>
       </div>
     );

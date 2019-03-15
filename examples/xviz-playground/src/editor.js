@@ -187,10 +187,11 @@ export default class Editor extends PureComponent {
   }
 
   render() {
+    const {isVisible} = this.props;
     const {error, activeEditor} = this.state;
 
     return (
-      <div id="edit-panel">
+      <div className={isVisible ? 'panel' : 'panel hidden'} id="edit">
         <div className={`tabs ${activeEditor === 'javascript-editor' ? '' : 'disabled'}`}>
           {Object.keys(this._sessions).map(this._renderTab, this)}
         </div>
