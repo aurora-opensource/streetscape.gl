@@ -20,7 +20,8 @@
 
 import {IconLayer} from '@deck.gl/layers';
 
-import vertex from './sign-layer-vertex.glsl';
+import vs from './sign-layer-vertex.glsl';
+import fs from './sign-layer-fragment.glsl';
 
 const defaultProps = {
   ...IconLayer.defaultProps,
@@ -48,8 +49,8 @@ export default class SignLayer extends IconLayer {
   getShaders() {
     return {
       ...super.getShaders(),
-      vs: vertex,
-      shaderCache: this.context.shaderCache
+      vs,
+      fs
     };
   }
 }

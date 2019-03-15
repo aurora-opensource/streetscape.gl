@@ -323,7 +323,7 @@ export default class Core3DViewer extends PureComponent {
           return layer;
         }
 
-        return new layer.constructor(props, additionalProps);
+        return layer.clone(additionalProps);
       })
     ];
   }
