@@ -1,4 +1,4 @@
-// Copyright (c) 2019 Uber Technologies, Inc.
+// Copyright (c) 2015 - 2017 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,18 +18,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-const path = require('path');
+export default `\
+#define SHADER_NAME icon-layer-fragment-shader
 
-const ALIASES = {
-  'streetscape.gl': path.resolve(__dirname, './modules/core/src'),
-  '@streetscape.gl/layers': path.resolve(__dirname, './modules/layers/src')
-};
+precision highp float;
 
-if (module.require) {
-  // Enables ES2015 import/export in Node.js
-  // module.require('reify');
-  // const moduleAlias = module.require('module-alias');
-  // moduleAlias.addAliases(ALIASES);
+uniform float opacity;
+uniform sampler2D iconsTexture;
+
+varying vec4 vColor;
+varying vec2 vTextureCoords;
+
+const float MIN_ALPHA = 0.05;
+
+void main(void) {
+  vec4 texColor = texture2D(iconsTexture, vTextureCoords);
+
+  // front of the sign, uses pixel color from the texture
+  // back of the sign uses texture as transparency mask
+  vec3 color = gl_FrontFacing ? texColor.rgb : vColor.rgb;
+  float a = texColor.a * opacity;
+
+  if (a < MIN_ALPHA) {
+    discard;
+  }
+
+  gl_FragColor = vec4(color, a);
+
+  gl_FragColor = picking_filterHighlightColor(gl_FragColor);
+
+  gl_FragColor = picking_filterPickingColor(gl_FragColor);
 }
-
-module.exports = ALIASES;
+`;
