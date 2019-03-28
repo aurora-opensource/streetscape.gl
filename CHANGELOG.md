@@ -3,6 +3,12 @@
 All notable changes to XVIZ will be documented in this file. This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
+## [1.0.0-beta.4]
+
+- Fix sign layer orientation (#281)
+- Fix light settings coordinate system (#272)
+- XVIZFileLoader: make sure always batchSize files being fetched (#264)
+
 ## [1.0.0-beta.3]
 
 - Export mergeXVIZStyles (#254)
