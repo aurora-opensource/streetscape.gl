@@ -143,6 +143,10 @@ export default class XVIZLoaderInterface {
     }
 
     this.set('timestamp', timestamp);
+
+    // Notify the stream buffer of the current play head
+    // for any data management needs.
+    this.streamBuffer.setCurrentTime(timestamp);
   }
 
   setLookAhead(lookAhead) {

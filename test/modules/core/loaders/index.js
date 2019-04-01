@@ -18,5 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import './xviz-loader-interface.spec';
 import './xviz-stream-loader.spec';
 import './xviz-live-loader.spec';
