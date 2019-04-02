@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 /* global document */
-import {Texture2D} from 'luma.gl';
+import {Texture2D} from '@luma.gl/core';
 
 const CANVAS_SIZE = 256;
 

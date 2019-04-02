@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import WebMercatorViewport from 'viewport-mercator-project';
-import {MapView, FirstPersonView} from 'deck.gl';
+import {MapView, FirstPersonView} from '@deck.gl/core';
 
 export function getViewStateOffset(oldViewState, viewState, oldOffset) {
   if (!oldViewState) {

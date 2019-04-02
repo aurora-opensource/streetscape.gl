@@ -74,18 +74,20 @@ export default class PointCloudLayer extends CorePointCloudLayer {
   }
 
   draw({uniforms}) {
-    const {radiusPixels, colorMode, colorDomain} = this.props;
+    const {pointSize, colorMode, colorDomain} = this.props;
     const {vehicleDistanceTransform, colorSize} = this.state;
 
-    this.state.model.render(
-      Object.assign({}, uniforms, {
-        radiusPixels,
-        colorSize,
-        colorMode: COLOR_MODE[colorMode] || COLOR_MODE.default,
-        colorDomain: colorDomain || COLOR_DOMAIN[colorMode] || COLOR_DOMAIN.default,
-        vehicleDistanceTransform
-      })
-    );
+    this.state.model
+      .setUniforms(
+        Object.assign({}, uniforms, {
+          pointSize,
+          colorSize,
+          colorMode: COLOR_MODE[colorMode] || COLOR_MODE.default,
+          colorDomain: colorDomain || COLOR_DOMAIN[colorMode] || COLOR_DOMAIN.default,
+          vehicleDistanceTransform
+        })
+      )
+      .draw();
   }
 }
 

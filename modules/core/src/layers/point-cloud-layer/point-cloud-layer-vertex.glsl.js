@@ -29,7 +29,7 @@ attribute vec3 instancePickingColors;
 
 uniform float colorSize;
 uniform float opacity;
-uniform float radiusPixels;
+uniform float pointSize;
 uniform float colorMode;
 uniform vec2 colorDomain;
 uniform mat4 vehicleDistanceTransform;
@@ -72,7 +72,7 @@ void main(void) {
 
   // Find the center of the point and add the current vertex
   gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, vec3(0.));
-  gl_Position += project_pixel_to_clipspace(positions.xy * radiusPixels) * project_uFocalDistance;
+  gl_Position.xy += project_pixel_size_to_clipspace(positions.xy * pointSize) * project_uFocalDistance;
 
   vec4 colorPosition;
   if (colorMode == COLOR_MODE_DISTANCE) {

@@ -25,9 +25,6 @@
 // The generic XVIZ layer
 export {default as XVIZLayer} from './layers/xviz-layer';
 
-// Generic layers (should be moved back to deck.gl)
-export {default as MeshLayer} from './layers/mesh-layer/mesh-layer';
-
 // COMPONENTS
 
 export {default as connectToLog} from './components/connect';

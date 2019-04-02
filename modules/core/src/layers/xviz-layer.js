@@ -65,7 +65,7 @@ const STYLE_TO_LAYER_PROP = {
   },
   pointcloud: {
     opacity: 'opacity',
-    radius_pixels: 'radiusPixels',
+    radius_pixels: 'pointSize',
     fill_color: 'getColor',
     point_color_mode: 'colorMode',
     point_color_domain: 'colorDomain'

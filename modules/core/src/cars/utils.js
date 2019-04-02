@@ -44,5 +44,5 @@ export function mirrorMesh({indices, positions, normals}) {
   for (let i = 0; i < indexSize; i++) {
     indices2[i] += vertexCount;
   }
-  return {indices: indices2, positions: positions2, normals: normals2};
+  return {indices: indices2, positions: positions2, normals: normals2, texCoords: new Float32Array(positions2.length / 3 * 2)};
 }

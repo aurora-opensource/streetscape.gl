@@ -19,9 +19,9 @@
 // THE SOFTWARE.
 
 import {Layer} from '@deck.gl/core';
-import {Cube, Sphere, fp64} from 'luma.gl';
+import {Cube, Sphere, fp64} from '@luma.gl/core';
 const {fp64LowPart} = fp64;
-import GL from 'luma.gl/constants';
+import GL from '@luma.gl/constants';
 
 import vs from './traffic-light-layer-vertex.glsl';
 import fs from './traffic-light-layer-fragment.glsl';

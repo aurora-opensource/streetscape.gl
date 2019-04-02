@@ -19,7 +19,8 @@
 // THE SOFTWARE.
 
 import {Layer} from '@deck.gl/core';
-import {Model, Geometry, loadTextures, Texture2D} from 'luma.gl';
+import {Model, Geometry, Texture2D} from '@luma.gl/core';
+import {loadImage} from '@loaders.gl/core';
 
 import IMAGERY_VERTEX_SHADER from './imagery-layer-vertex';
 import IMAGERY_FRAGMENT_SHADER from './imagery-layer-fragment';
@@ -36,8 +37,8 @@ import GridGeometry from './grid-geometry';
 function getTexture(gl, src, opts) {
   if (typeof src === 'string') {
     // Url, load the image
-    return loadTextures(gl, {urls: [src], ...opts})
-      .then(textures => textures[0])
+    return loadImage(src)
+      .then(data => new Texture2D(gl, {data, ...opts}))
       .catch(error => {
         throw new Error(`Could not load texture from ${src}: ${error}`);
       });
