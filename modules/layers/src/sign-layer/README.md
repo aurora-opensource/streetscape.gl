@@ -107,7 +107,7 @@ The height of each object, in pixels.
 
 * Default: `0`
 
-The rotating angle of each object, in radians.
+The rotating angle of each object, in radians. `0` faces due east.
 
 * If a number is provided, it is used as the angle for all objects.
 * If a function is provided, it is called on each object to retrieve its angle.
