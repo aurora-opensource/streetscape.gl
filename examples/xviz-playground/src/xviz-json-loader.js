@@ -59,6 +59,7 @@ export default class XVIZJsonLoader extends XVIZLoaderInterface {
       .filter(Number.isFinite)
       .sort();
     this.set('timestamps', timestamps);
+    this.seek(message.timestamp);
   }
 
   _getLogStartTime(metadata) {

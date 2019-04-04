@@ -359,7 +359,7 @@ export default class XVIZLayer extends CompositeLayer {
             id: 'stadium',
             data,
             getPath: f => [f.start, f.end],
-            lineJointRounded: true,
+            rounded: true,
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })

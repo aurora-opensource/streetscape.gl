@@ -28,12 +28,20 @@ import 'brace/theme/tomorrow';
 import 'brace/theme/tomorrow_night';
 import 'brace/ext/language_tools';
 
-import {CODE_SAMPLE_METADATA, CODE_SAMPLE_FRAME} from './constants';
+import {getCodeSample} from './code-samples';
 import {evaluateCode, createMessage} from './eval';
 import completer from './auto-complete';
 
 const {EditSession} = ace.acequire('ace/edit_session');
 const LanguageTools = ace.acequire('ace/ext/language_tools');
+
+// Parse default settings from query parameters
+/* global location, URLSearchParams */
+const urlParams = new URLSearchParams(location.search);
+const sampleStreams = urlParams.get('sample_streams') || 'circle,polygon';
+const defaultTab = urlParams.get('tab') || 'frame';
+
+const codeSample = getCodeSample(sampleStreams.split(','));
 
 export default class Editor extends PureComponent {
   state = {
@@ -63,21 +71,31 @@ export default class Editor extends PureComponent {
     // events
     jsonEditor.on('change', debounce(this._evaluateJSON, 500));
 
-    this._gotoTab('metadata');
+    // push initial messages
+    this._evaluateAndPush(codeSample.metadata, 'metadata');
+    this._evaluateAndPush(codeSample.frame, 'frame');
+
+    // activate tab
+    this._gotoTab(defaultTab);
   }
 
   _activeEditor = null;
   _jsEditor = null;
   _jsonEditor = null;
   _sessions = {
-    metadata: new EditSession(CODE_SAMPLE_METADATA),
-    frame: new EditSession(CODE_SAMPLE_FRAME)
+    metadata: new EditSession(codeSample.metadata),
+    frame: new EditSession(codeSample.frame)
   };
   _refs = {
     'javascript-editor': React.createRef(),
     'json-editor': React.createRef()
   };
   _error = null;
+
+  _evaluateAndPush(code, type) {
+    const {data} = evaluateCode(code, type);
+    this.props.log.push(createMessage(data));
+  }
 
   _evaluateJS = () => {
     const code = this._jsEditor.getValue();
