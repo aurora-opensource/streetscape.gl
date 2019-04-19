@@ -3,9 +3,9 @@
 This application has additional features beyond the
 [get-started](https://github.com/uber/streetscape.gl/tree/master/docs/get-started/starter-kit.md)
 that are detailed here. Instructions and features in the get-started application will work with the
-viewer application. Additional features are documented below.
+viewer application.
 
-The viewer application is intented to work with the _@xviz/server_ module and expose the full
+The viewer application is intented to work with the _@xviz/server_ module and exposes the full
 capabilities of the XVIZ protocol and server.
 
 # Developer Features
@@ -21,7 +21,7 @@ sources rather than hosting a single XVIZ data source.
 For example, if there is a directory `xviz-data` that had the following sub-folders:
 
 ```
-xviz-data/
+~/xviz-data/
   |
   +-- xviz-sample-1/
   |
