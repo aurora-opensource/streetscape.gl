@@ -163,4 +163,9 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
     // Only called on connection closure, which would be an error case
     this._debug('socket_closed', event);
   };
+
+  _onWSError = event => {
+    this._debug('socket_error', event);
+  };
+
 }
