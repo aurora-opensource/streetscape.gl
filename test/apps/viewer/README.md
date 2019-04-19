@@ -1,7 +1,6 @@
 # Developer Viewer App
 
-This app was based on the get-started app but with additional features for developers
-to test all the features in XVIZ and Streetscape.gl
+This is an application to enable testing and validation of all the features of XVIZ and Streetscape.gl
 
 ## Running the Viewer App
 
@@ -10,13 +9,13 @@ cd streetscape.gl/test/apps/viewer
 # install dependencies
 yarn
 # start the app
-yarn start
+yarn start-streaming
 ```
 
 ## Running an XVIZ server
 
 ```bash
-cd streetscape.gl/modules/server
-# start the app
-./bin/babel-xvizserver -p 3000 -d ../directory/of/xviz-data
+cd xviz/modules/server
+# start the server 
+./bin/babel-xvizserver -d ../directory/of/xviz-data
 ```
