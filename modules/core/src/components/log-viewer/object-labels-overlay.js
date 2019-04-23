@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 // @flow
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import {_MapContext as MapContext} from 'react-map-gl';
@@ -30,7 +30,7 @@ import {resolveCoordinateTransform, positionToLngLat} from '../../utils/transfor
 
 const renderDefaultObjectLabel = ({id, isSelected}) => isSelected && <div>ID: {id}</div>;
 
-export default class ObjectLabelsOverlay extends Component {
+export default class ObjectLabelsOverlay extends PureComponent {
   static propTypes = {
     objectSelection: PropTypes.object,
     frame: PropTypes.object,

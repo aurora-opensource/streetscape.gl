@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import GL from 'luma.gl/constants';
-import {Geometry} from 'luma.gl';
+import GL from '@luma.gl/constants';
+import {Geometry} from '@luma.gl/core';
 
 export default class GridGeometry extends Geometry {
   constructor({

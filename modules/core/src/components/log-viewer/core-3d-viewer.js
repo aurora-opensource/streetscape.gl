@@ -22,11 +22,12 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 import {StaticMap} from 'react-map-gl';
-import DeckGL, {COORDINATE_SYSTEM} from 'deck.gl';
+import DeckGL from '@deck.gl/react';
+import {COORDINATE_SYSTEM} from '@deck.gl/core';
 
 import ObjectLabelsOverlay from './object-labels-overlay';
 
-import MeshLayer from '../../layers/mesh-layer/mesh-layer';
+import {SimpleMeshLayer} from '@deck.gl/mesh-layers';
 import {XVIZStyleParser} from '@xviz/parser';
 
 import XVIZLayer from '../../layers/xviz-layer';
@@ -38,7 +39,7 @@ import {mergeXVIZStyles} from '../../utils/style';
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 import stats from '../../utils/stats';
 
-import {DEFAULT_ORIGIN, CAR_DATA, LIGHT_SETTINGS, DEFAULT_CAR} from './constants';
+import {DEFAULT_ORIGIN, CAR_DATA, LIGHTS, DEFAULT_CAR} from './constants';
 
 const noop = () => {};
 
@@ -131,13 +132,7 @@ export default class Core3DViewer extends PureComponent {
       });
     }
     if (this.props.frame !== nextProps.frame) {
-      const {frame} = this.props;
-      const lightSettings = {
-        ...LIGHT_SETTINGS,
-        coordinateOrigin: (frame && frame.origin) || DEFAULT_ORIGIN
-      };
-      this.setState({lightSettings});
-      stats.bump('frame-update');
+      stats.get('frame-update').incrementCount();
     }
   }
 
@@ -147,7 +142,7 @@ export default class Core3DViewer extends PureComponent {
         fps: deckMetrics.fps,
         redraw: deckMetrics.redraw || 0
       };
-      const table = stats.getStatsTable();
+      const table = stats.getTable();
 
       for (const key in table) {
         metrics[key] = table[key].total;
@@ -168,7 +163,7 @@ export default class Core3DViewer extends PureComponent {
     this.props.onHover(info, evt);
   };
 
-  _onLayerClick = (info, infos, evt) => {
+  _onLayerClick = (info, evt) => {
     const isRightClick = evt.which === 3;
 
     if (isRightClick) {
@@ -184,7 +179,6 @@ export default class Core3DViewer extends PureComponent {
 
   _getCarLayer() {
     const {frame, car} = this.props;
-    const {lightSettings} = this.state;
     const {
       origin = DEFAULT_ORIGIN,
       mesh,
@@ -194,22 +188,26 @@ export default class Core3DViewer extends PureComponent {
       color = [0, 0, 0]
     } = car;
 
-    return new MeshLayer({
+    return new SimpleMeshLayer({
       id: 'car',
       opacity: 1,
       coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
       coordinateOrigin: frame.origin || DEFAULT_ORIGIN,
       // Adjust for car center position relative to GPS/IMU
-      modelMatrix: frame.vehicleRelativeTransform.clone().translate(origin),
+      getTransformMatrix: d =>
+        frame.vehicleRelativeTransform
+          .clone()
+          .translate(origin)
+          .scale(scale),
       mesh,
       data: CAR_DATA,
       getPosition: d => d,
       getColor: color,
-      // Support old scale format
-      getSize: Number.isFinite(scale) ? [scale, scale, scale] : scale,
       texture,
       wireframe,
-      lightSettings
+      updateTriggers: {
+        getTransformMatrix: frame.vehicleRelativeTransform
+      }
     });
   }
 
@@ -227,7 +225,7 @@ export default class Core3DViewer extends PureComponent {
     }
 
     const {streams, lookAheads = {}} = frame;
-    const {styleParser, lightSettings} = this.state;
+    const {styleParser} = this.state;
 
     const streamFilter = normalizeStreamFilter(this.props.streamFilter);
     const featuresAndFutures = new Set(
@@ -260,7 +258,6 @@ export default class Core3DViewer extends PureComponent {
               ...coordinateProps,
 
               pickable: showTooltip || primitives[0].id,
-              lightSettings,
 
               data: primitives,
               style: stylesheet,
@@ -280,7 +277,6 @@ export default class Core3DViewer extends PureComponent {
               ...coordinateProps,
 
               pickable: showTooltip,
-              lightSettings,
 
               data: stream.pointCloud,
               style: stylesheet,
@@ -372,13 +368,14 @@ export default class Core3DViewer extends PureComponent {
       <DeckGL
         width="100%"
         height="100%"
+        effects={[LIGHTS]}
         views={getViews(viewMode)}
         viewState={this._getViewState()}
         layers={this._getLayers()}
         layerFilter={this._layerFilter}
         getCursor={this._getCursor}
-        onLayerHover={this._onLayerHover}
-        onLayerClick={this._onLayerClick}
+        onHover={this._onLayerHover}
+        onClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
         _onMetrics={this._onMetrics}
       >

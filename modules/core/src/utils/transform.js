@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {COORDINATE_SYSTEM} from 'deck.gl';
+import {COORDINATE_SYSTEM} from '@deck.gl/core';
 import {_Pose as Pose, Matrix4} from 'math.gl';
 import {addMetersToLngLat} from 'viewport-mercator-project';
 

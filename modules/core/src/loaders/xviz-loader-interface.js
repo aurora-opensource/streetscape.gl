@@ -68,7 +68,7 @@ export default class XVIZLoaderInterface {
         cb(eventType, eventArgs);
       }
     }
-    stats.bump(`loader-${eventType}`);
+    stats.get(`loader-${eventType}`).incrementCount();
   }
 
   subscribe(instance) {
