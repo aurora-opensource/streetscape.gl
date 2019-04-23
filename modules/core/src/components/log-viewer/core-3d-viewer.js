@@ -198,8 +198,7 @@ export default class Core3DViewer extends PureComponent {
         frame.vehicleRelativeTransform
           .clone()
           .translate(origin)
-          // Support old scale format
-          .scale(Number.isFinite(scale) ? [scale, scale, scale] : scale),
+          .scale(scale),
       mesh,
       data: CAR_DATA,
       getPosition: d => d,
