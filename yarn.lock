@@ -1025,7 +1025,7 @@
   dependencies:
     "@babel/runtime" "^7.3.1"
 
-"@loaders.gl/draco@1.0.1", "@loaders.gl/draco@^0.7.1":
+"@loaders.gl/draco@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@loaders.gl/draco/-/draco-1.0.1.tgz#4f181e4e702666550902011873627dcf0c10bb27"
   integrity sha512-cOEzLOqaX414O1rG6QBEfrgMuAsu/3s+mIA36zQjK+6Xb9awNboVFhUkqo0aNNgSAq7/In9wppGYiZKFwa+L2w==
@@ -1034,7 +1034,7 @@
     "@loaders.gl/core" "1.0.1"
     draco3d "^1.3.4"
 
-"@loaders.gl/gltf@1.0.1", "@loaders.gl/gltf@^0.7.2":
+"@loaders.gl/gltf@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@loaders.gl/gltf/-/gltf-1.0.1.tgz#93c9f3def8d35a1f362c7670637346df7061d1d1"
   integrity sha512-oObLQcMLD8bewnlZY13Ibsv3dbavIFoJpv4hIxcrzbGZbFgh8pNFs/OPme6tw5X+aBI41v74wcMjuZ3K4g1Sgg==
@@ -1334,19 +1334,19 @@
     "@webassemblyjs/wast-parser" "1.5.13"
     long "^3.2.0"
 
-"@xviz/parser@^1.0.0-beta.7":
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-beta.7.tgz#2488d7646ff2e94ed773c356056d5b045c40eebd"
-  integrity sha512-yNqIDzVFJdI4InQ48W4MDhbeDbRKo60vSq5N5DFXI9Xi0vaZF3s482EBuduzdPR2Z9dj0fIIh7IDZI+g9epFpQ==
+"@xviz/parser@^1.0.0-beta.8":
+  version "1.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-beta.8.tgz#05cfd6c01b95371cb4d1a364d4b0ee87aaf39fb6"
+  integrity sha512-PkGXalDPwXBIBd2q/0mefBIY2NFCGDUUKRnfKJFxVcuz82SvlPJ6EIiDZ5Rz7u72GwBFu7buF5GHE6crZqwVog==
   dependencies:
-    "@loaders.gl/draco" "^0.7.1"
-    "@loaders.gl/gltf" "^0.7.2"
+    "@loaders.gl/draco" "^1.0.1"
+    "@loaders.gl/gltf" "^1.0.1"
     base64-js "^1.3.0"
     color "^3.0.0"
-    math.gl "^2.2.0"
-    probe.gl "^2.0.1"
+    math.gl "^2.3.1"
+    probe.gl "^3.0.1"
     text-encoding "^0.6.4"
-    viewport-mercator-project "^6.0.0"
+    viewport-mercator-project "^6.1.0"
 
 JSONStream@^1.0.4:
   version "1.3.4"
@@ -4321,44 +4321,10 @@ gitconfiglocal@^1.0.0:
   dependencies:
     ini "^1.3.2"
 
-gl-mat3@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/gl-mat3/-/gl-mat3-1.0.0.tgz#89633219ca429379a16b9185d95d41713453b912"
-  integrity sha1-iWMyGcpCk3mha5GF2V1BcTRTuRI=
-
-gl-mat4@^1.1.4:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/gl-mat4/-/gl-mat4-1.2.0.tgz#49d8a7636b70aa00819216635f4a3fd3f4669b26"
-  integrity sha512-sT5C0pwB1/e9G9AvAoLsoaJtbMGjfd/jfxo8jMCKqYYEnjZuFvqV5rehqar0538EmssjdDeiEWnKyBSTw7quoA==
-
 gl-matrix@^3.0.0, gl-matrix@^3.0.0-0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/gl-matrix/-/gl-matrix-3.0.0.tgz#888301ac7650e148c3865370e13ec66d08a8381f"
   integrity sha512-PD4mVH/C/Zs64kOozeFnKY8ybhgwxXXQYGWdB4h68krAHknWJgk9uKOn6z8YElh5//vs++90pb6csrTIDWnexA==
-
-gl-quat@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/gl-quat/-/gl-quat-1.0.0.tgz#0945ec923386f45329be5dc357b1c8c2d47586c5"
-  integrity sha1-CUXskjOG9FMpvl3DV7HIwtR1hsU=
-  dependencies:
-    gl-mat3 "^1.0.0"
-    gl-vec3 "^1.0.3"
-    gl-vec4 "^1.0.0"
-
-gl-vec2@^1.0.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/gl-vec2/-/gl-vec2-1.3.0.tgz#83d472ed46034de8e09cbc857123fb6c81c51199"
-  integrity sha512-YiqaAuNsheWmUV0Sa8k94kBB0D6RWjwZztyO+trEYS8KzJ6OQB/4686gdrf59wld4hHFIvaxynO3nRxpk1Ij/A==
-
-gl-vec3@^1.0.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/gl-vec3/-/gl-vec3-1.1.3.tgz#a47c62f918774a06cbed1b65bcd0288ecbb03826"
-  integrity sha512-jduKUqT0SGH02l8Yl+mV1yVsDfYgQAJyXGxkJQGyxPLHRiW25DwVIRPt6uvhrEMHftJfqhqKthRcyZqNEl9Xdw==
-
-gl-vec4@^1.0.0, gl-vec4@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/gl-vec4/-/gl-vec4-1.0.1.tgz#97d96878281b14b532cbce101785dfd1cb340964"
-  integrity sha1-l9loeCgbFLUyy84QF4Xf0cs0CWQ=
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -5833,28 +5799,7 @@ math-random@^1.0.1:
   resolved "https://registry.yarnpkg.com/math-random/-/math-random-1.0.1.tgz#8b3aac588b8a66e4975e3cdea67f7bb329601fac"
   integrity sha1-izqsWIuKZuSXXjzepn97sylgH6w=
 
-math.gl@^2.1.0, math.gl@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-2.2.0.tgz#301dcda760ae235f5fdf471dd67ef2aa8c74d659"
-  integrity sha512-HIaDMt7zzeTx77k+9jrDpvpO6UTqrdMk+PkTmSLAIamnxAHTHmvnpxM7CYiJFP+SPNcD7Mp+y1wx8BlvJM+lmw==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    gl-mat3 "^1.0.0"
-    gl-mat4 "^1.1.4"
-    gl-quat "^1.0.0"
-    gl-vec2 "^1.0.0"
-    gl-vec3 "^1.0.3"
-    gl-vec4 "^1.0.1"
-
-math.gl@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-2.3.0.tgz#d6312eb2b28e4e72116ab845fbebc482b6fea5ba"
-  integrity sha512-6a2II4xlYg4k0Z9KLh0u9LzVjb/17/viobJlyI1GzzK2COF3SF28VlYH0I4O8MduObZjlJR+E7Y9OM7d8VuZlw==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    gl-matrix "^3.0.0"
-
-math.gl@^2.3.1:
+math.gl@^2.3.0, math.gl@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-2.3.1.tgz#4099e0e34f03dbc458e57945583badb3a517ce8f"
   integrity sha512-364xFXawzGCp46BmaEcKMAYgDLsaSqXO3ki4XAh+8aJAFNcdJFeORpoZFRLdZMZzwdOepwfcc+rk3LhDNJZF1Q==
@@ -7088,13 +7033,6 @@ private@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
   integrity sha512-VvivMrbvd2nKkiG38qjULzlc+4Vx4wm/whI9pQD35YrARNnhxeiRktSOhSukRLFNlzg6Br/cJPet5J/u19r/mg==
-
-probe.gl@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/probe.gl/-/probe.gl-2.0.1.tgz#e42dfe02eca9ef262cdf89a24e1a4c0856e989e0"
-  integrity sha512-BNL0Eys0VzoM82gD9sUF3WQmzFv3LNV5WH8LzwYeGOKG1ro2TxVaOSKKD92TVK1qjg9miOiCh7S1ppGS9c1ylQ==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
 
 probe.gl@^3.0.1:
   version "3.0.1"
@@ -9052,14 +8990,6 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
-
-viewport-mercator-project@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-6.0.0.tgz#33b8bb40bae44978b889e5425f4f5d26f2367ecb"
-  integrity sha512-9PNfBPAmwWMaKquWj4CiaXGz+SDguDi61DfIvLZxfJyl82Lbi5dZwgb9UgnH4cLacqzvLwO/nr7Nth37GpQZIg==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    math.gl "^2.1.0"
 
 viewport-mercator-project@^6.1.0:
   version "6.1.0"

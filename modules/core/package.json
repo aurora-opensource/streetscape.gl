@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@streetscape.gl/monochrome": "^1.0.0-beta.1",
-    "@xviz/parser": "^1.0.0-beta.7",
+    "@xviz/parser": "^1.0.0-beta.8",
     "@deck.gl/core": "^7.0.2",
     "@deck.gl/layers": "^7.0.2",
     "@deck.gl/mesh-layers": "^7.0.2",
