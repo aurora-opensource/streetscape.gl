@@ -29,7 +29,6 @@ uniform bool useInstanceColor;
 uniform sampler2D lightShapeTexture;
 
 varying vec4 vColor;
-varying vec4 vPickingColor;
 varying vec2 vTexCoord;
 
 void main(void) {

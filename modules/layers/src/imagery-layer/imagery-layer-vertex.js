@@ -55,13 +55,11 @@ void main(void) {
     float relativeHeight = heightMapColor.b;
     z = mix(heightRange[0], heightRange[1], relativeHeight);
   }
-  vec3 vertex = project_position(vec3(position, z));
 
   vWorldHeight = z;
   vTexCoord = texCoords;
 
-  // Apply projection matrix
-  gl_Position = project_to_clipspace(vec4(vertex, 1.0));
+  gl_Position = project_position_to_clipspace(vec3(position, z), vec2(0.0), vec3(0.0));
 
   picking_setPickingColor(vec3(0., 0., 1.));
 }

@@ -24,8 +24,8 @@ import {Geometry} from '@luma.gl/core';
 export default class GridGeometry extends Geometry {
   constructor({
     id = uid('grid-geometry'),
-    uCount = 2,
-    vCount = 2,
+    uCount = 1,
+    vCount = 1,
     drawMode = GL.TRIANGLES,
     ...opts
   } = {}) {
@@ -59,12 +59,12 @@ function calculateIndices({uCount, vCount}) {
   // # of squares = (nx - 1) * (ny - 1)
   // # of triangles = squares * 2
   // # of indices = triangles * 3
-  const indicesCount = (uCount - 1) * (vCount - 1) * 2 * 3;
+  const indicesCount = uCount * vCount * 2 * 3;
   const indices = new Uint32Array(indicesCount);
 
   let i = 0;
-  for (let uIndex = 0; uIndex < uCount - 1; uIndex++) {
-    for (let vIndex = 0; vIndex < vCount - 1; vIndex++) {
+  for (let uIndex = 0; uIndex < uCount; uIndex++) {
+    for (let vIndex = 0; vIndex < vCount; vIndex++) {
       /*
        *   i0   i1
        *    +--.+---
@@ -73,9 +73,9 @@ function calculateIndices({uCount, vCount}) {
        *    |   |
        *   i2   i3
        */
-      const i0 = vIndex * uCount + uIndex;
+      const i0 = vIndex * (uCount + 1) + uIndex;
       const i1 = i0 + 1;
-      const i2 = i0 + uCount;
+      const i2 = i0 + uCount + 1;
       const i3 = i2 + 1;
 
       indices[i++] = i0;
@@ -91,13 +91,13 @@ function calculateIndices({uCount, vCount}) {
 }
 
 function calculateTexCoords({uCount, vCount}) {
-  const texCoords = new Float32Array(uCount * vCount * 2);
+  const texCoords = new Float32Array((uCount + 1) * (vCount + 1) * 2);
 
   let i = 0;
-  for (let vIndex = 0; vIndex < vCount; vIndex++) {
-    for (let uIndex = 0; uIndex < uCount; uIndex++) {
-      texCoords[i++] = uIndex / (uCount - 1);
-      texCoords[i++] = vIndex / (vCount - 1);
+  for (let vIndex = 0; vIndex <= vCount; vIndex++) {
+    for (let uIndex = 0; uIndex <= uCount; uIndex++) {
+      texCoords[i++] = uIndex / uCount;
+      texCoords[i++] = vIndex / vCount;
     }
   }
 

@@ -17,35 +17,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+import {CarMesh} from 'streetscape.gl';
 
-import {IconLayer} from '@deck.gl/layers';
+/* eslint-disable camelcase */
+export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
 
-import vs from './sign-layer-vertex.glsl';
-import fs from './sign-layer-fragment.glsl';
+export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 
-const defaultProps = {
-  ...IconLayer.defaultProps,
-  sizeUnits: 'meters',
-  render3D: true
+export const XVIZ_CONFIG = {
+  PLAYBACK_FRAME_RATE: 10
 };
 
-export default class SignLayer extends IconLayer {
-  updateState({oldProps, props, changeFlags}) {
-    super.updateState({props, oldProps, changeFlags});
-
-    if (props.render3D !== oldProps.render3D) {
-      this.state.model.setUniforms({render3D: props.render3D ? 1 : 0});
-    }
-  }
-
-  getShaders() {
-    return {
-      ...super.getShaders(),
-      vs,
-      fs
-    };
-  }
-}
-
-SignLayer.layerName = 'SignLayer';
-SignLayer.defaultProps = defaultProps;
+export const CAR = CarMesh.sedan({
+  origin: [1.08, -0.32, 0],
+  length: 4.3,
+  width: 2.2,
+  height: 1.5,
+  color: [160, 160, 160]
+});

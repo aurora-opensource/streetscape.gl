@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import {Layer} from '@deck.gl/core';
-import {Cube, Sphere, fp64} from '@luma.gl/core';
+import {CubeGeometry, SphereGeometry, Model, PhongMaterial, fp64} from '@luma.gl/core';
 const {fp64LowPart} = fp64;
 import GL from '@luma.gl/constants';
 
@@ -53,13 +53,16 @@ const defaultProps = {
   sizeScale: {type: 'number', value: 0.15, min: 0},
 
   fp64: false,
-  lightSettings: {}
+  material: new PhongMaterial({
+    shininess: 0,
+    specularColor: [0, 0, 0]
+  })
 };
 
 export default class TrafficLightLayer extends Layer {
   getShaders() {
     const projectModule = this.use64bitProjection() ? 'project64' : 'project32';
-    return {vs, fs, modules: [projectModule, 'lighting', 'picking']};
+    return {vs, fs, modules: [projectModule, 'gouraud-lighting', 'picking']};
   }
 
   initializeState() {
@@ -108,25 +111,30 @@ export default class TrafficLightLayer extends Layer {
     const {sizeScale} = this.props;
     const {modelsByName} = this.state;
 
-    modelsByName.box.render(
-      Object.assign({}, uniforms, {
-        modelScale: [sizeScale * 0.8, sizeScale * 1.6, sizeScale * 1.6]
-      })
-    );
-    modelsByName.lights.render(
-      Object.assign({}, uniforms, {
-        modelScale: [sizeScale, sizeScale, sizeScale]
-      })
-    );
+    modelsByName.box
+      .setUniforms(
+        Object.assign({}, uniforms, {
+          modelScale: [sizeScale * 0.8, sizeScale * 1.6, sizeScale * 1.6]
+        })
+      )
+      .draw();
+    modelsByName.lights
+      .setUniforms(
+        Object.assign({}, uniforms, {
+          modelScale: [sizeScale, sizeScale, sizeScale]
+        })
+      )
+      .draw();
   }
 
   _getModels(gl) {
     const shaders = this.getShaders();
 
-    const box = new Cube(gl, {
+    const box = new Model(gl, {
       id: `${this.props.id}-box`,
       ...shaders,
       shaderCache: this.context.shaderCache,
+      geometry: new CubeGeometry(),
       isInstanced: true,
       uniforms: {
         modelTranslate: [0, 0, 0],
@@ -134,14 +142,15 @@ export default class TrafficLightLayer extends Layer {
       }
     });
 
-    const lights = new Sphere(gl, {
+    const lights = new Model(gl, {
       id: `${this.props.id}-light`,
       ...shaders,
       shaderCache: this.context.shaderCache,
+      geometry: new SphereGeometry(),
       isInstanced: true,
       uniforms: {
         lightShapeTexture: makeLightShapeTexture(gl),
-        modelTranslate: [0.4, 0, 0],
+        modelTranslate: [-0.4, 0, 0],
         useInstanceColor: true
       }
     });

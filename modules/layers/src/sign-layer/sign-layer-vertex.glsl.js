@@ -50,14 +50,14 @@ void main(void) {
 
   vec2 iconSize = instanceIconFrames.zw;
   vec2 texCoords = positions.xy;
-  vec2 vertex_offset = (texCoords / 2.0 + instanceOffsets) * sizeScale * instanceSizes;
+  vec2 vertex_offset = (texCoords / 2.0 + instanceOffsets / iconSize) * sizeScale * instanceSizes;
   vec3 vertex = vec3(
     vertex_offset.x,
     vertex_offset.y * (1.0 - render3D),
     -vertex_offset.y * render3D
   );
 
-  vec3 offset = project_scale(vec3(rotationMatrix * vertex.xy, vertex.z));
+  vec3 offset = project_size(vec3(rotationMatrix * vertex.xy, vertex.z));
   gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, offset);
 
   vTextureCoords = mix(

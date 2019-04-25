@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 export default `\
-#define SHADER_NAME icon-layer-fragment-shader
+#define SHADER_NAME sign-layer-fragment-shader
 
 precision highp float;
 
