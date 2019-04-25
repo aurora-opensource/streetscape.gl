@@ -72,8 +72,8 @@ const defaultProps = {
   heightRange: {type: 'array', value: [0, 1], compare: true},
   imagery: null,
   imageryBounds: {type: 'array', value: [0, 0, 1, 1], compare: true},
-  uCount: {type: 'number', value: 2, min: 2},
-  vCount: {type: 'number', value: 2, min: 2},
+  uCount: {type: 'number', value: 1, min: 1},
+  vCount: {type: 'number', value: 1, min: 1},
   desaturate: {type: 'number', value: 0, min: 0, max: 1},
   // More context: because of the blending mode we're using for ground imagery,
   // alpha is not effective when blending the bitmap layers with the base map.
@@ -107,7 +107,9 @@ export default class ImageryLayer extends Layer {
       });
     }
     if (imagery !== oldProps.imagery) {
+      this.setState({imageLoaded: false});
       getTexture(gl, imagery).then(texture => {
+        this.setState({imageLoaded: true});
         model.setUniforms({imageryTexture: texture});
       });
     }
@@ -132,6 +134,12 @@ export default class ImageryLayer extends Layer {
         transparentColor,
         tintColor
       });
+    }
+  }
+
+  draw(opts) {
+    if (this.state.imageLoaded) {
+      this.state.model.draw(opts);
     }
   }
 

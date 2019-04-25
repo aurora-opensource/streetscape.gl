@@ -35,8 +35,7 @@ const ALIASES = require('../../aliases');
 // Support for hot reloading changes to the deck.gl library:
 function makeLocalDevConfig() {
   return {
-    // TODO - Uncomment when all examples use webpack 4 for faster bundling
-    // mode: 'development',
+    mode: 'development',
 
     // suppress warnings about bundle size
     devServer: {
@@ -48,7 +47,6 @@ function makeLocalDevConfig() {
     devtool: 'source-map',
 
     resolve: {
-      // mainFields: ['esnext', 'module', 'main'],
       modules: [
         resolve(ROOT_DIR, './node_modules'),
         resolve('./node_modules'),
