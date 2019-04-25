@@ -18,34 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {IconLayer} from '@deck.gl/layers';
+import {XVIZFileLoader} from 'streetscape.gl';
 
-import vs from './sign-layer-vertex.glsl';
-import fs from './sign-layer-fragment.glsl';
-
-const defaultProps = {
-  ...IconLayer.defaultProps,
-  sizeUnits: 'meters',
-  render3D: true
-};
-
-export default class SignLayer extends IconLayer {
-  updateState({oldProps, props, changeFlags}) {
-    super.updateState({props, oldProps, changeFlags});
-
-    if (props.render3D !== oldProps.render3D) {
-      this.state.model.setUniforms({render3D: props.render3D ? 1 : 0});
-    }
-  }
-
-  getShaders() {
-    return {
-      ...super.getShaders(),
-      vs,
-      fs
-    };
-  }
-}
-
-SignLayer.layerName = 'SignLayer';
-SignLayer.defaultProps = defaultProps;
+export default new XVIZFileLoader({
+  timingsFilePath:
+    'https://raw.githubusercontent.com/uber/xviz-data/master/kitti/2011_09_26_drive_0005_sync/0-frame.json',
+  getFilePath: index =>
+    `https://raw.githubusercontent.com/uber/xviz-data/master/kitti/2011_09_26_drive_0005_sync/${index +
+      1}-frame.glb`,
+  worker: true,
+  maxConcurrency: 4
+});

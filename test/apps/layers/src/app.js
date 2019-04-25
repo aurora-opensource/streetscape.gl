@@ -18,34 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {IconLayer} from '@deck.gl/layers';
+/* global document */
+/* eslint-disable no-unused-vars, no-undef */
+import React, {PureComponent} from 'react';
+import {render} from 'react-dom';
 
-import vs from './sign-layer-vertex.glsl';
-import fs from './sign-layer-fragment.glsl';
+import {setXVIZConfig} from '@xviz/parser';
+import {LogViewer, PlaybackControl, VIEW_MODE} from 'streetscape.gl';
 
-const defaultProps = {
-  ...IconLayer.defaultProps,
-  sizeUnits: 'meters',
-  render3D: true
-};
+import {XVIZ_CONFIG, MAPBOX_TOKEN, MAP_STYLE, CAR} from './constants';
+import log from './log-from-file';
+import customLayers from './custom-layers';
 
-export default class SignLayer extends IconLayer {
-  updateState({oldProps, props, changeFlags}) {
-    super.updateState({props, oldProps, changeFlags});
+setXVIZConfig(XVIZ_CONFIG);
 
-    if (props.render3D !== oldProps.render3D) {
-      this.state.model.setUniforms({render3D: props.render3D ? 1 : 0});
-    }
+class Example extends PureComponent {
+  componentDidMount() {
+    log.connect();
   }
 
-  getShaders() {
-    return {
-      ...super.getShaders(),
-      vs,
-      fs
-    };
+  render() {
+    return (
+      <div id="container">
+        <LogViewer
+          log={log}
+          mapboxApiAccessToken={MAPBOX_TOKEN}
+          mapStyle={MAP_STYLE}
+          car={CAR}
+          customLayers={customLayers}
+          viewMode={VIEW_MODE.PERSPECTIVE}
+        />
+        <div id="timeline">
+          <PlaybackControl
+            width="100%"
+            log={log}
+            formatTimestamp={x => new Date(x).toUTCString()}
+          />
+        </div>
+      </div>
+    );
   }
 }
 
-SignLayer.layerName = 'SignLayer';
-SignLayer.defaultProps = defaultProps;
+render(<Example />, document.getElementById('app'));

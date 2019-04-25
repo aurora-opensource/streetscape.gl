@@ -85,7 +85,7 @@ const customLayers = [
 
     // log-related options
     streamName: '/tracklets/label',
-    coordinate: 'vehicle_relative'
+    coordinate: 'VEHICLE_RELATIVE'
   })
 ];
 

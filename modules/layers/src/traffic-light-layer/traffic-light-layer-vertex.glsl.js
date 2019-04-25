@@ -48,26 +48,26 @@ varying vec2 vTexCoord;
 const vec4 defaultColor = vec4(0.05, 0.05, 0.05, 1.0);
 
 void main(void) {
-  float angle = instanceAngles;
+  float angle = instanceAngles + PI;
   mat2 rotationMatrix = mat2(cos(angle), sin(angle), -sin(angle), cos(angle));
 
   vec3 offset = (positions + modelTranslate) * modelScale;
   offset.xy = rotationMatrix * offset.xy;
-  offset = project_scale(offset);
-  vec3 normal = vec3(rotationMatrix * normals.xy, normals.z);
+  offset = project_size(offset);
+  vec3 normal_commonspace = project_normal(vec3(rotationMatrix * normals.xy, normals.z));
 
-  vec4 position_worldspace;
-  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, offset, position_worldspace);
+  vec4 position_commonpace;
+  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, offset, position_commonpace);
 
-  float envLight = lighting_getLightWeight(position_worldspace.xyz, normal);
   if (useInstanceColor) {
     float ownLight = instanceStates;
-    vColor = vec4(instanceColors * max(ownLight, envLight * 0.2) / 255.0, opacity);
+    vColor = vec4(instanceColors.rgb * ownLight / 255.0, opacity);
   } else {
-    vColor = vec4(defaultColor.rgb * envLight, defaultColor.a * opacity);
+    vColor = vec4(defaultColor.rgb, defaultColor.a * opacity);
   }
+  vColor.rgb = lighting_getLightColor(vColor.rgb, project_uCameraPosition, position_commonpace.xyz, normal_commonspace);
 
-  vTexCoord = vec2((texCoords.y + instanceShapes) / 4.0, texCoords.x);
+  vTexCoord = vec2((1.0 - texCoords.y + instanceShapes) / 4.0, texCoords.x);
 
   picking_setPickingColor(instancePickingColors);
 }
