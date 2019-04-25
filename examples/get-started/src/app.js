@@ -53,21 +53,11 @@ class Example extends PureComponent {
     settings: {
       viewMode: 'PERSPECTIVE',
       showTooltip: false
-    },
-    panels: []
+    }
   };
 
   componentDidMount() {
-    const {log} = this.state;
-    log
-      .on('ready', () => {
-        const metadata = log.getMetadata();
-        this.setState({
-          panels: Object.keys((metadata && metadata.ui_config) || {})
-        });
-      })
-      .on('error', console.error)
-      .connect();
+    this.state.log.on('error', console.error).connect();
   }
 
   _onSettingsChange = changedSettings => {
@@ -77,15 +67,15 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, settings, panels} = this.state;
+    const {log, settings} = this.state;
 
     return (
       <div id="container">
         <div id="control-panel">
-          {panels.map(panelName => [
-            <XVIZPanel key={panelName} log={log} name={panelName} />,
-            <hr key={`${panelName}-divider`} />
-          ])}
+          <XVIZPanel log={log} name="Metrics" />
+          <hr />
+          <XVIZPanel log={log} name="Camera" />
+          <hr />
           <Form
             data={APP_SETTINGS}
             values={this.state.settings}
