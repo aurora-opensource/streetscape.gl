@@ -34,6 +34,7 @@ import {
   XVIZPanel,
   VIEW_MODE
 } from 'streetscape.gl';
+import {XvizWorkersStatus, LogViewerStats} from '@streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
 import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
@@ -85,7 +86,8 @@ class Example extends PureComponent {
       viewMode: 'PERSPECTIVE',
       showTooltip: false
     },
-    panels: []
+    panels: [],
+    statsSnapshot: {}
   };
 
   componentDidMount() {
@@ -108,11 +110,11 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, settings, panels} = this.state;
+    const {log, settings, panels, statsSnapshot} = this.state;
 
     return (
       <div id="container">
-        <div id="control-panel">
+        <div id="control-panel" style={{minWidth: 400}}>
           {panels.map(panelName => [
             <XVIZPanel key={panelName} log={log} name={panelName} />,
             <hr key={`${panelName}-divider`} />
@@ -123,6 +125,10 @@ class Example extends PureComponent {
             onChange={this._onSettingsChange}
           />
           <StreamSettingsPanel log={log} />
+          <hr />
+          <XvizWorkersStatus log={log} />
+          <hr />
+          <LogViewerStats statsSnapshot={statsSnapshot} />
         </div>
         <div id="log-panel">
           <div id="map-view">
@@ -134,6 +140,7 @@ class Example extends PureComponent {
               xvizStyles={XVIZ_STYLE}
               showTooltip={settings.showTooltip}
               viewMode={VIEW_MODE[settings.viewMode]}
+              debug={payload => this.setState({statsSnapshot: payload})}
             />
             <div id="hud">
               <TurnSignalWidget log={log} streamName="/vehicle/turn_signal" />
