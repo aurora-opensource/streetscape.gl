@@ -84,7 +84,8 @@ class Example extends PureComponent {
     log: exampleLog,
     settings: {
       viewMode: 'PERSPECTIVE',
-      showTooltip: false
+      showTooltip: false,
+      showDebug: true
     },
     panels: [],
     statsSnapshot: {}
@@ -109,8 +110,18 @@ class Example extends PureComponent {
     });
   };
 
+  _renderDebugStats = () =>
+    this.state.settings.showDebug ? (
+      <div>
+        <hr />
+        <XVIZWorkersStatus log={this.state.log} />
+        <hr />
+        <LogViewerStats statsSnapshot={this.state.statsSnapshot} />
+      </div>
+    ) : null;
+
   render() {
-    const {log, settings, panels, statsSnapshot} = this.state;
+    const {log, settings, panels} = this.state;
 
     return (
       <div id="container">
@@ -125,10 +136,7 @@ class Example extends PureComponent {
             onChange={this._onSettingsChange}
           />
           <StreamSettingsPanel log={log} />
-          <hr />
-          <XVIZWorkersStatus log={log} />
-          <hr />
-          <LogViewerStats statsSnapshot={statsSnapshot} />
+          {this._renderDebugStats()}
         </div>
         <div id="log-panel">
           <div id="map-view">

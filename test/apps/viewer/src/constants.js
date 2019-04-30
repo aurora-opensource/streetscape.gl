@@ -45,6 +45,10 @@ export const APP_SETTINGS = {
   showTooltip: {
     type: 'toggle',
     title: 'Show Tooltip'
+  },
+  showDebug: {
+    type: 'toggle',
+    title: 'Show Debug Stats'
   }
 };
 
