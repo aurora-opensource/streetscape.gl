@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 import React from 'react';
 import {STYLES} from './constants';
-import {XvizWorkersMonitor} from './xviz-workers-monitor';
+import {XVIZWorkersMonitor} from './xviz-workers-monitor';
 
 const ActivityTag = ({isActive}) =>
   isActive ? (
@@ -54,12 +54,12 @@ const Backlog = ({backlog, dropped}) => (
   </div>
 );
 
-export class XvizWorkersStatus extends React.Component {
+export class XVIZWorkersStatus extends React.Component {
   state = {backlog: 'NA', dropped: 'NA', workers: {}};
 
   componentWillMount() {
     const {log} = this.props;
-    this.xvizWorkerMonitor = new XvizWorkersMonitor({
+    this.xvizWorkerMonitor = new XVIZWorkersMonitor({
       numWorkers: log.options.maxConcurrency,
       reportCallback: ({backlog, dropped, workers}) => {
         this.setState({backlog, dropped, workers});

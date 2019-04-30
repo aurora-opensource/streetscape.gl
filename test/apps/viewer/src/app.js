@@ -34,7 +34,7 @@ import {
   XVIZPanel,
   VIEW_MODE
 } from 'streetscape.gl';
-import {XvizWorkersStatus, LogViewerStats} from '@streetscape.gl';
+import {XVIZWorkersStatus, LogViewerStats} from '@streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
 import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
@@ -126,7 +126,7 @@ class Example extends PureComponent {
           />
           <StreamSettingsPanel log={log} />
           <hr />
-          <XvizWorkersStatus log={log} />
+          <XVIZWorkersStatus log={log} />
           <hr />
           <LogViewerStats statsSnapshot={statsSnapshot} />
         </div>

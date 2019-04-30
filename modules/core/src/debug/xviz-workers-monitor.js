@@ -26,7 +26,7 @@
  */
 import {XVIZ_WORKERS_MONITOR_INTERVAL} from './constants';
 
-export class XvizWorkersMonitor {
+export class XVIZWorkersMonitor {
   /**
    * constructor
    * @param options {Object} - Monitor options.
