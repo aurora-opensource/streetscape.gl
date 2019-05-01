@@ -72,6 +72,8 @@ export default class Core3DViewer extends PureComponent {
     getTransformMatrix: PropTypes.func,
 
     // Callbacks
+    onMapLoad: PropTypes.func,
+    onDeckLoad: PropTypes.func,
     onHover: PropTypes.func,
     onClick: PropTypes.func,
     onContextMenu: PropTypes.func,
@@ -91,6 +93,8 @@ export default class Core3DViewer extends PureComponent {
     viewMode: VIEW_MODE.PERSPECTIVE,
     xvizStyles: {},
     customLayers: [],
+    onMapLoad: noop,
+    onDeckLoad: noop,
     onViewStateChange: noop,
     onHover: noop,
     onClick: noop,
@@ -106,6 +110,8 @@ export default class Core3DViewer extends PureComponent {
       styleParser: this._getStyleParser(props)
     };
   }
+
+  deckRef = React.createRef();
 
   componentWillReceiveProps(nextProps) {
     if (this.props.viewMode !== nextProps.viewMode) {
@@ -135,6 +141,16 @@ export default class Core3DViewer extends PureComponent {
       stats.get('frame-update').incrementCount();
     }
   }
+
+  _onMapLoad = evt => {
+    const map = evt.target;
+    this.props.onMapLoad(map);
+  };
+
+  _onDeckLoad = () => {
+    const deck = this.deckRef.current.deck;
+    this.props.onDeckLoad(deck);
+  };
 
   _onMetrics = deckMetrics => {
     if (this.props.debug) {
@@ -368,12 +384,14 @@ export default class Core3DViewer extends PureComponent {
       <DeckGL
         width="100%"
         height="100%"
+        ref={this.deckRef}
         effects={[LIGHTS]}
         views={getViews(viewMode)}
         viewState={this._getViewState()}
         layers={this._getLayers()}
         layerFilter={this._layerFilter}
         getCursor={this._getCursor}
+        onLoad={this._onDeckLoad}
         onHover={this._onLayerHover}
         onClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
@@ -386,6 +404,7 @@ export default class Core3DViewer extends PureComponent {
             mapboxApiAccessToken={mapboxApiAccessToken}
             mapStyle={mapStyle}
             visible={frame && frame.origin && !viewMode.firstPerson}
+            onLoad={this._onMapLoad}
           />
         )}
 
