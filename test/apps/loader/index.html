@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>streetscape.gl Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+#container { padding: 20px; overflow-y: auto; font-size: 13px; font-family: sans-serif; line-height: 2; }
+
+#worker-states { margin: 20px 0; display: flex; line-height: 18px; }
+.worker-state { width: 50px; padding: 0 4px; margin: 0 1px; background: #5d2; color: #fff; }
+.worker-state.busy { background: #d00; }
+
+.entry { display: flex; color: #888; }
+label { font-weight: bold; width: 160px; color: #000; }
+i { color: #000; font-style: normal; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src='bundle.js'></script>
+  </body>
+</html>

@@ -94,13 +94,6 @@ export default class XVIZLiveLoader extends XVIZWebsocketLoader {
     });
   }
 
-  seek(timestamp) {
-    super.seek(timestamp);
-
-    // Info the streamBuffer so it can prune appropriately
-    this.streamBuffer.setCurrentTime(timestamp);
-  }
-
   /* Hook overrides */
 
   _onOpen = () => {};

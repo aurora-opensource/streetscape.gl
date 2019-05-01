@@ -124,6 +124,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
       if (this._isOpen) {
         parseStreamMessage({
           message: data,
+          debug: this._debug,
           onResult: this.onXVIZMessage,
           onError: this.onError,
           worker: options.worker,

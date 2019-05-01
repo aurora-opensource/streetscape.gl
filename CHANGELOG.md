@@ -11,7 +11,7 @@ All notable changes to XVIZ will be documented in this file. This project adhere
 
 - Upgrade to deck.gl 6.4.10 (#300)
 - Add URL passing to the XVIZ Loaders (#285)
-- Add backing missing error handler _onWSError (#295)
+- Add backing missing error handler \_onWSError (#295)
 - flip signs (#290)
 
 ## [1.0.0-beta.5]

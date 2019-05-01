@@ -95,18 +95,7 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
           const ws = new this.WebSocketClass(url);
           ws.binaryType = 'arraybuffer';
 
-          ws.onmessage = message => {
-            const hasMetadata = Boolean(this.getMetadata());
-
-            return parseStreamMessage({
-              message: message.data,
-              onResult: this.onXVIZMessage,
-              onError: this.onError,
-              debug: this._debug.bind('parse_message'),
-              worker: hasMetadata && this.options.worker,
-              maxConcurrency: this.options.maxConcurrency
-            });
-          };
+          ws.onmessage = this._onWSMessage;
 
           ws.onerror = this.onError;
           ws.onclose = event => {
@@ -159,6 +148,19 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
     this._onOpen();
   };
 
+  _onWSMessage = message => {
+    const hasMetadata = Boolean(this.getMetadata());
+
+    return parseStreamMessage({
+      message: message.data,
+      onResult: this.onXVIZMessage,
+      onError: this.onError,
+      debug: this._debug,
+      worker: hasMetadata && this.options.worker,
+      maxConcurrency: this.options.maxConcurrency
+    });
+  };
+
   _onWSClose = event => {
     // Only called on connection closure, which would be an error case
     this._debug('socket_closed', event);
@@ -167,5 +169,4 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
   _onWSError = event => {
     this._debug('socket_error', event);
   };
-
 }
