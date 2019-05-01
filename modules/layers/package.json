@@ -2,7 +2,7 @@
   "name": "@streetscape.gl/layers",
   "description": "A collection of deck.gl map layers for autonomy visualization",
   "license": "MIT",
-  "version": "1.0.0-beta.7",
+  "version": "1.0.0-beta.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -22,8 +22,8 @@
     "build": "npm run clean && npm run build-es6 && npm run build-esm && npm run build-es5"
   },
   "peerDependencies": {
-    "@deck.gl/core": "^7.0.2",
-    "@deck.gl/layers": "^7.0.2"
+    "@deck.gl/core": "^7.0.4",
+    "@deck.gl/layers": "^7.0.4"
   },
   "engines": {
     "node": ">= 8",

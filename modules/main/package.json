@@ -2,7 +2,7 @@
   "name": "streetscape.gl",
   "description": "Visualizaton toolkit for 3D maps and autonomous XVIZ protocol data",
   "license": "MIT",
-  "version": "1.0.0-beta.7",
+  "version": "1.0.0-beta.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -22,8 +22,8 @@
     "build": "npm run clean && npm run build-es6 && npm run build-esm && npm run build-es5"
   },
   "dependencies": {
-    "@streetscape.gl/core": "^1.0.0-beta.7",
-    "@streetscape.gl/layers": "^1.0.0-beta.7"
+    "@streetscape.gl/core": "^1.0.0-beta.9",
+    "@streetscape.gl/layers": "^1.0.0-beta.9"
   },
   "engines": {
     "node": ">= 8",

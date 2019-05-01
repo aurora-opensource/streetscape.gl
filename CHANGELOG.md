@@ -3,6 +3,12 @@
 All notable changes to XVIZ will be documented in this file. This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
+## [1.0.0-beta.9]
+
+- Fix custom layers under deck.gl v7 (#303)
+- simplify get-started app (#304)
+- Expose underlying components from the log viewer (#309)
+
 ## [1.0.0-beta.7]
 
 - Upgrade deck.gl (#297)
