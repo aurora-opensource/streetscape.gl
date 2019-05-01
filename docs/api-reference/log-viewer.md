@@ -175,6 +175,18 @@ Callback when the canvas is right clicked on. Will receive the following argumen
 - `info` (Object) - a descriptor of the object being clicked
 - `event` (Object) - the original pointer event
 
+##### onDeckLoad (Function, optional)
+
+Callback when deck.gl is initialized. Will receive the following arguments:
+
+- `deck` (Object) - a deck.gl [Deck](http://deck.gl/#/documentation/deckgl-api-reference/deck) instance.
+
+##### onMapLoad (Function, optional)
+
+Callback when the base map is loaded. Will receive the following arguments:
+
+- `map` (Object) - a Mapbox [Map](https://docs.mapbox.com/mapbox-gl-js/api/#map) instance.
+
 ##### objectStates (Object, optional)
 
 Override the internal object states. By default, `LogViewer` is a stateful component which stores
