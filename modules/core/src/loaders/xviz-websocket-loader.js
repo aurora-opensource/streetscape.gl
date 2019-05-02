@@ -103,12 +103,7 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
               message: message.data,
               onResult: this.onXVIZMessage,
               onError: this.onError,
-              debug: payload => {
-                this._debug.bind('parse_message');
-                if (typeof this.options.debug === 'function') {
-                  this.options.debug(payload);
-                }
-              },
+              debug: this._debug.bind(this, 'parse_message'),
               worker: hasMetadata && this.options.worker,
               maxConcurrency: this.options.maxConcurrency
             });

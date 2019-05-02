@@ -128,7 +128,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
           onError: this.onError,
           worker: options.worker,
           maxConcurrency: options.maxConcurrency,
-          debug: options.debug
+          debug: this._debug.bind(this, 'parse_message')
         });
       }
     });
