@@ -21,7 +21,7 @@
 /* eslint-disable camelcase */
 import test from 'tape';
 
-import {mergeXVIZStyles} from 'streetscape.gl/utils/style';
+import {mergeXVIZStyles} from '@streetscape.gl/core/utils/style';
 
 test('style#mergeXVIZStyles precedence order', t => {
   const style1 = {

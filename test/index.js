@@ -18,5 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import './modules/core';
-import './website';
+require('@babel/register');
+
+require('./modules/core');
+require('./website');

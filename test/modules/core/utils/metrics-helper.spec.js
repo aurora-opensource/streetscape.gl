@@ -20,7 +20,7 @@
 
 import test from 'tape';
 
-import {getTimeSeries} from 'streetscape.gl/utils/metrics-helper';
+import {getTimeSeries} from '@streetscape.gl/core/utils/metrics-helper';
 
 test('metricsHelper#getTimeSeries', t => {
   const metadata = {

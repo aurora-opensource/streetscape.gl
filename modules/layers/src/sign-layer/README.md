@@ -51,64 +51,65 @@ Atlas image url or texture
 
 Sign names mapped to sign definitions. Each sign is defined with the following values:
 
-* `x`: x position of sign on the atlas image
-* `y`: y position of sign on the atlas image
-* `width`: width of sign on the atlas image
-* `height`: height of sign on the atlas image
-* `anchorX`: horizontal position of sign anchor. Default: half width.
-* `anchorY`: vertical position of sign anchor. Default: half height.
+- `x`: x position of sign on the atlas image
+- `y`: y position of sign on the atlas image
+- `width`: width of sign on the atlas image
+- `height`: height of sign on the atlas image
+- `anchorX`: horizontal position of sign anchor. Default: half width.
+- `anchorY`: vertical position of sign anchor. Default: half height.
 
 ##### `sizeScale` (Number, optional)
 
-* Default: `1`
+- Default: `1`
 
 Size multiplier.
 
 ##### `render3D` (Boolean, optional)
 
-* Default: `false`
+- Default: `false`
 
-If `true`, the sign is rendered as a vertical surface, at the altitude specified by `getPosition` and facing the direction specified by `getAngle`.
+If `true`, the sign is rendered as a vertical surface, at the altitude specified by `getPosition`
+and facing the direction specified by `getAngle`.
 
-If `false`, the sign is rendered as a horizontal surface, at the ground level facing up. This is useful in top-down view mode.
-
+If `false`, the sign is rendered as a horizontal surface, at the ground level facing up. This is
+useful in top-down view mode.
 
 ##### `fp64` (Boolean, optional)
 
-* Default: `false`
+- Default: `false`
 
-Whether the layer should be rendered in high-precision 64-bit mode. Note that since deck.gl v6.1, the default 32-bit projection uses a hybrid mode that matches 64-bit precision with significantly better performance.
+Whether the layer should be rendered in high-precision 64-bit mode. Note that since deck.gl v6.1,
+the default 32-bit projection uses a hybrid mode that matches 64-bit precision with significantly
+better performance.
 
 ### Data Accessors
 
 ##### `getPosition` (Function, optional) ![transition-enabled](https://img.shields.io/badge/transition-enabled-green.svg?style=flat-square")
 
-* Default: `d => d.position`
+- Default: `d => d.position`
 
 Method called to retrieve the position of each object, returns `[lng, lat, z]`.
 
 ##### `getIcon` (Function, optional)
 
-* Default: `d => d.icon`
+- Default: `d => d.icon`
 
 Method called to retrieve the sign name of each object, returns string.
 
 ##### `getSize` (Function|Number, optional) ![transition-enabled](https://img.shields.io/badge/transition-enabled-green.svg?style=flat-square")
 
-* Default: `1`
+- Default: `1`
 
 The height of each object, in pixels.
 
-* If a number is provided, it is used as the size for all objects.
-* If a function is provided, it is called on each object to retrieve its size.
-
+- If a number is provided, it is used as the size for all objects.
+- If a function is provided, it is called on each object to retrieve its size.
 
 ##### `getAngle` (Function|Number, optional) ![transition-enabled](https://img.shields.io/badge/transition-enabled-green.svg?style=flat-square")
 
-* Default: `0`
+- Default: `0`
 
 The rotating angle of each object, in radians. `0` faces due east.
 
-* If a number is provided, it is used as the angle for all objects.
-* If a function is provided, it is called on each object to retrieve its angle.
-
+- If a number is provided, it is used as the angle for all objects.
+- If a function is provided, it is called on each object to retrieve its angle.

@@ -167,5 +167,4 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
   _onWSError = event => {
     this._debug('socket_error', event);
   };
-
 }

@@ -26,7 +26,7 @@ import {
   settingsToFormValues,
   updateFormValues,
   formValuesToSettings
-} from 'streetscape.gl/components/stream-settings-panel';
+} from '@streetscape.gl/core/components/stream-settings-panel';
 
 const TEST_STREAMS = {
   '/vehicle_pose': {
