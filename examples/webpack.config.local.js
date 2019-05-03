@@ -26,7 +26,11 @@
 // without publishing or npm linking, with conveniences such hot reloading etc.
 
 // avoid destructuring for older Node version support
-const ALIASES = require('../aliases');
+const {resolve} = require('path');
+
+const ALIASES = require('ocular-dev-tools/config/ocular.config')({
+  root: resolve(__dirname, '..')
+}).aliases;
 
 // Support for hot reloading changes to the deck.gl library:
 function makeLocalDevConfig() {
