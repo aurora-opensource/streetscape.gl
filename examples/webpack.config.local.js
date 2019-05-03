@@ -26,10 +26,6 @@
 // without publishing or npm linking, with conveniences such hot reloading etc.
 
 // avoid destructuring for older Node version support
-const resolve = require('path').resolve;
-
-const ROOT_DIR = resolve(__dirname, '..');
-
 const ALIASES = require('../aliases');
 
 // Support for hot reloading changes to the deck.gl library:
@@ -48,12 +44,6 @@ function makeLocalDevConfig() {
     devtool: 'source-map',
 
     resolve: {
-      // mainFields: ['esnext', 'module', 'main'],
-      modules: [
-        resolve(ROOT_DIR, './node_modules'),
-        resolve('./node_modules'),
-        resolve(ROOT_DIR, '../xviz/node_modules')
-      ],
       alias: ALIASES
     },
     module: {
