@@ -11,16 +11,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const getBabelConfig = require('ocular-dev-tools/config/babel.config');
+const getWebpackConfig = require('ocular-dev-tools/config/webpack.config');
 
-module.exports = api => {
-  const config = getBabelConfig(api);
+const BABEL_CONFIG = {
+  presets: ['@babel/env', '@babel/react'],
+  plugins: ['version-inline', '@babel/proposal-class-properties']
+};
 
-  config.presets.push('@babel/react');
+module.exports = env => {
+  const config = getWebpackConfig(env);
 
-  config.plugins = config.plugins || [];
-
-  config.plugins.push('version-inline', '@babel/proposal-class-properties');
+  config.module.rules.push({
+    // This is required to handle inline worker!
+    test: /\.js$/,
+    exclude: /node_modules/,
+    use: [
+      {
+        loader: 'babel-loader',
+        options: BABEL_CONFIG
+      }
+    ]
+  });
 
   return config;
 };

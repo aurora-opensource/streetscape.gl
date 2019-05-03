@@ -20,7 +20,7 @@
 
 import test from 'tape';
 
-import {add, intersect, subtract} from 'streetscape.gl/utils/buffer-range';
+import {add, intersect, subtract} from '@streetscape.gl/core/utils/buffer-range';
 
 test('bufferRangeUtils#add', t => {
   t.deepEquals(add([1, 2], []), [[1, 2]], 'add to empty range');

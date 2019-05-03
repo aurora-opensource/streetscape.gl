@@ -11,16 +11,21 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-const getBabelConfig = require('ocular-dev-tools/config/babel.config');
+const {resolve} = require('path');
 
-module.exports = api => {
-  const config = getBabelConfig(api);
+module.exports = {
+  lint: {
+    paths: ['modules', 'docs', 'test', 'examples'],
+    extensions: ['js', 'md']
+  },
 
-  config.presets.push('@babel/react');
+  aliases: {
+    // TEST
+    'test-data': resolve(__dirname, 'test/data')
+  },
 
-  config.plugins = config.plugins || [];
-
-  config.plugins.push('version-inline', '@babel/proposal-class-properties');
-
-  return config;
+  entry: {
+    test: 'test/index.js',
+    'test-browser': 'test/browser.js'
+  }
 };

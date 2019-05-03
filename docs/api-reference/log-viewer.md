@@ -179,7 +179,8 @@ Callback when the canvas is right clicked on. Will receive the following argumen
 
 Callback when deck.gl is initialized. Will receive the following arguments:
 
-- `deck` (Object) - a deck.gl [Deck](http://deck.gl/#/documentation/deckgl-api-reference/deck) instance.
+- `deck` (Object) - a deck.gl [Deck](http://deck.gl/#/documentation/deckgl-api-reference/deck)
+  instance.
 
 ##### onMapLoad (Function, optional)
 

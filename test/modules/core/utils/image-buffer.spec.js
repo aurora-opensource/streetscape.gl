@@ -20,7 +20,7 @@
 
 import test from 'tape';
 
-import ImageBuffer from 'streetscape.gl/utils/image-buffer';
+import ImageBuffer from '@streetscape.gl/core/utils/image-buffer';
 
 function TestImageHandler() {
   let loadCount = 0;

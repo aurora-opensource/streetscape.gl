@@ -17,6 +17,25 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+const test = require('tape');
+const {_enableDOMLogging: enableDOMLogging} = require('@probe.gl/test-utils');
 
-require('tap-browser-color')();
-require('./index');
+/* global window */
+let failed = false;
+test.onFinish(window.browserTestDriver_finish);
+test.onFailure(() => {
+  failed = true;
+  window.browserTestDriver_fail();
+});
+
+// tap-browser-color alternative
+enableDOMLogging({
+  getStyle: message => ({
+    background: failed ? '#F28E82' : '#8ECA6C',
+    position: 'absolute',
+    top: '220px',
+    width: '100%'
+  })
+});
+
+require('./modules/core');

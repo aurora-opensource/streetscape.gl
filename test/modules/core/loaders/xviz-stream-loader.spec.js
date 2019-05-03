@@ -23,7 +23,7 @@ import test from 'tape-catch';
 
 import {setXVIZConfig, getXVIZConfig, LOG_STREAM_MESSAGE} from '@xviz/parser';
 import {XVIZStreamLoader} from 'streetscape.gl';
-import {updateSocketRequestParams} from 'streetscape.gl/loaders/xviz-stream-loader';
+import {updateSocketRequestParams} from '@streetscape.gl/core/loaders/xviz-stream-loader';
 
 /* eslint-disable camelcase */
 class MockSocket {
