@@ -79,7 +79,8 @@ export default class ImageSequence extends PureComponent {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      this.state.currentFrameImage !== prevState.currentFrameImage ||
+      (this.state.currentFrameImage !== prevState.currentFrameImage &&
+        !this.state.currentFrameImagePending) ||
       this.state.width !== prevState.width ||
       this.state.height !== prevState.height
     ) {
@@ -108,13 +109,17 @@ export default class ImageSequence extends PureComponent {
     if (currentFrameData && !currentFrameData.image) {
       currentFrameData.promise.then(image => {
         if (this.state.currentFrame === currentFrame) {
-          this.setState({currentFrameImage: image});
+          this.setState({
+            currentFrameImagePending: false,
+            currentFrameImage: image
+          });
         }
       });
     }
 
     return {
       currentFrameImage: currentFrameData && currentFrameData.image,
+      currentFrameImagePending: currentFrameData && !currentFrameData.image && true,
       currentFrame
     };
   }
