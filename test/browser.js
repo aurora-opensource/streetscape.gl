@@ -33,7 +33,6 @@ enableDOMLogging({
   getStyle: message => ({
     background: failed ? '#F28E82' : '#8ECA6C',
     position: 'absolute',
-    top: '220px',
     width: '100%'
   })
 });
