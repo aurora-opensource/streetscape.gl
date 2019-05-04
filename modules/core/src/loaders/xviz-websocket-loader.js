@@ -45,6 +45,7 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
    *   - serverConfig.retryAttempts {number, optional} - default 3
    * @params worker {string|function, optional}
    * @params maxConcurrency {number, optional} - default 3
+   * @params debug {function} - Debug callback for the XVIZ parser.
    * @params logGuid {string}
    * @params logProfile {string, optional}
    * @params duration {number, optional}
@@ -102,7 +103,7 @@ export default class XVIZWebsocketLoader extends XVIZLoaderInterface {
               message: message.data,
               onResult: this.onXVIZMessage,
               onError: this.onError,
-              debug: this._debug.bind('parse_message'),
+              debug: this._debug.bind(this, 'parse_message'),
               worker: hasMetadata && this.options.worker,
               maxConcurrency: this.options.maxConcurrency
             });

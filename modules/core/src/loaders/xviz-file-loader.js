@@ -24,7 +24,7 @@ import {parseStreamMessage, XVIZStreamBuffer} from '@xviz/parser';
 
 import XVIZLoaderInterface from './xviz-loader-interface';
 
-const DEFUALT_BATCH_SIZE = 4;
+const DEFAULT_BATCH_SIZE = 4;
 
 export default class XVIZFileLoader extends XVIZLoaderInterface {
   constructor(options) {
@@ -34,7 +34,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
     this._timingsFilePath = options.timingsFilePath;
     this._getFilePath = options.getFilePath;
-    this._batchSize = options.maxConcurrency || DEFUALT_BATCH_SIZE;
+    this._batchSize = options.maxConcurrency || DEFAULT_BATCH_SIZE;
 
     this.streamBuffer = new XVIZStreamBuffer();
     this._isOpen = false;
@@ -127,7 +127,8 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
           onResult: this.onXVIZMessage,
           onError: this.onError,
           worker: options.worker,
-          maxConcurrency: options.maxConcurrency
+          maxConcurrency: options.maxConcurrency,
+          debug: this._debug.bind(this, 'parse_message')
         });
       }
     });

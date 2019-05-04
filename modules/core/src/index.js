@@ -58,3 +58,8 @@ export {default as _XVIZLoaderInterface} from './loaders/xviz-loader-interface';
 export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
 export {default as XVIZLiveLoader} from './loaders/xviz-live-loader';
 export {default as XVIZFileLoader} from './loaders/xviz-file-loader';
+
+// Debug
+export {XVIZWorkersStatus} from './debug/xviz-workers-status';
+export {LogViewerStats} from './debug/log-viewer-stats';
+export {XVIZWorkersMonitor} from './debug/xviz-workers-monitor';
