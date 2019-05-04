@@ -32,9 +32,10 @@ import {
   TrafficLightWidget,
   TurnSignalWidget,
   XVIZPanel,
-  VIEW_MODE
+  VIEW_MODE,
+  XVIZWorkersStatus,
+  LogViewerStats
 } from 'streetscape.gl';
-import {XVIZWorkersStatus, LogViewerStats} from '@streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
 import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';

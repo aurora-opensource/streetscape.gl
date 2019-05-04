@@ -65,7 +65,11 @@ export class XVIZWorkersStatus extends React.Component {
         this.setState({backlog, dropped, workers});
       }
     });
-    log.options.debug = this.xvizWorkerMonitor.update;
+    log._debug = (event, payload) => {
+      if (event === 'parse_message') {
+        this.xvizWorkerMonitor.update(payload);
+      }
+    };
     this.xvizWorkerMonitor.start();
   }
 
