@@ -24,6 +24,13 @@ module.exports = {
     'test-data': resolve(__dirname, 'test/data')
   },
 
+  browserTest: {
+    browser: {
+      // Required by CI
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
+  },
+
   entry: {
     test: 'test/index.js',
     'test-browser': 'test/browser.js'

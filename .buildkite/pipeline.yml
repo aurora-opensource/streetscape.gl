@@ -1,34 +1,34 @@
 steps:
-  - name: ":docker:"
+  - name: ':docker:'
     plugins:
       docker-compose#v1.5.2:
         build: streetscape
         image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
     agents:
-      queue: private-builders
+      queue: builders
 
   - wait
 
-  - name: ":eslint:"
-    command: "yarn lint"
+  - name: ':eslint:'
+    command: 'yarn lint'
     plugins:
       docker-compose#v1.5.2:
         run: streetscape
     agents:
-      queue: private-default
+      queue: workers
 
-  - name: ":node:"
-    command: "yarn test cover && cat coverage/lcov.info | coveralls"
+  - name: ':node:'
+    command: 'yarn test-ci'
     plugins:
       docker-compose#v1.5.2:
         run: streetscape
     agents:
-      queue: private-default
+      queue: workers
 
-  - name: ":chrome:"
-    command: "sh /etc/init.d/xvfb && yarn test browser"
+  - name: ':chrome:'
+    command: 'yarn test browser-headless'
     plugins:
       docker-compose#v1.5.2:
         run: streetscape
     agents:
-      queue: private-default
+      queue: workers

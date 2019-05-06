@@ -16,7 +16,8 @@
     "copyright-check": "scripts/copyright.sh",
     "lint": "ocular-lint",
     "publish": "ocular-publish",
-    "test": "ocular-test"
+    "test": "ocular-test",
+    "test-ci": "ocular-test cover && (cat coverage/lcov.info | coveralls)"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.0.0",
@@ -27,7 +28,7 @@
     "coveralls": "^3.0.0",
     "eslint-config-uber-jsx": "^3.3.3",
     "eslint-plugin-react": "^7.5.1",
-    "ocular-dev-tools": "0.0.21",
+    "ocular-dev-tools": "0.0.22",
     "pre-commit": "^1.2.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
