@@ -5,7 +5,7 @@ steps:
         build: streetscape
         image-repository: 027047743804.dkr.ecr.us-east-2.amazonaws.com/uber
     agents:
-      queue: private-builders
+      queue: builders
 
   - wait
 
@@ -15,7 +15,7 @@ steps:
       docker-compose#v1.5.2:
         run: streetscape
     agents:
-      queue: private-default
+      queue: workers
 
   - name: ":node:"
     command: "yarn test cover && cat coverage/lcov.info | coveralls"
@@ -23,7 +23,7 @@ steps:
       docker-compose#v1.5.2:
         run: streetscape
     agents:
-      queue: private-default
+      queue: workers
 
   - name: ":chrome:"
     command: "sh /etc/init.d/xvfb && yarn test browser"
@@ -31,4 +31,4 @@ steps:
       docker-compose#v1.5.2:
         run: streetscape
     agents:
-      queue: private-default
+      queue: workers
