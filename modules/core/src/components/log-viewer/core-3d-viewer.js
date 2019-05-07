@@ -155,13 +155,13 @@ export default class Core3DViewer extends PureComponent {
   _onMetrics = deckMetrics => {
     if (this.props.debug) {
       const metrics = {
-        fps: deckMetrics.fps,
-        redraw: deckMetrics.redraw || 0
+        fps: deckMetrics.frameRate.hz,
+        redraw: deckMetrics['Redraw Count'].count
       };
       const table = stats.getTable();
 
       for (const key in table) {
-        metrics[key] = table[key].total;
+        metrics[key] = table[key].count;
       }
       this.props.debug(metrics);
     }
