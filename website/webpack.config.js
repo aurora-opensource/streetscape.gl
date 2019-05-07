@@ -22,7 +22,9 @@
 const {resolve} = require('path');
 const webpack = require('webpack');
 
-const ALIASES = require('../aliases');
+const ALIASES = require('ocular-dev-tools/config/ocular.config')({
+  root: resolve(__dirname, '..')
+}).aliases;
 
 const ROOT_DIR = resolve(__dirname, '..');
 
