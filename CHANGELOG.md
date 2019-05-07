@@ -3,6 +3,13 @@
 All notable changes to XVIZ will be documented in this file. This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
+## [1.0.0-beta.10]
+
+- Fix black video image being drawn while image promise is pending (#310)
+- New debug panel with XVIZ Parser and Log Viewer stats (#306)
+- Fix debug callback of LogViewer (#318)
+- Handle new point cloud format (#314)
+
 ## [1.0.0-beta.9]
 
 - Fix custom layers under deck.gl v7 (#303)
