@@ -47,6 +47,11 @@ function getStreamMetadata(metadata, streamName) {
   return (metadata && metadata.streams && metadata.streams[streamName]) || {};
 }
 
+const Z_INDEX = {
+  point: 1,
+  polygon: 2
+};
+
 export default class Core3DViewer extends PureComponent {
   static propTypes = {
     // Props from loader
@@ -278,30 +283,13 @@ export default class Core3DViewer extends PureComponent {
               data: primitives,
               style: stylesheet,
               objectStates,
+              vehicleRelativeTransform: frame.vehicleRelativeTransform,
 
               // Hack: draw extruded polygons last to defeat depth test when rendering translucent objects
               // This is not used by deck.gl, only used in this function to sort the layers
-              zIndex: primitives[0].type === 'polygon' ? 2 : 0,
+              zIndex: Z_INDEX[primitives[0].type] || 0,
 
               // Selection props (app defined, not used by deck.gl)
-              streamName
-            });
-          }
-          if (stream.pointCloud) {
-            return new XVIZLayer({
-              id: `xviz-${streamName}`,
-              ...coordinateProps,
-
-              pickable: showTooltip,
-
-              data: stream.pointCloud,
-              style: stylesheet,
-              vehicleRelativeTransform: frame.vehicleRelativeTransform,
-
-              // Hack: draw point clouds before polygons to defeat depth test when rendering translucent objects
-              // This is not used by deck.gl, only used in this function to sort the layers
-              zIndex: 1,
-
               streamName
             });
           }

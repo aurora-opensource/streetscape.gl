@@ -251,7 +251,7 @@ export default class XVIZLayer extends CompositeLayer {
     if (data.length > 0) {
       return data[0].type;
     }
-    return data.type;
+    return null;
   }
 
   updateState({props, oldProps, changeFlags}) {
@@ -320,18 +320,12 @@ export default class XVIZLayer extends CompositeLayer {
         return new PointCloudLayer(
           forwardProps,
           layerProps,
-          Array.isArray(data)
-            ? {
-                data: data[0].vertices
-              }
-            : {
-                data: data.ids,
-                numInstances: data.numInstances,
-                instancePositions: data.positions,
-                instanceColors: data.colors
-              },
           this.getSubLayerProps({
             id: 'pointcloud',
+            data: data[0].ids,
+            numInstances: data[0].points.length / 3,
+            instancePositions: data[0].points,
+            instanceColors: data[0].colors,
             vehicleRelativeTransform: this.props.vehicleRelativeTransform,
             getPosition: p => p
           })
