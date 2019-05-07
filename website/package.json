@@ -11,6 +11,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --progress --hot --open",
+    "start-local": "webpack-dev-server --progress --hot --env.local --open",
     "build": "./scripts/build.sh",
     "lint": "eslint src"
   },

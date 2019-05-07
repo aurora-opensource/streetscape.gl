@@ -37,7 +37,7 @@ const BABEL_CONFIG = {
   plugins: ['@babel/proposal-class-properties']
 };
 
-module.exports = {
+const CONFIG = {
   mode: 'development',
 
   entry: {
@@ -61,8 +61,10 @@ module.exports = {
 
   resolve: {
     // https://github.com/ReactTraining/react-router/issues/6201
-    modules: [resolve('./node_modules'), resolve(ROOT_DIR, './node_modules')],
-    alias: ALIASES
+    alias: Object.assign({}, ALIASES, {
+      react: resolve('../node_modules/react'),
+      'react-dom': resolve('../node_modules/react-dom')
+    })
   },
 
   module: {
@@ -113,4 +115,21 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin(['MapboxAccessToken'])
   ]
+};
+
+module.exports = (env = {}) => {
+  const config = Object.assign({}, CONFIG);
+
+  // This switch between streaming and static file loading
+  config.plugins = config.plugins.concat([
+    new webpack.DefinePlugin({__IS_LOCAL__: JSON.stringify(Boolean(env.local))})
+  ]);
+
+  if (Boolean(env.local)) {
+    config.devServer.contentBase = config.devServer.contentBase.concat([
+      resolve(__dirname, './src-local/static')
+    ]);
+  }
+
+  return config;
 };

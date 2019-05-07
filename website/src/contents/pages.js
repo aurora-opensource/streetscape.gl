@@ -18,15 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* global __IS_LOCAL__ */
+
 import XVIZ_DOCS from '../../../../xviz/website/pages.json';
 import STREETSCAPE_DOCS from '../../pages.json';
 
 // TODO: replace with github url when the repo is public
 function getXVIZDocUrl(filename) {
-  return `https://raw.githubusercontent.com/uber/xviz/master/docs/${filename}`;
+  // __IS_LOCAL__ is defined in webpack.config.js
+  return __IS_LOCAL__
+    ? `./xviz-docs/${filename}`
+    : `https://raw.githubusercontent.com/uber/xviz/master/docs/${filename}`;
 }
 function getStreetscapeDocUrl(filename) {
-  return `https://raw.githubusercontent.com/uber/streetscape.gl/master/docs/${filename}`;
+  // __IS_LOCAL__ is defined in webpack.config.js
+  return __IS_LOCAL__
+    ? `./streetscape-docs/${filename}`
+    : `https://raw.githubusercontent.com/uber/streetscape.gl/master/docs/${filename}`;
 }
 
 // mapping from file path in source to generated page url
