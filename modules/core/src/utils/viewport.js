@@ -67,7 +67,7 @@ function offsetViewState(viewState, offset) {
 export function getViews(viewMode) {
   const {name, orthographic, firstPerson, mapInteraction} = viewMode;
 
-  const controllerProps = {...mapInteraction, keyboard: false};
+  const controllerProps = {...mapInteraction, doubleClickZoom: false, keyboard: false};
 
   if (firstPerson) {
     return new FirstPersonView({
