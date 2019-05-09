@@ -133,3 +133,27 @@ test('XVIZLiveLoader#metadata missing start_time', t => {
     t.end();
   });
 });
+
+test('XVIZLiveLoader#pass through options', t => {
+  setXVIZConfig({});
+
+  const loader = new XVIZLiveLoader({
+    WebSocketClass: MockSocket,
+    serverConfig: {
+      serverUrl: 'http://localhost:3000'
+    },
+    foobar: 'testing'
+  });
+
+  loader.connect().then(() => {
+    t.ok(loader.isOpen(), 'socket connected');
+    const {socket} = loader;
+    t.is(
+      socket.url,
+      'http://localhost:3000?foobar=testing&profile=default',
+      'option pass through was seen'
+    );
+
+    t.end();
+  });
+});

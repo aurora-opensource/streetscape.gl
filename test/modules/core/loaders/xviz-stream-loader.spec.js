@@ -208,7 +208,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     const {socket} = loader;
     t.is(
       socket.url,
-      'http://localhost:3000?log=test_log&profile=default',
+      'http://localhost:3000?log=test_log&profile=default&duration=30',
       'socket connected to correct url'
     );
     t.deepEquals(socket.flush(), [], 'No data till metadata');
@@ -244,6 +244,34 @@ test('XVIZStreamLoader#connect, seek', t => {
     );
 
     setXVIZConfig(oldConfig);
+    t.end();
+  });
+});
+
+test('XVIZStreamLoader#pass through options', t => {
+  const loader = new XVIZStreamLoader({
+    WebSocketClass: MockSocket,
+    serverConfig: {
+      serverUrl: 'http://localhost:3000'
+    },
+    logGuid: 'test_log',
+    duration: 10,
+    foobar: 'testing'
+  });
+
+  setXVIZConfig({
+    TIME_WINDOW: 1
+  });
+
+  loader.connect().then(() => {
+    t.ok(loader.isOpen(), 'socket connected');
+    const {socket} = loader;
+    t.is(
+      socket.url,
+      'http://localhost:3000?foobar=testing&log=test_log&profile=default&duration=10',
+      'option pass through was seen'
+    );
+
     t.end();
   });
 });
