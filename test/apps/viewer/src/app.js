@@ -33,12 +33,21 @@ import {
   TurnSignalWidget,
   XVIZPanel,
   VIEW_MODE,
-  XVIZWorkersStatus,
-  LogViewerStats
+  LogViewerStats,
+  XVIZWorkerFarmStatus,
+  XVIZWorkersMonitor,
+  XVIZWorkersStatus
 } from 'streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
-
-import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
+import {
+  XVIZ_CONFIG,
+  APP_SETTINGS,
+  MAPBOX_TOKEN,
+  MAP_STYLE,
+  XVIZ_STYLE,
+  CAR,
+  STYLES
+} from './constants';
 import {default as XVIZLoaderFactory} from './log-from-factory';
 
 setXVIZConfig(XVIZ_CONFIG);
@@ -89,7 +98,12 @@ class Example extends PureComponent {
       showDebug: true
     },
     panels: [],
-    statsSnapshot: {}
+    // LogViewer perf stats
+    statsSnapshot: {},
+    // XVIZ Parser perf stats
+    backlog: 'NA',
+    dropped: 'NA',
+    workers: {}
   };
 
   componentDidMount() {
@@ -103,23 +117,45 @@ class Example extends PureComponent {
       })
       .on('error', console.error)
       .connect();
+
+    // Monitor the log
+    this.xvizWorkerMonitor = new XVIZWorkersMonitor({
+      numWorkers: log.options.maxConcurrency,
+      reportCallback: ({backlog, dropped, workers}) => {
+        this.setState({backlog, dropped, workers});
+      }
+    });
+    log._debug = (event, payload) => {
+      if (event === 'parse_message') {
+        this.xvizWorkerMonitor.update(payload);
+      }
+    };
+    this.xvizWorkerMonitor.start();
   }
 
+  componentWillUnmount() {
+    if (this.xvizWorkerMonitor) {
+      this.xvizWorkerMonitor.stop();
+    }
+  }
   _onSettingsChange = changedSettings => {
     this.setState({
       settings: {...this.state.settings, ...changedSettings}
     });
   };
 
-  _renderDebugStats = () =>
-    this.state.settings.showDebug ? (
-      <div>
+  _renderPerf = () => {
+    const {statsSnapshot, backlog, dropped, workers} = this.state;
+    return this.state.settings.showDebug ? (
+      <div style={STYLES.PERF}>
         <hr />
-        <XVIZWorkersStatus log={this.state.log} />
+        <XVIZWorkerFarmStatus backlog={backlog} dropped={dropped} />
+        <XVIZWorkersStatus workers={workers} />
         <hr />
-        <LogViewerStats statsSnapshot={this.state.statsSnapshot} />
+        <LogViewerStats statsSnapshot={statsSnapshot} />
       </div>
     ) : null;
+  };
 
   render() {
     const {log, settings, panels} = this.state;
@@ -137,7 +173,7 @@ class Example extends PureComponent {
             onChange={this._onSettingsChange}
           />
           <StreamSettingsPanel log={log} />
-          {this._renderDebugStats()}
+          {this._renderPerf()}
         </div>
         <div id="log-panel">
           <div id="map-view">

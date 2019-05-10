@@ -60,6 +60,7 @@ export {default as XVIZLiveLoader} from './loaders/xviz-live-loader';
 export {default as XVIZFileLoader} from './loaders/xviz-file-loader';
 
 // Debug
-export {XVIZWorkersStatus} from './debug/xviz-workers-status';
-export {LogViewerStats} from './debug/log-viewer-stats';
-export {XVIZWorkersMonitor} from './debug/xviz-workers-monitor';
+export {LogViewerStats} from './perf/log-viewer-stats';
+export {XVIZWorkersMonitor} from './perf/xviz-workers-monitor';
+export {XVIZWorkerFarmStatus} from './perf/xviz-worker-farm-status';
+export {XVIZWorkersStatus} from './perf/xviz-workers-status';

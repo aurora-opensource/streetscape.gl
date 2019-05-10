@@ -103,33 +103,31 @@ export const STYLES = {
       tooltip: TOOLTIP_STYLE
     }
   },
-  WORKERS: {
-    CONTENT: {
-      width: '100%',
-      color: 'black',
-      fontFamily: '"Helvetica Neue",arial,sans-serif',
-      fontSize: 12
-    },
-    SECTION: {
+  WORKER_FARM: {
+    CONTAINER: {
       margin: '10px 0'
     },
     TITLE: {
-      fontSize: 14,
-      fontWeight: 500,
-      padding: '10px 10px 10px 0',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center'
+    }
+  },
+  WORKERS: {
+    CONTAINER: {
+      margin: '10px 0'
     },
-    NAME: {
-      marginRight: 10
+    TITLE: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center'
     }
   },
   TAG: {
+    marginLeft: 10,
     borderRadius: 20,
     padding: '2px 10px',
-    border: 'solid 1.5px',
-    fontSize: 10
+    border: 'solid 1.5px'
   },
   POSITIVE: {
     background: 'rgb(52, 168, 83, 0.1)',
