@@ -60,7 +60,7 @@ export function createFormData(metadata, opts) {
   }
 
   const root = {};
-  const {style = {}} = opts;
+  const {style = {}, collapsible = false} = opts;
 
   for (const streamName in metadata) {
     const parentKey = getParentKey(streamName);
@@ -70,6 +70,7 @@ export function createFormData(metadata, opts) {
       root[parentKey] = root[parentKey] || {
         type: 'checkbox',
         children: {},
+        collapsible,
         badge: <Badge userStyle={style.badge} />
       };
       siblings = root[parentKey].children;
