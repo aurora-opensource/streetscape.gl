@@ -48,11 +48,32 @@ const TEST_STREAMS = {
 test('StreamSettingsPanel#createFormData', t => {
   const data = createFormData(TEST_STREAMS, {});
 
+  t.equals(data['/vehicle_pose'].collapsible, undefined);
   t.deepEquals(
     Object.keys(data),
     ['/vehicle_pose', '/vehicle', '/lidar'],
     'extracted top-level options'
   );
+  t.equals(data['/vehicle'].collapsible, undefined);
+  t.deepEquals(
+    Object.keys(data['/vehicle'].children),
+    ['/vehicle/velocity', '/vehicle/acceleration'],
+    'extracted nested options'
+  );
+
+  t.end();
+});
+
+test.only('StreamSettingsPanel#createFormData-collapsible', t => {
+  const data = createFormData(TEST_STREAMS, {collapsible: true});
+
+  t.equals(data['/vehicle_pose'].collapsible, undefined);
+  t.deepEquals(
+    Object.keys(data),
+    ['/vehicle_pose', '/vehicle', '/lidar'],
+    'extracted top-level options'
+  );
+  t.equals(data['/vehicle'].collapsible, true);
   t.deepEquals(
     Object.keys(data['/vehicle'].children),
     ['/vehicle/velocity', '/vehicle/acceleration'],
