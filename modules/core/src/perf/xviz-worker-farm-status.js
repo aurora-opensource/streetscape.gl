@@ -17,46 +17,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {CarMesh} from 'streetscape.gl';
+import React from 'react';
+import {STYLES} from './constants';
 
-/* eslint-disable camelcase */
-export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
-
-export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
-
-export const XVIZ_CONFIG = {
-  PLAYBACK_FRAME_RATE: 10
-};
-
-export const CAR = CarMesh.sedan({
-  origin: [1.08, -0.32, 0],
-  length: 4.3,
-  width: 2.2,
-  height: 1.5,
-  color: [160, 160, 160]
-});
-
-export const APP_SETTINGS = {
-  viewMode: {
-    type: 'select',
-    title: 'View Mode',
-    data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
-  },
-  showTooltip: {
-    type: 'toggle',
-    title: 'Show Tooltip'
-  },
-  showDebug: {
-    type: 'toggle',
-    title: 'Show Debug Stats'
-  }
-};
-
-export const XVIZ_STYLE = {
-  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}],
-  '/lidar/points': [{style: {point_color_mode: 'elevation'}}]
-};
-
-export const STYLES = {
-  PERF: {fontFamily: '"Helvetica Neue",arial,sans-serif', fontSize: 12}
-};
+/**
+ * XVIZ worker farm status view component.
+ * @param {number} backlog - The size of the worker queue.
+ * @param {number} dropped - The number of un-parsed XVIZ messages in the worker queue that had to be dropped.
+ * @param {Object} style - Style overrides.
+ * @param {Object} style.container - Style of the outer container.
+ * @param {Object} style.title - Style of the title.
+ */
+export const XVIZWorkerFarmStatus = ({backlog, dropped, style = {}}) => (
+  <div style={{...STYLES.WORKER_FARM.CONTAINER, ...style.container}}>
+    <h3 style={{...STYLES.WORKER_FARM.TITLE, ...style.title}}>XVIZ Worker Farm</h3>
+    <div>{`Queue backlog: ${backlog}`}</div>
+    <div>{`Dropped: ${dropped}`}</div>
+  </div>
+);
