@@ -1040,10 +1040,10 @@
     probe.gl "3.0.1"
     puppeteer "1.8.0"
 
-"@streetscape.gl/monochrome@^1.0.0-beta.1":
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@streetscape.gl/monochrome/-/monochrome-1.0.0-beta.2.tgz#f5df7f81a5047eb9c6fab7ffb6533e58643446c6"
-  integrity sha512-8lrbew2O1NPOL/ojZSxm77c2pm/XqbYDBsGbmkE7xY9ZWMwxkdvG8YD1dXzTBAKNvPAu06c6db1oLsDzlUWxXA==
+"@streetscape.gl/monochrome@^1.0.0-beta.3":
+  version "1.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/@streetscape.gl/monochrome/-/monochrome-1.0.0-beta.3.tgz#307d6ad85341313bcb73c76f7124384826453509"
+  integrity sha512-184x71JxWKAfWhUQya5pZE823OaAtGD7TbSV4tPnRAcvA5ALXe+PxpDuTYiqZh7SiGJVYVYOzLAC8p0wvHibEA==
   dependencies:
     "@emotion/core" "^10.0.0"
     "@emotion/styled" "^10.0.0"
