@@ -3,6 +3,12 @@
 All notable changes to XVIZ will be documented in this file. This project adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html)
 
+## [1.0.0-beta.11]
+
+- Bump Monochrome version to beta.3 (#327)
+- Support collapsing in stream settings panel (#324)
+- Decouple XVIZWorkersMonitor instance from XVIZWorkersStatus (#323)
+
 ## [1.0.0-beta.10]
 
 - Fix black video image being drawn while image promise is pending (#310)
