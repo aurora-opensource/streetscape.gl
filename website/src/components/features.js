@@ -32,7 +32,6 @@ const Container = styled.div`
 
 const BackgroundImage = styled.img`
   width: 100%;
-  height: 100%;
   max-width: 1200px;
   margin-bottom: ${props => props.theme.margins.large};
 `;
