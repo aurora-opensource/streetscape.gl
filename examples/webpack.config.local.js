@@ -32,6 +32,8 @@ const ALIASES = require('ocular-dev-tools/config/ocular.config')({
   root: resolve(__dirname, '..')
 }).aliases;
 
+console.log(ALIASES);
+
 // Support for hot reloading changes to the deck.gl library:
 function makeLocalDevConfig() {
   return {
