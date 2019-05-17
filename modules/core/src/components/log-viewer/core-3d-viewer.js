@@ -48,6 +48,7 @@ function getStreamMetadata(metadata, streamName) {
 }
 
 const Z_INDEX = {
+  car: 0,
   point: 1,
   polygon: 2
 };
@@ -228,7 +229,8 @@ export default class Core3DViewer extends PureComponent {
       wireframe,
       updateTriggers: {
         getTransformMatrix: frame.vehicleRelativeTransform
-      }
+      },
+      zIndex: Z_INDEX.car
     });
   }
 
@@ -255,8 +257,9 @@ export default class Core3DViewer extends PureComponent {
         .filter(streamFilter)
     );
 
-    return [
-      this._getCarLayer(),
+    const layerList = [this._getCarLayer()];
+
+    layerList.concat(
       Array.from(featuresAndFutures)
         .map(streamName => {
           // Check lookAheads first because it will contain the selected futures
@@ -296,7 +299,9 @@ export default class Core3DViewer extends PureComponent {
           return null;
         })
         .filter(Boolean)
-        .sort((layer1, layer2) => layer1.props.zIndex - layer2.props.zIndex),
+    );
+
+    layerList.concat(
       customLayers.map(layer => {
         // Clone layer props
         const {props} = layer;
@@ -325,7 +330,12 @@ export default class Core3DViewer extends PureComponent {
 
         return layer.clone(additionalProps);
       })
-    ];
+    );
+
+    // Sort layers by zIndex to avoid depth test issues
+    return layerList.sort(
+      (layer1, layer2) => (layer1.props.zIndex || 0) - (layer2.props.zIndex || 0)
+    );
   }
 
   _layerFilter({layer, viewport, isPicking}) {
