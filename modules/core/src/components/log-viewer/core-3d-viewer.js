@@ -346,6 +346,7 @@ export default class Core3DViewer extends PureComponent {
       ? {
           longitude: frame.trackPosition[0],
           latitude: frame.trackPosition[1],
+          altitude: frame.trackPosition[2] - frame.origin[2],
           bearing: 90 - frame.heading
         }
       : null;

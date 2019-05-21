@@ -122,6 +122,11 @@ export function getViewStates({viewState, trackedPosition, viewMode, offset}) {
     } else {
       offset.bearing = 0;
     }
+    // Put the tracked object on the ground
+    // TODO - support flying vehicle
+    if (trackedPosition) {
+      viewState.position = [0, 0, trackedPosition.altitude];
+    }
 
     viewStates[name] = offsetViewState(viewState, offset);
   }
