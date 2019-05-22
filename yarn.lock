@@ -742,10 +742,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@deck.gl/core@^7.0.4":
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-7.0.4.tgz#406977fd149d1bc9cb20591e5417b002ef986b41"
-  integrity sha512-h/Ae4Mc52maWjiAposoKgmi9fxd0+HE5XWsJOxsVfoH8IbJi305IhFwCf9n0Rz/zWwKEdZglzwDtu6mqDDBzww==
+"@deck.gl/core@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@deck.gl/core/-/core-7.0.9.tgz#41445b2dca90bd1134d79bf8825c99e1dbc804f3"
+  integrity sha512-EBK7PvKg7FOoXbaU5O+szdH3X9lkNXzIcs98uyEihm72lWnA2QAuz/CIXRRNZct+Z7oukSlMQRiL3nHMvrpnlw==
   dependencies:
     "@luma.gl/core" "^7.0.1"
     gl-matrix "^3.0.0"
@@ -755,28 +755,28 @@
     seer "^0.2.4"
     viewport-mercator-project "^6.1.0"
 
-"@deck.gl/layers@^7.0.4":
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-7.0.4.tgz#77317989f967a9635664ab217f0dbca76057474c"
-  integrity sha512-gG2W1rB7r4F/Af+mheknw743MkCFleT5q7gP76TIp+YUl63bwEPC6VXs1b9vU1rgm7rMBhrvxrJBTg+CVOfLog==
+"@deck.gl/layers@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@deck.gl/layers/-/layers-7.0.9.tgz#19417a01d43a493d2d3c9997cb42ac8e66153700"
+  integrity sha512-rUGPJb+o36w4EFAPOsyhwFuwRKduF0SeG7gGG5tfGC8oL0L0cmlme6T78DRvG7eLCDfyA5LQKgtHGps4c6hmvQ==
   dependencies:
-    "@loaders.gl/core" "^1.0.1"
-    "@loaders.gl/images" "^1.0.1"
+    "@loaders.gl/core" "^1.0.3"
+    "@loaders.gl/images" "^1.0.3"
     "@mapbox/tiny-sdf" "^1.1.0"
     earcut "^2.0.6"
 
-"@deck.gl/mesh-layers@^7.0.4":
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/@deck.gl/mesh-layers/-/mesh-layers-7.0.4.tgz#b695c7b80dd4b07248da92d394d14d482cfb79f4"
-  integrity sha512-+h9bxozIGbWXkpCNhywY68awWy0TYibMpjU5i3Y3QsgcYYKMUPDE9eK/K7NGVH0dkMU0nDT9K4NMDnvMTq8J/g==
+"@deck.gl/mesh-layers@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@deck.gl/mesh-layers/-/mesh-layers-7.0.9.tgz#c3f089e7b6b7aa68615ca5e56db353046f210c28"
+  integrity sha512-uujr3HQHO+FMXy7ep54iW2HWBm4enHDw5fVu8BgnXS/CxYF1+myBScesz/qJMC+r3KiEiB1GlXOlbHW9/hj0KQ==
   dependencies:
-    "@loaders.gl/core" "^1.0.1"
-    "@loaders.gl/images" "^1.0.1"
+    "@loaders.gl/core" "^1.0.3"
+    "@loaders.gl/images" "^1.0.3"
 
-"@deck.gl/react@^7.0.4":
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-7.0.4.tgz#519cb920403c2ff28cf77d4a7e0345d2c140437d"
-  integrity sha512-y14N2QF+Q2+/njnMy/mbwak2uc/BTdk6izf0+CEiU2nQzdtXiY7kOEWtcqs95OVck8JZrSGDVnx1EYT4Ke3hQg==
+"@deck.gl/react@^7.0.9":
+  version "7.0.9"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-7.0.9.tgz#6ff9a66c803bd3851e3d72dda4a59b614b74ddc5"
+  integrity sha512-3o3Hj2WWB0BI7RyWlnCrVe3YFoktwDstXLG/uoUpiE2Jg4Hvt4Yji8Aff32cY1t+Whsf2QRKOlMTOeLbmyClHw==
   dependencies:
     prop-types "^15.6.0"
 
@@ -881,7 +881,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.2.tgz#63985d3d8b02530e0869962f4da09142ee8e200e"
   integrity sha512-n/VQ4mbfr81aqkx/XmVicOLjviMuy02eenSdJY33SVA7S2J42EU0P1H0mOogfYedb3wXA0d/LVtBrgTSm04WEA==
 
-"@loaders.gl/core@1.0.3", "@loaders.gl/core@^1.0.1":
+"@loaders.gl/core@1.0.3", "@loaders.gl/core@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@loaders.gl/core/-/core-1.0.3.tgz#60a1467e583f28d974a72f947cf2c7c2bc266393"
   integrity sha512-ENyW3UqPgtOx81iY23Y8jD7FJ6miNduOzV6Z1xY7pXwoOGrF2BXTJ3P7KPLXTIBN98mh67jUax0fouBhrQL2Kw==
@@ -905,7 +905,7 @@
     "@loaders.gl/core" "1.0.3"
     "@loaders.gl/images" "1.0.3"
 
-"@loaders.gl/images@1.0.3", "@loaders.gl/images@^1.0.1":
+"@loaders.gl/images@1.0.3", "@loaders.gl/images@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@loaders.gl/images/-/images-1.0.3.tgz#f2d4d75f53a84289b30900c44711ab4fd32e25bd"
   integrity sha512-S3UV2/apkWkf+ULT/nt8+SYFh7WYir/mCL5VK/dYUnOgNs+0JLyG+0i35bMWg/GsHN683Z9Ja1m9zRsIz/EOdA==
