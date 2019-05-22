@@ -5,7 +5,7 @@ Renders a stream settings editor.
 ```jsx
 import {StreamSettingsPanel} from 'streetscape.gl';
 
-<StreamSettingsPanel log={log} />;
+<StreamSettingsPanel log={log} collapsible={true} />;
 ```
 
 ## Properties
@@ -13,6 +13,10 @@ import {StreamSettingsPanel} from 'streetscape.gl';
 ##### log (XVIZLoader)
 
 The log to edit - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) object.
+
+##### collapsible (boolean)
+
+A boolean to determine if the parent stream can be collapsed and expanded
 
 ##### style (Object, optional)
 
