@@ -55,32 +55,50 @@ setXVIZConfig(XVIZ_CONFIG);
 // Pass through path & parameters to loaders
 function buildLoaderOptions() {
   const url = new URL(window.location);
-  const params = url.searchParams;
 
-  const server = params.get('server') || 'ws://localhost:3000';
+  // I prefer to work with an object
+  const params = {};
+  for (const [k, v] of url.searchParams.entries()) {
+    params[k] = v;
+  }
+
+  const {
+    // These will not be passed through to server request
+    server = 'ws://localhost:3000',
+    worker = true,
+    bufferLength = 10,
+    // These will be passed through to server request
+    log = 'mock',
+    profile,
+    timestamp,
+    duration,
+    ...passthroughOptions
+  } = params;
 
   const options = {
-    logGuid: params.get('log') || 'mock',
+    // Any options not handled directly will just pass through
+    ...passthroughOptions,
+
+    logGuid: log,
     serverConfig: {
       defaultLogLength: 30,
       serverUrl: `${server}${url.pathname}`
     },
-    worker: Boolean(params.get('worker')) || true,
+    worker: worker !== 'false',
     maxConcurrency: 4
   };
 
-  const addParam = (param, prop, dflt) => {
-    if (params.has(param) || dflt) {
-      options[prop] = params.get(param) || dflt;
-    }
-  };
-
-  addParam('profile', 'logProfile');
-  addParam('timestamp', 'timestamp');
-  addParam('duration', 'duration');
-
+  if (profile) {
+    options.logProfile = profile;
+  }
+  if (timestamp) {
+    options.timestamp = timestamp;
+  }
+  if (duration) {
+    options.duration = duration;
+  }
   if (__IS_LIVE__) {
-    addParam('bufferLength', 'bufferLength', 10);
+    options.bufferLength = bufferLength;
   }
 
   return options;

@@ -27,10 +27,20 @@ import XVIZWebsocketLoader from './xviz-websocket-loader';
 const DEFAULT_LOG_PROFILE = 'default';
 const DEFAULT_RETRY_ATTEMPTS = 3;
 
+/* eslint-disable no-unused-vars */
 function getSocketRequestParams(options) {
-  const {logProfile = DEFAULT_LOG_PROFILE, serverConfig, bufferLength = 30} = options;
+  const {
+    logProfile = DEFAULT_LOG_PROFILE,
+    serverConfig,
+    bufferLength = 30,
+    // These are parent class options we want to filter
+    maxConcurrency,
+    WebSocketClass,
+    ...passThroughOptions
+  } = options;
 
   const queryParams = {
+    ...passThroughOptions,
     ...serverConfig.queryParams,
     profile: logProfile
   };
@@ -50,6 +60,7 @@ function getSocketRequestParams(options) {
     serverConfig
   };
 }
+/* eslint-enable no-unused-vars */
 
 /*
  * Handle connecting to XVIZ socket and negotiation of the XVIZ protocol version

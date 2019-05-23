@@ -32,25 +32,40 @@ const DEFAULT_BUFFER_LENGTH = {
   milliseconds: 30000
 };
 
+/* eslint-disable no-unused-vars */
 function getSocketRequestParams(options) {
   const {
     logGuid,
     logProfile = DEFAULT_LOG_PROFILE,
+    duration: requestedDuration,
     timestamp,
     serverConfig,
-    bufferLength = DEFAULT_BUFFER_LENGTH[getXVIZConfig().TIMESTAMP_FORMAT]
+    bufferLength = DEFAULT_BUFFER_LENGTH[getXVIZConfig().TIMESTAMP_FORMAT],
+    // These are parent class options we want to filter
+    maxConcurrency,
+    WebSocketClass,
+    ...passThroughOptions
   } = options;
 
   // set duration overrides & defaults
-  const duration = options.duration || serverConfig.defaultLogLength;
+  const duration = requestedDuration || serverConfig.defaultLogLength;
 
   assert(logGuid && duration);
 
   const queryParams = {
+    ...passThroughOptions,
     ...serverConfig.queryParams,
     log: logGuid,
     profile: logProfile
   };
+
+  if (duration) {
+    queryParams.duration = duration;
+  }
+  if (timestamp) {
+    queryParams.timestamp = timestamp;
+  }
+
   const retryAttempts = Number.isInteger(serverConfig.retryAttempts)
     ? serverConfig.retryAttempts
     : DEFAULT_RETRY_ATTEMPTS;
@@ -70,6 +85,7 @@ function getSocketRequestParams(options) {
     serverConfig
   };
 }
+/* eslint-enable no-unused-vars */
 
 // Determine timestamp & duration to reconnect after an interrupted connection.
 // Calculate based on current XVIZStreamBuffer data
