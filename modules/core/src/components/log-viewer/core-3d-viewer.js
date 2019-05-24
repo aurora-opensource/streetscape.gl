@@ -50,7 +50,8 @@ function getStreamMetadata(metadata, streamName) {
 const Z_INDEX = {
   car: 0,
   point: 1,
-  polygon: 2
+  polygon: 2,
+  customDefault: 3
 };
 
 export default class Core3DViewer extends PureComponent {
@@ -257,9 +258,9 @@ export default class Core3DViewer extends PureComponent {
         .filter(streamFilter)
     );
 
-    const layerList = [this._getCarLayer()];
+    let layerList = [this._getCarLayer()];
 
-    layerList.concat(
+    layerList = layerList.concat(
       Array.from(featuresAndFutures)
         .map(streamName => {
           // Check lookAheads first because it will contain the selected futures
@@ -301,11 +302,13 @@ export default class Core3DViewer extends PureComponent {
         .filter(Boolean)
     );
 
-    layerList.concat(
+    layerList = layerList.concat(
       customLayers.map(layer => {
         // Clone layer props
         const {props} = layer;
-        const additionalProps = {};
+        const additionalProps = {
+          zIndex: 'zIndex' in props ? props.zIndex : Z_INDEX.customDefault
+        };
 
         if (props.streamName) {
           // Use log data
