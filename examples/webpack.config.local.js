@@ -33,6 +33,17 @@ const ALIASES = require('ocular-dev-tools/config/ocular.config')({
 }).aliases;
 
 console.log(ALIASES);
+ALIASES['deck.gl'] = '/Users/georgios/deck.gl/modules/main/src';
+ALIASES['@deck.gl/core'] = '/Users/georgios/deck.gl/modules/core/src';
+ALIASES['@deck.gl/layers'] = '/Users/georgios/deck.gl/modules/layers/src';
+ALIASES['@deck.gl/react'] = '/Users/georgios/deck.gl/modules/react/src';
+ALIASES['@deck.gl/mesh-layers'] = '/Users/georgios/deck.gl/modules/mesh-layers/src';
+ALIASES['luma.gl'] = '/Users/georgios/luma.gl/modules/mesh-layers/src';
+ALIASES['@luma.gl/core'] = '/Users/georgios/luma.gl/modules/core/src';
+ALIASES['@luma.gl/addons'] = '/Users/georgios/luma.gl/modules/addons/src';
+ALIASES['@luma.gl/webgl'] = '/Users/georgios/luma.gl/modules/webgl/src';
+
+ALIASES['@loaders.gl/core']='/Users/georgios/streetscape.gl/examples/website-demo/node_modules/@loaders.gl/core/dist/esm';
 
 // Support for hot reloading changes to the deck.gl library:
 function makeLocalDevConfig() {

@@ -27,7 +27,7 @@ import {COORDINATE_SYSTEM} from '@deck.gl/core';
 
 import ObjectLabelsOverlay from './object-labels-overlay';
 
-import {SimpleMeshLayer} from '@deck.gl/mesh-layers';
+import {SimpleMeshLayer, ScenegraphLayer} from '@deck.gl/mesh-layers';
 import {XVIZStyleParser} from '@xviz/parser';
 
 import XVIZLayer from '../../layers/xviz-layer';
@@ -40,6 +40,10 @@ import {normalizeStreamFilter} from '../../utils/stream-utils';
 import stats from '../../utils/stats';
 
 import {DEFAULT_ORIGIN, CAR_DATA, LIGHTS, DEFAULT_CAR} from './constants';
+
+import {GLTFScenegraphLoader} from '@luma.gl/addons';
+import {registerLoaders} from '@loaders.gl/core';
+registerLoaders([GLTFScenegraphLoader]);
 
 const noop = () => {};
 
@@ -202,30 +206,51 @@ export default class Core3DViewer extends PureComponent {
     const {frame, car} = this.props;
     const {
       origin = DEFAULT_ORIGIN,
-      mesh,
-      scale = [1, 1, 1],
-      wireframe = false,
-      texture = null,
-      color = [0, 0, 0]
+      // mesh,
+      scale = [1, 1, 1]
+      // wireframe = false,
+      // texture = null,
+      // color = [0, 0, 0]
     } = car;
 
-    return new SimpleMeshLayer({
+    // return new SimpleMeshLayer({
+    //   id: 'car',
+    //   opacity: 1,
+    //   coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+    //   coordinateOrigin: frame.origin || DEFAULT_ORIGIN,
+    //   // Adjust for car center position relative to GPS/IMU
+    //   getTransformMatrix: d =>
+    //     frame.vehicleRelativeTransform
+    //       .clone()
+    //       .translate(origin)
+    //       .scale(scale),
+    //   mesh,
+    //   data: CAR_DATA,
+    //   getPosition: d => d,
+    //   getColor: color,
+    //   texture,
+    //   wireframe,
+    //   updateTriggers: {
+    //     getTransformMatrix: frame.vehicleRelativeTransform
+    //   }
+    // });
+    return new ScenegraphLayer({
       id: 'car',
-      opacity: 1,
       coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
       coordinateOrigin: frame.origin || DEFAULT_ORIGIN,
-      // Adjust for car center position relative to GPS/IMU
+      data: CAR_DATA,
+      sizeScale: 50,
+      getPosition: d => d,
+      scenegraph: 'car.glb',
+      _lighting: '_pbr',
       getTransformMatrix: d =>
         frame.vehicleRelativeTransform
           .clone()
+          .rotateX(1.5708)
+          .rotateY(-1.5708)
           .translate(origin)
+          .translate([-1, 0, 0])
           .scale(scale),
-      mesh,
-      data: CAR_DATA,
-      getPosition: d => d,
-      getColor: color,
-      texture,
-      wireframe,
       updateTriggers: {
         getTransformMatrix: frame.vehicleRelativeTransform
       }
