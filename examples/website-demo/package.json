@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
-    "start": "webpack-dev-server --env.prod --progress --hot --open",
     "build-clean": "rm -rf dist && mkdir dist",
     "build-copy": "cp -r assets dist && cp index.html dist",
     "build-script": "NODE_ENV=production webpack  --env.local --env.prod",
@@ -16,7 +15,7 @@
     "bowser": "^2.1.0",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "streetscape.gl": "1.0.0-beta.8"
+    "streetscape.gl": "^1.0.0-beta"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
