@@ -4,17 +4,19 @@
   "version": "0.0.1",
   "scripts": {
     "start-local": "webpack-dev-server --env.local --progress --hot --open",
+    "start": "webpack-dev-server --env.prod --progress --hot --open",
     "build-clean": "rm -rf dist && mkdir dist",
     "build-copy": "cp -r assets dist && cp index.html dist",
     "build-script": "NODE_ENV=production webpack  --env.local --env.prod",
     "build": "npm run build-clean && npm run build-script && npm run build-copy"
   },
   "dependencies": {
-    "@loaders.gl/obj": "^1.0.0",
+    "@loaders.gl/obj": "^1.0.3",
+    "@loaders.gl/core": "^1.0.3",
     "bowser": "^2.1.0",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "streetscape.gl": "^1.0.0-beta"
+    "streetscape.gl": "1.0.0-beta.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
