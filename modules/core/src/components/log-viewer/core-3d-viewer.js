@@ -346,9 +346,7 @@ export default class Core3DViewer extends PureComponent {
       ? {
           longitude: frame.trackPosition[0],
           latitude: frame.trackPosition[1],
-          // This is due to a bug in deck.gl where coordinateOrigin.z is not applied
-          // Remove when deck is fixed
-          altitude: frame.trackPosition[2] - (frame.origin ? frame.origin[2] : 0),
+          altitude: frame.trackPosition[2],
           bearing: 90 - frame.heading
         }
       : null;
