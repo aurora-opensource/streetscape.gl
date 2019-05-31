@@ -83,7 +83,7 @@ export default class ObjectLabelsOverlay extends PureComponent {
   }
 
   _renderPerspectivePopup = object => {
-    const {objectSelection, frame, xvizStyleParser, style, renderObjectLabel} = this.props;
+    const {objectSelection, xvizStyleParser, style, renderObjectLabel} = this.props;
 
     const isSelected = Boolean(objectSelection[object.id]);
     const styleProps = {
@@ -113,11 +113,6 @@ export default class ObjectLabelsOverlay extends PureComponent {
     }
 
     trackingPoint[2] += objectHeight || 0;
-
-    // compensate for camera offset
-    if (frame.origin) {
-      trackingPoint[2] -= frame.origin[2];
-    }
 
     return (
       <PerspectivePopup
