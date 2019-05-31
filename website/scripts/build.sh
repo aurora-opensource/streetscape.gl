@@ -27,6 +27,10 @@ DEMO_DIR=../examples/website-demo
 DEMO_PACKAGE_DIR=${DEMO_DIR}/dist
 DEMO_DESTINATION=./dist/demo
 
+PLAYGROUND_DIR=../examples/xviz-playground
+PLAYGROUND_PACKAGE_DIR=${PLAYGROUND_DIR}/dist
+PLAYGROUND_DESTINATION=./dist/playground
+
 # install dependencies
 yarn
 
@@ -55,3 +59,17 @@ cp -r ${DEMO_PACKAGE_DIR} ${DEMO_DESTINATION}
 # replace style.css path
 (cd ${DEMO_DESTINATION} && sed -i '' -E 's/href="style.css"/href="..\/style.css"/' index.html)
 
+
+# build playground app
+(cd ${PLAYGROUND_DIR} && rm -rf node_modules && yarn && yarn build)
+
+# copy playground bundle
+echo "Copy from ${PLAYGROUND_PACKAGE_DIR} to ${PLAYGROUND_DESTINATION}"
+
+if [ -e ${PLAYGROUND_DESTINATION} ]; then
+  rm -rf ${PLAYGROUND_DESTINATION}
+  mkdir ${PLAYGROUND_DESTINATION}
+fi
+
+cp -r ${PLAYGROUND_PACKAGE_DIR} ${PLAYGROUND_DESTINATION}
+cp -r ${PLAYGROUND_DIR}/index.html ${PLAYGROUND_DESTINATION}
