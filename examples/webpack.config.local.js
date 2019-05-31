@@ -48,7 +48,17 @@ function makeLocalDevConfig() {
     devtool: 'source-map',
 
     resolve: {
-      alias: ALIASES
+      alias: Object.assign(
+        {
+          '@streetscape.gl/monochrome': resolve(
+            __dirname,
+            '../node_modules/@streetscape.gl/monochrome'
+          ),
+          react: resolve(__dirname, '../node_modules/react'),
+          'react-dom': resolve(__dirname, '../node_modules/react-dom')
+        },
+        ALIASES
+      )
     },
     module: {
       rules: [
