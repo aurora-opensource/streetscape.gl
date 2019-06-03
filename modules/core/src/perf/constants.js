@@ -38,7 +38,7 @@ export const COLOR_PALETTE = {
 
 export const STATS_KEYS = {
   FPS: 'fps',
-  REDRAW: 'redraw',
+  REDRAW: 'framesRedrawn',
   FRAME_UPDATE: 'frame-update',
   LOADER_UPDATE: 'loader-update',
   LOADER_ERROR: 'loader-error'
