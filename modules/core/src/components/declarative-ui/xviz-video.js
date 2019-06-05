@@ -89,7 +89,9 @@ class BaseComponent extends PureComponent {
     const streamNames = Object.keys(streamMetadata)
       .filter(
         streamName =>
-          streamMetadata[streamName] && streamMetadata[streamName].primitive_type === 'image'
+          streamMetadata[streamName] &&
+          streamMetadata[streamName].primitive_type &&
+          streamMetadata[streamName].primitive_type.toUpperCase() === 'IMAGE'
       )
       .filter(normalizeStreamFilter(cameras))
       .sort();

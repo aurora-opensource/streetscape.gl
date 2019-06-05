@@ -21,8 +21,8 @@
 const streamMetadata = {
   circle: `
   .stream('/object/tracking_point')
-  .category('primitive')
-  .type('circle')
+  .category('PRIMITIVE')
+  .type('CIRCLE')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
     fill_color: '#fb0'
@@ -30,8 +30,8 @@ const streamMetadata = {
 `,
   polygon: `
   .stream('/object/shape')
-  .category('primitive')
-  .type('polygon')
+  .category('PRIMITIVE')
+  .type('POLYGON')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
     fill_color: '#fb0',
@@ -41,8 +41,8 @@ const streamMetadata = {
 `,
   polyline: `
   .stream('/prediction/trajectory')
-  .category('primitive')
-  .type('polyline')
+  .category('PRIMITIVE')
+  .type('POLYLINE')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
     stroke_color: '#f08'
@@ -50,8 +50,8 @@ const streamMetadata = {
 `,
   points: `
   .stream('/lidar/points')
-  .category('primitive')
-  .type('points')
+  .category('PRIMITIVE')
+  .type('POINTS')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
     point_color_mode: 'elevation',
@@ -61,8 +61,8 @@ const streamMetadata = {
 `,
   stadium: `
   .stream('/motion_planning/vehicle')
-  .category('primitive')
-  .type('stadium')
+  .category('PRIMITIVE')
+  .type('STADIUM')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
     fill_color: '#8888',
@@ -71,8 +71,8 @@ const streamMetadata = {
 `,
   text: `
   .stream('/object/label')
-  .category('primitive')
-  .type('text')
+  .category('PRIMITIVE')
+  .type('TEXT')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
     font_family: 'Arial',
@@ -131,7 +131,7 @@ const streamSample = {
 
   .text('Object 02')
   .position([3, 18.5, 4])
-  .style({text_anchor: 'start', text_rotation: 90})
+  .style({text_anchor: 'START', text_rotation: 90})
 `
 };
 
@@ -142,7 +142,7 @@ xvizMetadataBuilder
   .endTime(1005)
 
   .stream('/vehicle_pose')
-  .category('pose')
+  .category('POSE')
 `;
   let frame = `// frame
 const timestamp = 1000;

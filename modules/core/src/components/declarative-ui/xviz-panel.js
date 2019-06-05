@@ -36,7 +36,15 @@ const DEFAULT_COMPONENTS = {
   plot: XVIZPlot,
   video: XVIZVideo,
   table: XVIZTable,
-  treetable: XVIZTable
+  treetable: XVIZTable,
+
+  // Normalize enums to uppercase
+  CONTAINER: XVIZContainer,
+  METRIC: XVIZMetric,
+  PLOT: XVIZPlot,
+  VIDEO: XVIZVideo,
+  TABLE: XVIZTable,
+  TREETABLE: XVIZTable
 };
 
 class XVIZPanelComponent extends PureComponent {

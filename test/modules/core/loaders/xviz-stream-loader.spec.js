@@ -217,7 +217,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     loader.onXVIZMessage({type: LOG_STREAM_MESSAGE.METADATA, start_time: 1000, end_time: 1030});
     t.deepEquals(
       socket.flush(),
-      [{type: 'xviz/transform_log', data: {start_timestamp: 1000, end_timestamp: 1010, id: '0'}}],
+      [{type: 'XVIZ/TRANSFORM_LOG', data: {start_timestamp: 1000, end_timestamp: 1010, id: '0'}}],
       'transform_log: update with correct parameters'
     );
 
@@ -227,7 +227,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     loader.seek(1012);
     t.deepEquals(
       socket.flush(),
-      [{type: 'xviz/transform_log', data: {start_timestamp: 1007, end_timestamp: 1017, id: '1'}}],
+      [{type: 'XVIZ/TRANSFORM_LOG', data: {start_timestamp: 1007, end_timestamp: 1017, id: '1'}}],
       'seek: update with correct parameters'
     );
 
@@ -239,7 +239,7 @@ test('XVIZStreamLoader#connect, seek', t => {
     loader.seek(1001);
     t.deepEquals(
       socket.flush(),
-      [{type: 'xviz/transform_log', data: {start_timestamp: 1000, end_timestamp: 1007, id: '2'}}],
+      [{type: 'XVIZ/TRANSFORM_LOG', data: {start_timestamp: 1000, end_timestamp: 1007, id: '2'}}],
       'seek: update with correct parameters'
     );
 
