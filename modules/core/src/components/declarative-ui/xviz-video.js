@@ -91,7 +91,8 @@ class BaseComponent extends PureComponent {
         streamName =>
           streamMetadata[streamName] &&
           streamMetadata[streamName].primitive_type &&
-          streamMetadata[streamName].primitive_type.toUpperCase() === 'IMAGE'
+          (streamMetadata[streamName].primitive_type === 'IMAGE' ||
+            streamMetadata[streamName].primitive_type === 'image') // Support pre-1.0 lowercase value
       )
       .filter(normalizeStreamFilter(cameras))
       .sort();

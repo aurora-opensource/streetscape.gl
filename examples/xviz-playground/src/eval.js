@@ -72,19 +72,19 @@ export function evaluateCode(code, type) {
 // TODO(twojtasz) this should use @xviz/io
 export function createMessage(data) {
   // Normalize enums to uppercase
-  let type = data.type && data.type.toUpperCase();
-  if (type && type.startsWith('XVIZ/')) {
-    type = type === 'XVIZ/METADATA' ? 'METADATA' : 'FRAME';
+  let type = data.type && data.type;
+  if (type && type.startsWith('xviz/')) {
+    type = type === 'xviz/metadata' ? 'metadata' : 'frame';
     data = data.data;
   } else {
-    type = data.update_type ? 'FRAME' : 'METADATA';
+    type = data.update_type ? 'frame' : 'metadata';
   }
   switch (type) {
-    case 'METADATA':
+    case 'metadata':
       writer.writeMetadata('', data);
       return dataSink.message;
 
-    case 'FRAME':
+    case 'frame':
       writer.writeFrame('', 1, data);
       return dataSink.message;
 

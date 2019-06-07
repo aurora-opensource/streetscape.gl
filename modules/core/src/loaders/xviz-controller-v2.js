@@ -45,7 +45,7 @@ export default class XVIZControllerV2 {
 
   _send(type, message) {
     // TODO(twojtasz): change to @xviz/io
-    const msg = {type: `XVIZ/${type}`, data: message};
+    const msg = {type: `xviz/${type}`, data: message};
     this.socket.send(JSON.stringify(msg));
   }
 
@@ -63,6 +63,6 @@ export default class XVIZControllerV2 {
     msg.id = `${this.transformCounter}`;
     this.transformCounter++;
 
-    this._send('TRANSFORM_LOG', msg);
+    this._send('transform_log', msg);
   }
 }

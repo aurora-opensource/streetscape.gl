@@ -36,15 +36,7 @@ const DEFAULT_COMPONENTS = {
   plot: XVIZPlot,
   video: XVIZVideo,
   table: XVIZTable,
-  treetable: XVIZTable,
-
-  // Normalize enums to uppercase
-  CONTAINER: XVIZContainer,
-  METRIC: XVIZMetric,
-  PLOT: XVIZPlot,
-  VIDEO: XVIZVideo,
-  TABLE: XVIZTable,
-  TREETABLE: XVIZTable
+  treetable: XVIZTable
 };
 
 class XVIZPanelComponent extends PureComponent {
@@ -67,8 +59,10 @@ class XVIZPanelComponent extends PureComponent {
 
   _renderItem = (item, i) => {
     const {components, componentProps, log, style} = this.props;
-    const XVIZComponent = components[item.type] || DEFAULT_COMPONENTS[item.type];
-    const customProps = componentProps[item.type];
+    // Normalize 'type' to lowercase where XVIZ spec defines it as uppercase
+    const type = item.type.toLowerCase();
+    const XVIZComponent = components[type] || DEFAULT_COMPONENTS[type];
+    const customProps = componentProps[type];
 
     if (!XVIZComponent) {
       return null;
