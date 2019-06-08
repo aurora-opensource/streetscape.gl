@@ -27,7 +27,7 @@ export default class XVIZContainer extends PureComponent {
   };
 
   static defaultProps = {
-    layout: 'vertical'
+    layout: 'VERTICAL'
   };
 
   render() {
@@ -39,13 +39,14 @@ export default class XVIZContainer extends PureComponent {
     };
     const childStyle = {};
 
-    switch (layout) {
-      case 'vertical':
+    // Normalize enums to uppercase
+    switch (layout.toUpperCase()) {
+      case 'VERTICAL':
         layoutStyle.flexDirection = 'column';
         childStyle.flex = '0 0 auto';
         break;
 
-      case 'horizontal':
+      case 'HORIZONTAL':
         layoutStyle.flexDirection = 'row';
         childStyle.flex = '1 1 auto';
         break;

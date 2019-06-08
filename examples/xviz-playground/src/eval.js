@@ -69,10 +69,12 @@ export function evaluateCode(code, type) {
   }
 }
 
+// TODO(twojtasz) this should use @xviz/io
 export function createMessage(data) {
-  let type;
-  if (data.type && data.type.startsWith('xviz/')) {
-    type = data.type === 'xviz/metadata' ? 'metadata' : 'frame';
+  // Normalize enums to uppercase
+  let type = data.type && data.type;
+  if (type && type.startsWith('xviz/')) {
+    type = type === 'xviz/metadata' ? 'metadata' : 'frame';
     data = data.data;
   } else {
     type = data.update_type ? 'frame' : 'metadata';

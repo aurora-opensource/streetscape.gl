@@ -193,6 +193,11 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
     property = context.style.getPropertyDefault(propertyName);
   }
 
+  if (propertyName === 'text_anchor' || propertyName === 'text_baseline') {
+    // These XVIZ enumerations map to Deck.gl as lowercase strings
+    property = property.toLowerCase();
+  }
+
   return property;
 }
 /* eslint-enable complexity */
