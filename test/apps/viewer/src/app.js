@@ -36,7 +36,7 @@ import {
   XVIZWorkersStatus,
   LogViewerStats
 } from 'streetscape.gl';
-import {Form} from '@streetscape.gl/monochrome';
+import {Form, Dropdown} from '@streetscape.gl/monochrome';
 
 import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 import {default as XVIZLoaderFactory} from './log-from-factory';
@@ -89,6 +89,7 @@ class Example extends PureComponent {
       showDebug: true
     },
     panels: [],
+    selectedPanel: undefined,
     statsSnapshot: {}
   };
 
@@ -97,8 +98,10 @@ class Example extends PureComponent {
     log
       .on('ready', () => {
         const metadata = log.getMetadata();
+        const panels = Object.keys((metadata && metadata.ui_config) || []);
         this.setState({
-          panels: Object.keys((metadata && metadata.ui_config) || {})
+          panels,
+          selectedPanel: panels[0]
         });
       })
       .on('error', console.error)
@@ -111,15 +114,44 @@ class Example extends PureComponent {
     });
   };
 
+  _onSelectPanel = panelName => {
+    this.setState({selectedPanel: panelName});
+  };
+
   _renderDebugStats = () =>
     this.state.settings.showDebug ? (
       <div>
         <hr />
-        <XVIZWorkersStatus log={this.state.log} />
+        {/*<XVIZWorkersStatus log={this.state.log} />*/}
         <hr />
         <LogViewerStats statsSnapshot={this.state.statsSnapshot} />
       </div>
     ) : null;
+
+  _renderPanelSelector = () => {
+    const {panels, selectedPanel} = this.state;
+
+    if (panels.length > 0) {
+      const data = {};
+      panels.map(panelName => (data[panelName] = panelName));
+
+      return <Dropdown value={selectedPanel} data={data} onChange={this._onSelectPanel} />;
+    }
+
+    return null;
+  };
+
+  _renderSelectedPanel = () => {
+    const {log, panels, selectedPanel} = this.state;
+
+    if (selectedPanel !== undefined) {
+      return [
+        <XVIZPanel key={selectedPanel} log={log} name={selectedPanel} />,
+        <hr key={`${selectedPanel}-divider`} />
+      ];
+    }
+    return null;
+  };
 
   render() {
     const {log, settings, panels} = this.state;
@@ -127,10 +159,8 @@ class Example extends PureComponent {
     return (
       <div id="container">
         <div id="control-panel" style={{minWidth: 400}}>
-          {panels.map(panelName => [
-            <XVIZPanel key={panelName} log={log} name={panelName} />,
-            <hr key={`${panelName}-divider`} />
-          ])}
+          {this._renderPanelSelector()}
+          {this._renderSelectedPanel()}
           <Form
             data={APP_SETTINGS}
             values={this.state.settings}
