@@ -27,7 +27,7 @@ This example loads an XVIZ log extracted from the [KITTI](http://www.cvlibs.net/
 dataset. By default, the data is loaded from a remote URL using the
 [XVIZFileLoader](/docs/api-reference/xviz-file-loader.md). You can change the URL to point to your
 own files by tweaking the options in
-[log-from-file.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/log-from-file.js).
+[log-from-file.js](https://github.com/uber/streetscape.gl/tree/master/examples/get-started/src/log-from-file.js).
 
 You can also use this application to stream XVIZ data from a server. To do this:
 
