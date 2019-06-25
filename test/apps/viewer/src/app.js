@@ -23,7 +23,7 @@
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {setXVIZConfig} from '@xviz/parser';
+import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
 import {
   LogViewer,
   PlaybackControl,
@@ -51,6 +51,8 @@ import {
 import {default as XVIZLoaderFactory} from './log-from-factory';
 
 setXVIZConfig(XVIZ_CONFIG);
+
+const TIMEFORMAT_SCALE = getXVIZConfig().TIMESTAMP_FORMAT === 'seconds' ? 1000 : 1;
 
 // Pass through path & parameters to loaders
 function buildLoaderOptions() {
@@ -232,7 +234,7 @@ class Example extends PureComponent {
             <PlaybackControl
               width="100%"
               log={log}
-              formatTimestamp={x => new Date(x).toUTCString()}
+              formatTimestamp={x => new Date(x * TIMEFORMAT_SCALE).toUTCString()}
             />
           </div>
         </div>
