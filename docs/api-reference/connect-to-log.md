@@ -1,7 +1,7 @@
 # connectToLog
 
 Wraps a React component in a
-[high-order component](https://reactjs.org/docs/higher-order-components.html) that rerenders when a
+[higher-order component](https://reactjs.org/docs/higher-order-components.html) that rerenders when a
 [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) updates.
 
 ```jsx
@@ -21,7 +21,7 @@ const getLogState = (log, ownProps) => ({
   frame: log.getCurrentFrame()
 });
 
-const SomeContainer = connectToLog({component: SomeComponent, getLogState});
+const SomeContainer = connectToLog({Component: SomeComponent, getLogState});
 export default SomeContainer;
 ```
 
@@ -35,7 +35,7 @@ import SomeContainer from './some-container';
 Arguments:
 
 - `opts` (Object)
-  - `component` (React.Component) - the component class to wrap
+  - `Component` (React.Component) - the component class to wrap
   - `getLogState` (Function) - a callback used to retrieve props from the connected log. Receives
     two arguments: `log` (XVIZLoader) and `ownProps` (Object, other props that are passed to the
     rendered instance).
