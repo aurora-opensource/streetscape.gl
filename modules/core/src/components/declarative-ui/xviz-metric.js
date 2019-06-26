@@ -127,7 +127,7 @@ class XVIZMetricComponent extends PureComponent {
       verticalGridLines,
       getColor
     } = this.props;
-    const isLoading = currentTime === null || currentTime === undefined;
+    const isLoading = currentTime == null; /* eslint-disable-line no-eq-null, eqeqeq */
     const timeDomain = Number.isFinite(startTime) ? [startTime, endTime] : null;
 
     return (
