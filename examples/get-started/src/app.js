@@ -23,7 +23,7 @@
 import React, {PureComponent} from 'react';
 import {render} from 'react-dom';
 
-import {setXVIZConfig} from '@xviz/parser';
+import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
 import {
   LogViewer,
   PlaybackControl,
@@ -39,6 +39,8 @@ import {Form} from '@streetscape.gl/monochrome';
 import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
+
+const TIMEFORMAT_SCALE = getXVIZConfig().TIMESTAMP_FORMAT === 'seconds' ? 1000 : 1;
 
 // __IS_STREAMING__ and __IS_LIVE__ are defined in webpack.config.js
 const exampleLog = require(__IS_STREAMING__
@@ -121,7 +123,7 @@ class Example extends PureComponent {
             <PlaybackControl
               width="100%"
               log={log}
-              formatTimestamp={x => new Date(x).toUTCString()}
+              formatTimestamp={x => new Date(x * TIMEFORMAT_SCALE).toUTCString()}
             />
           </div>
         </div>
