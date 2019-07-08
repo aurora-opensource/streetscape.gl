@@ -67,12 +67,15 @@ export function createFormData(metadata, opts) {
     let siblings = root;
 
     if (parentKey) {
-      root[parentKey] = root[parentKey] || {
-        type: 'checkbox',
-        children: {},
-        collapsible,
-        badge: <Badge userStyle={style.badge} />
-      };
+      const hasValidParent = Boolean(root[parentKey] && root[parentKey].children);
+      root[parentKey] = hasValidParent
+        ? root[parentKey]
+        : {
+            type: 'checkbox',
+            children: {},
+            collapsible,
+            badge: <Badge userStyle={style.badge} />
+          };
       siblings = root[parentKey].children;
     }
 
