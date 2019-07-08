@@ -100,9 +100,9 @@ The following props are automatically populated when the `log` prop is provided.
 manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux
 store:
 
-##### metadata (Object)
+##### streamMetadata (Object)
 
-The metadata of the current log.
+A map from stream names to their metadata.
 
 ##### variables (Object)
 

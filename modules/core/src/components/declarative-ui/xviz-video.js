@@ -153,14 +153,11 @@ class BaseComponent extends PureComponent {
   }
 }
 
-const getLogState = log => {
-  const metadata = log.getMetadata();
-  return {
-    currentTime: log.getCurrentTime(),
-    streamMetadata: metadata && metadata.streams,
-    streams: log.getStreams()
-  };
-};
+const getLogState = log => ({
+  currentTime: log.getCurrentTime(),
+  streamMetadata: log.getStreamMetadata(),
+  streams: log.getStreams()
+});
 
 const XVIZVideoComponent = withTheme(BaseComponent);
 

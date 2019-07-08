@@ -90,12 +90,9 @@ class BaseWidget extends PureComponent {
   }
 }
 
-const getLogState = (log, {streamName}) => {
-  const metadata = log.getMetadata();
-  return {
-    streamMetadata: metadata && metadata.streams,
-    frame: log.getCurrentFrame()
-  };
-};
+const getLogState = log => ({
+  streamMetadata: log.getStreamMetadata(),
+  frame: log.getCurrentFrame()
+});
 
 export default connectToLog({getLogState, Component: withTheme(BaseWidget)});

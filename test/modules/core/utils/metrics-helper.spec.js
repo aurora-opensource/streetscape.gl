@@ -23,21 +23,19 @@ import test from 'tape';
 import {getTimeSeries} from '@streetscape.gl/core/utils/metrics-helper';
 
 test('metricsHelper#getTimeSeries', t => {
-  const metadata = {
-    streams: {
-      '/numerical': {
-        unit: 'mph',
-        scale: 2.23694
-      },
-      '/no_graph': {
-        nograph: true
-      },
-      '/value_map': {
-        valueMap: {left: -1, none: 0, right: 1}
-      },
-      '/empty': {
-        unit: 'rad'
-      }
+  const streamMetadata = {
+    '/numerical': {
+      unit: 'mph',
+      scale: 2.23694
+    },
+    '/no_graph': {
+      nograph: true
+    },
+    '/value_map': {
+      valueMap: {left: -1, none: 0, right: 1}
+    },
+    '/empty': {
+      unit: 'rad'
     }
   };
 
@@ -63,28 +61,28 @@ test('metricsHelper#getTimeSeries', t => {
     '/empty': [undefined, undefined, undefined, undefined]
   };
 
-  let result = getTimeSeries({metadata, streamNames: [], streams});
+  let result = getTimeSeries({streamMetadata, streamNames: [], streams});
   t.deepEqual(result.data, {}, 'Should return empty when no streams are requested.');
 
   result = getTimeSeries({streamNames: ['/numerical'], streams});
   t.ok(result.data['/numerical'], 'Should work without metadata');
 
-  result = getTimeSeries({metadata, streamNames: ['/numerical'], streams});
+  result = getTimeSeries({streamMetadata, streamNames: ['/numerical'], streams});
   t.is(result.getX(result.data['/numerical'][0]), 1000, 'getX is properly set');
   t.is(result.getY(result.data['/numerical'][0]), 2.23694, 'getY is properly set');
   t.is(result.unit, 'mph', 'unit is properly set');
   t.ok(result.data['/numerical'].every(Boolean), 'Missing frames are filtered out');
   t.notOk(result.isLoading, 'Should not show spinner');
 
-  result = getTimeSeries({metadata, streamNames: ['/no_graph'], streams});
+  result = getTimeSeries({streamMetadata, streamNames: ['/no_graph'], streams});
   t.deepEqual(result.data, {}, 'Should respect metadata setting');
   t.ok(result.isLoading, 'Should show spinner when no stream is available');
 
-  result = getTimeSeries({metadata, streamNames: ['/value_map'], streams});
+  result = getTimeSeries({streamMetadata, streamNames: ['/value_map'], streams});
   t.is(result.getY(result.data['/value_map'][0]), -1, 'getY is properly set for custom mapping');
   t.notOk(result.isLoading, 'Should not show spinner');
 
-  result = getTimeSeries({metadata, streamNames: ['/empty'], streams});
+  result = getTimeSeries({streamMetadata, streamNames: ['/empty'], streams});
   t.deepEqual(result.data, {}, 'Should return empty when no valid frames are found');
   t.ok(result.isLoading, 'Should show spinner when no stream is available');
 

@@ -162,12 +162,13 @@ class StreamSettingsPanel extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     let {data, values} = this.state;
+    let dataChanged = false;
 
     if (nextProps.streamMetadata !== this.props.streamMetadata) {
       data = createFormData(nextProps.streamMetadata, nextProps);
-      values = null;
+      dataChanged = true;
     }
-    if (nextProps.streamSettings !== this.props.streamSettings) {
+    if (dataChanged || nextProps.streamSettings !== this.props.streamSettings) {
       values = settingsToFormValues(data, nextProps.streamSettings);
     }
     this.setState({data, values});
@@ -196,12 +197,9 @@ class StreamSettingsPanel extends PureComponent {
   }
 }
 
-const getLogState = log => {
-  const metadata = log.getMetadata();
-  return {
-    streamMetadata: metadata && metadata.streams,
-    streamSettings: log.getStreamSettings()
-  };
-};
+const getLogState = log => ({
+  streamMetadata: log.getStreamMetadata(),
+  streamSettings: log.getStreamSettings()
+});
 
 export default connectToLog({getLogState, Component: StreamSettingsPanel});

@@ -51,7 +51,7 @@ class XVIZMetricComponent extends PureComponent {
 
     // From connected log
     currentTime: PropTypes.number,
-    metadata: PropTypes.object,
+    streamMetadata: PropTypes.object,
     logStreams: PropTypes.objectOf(PropTypes.array),
     startTime: PropTypes.number,
     endTime: PropTypes.number
@@ -82,7 +82,7 @@ class XVIZMetricComponent extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (
       this.props.streams !== nextProps.streams ||
-      this.props.metadata !== nextProps.metadata ||
+      this.props.streamMetadata !== nextProps.streamMetadata ||
       this.props.logStreams !== nextProps.logStreams
     ) {
       this.setState({
@@ -94,7 +94,7 @@ class XVIZMetricComponent extends PureComponent {
   _getTimeSeries(props) {
     return getTimeSeries({
       streamNames: props.streams,
-      metadata: props.metadata,
+      streamMetadata: props.streamMetadata,
       streams: props.logStreams
     });
   }
@@ -158,7 +158,7 @@ class XVIZMetricComponent extends PureComponent {
 
 const getLogState = log => ({
   currentTime: log.getCurrentTime(),
-  metadata: log.getMetadata(),
+  streamMetadata: log.getStreamMetadata(),
   logStreams: log.getStreams(),
   startTime: log.getBufferStartTime(),
   endTime: log.getBufferEndTime()

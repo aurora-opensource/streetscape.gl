@@ -51,12 +51,12 @@ class XVIZPlotComponent extends PureComponent {
     dependentVariables: PropTypes.arrayOf(PropTypes.string),
 
     // From connected log
-    metadata: PropTypes.object,
+    streamMetadata: PropTypes.object,
     variables: PropTypes.object
   };
 
   static defaultProps = {
-    metadata: {},
+    streamMetadata: {},
     variables: {},
     width: '100%',
     height: 300,
@@ -217,7 +217,7 @@ class XVIZPlotComponent extends PureComponent {
 const getLogState = log => {
   const frame = log.getCurrentFrame();
   return {
-    metadata: log.getMetadata(),
+    streamMetadata: log.getStreamMetadata(),
     variables: frame && frame.variables
   };
 };

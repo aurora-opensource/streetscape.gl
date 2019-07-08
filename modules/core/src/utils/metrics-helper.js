@@ -48,17 +48,17 @@ function getTimeSeriesForStream(streamName, metadata, stream, target) {
  * @param streams array of streams data
  * @returns {Array} array of time series data
  */
-export function getTimeSeries({metadata = {}, streamNames, streams}) {
+export function getTimeSeries({streamMetadata = {}, streamNames, streams}) {
   const timeSeries = {
     isLoading: true,
     data: {}
   };
   for (const streamName of streamNames) {
     // ui configuration for this stream
-    const streamMetadata = (metadata.streams && metadata.streams[streamName]) || {};
+    const metadata = (streamMetadata && streamMetadata[streamName]) || {};
     const stream = streams[streamName];
     if (stream) {
-      getTimeSeriesForStream(streamName, streamMetadata, stream, timeSeries);
+      getTimeSeriesForStream(streamName, metadata, stream, timeSeries);
     }
   }
 

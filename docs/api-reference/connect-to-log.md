@@ -1,8 +1,8 @@
 # connectToLog
 
 Wraps a React component in a
-[higher-order component](https://reactjs.org/docs/higher-order-components.html) that rerenders when a
-[XVIZLoader](/docs/api-reference/xviz-loader-interface.md) updates.
+[higher-order component](https://reactjs.org/docs/higher-order-components.html) that rerenders when
+a [XVIZLoader](/docs/api-reference/xviz-loader-interface.md) updates.
 
 ```jsx
 // some-container.js

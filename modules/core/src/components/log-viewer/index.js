@@ -36,10 +36,6 @@ class LogViewer extends PureComponent {
   static propTypes = {
     ...Core3DViewer.propTypes,
 
-    // Props from loader
-    frame: PropTypes.object,
-    metadata: PropTypes.object,
-
     // Rendering options
     renderTooltip: PropTypes.func,
     style: PropTypes.object,
@@ -165,7 +161,8 @@ class LogViewer extends PureComponent {
 
 const getLogState = log => ({
   frame: log.getCurrentFrame(),
-  metadata: log.getMetadata()
+  metadata: log.getMetadata(),
+  streamMetadata: log.getStreamMetadata()
 });
 
 export default connectToLog({getLogState, Component: LogViewer});
