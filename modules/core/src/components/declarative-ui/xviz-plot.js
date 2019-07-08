@@ -24,6 +24,7 @@ import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
+import {MissingDataCard} from './missing-data-card';
 
 const GET_X = d => d[0];
 const GET_Y = d => d[1];
@@ -49,6 +50,7 @@ class XVIZPlotComponent extends PureComponent {
     description: PropTypes.string,
     independentVariable: PropTypes.string,
     dependentVariables: PropTypes.arrayOf(PropTypes.string),
+    missingData: PropTypes.arrayOf(PropTypes.string),
 
     // From connected log
     metadata: PropTypes.object,
@@ -185,6 +187,16 @@ class XVIZPlotComponent extends PureComponent {
     } = this.props;
 
     const dataProps = this._extractDataProps();
+    const {dependentVariables} = this.state;
+    const missingStreams = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
+    /*
+      TODO: Add missing independent variables to missingStreams above
+      independent variables might just be timestamps.. don't need to know about each one?
+    */
+
+    /*
+      TODO: MetricCard will not display children if isLoading === true
+    */
 
     return (
       <MetricCard
@@ -193,6 +205,7 @@ class XVIZPlotComponent extends PureComponent {
         style={style}
         isLoading={dataProps.isLoading}
       >
+        {missingStreams.length && <MissingDataCard style={style} missingData={missingStreams} />}
         <MetricChart
           {...dataProps}
           getColor={getColor}
