@@ -39,7 +39,7 @@ class BaseWidget extends PureComponent {
     children: PropTypes.func.isRequired,
 
     // From connected log
-    streamMetadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
     frame: PropTypes.object
   };
 
@@ -57,20 +57,20 @@ class BaseWidget extends PureComponent {
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.streamNames !== this.props.streamNames ||
-      nextProps.streamMetadata !== this.props.streamMetadata ||
+      nextProps.streamsMetadata !== this.props.streamsMetadata ||
       nextProps.frame !== this.props.frame
     ) {
       this.setState({streams: this._extractStreams(nextProps)});
     }
   }
 
-  _extractStreams({streamNames, streamMetadata, frame}) {
+  _extractStreams({streamNames, streamsMetadata, frame}) {
     const result = {};
     for (const key in streamNames) {
       const streamName = streamNames[key];
       if (streamName) {
         result[key] = {
-          ...(streamMetadata && streamMetadata[streamName]),
+          ...streamsMetadata[streamName],
           data: frame && frame.streams[streamName]
         };
       }
@@ -90,12 +90,9 @@ class BaseWidget extends PureComponent {
   }
 }
 
-const getLogState = (log, {streamName}) => {
-  const metadata = log.getMetadata();
-  return {
-    streamMetadata: metadata && metadata.streams,
-    frame: log.getCurrentFrame()
-  };
-};
+const getLogState = log => ({
+  streamsMetadata: log.getStreamsMetadata(),
+  frame: log.getCurrentFrame()
+});
 
 export default connectToLog({getLogState, Component: withTheme(BaseWidget)});

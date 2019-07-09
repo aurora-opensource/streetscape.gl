@@ -76,6 +76,10 @@ Returns the current look ahead offset in seconds.
 
 Returns the loaded metadata.
 
+##### getStreamMetadata()
+
+Returns a map from stream names to stream metadata.
+
 ##### getStreamSettings()
 
 Returns the current stream settings.

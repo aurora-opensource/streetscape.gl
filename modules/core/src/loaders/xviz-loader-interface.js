@@ -174,6 +174,8 @@ export default class XVIZLoaderInterface {
 
   _getDataVersion = () => this.get('dataVersion');
 
+  _getStreamsMetadata = () => this.get('streamsMetadata');
+
   _getStreams = createSelector(this, this._getDataVersion, () => this._getDataByStream());
 
   getBufferedTimeRanges = createSelector(this, this._getDataVersion, () =>
@@ -196,6 +198,16 @@ export default class XVIZLoaderInterface {
       return result;
     }
   );
+
+  getStreamsMetadata = getXVIZConfig().DYNAMIC_STREAM_METADATA
+    ? createSelector(
+        this,
+        [this.getMetadata, this._getStreamsMetadata],
+        (metadata, streamsMetadata) => {
+          return Object.assign({}, streamsMetadata, metadata && metadata.streams);
+        }
+      )
+    : createSelector(this, this.getMetadata, metadata => (metadata && metadata.streams) || {});
 
   getBufferStartTime = createSelector(this, this.getCurrentTime, () => this._getBufferStartTime());
   getBufferEndTime = createSelector(this, this.getCurrentTime, () => this._getBufferEndTime());
@@ -253,10 +265,27 @@ export default class XVIZLoaderInterface {
   }
 
   _onXVIZTimeslice(timeslice) {
+    const oldStreamCount = this.streamBuffer.streamCount;
     const bufferUpdated = this.streamBuffer.insert(timeslice);
     if (bufferUpdated) {
       this._bumpDataVersion();
     }
+
+    if (getXVIZConfig().DYNAMIC_STREAM_METADATA && this.streamBuffer.streamCount > oldStreamCount) {
+      const streamsMetadata = {};
+      const streamSettings = this.get('streamSettings');
+
+      for (const streamName in timeslice.streams) {
+        streamsMetadata[streamName] = timeslice.streams[streamName].__metadata;
+
+        // Add new stream name to stream settings (default on)
+        if (!(streamName in streamSettings)) {
+          streamSettings[streamName] = true;
+        }
+      }
+      this.set('streamsMetadata', streamsMetadata);
+    }
+
     return bufferUpdated;
   }
 

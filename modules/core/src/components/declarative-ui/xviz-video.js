@@ -51,7 +51,7 @@ class BaseComponent extends PureComponent {
 
     // From connected log
     currentTime: PropTypes.number,
-    streamMetadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
     streams: PropTypes.object
   };
 
@@ -71,29 +71,19 @@ class BaseComponent extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (
-      this.props.streamMetadata !== nextProps.streamMetadata ||
+      this.props.streamsMetadata !== nextProps.streamsMetadata ||
       this.props.cameras !== nextProps.cameras
     ) {
       this.setState(this._getStreamNames(nextProps));
     }
   }
 
-  _getStreamNames({streamMetadata, cameras}) {
-    if (!streamMetadata) {
-      return {
-        streamNames: null,
-        selectedStreamName: null
-      };
-    }
-
-    const streamNames = Object.keys(streamMetadata)
-      .filter(
-        streamName =>
-          streamMetadata[streamName] &&
-          streamMetadata[streamName].primitive_type &&
-          (streamMetadata[streamName].primitive_type === 'IMAGE' ||
-            streamMetadata[streamName].primitive_type === 'image') // Support pre-1.0 lowercase value
-      )
+  _getStreamNames({streamsMetadata, cameras}) {
+    const streamNames = Object.keys(streamsMetadata)
+      .filter(streamName => {
+        const type = streamsMetadata[streamName] && streamsMetadata[streamName].primitive_type;
+        return type === 'IMAGE' || type === 'image'; // Support pre-1.0 lowercase value
+      })
       .filter(normalizeStreamFilter(cameras))
       .sort();
     let {selectedStreamName} = this.state || {};
@@ -153,14 +143,11 @@ class BaseComponent extends PureComponent {
   }
 }
 
-const getLogState = log => {
-  const metadata = log.getMetadata();
-  return {
-    currentTime: log.getCurrentTime(),
-    streamMetadata: metadata && metadata.streams,
-    streams: log.getStreams()
-  };
-};
+const getLogState = log => ({
+  currentTime: log.getCurrentTime(),
+  streamsMetadata: log.getStreamsMetadata(),
+  streams: log.getStreams()
+});
 
 const XVIZVideoComponent = withTheme(BaseComponent);
 

@@ -143,7 +143,7 @@ export function formValuesToSettings(metadata, values) {
 class StreamSettingsPanel extends PureComponent {
   static propTypes = {
     style: PropTypes.object,
-    streamMetadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
     onSettingsChange: PropTypes.func
   };
 
@@ -155,7 +155,7 @@ class StreamSettingsPanel extends PureComponent {
   constructor(props) {
     super(props);
 
-    const data = createFormData(props.streamMetadata, props);
+    const data = createFormData(props.streamsMetadata, props);
     const values = settingsToFormValues(data, props.streamSettings);
     this.state = {data, values};
   }
@@ -163,8 +163,8 @@ class StreamSettingsPanel extends PureComponent {
   componentWillReceiveProps(nextProps) {
     let {data, values} = this.state;
 
-    if (nextProps.streamMetadata !== this.props.streamMetadata) {
-      data = createFormData(nextProps.streamMetadata, nextProps);
+    if (nextProps.streamsMetadata !== this.props.streamsMetadata) {
+      data = createFormData(nextProps.streamsMetadata, nextProps);
       values = null;
     }
     if (nextProps.streamSettings !== this.props.streamSettings) {
@@ -174,10 +174,10 @@ class StreamSettingsPanel extends PureComponent {
   }
 
   _onValuesChange = newValues => {
-    const {streamMetadata, log, onSettingsChange} = this.props;
+    const {streamsMetadata, log, onSettingsChange} = this.props;
     const {data} = this.state;
     const values = updateFormValues(data, this.state.values, newValues);
-    const settings = formValuesToSettings(streamMetadata, values);
+    const settings = formValuesToSettings(streamsMetadata, values);
 
     if (!onSettingsChange(settings) && log) {
       log.updateStreamSettings(settings);
@@ -196,12 +196,9 @@ class StreamSettingsPanel extends PureComponent {
   }
 }
 
-const getLogState = log => {
-  const metadata = log.getMetadata();
-  return {
-    streamMetadata: metadata && metadata.streams,
-    streamSettings: log.getStreamSettings()
-  };
-};
+const getLogState = log => ({
+  streamsMetadata: log.getStreamsMetadata(),
+  streamSettings: log.getStreamSettings()
+});
 
 export default connectToLog({getLogState, Component: StreamSettingsPanel});

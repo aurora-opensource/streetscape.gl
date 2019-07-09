@@ -108,9 +108,9 @@ store:
 
 The current playback position of the log.
 
-##### metadata (Object)
+##### streamsMetadata (Object)
 
-The log metadata.
+A map from stream names to their metadata.
 
 ##### logStreams (Object)
 

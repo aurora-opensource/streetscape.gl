@@ -43,10 +43,6 @@ import {DEFAULT_ORIGIN, CAR_DATA, LIGHTS, DEFAULT_CAR} from './constants';
 
 const noop = () => {};
 
-function getStreamMetadata(metadata, streamName) {
-  return (metadata && metadata.streams && metadata.streams[streamName]) || {};
-}
-
 const Z_INDEX = {
   car: 0,
   point: 1,
@@ -59,6 +55,7 @@ export default class Core3DViewer extends PureComponent {
     // Props from loader
     frame: PropTypes.object,
     metadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
 
     // Rendering options
     showMap: PropTypes.bool,
@@ -235,13 +232,13 @@ export default class Core3DViewer extends PureComponent {
   _getLayers() {
     const {
       frame,
-      metadata,
+      streamsMetadata,
       showTooltip,
       objectStates,
       customLayers,
       getTransformMatrix
     } = this.props;
-    if (!frame || !metadata) {
+    if (!frame) {
       return [];
     }
 
@@ -263,10 +260,9 @@ export default class Core3DViewer extends PureComponent {
           // Check lookAheads first because it will contain the selected futures
           // while streams would contain the full futures array
           const stream = lookAheads[streamName] || streams[streamName];
-          const streamMetadata = getStreamMetadata(metadata, streamName);
           const coordinateProps = resolveCoordinateTransform(
             frame,
-            streamMetadata,
+            streamsMetadata[streamName],
             getTransformMatrix
           );
 
@@ -310,10 +306,13 @@ export default class Core3DViewer extends PureComponent {
         if (props.streamName) {
           // Use log data
           const stream = streams[props.streamName];
-          const streamMetadata = getStreamMetadata(metadata, props.streamName);
           Object.assign(
             additionalProps,
-            resolveCoordinateTransform(frame, streamMetadata, getTransformMatrix),
+            resolveCoordinateTransform(
+              frame,
+              streamsMetadata[props.streamName],
+              getTransformMatrix
+            ),
             {
               data: stream && stream.features
             }
@@ -368,7 +367,7 @@ export default class Core3DViewer extends PureComponent {
     const {
       mapboxApiAccessToken,
       frame,
-      metadata,
+      streamsMetadata,
       objectStates,
       renderObjectLabel,
       getTransformMatrix,
@@ -410,7 +409,7 @@ export default class Core3DViewer extends PureComponent {
         <ObjectLabelsOverlay
           objectSelection={objectStates.selected}
           frame={frame}
-          metadata={metadata}
+          streamsMetadata={streamsMetadata}
           renderObjectLabel={renderObjectLabel}
           xvizStyleParser={styleParser}
           style={style}
