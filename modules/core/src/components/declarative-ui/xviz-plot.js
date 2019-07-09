@@ -20,7 +20,7 @@
 
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
+import {MetricCard, MetricChart, Spinner} from '@streetscape.gl/monochrome';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
@@ -189,39 +189,32 @@ class XVIZPlotComponent extends PureComponent {
     const dataProps = this._extractDataProps();
     const {dependentVariables} = this.state;
     const missingStreams = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
-    /*
-      TODO: Add missing independent variables to missingStreams above
-      independent variables might just be timestamps.. don't need to know about each one?
-    */
-
-    /*
-      TODO: MetricCard will not display children if isLoading === true
-    */
 
     return (
-      <MetricCard
-        title={title}
-        description={description}
-        style={style}
-        isLoading={dataProps.isLoading}
-      >
-        {missingStreams.length && <MissingDataCard style={style} missingData={missingStreams} />}
-        <MetricChart
-          {...dataProps}
-          getColor={getColor}
-          highlightX={0}
-          width={width}
-          height={height}
-          style={style}
-          xTicks={xTicks}
-          yTicks={yTicks}
-          formatXTick={formatXTick}
-          formatYTick={formatYTick}
-          onClick={this._onClick}
-          formatTitle={this._formatTitle}
-          horizontalGridLines={horizontalGridLines}
-          verticalGridLines={verticalGridLines}
-        />
+      <MetricCard title={title} description={description} style={style} isLoading={false}>
+        {missingStreams.length !== 0 ? (
+          <MissingDataCard style={style} missingData={missingStreams} />
+        ) : null}
+        {dataProps.isLoading ? (
+          <Spinner />
+        ) : (
+          <MetricChart
+            {...dataProps}
+            getColor={getColor}
+            highlightX={0}
+            width={width}
+            height={height}
+            style={style}
+            xTicks={xTicks}
+            yTicks={yTicks}
+            formatXTick={formatXTick}
+            formatYTick={formatYTick}
+            onClick={this._onClick}
+            formatTitle={this._formatTitle}
+            horizontalGridLines={horizontalGridLines}
+            verticalGridLines={verticalGridLines}
+          />
+        )}
       </MetricCard>
     );
   }

@@ -19,23 +19,24 @@
 // THE SOFTWARE.
 import React from 'react';
 import {Tooltip} from '@streetscape.gl/monochrome';
+import styled from '@emotion/styled';
+
+const WrapperComponent = styled.div(() => ({
+  color: 'red',
+  padding: '10px 0',
+  width: '350px',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis'
+}));
 
 export const MissingDataCard = props => {
   const {missingData} = props;
   const missingDataAsString = missingData.join(', ');
-  const style = {
-    color: 'red',
-    padding: '10px 0',
-    maxWidth: '100%',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis'
-  };
 
   return (
-    <div style={style}>
-      <Tooltip style={props.style.tooltip} content={missingDataAsString}>
-        Missing Data: {missingDataAsString}
-      </Tooltip>
-    </div>
+    <Tooltip style={props.style.tooltip} content={missingDataAsString}>
+      <WrapperComponent>Missing Data: {missingDataAsString}</WrapperComponent>
+    </Tooltip>
   );
 };

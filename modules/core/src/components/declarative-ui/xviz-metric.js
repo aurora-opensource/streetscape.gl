@@ -20,7 +20,7 @@
 
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
+import {MetricCard, MetricChart, Spinner} from '@streetscape.gl/monochrome';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
@@ -135,14 +135,14 @@ class XVIZMetricComponent extends PureComponent {
     const {timeSeries} = this.state;
     const missingStreams = streams.filter(streamToDisplay => !timeSeries.data[streamToDisplay]);
 
-    /*
-      TODO: MetricCard will not display children if isLoading === true
-    */
-
     return (
-      <MetricCard title={title} description={description} isLoading={isLoading} style={style}>
-        {missingStreams.length && <MissingDataCard style={style} missingData={missingStreams} />}
-        {!isLoading && (
+      <MetricCard title={title} description={description} isLoading={false} style={style}>
+        {missingStreams.length !== 0 ? (
+          <MissingDataCard style={style} missingData={missingStreams} />
+        ) : null}
+        {isLoading ? (
+          <Spinner />
+        ) : (
           <MetricChart
             {...this.state.timeSeries}
             getColor={getColor}
