@@ -162,7 +162,7 @@ class LogViewer extends PureComponent {
 const getLogState = log => ({
   frame: log.getCurrentFrame(),
   metadata: log.getMetadata(),
-  streamMetadata: log.getStreamMetadata()
+  streamsMetadata: log.getStreamsMetadata()
 });
 
 export default connectToLog({getLogState, Component: LogViewer});

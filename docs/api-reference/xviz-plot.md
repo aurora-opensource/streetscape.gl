@@ -100,7 +100,7 @@ The following props are automatically populated when the `log` prop is provided.
 manually if the component is used without a `XVIZLoader` instance, e.g. connected with a Redux
 store:
 
-##### streamMetadata (Object)
+##### streamsMetadata (Object)
 
 A map from stream names to their metadata.
 

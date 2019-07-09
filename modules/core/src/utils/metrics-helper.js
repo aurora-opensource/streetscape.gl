@@ -44,21 +44,21 @@ function getTimeSeriesForStream(streamName, metadata, stream, target) {
 
 /**
  * Get the time series for given streams
- * @param logMetadata {object} log metadata
+ * @param streamsMetadata {object} map from stream names to stream metadata
  * @param streams array of streams data
  * @returns {Array} array of time series data
  */
-export function getTimeSeries({streamMetadata = {}, streamNames, streams}) {
+export function getTimeSeries({streamsMetadata = {}, streamNames, streams}) {
   const timeSeries = {
     isLoading: true,
     data: {}
   };
   for (const streamName of streamNames) {
     // ui configuration for this stream
-    const metadata = (streamMetadata && streamMetadata[streamName]) || {};
+    const streamMetadata = (streamsMetadata && streamsMetadata[streamName]) || {};
     const stream = streams[streamName];
     if (stream) {
-      getTimeSeriesForStream(streamName, metadata, stream, timeSeries);
+      getTimeSeriesForStream(streamName, streamMetadata, stream, timeSeries);
     }
   }
 

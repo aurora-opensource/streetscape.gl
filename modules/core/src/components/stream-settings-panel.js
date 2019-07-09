@@ -143,7 +143,7 @@ export function formValuesToSettings(metadata, values) {
 class StreamSettingsPanel extends PureComponent {
   static propTypes = {
     style: PropTypes.object,
-    streamMetadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
     onSettingsChange: PropTypes.func
   };
 
@@ -155,30 +155,29 @@ class StreamSettingsPanel extends PureComponent {
   constructor(props) {
     super(props);
 
-    const data = createFormData(props.streamMetadata, props);
+    const data = createFormData(props.streamsMetadata, props);
     const values = settingsToFormValues(data, props.streamSettings);
     this.state = {data, values};
   }
 
   componentWillReceiveProps(nextProps) {
     let {data, values} = this.state;
-    let dataChanged = false;
 
-    if (nextProps.streamMetadata !== this.props.streamMetadata) {
-      data = createFormData(nextProps.streamMetadata, nextProps);
-      dataChanged = true;
+    if (nextProps.streamsMetadata !== this.props.streamsMetadata) {
+      data = createFormData(nextProps.streamsMetadata, nextProps);
+      values = null;
     }
-    if (dataChanged || nextProps.streamSettings !== this.props.streamSettings) {
+    if (nextProps.streamSettings !== this.props.streamSettings) {
       values = settingsToFormValues(data, nextProps.streamSettings);
     }
     this.setState({data, values});
   }
 
   _onValuesChange = newValues => {
-    const {streamMetadata, log, onSettingsChange} = this.props;
+    const {streamsMetadata, log, onSettingsChange} = this.props;
     const {data} = this.state;
     const values = updateFormValues(data, this.state.values, newValues);
-    const settings = formValuesToSettings(streamMetadata, values);
+    const settings = formValuesToSettings(streamsMetadata, values);
 
     if (!onSettingsChange(settings) && log) {
       log.updateStreamSettings(settings);
@@ -198,7 +197,7 @@ class StreamSettingsPanel extends PureComponent {
 }
 
 const getLogState = log => ({
-  streamMetadata: log.getStreamMetadata(),
+  streamsMetadata: log.getStreamsMetadata(),
   streamSettings: log.getStreamSettings()
 });
 

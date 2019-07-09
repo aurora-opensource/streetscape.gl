@@ -55,7 +55,7 @@ export default class Core3DViewer extends PureComponent {
     // Props from loader
     frame: PropTypes.object,
     metadata: PropTypes.object,
-    streamMetadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
 
     // Rendering options
     showMap: PropTypes.bool,
@@ -232,7 +232,7 @@ export default class Core3DViewer extends PureComponent {
   _getLayers() {
     const {
       frame,
-      streamMetadata,
+      streamsMetadata,
       showTooltip,
       objectStates,
       customLayers,
@@ -262,7 +262,7 @@ export default class Core3DViewer extends PureComponent {
           const stream = lookAheads[streamName] || streams[streamName];
           const coordinateProps = resolveCoordinateTransform(
             frame,
-            streamMetadata[streamName],
+            streamsMetadata[streamName],
             getTransformMatrix
           );
 
@@ -308,7 +308,11 @@ export default class Core3DViewer extends PureComponent {
           const stream = streams[props.streamName];
           Object.assign(
             additionalProps,
-            resolveCoordinateTransform(frame, streamMetadata[props.streamName], getTransformMatrix),
+            resolveCoordinateTransform(
+              frame,
+              streamsMetadata[props.streamName],
+              getTransformMatrix
+            ),
             {
               data: stream && stream.features
             }
@@ -363,7 +367,7 @@ export default class Core3DViewer extends PureComponent {
     const {
       mapboxApiAccessToken,
       frame,
-      streamMetadata,
+      streamsMetadata,
       objectStates,
       renderObjectLabel,
       getTransformMatrix,
@@ -405,7 +409,7 @@ export default class Core3DViewer extends PureComponent {
         <ObjectLabelsOverlay
           objectSelection={objectStates.selected}
           frame={frame}
-          streamMetadata={streamMetadata}
+          streamsMetadata={streamsMetadata}
           renderObjectLabel={renderObjectLabel}
           xvizStyleParser={styleParser}
           style={style}

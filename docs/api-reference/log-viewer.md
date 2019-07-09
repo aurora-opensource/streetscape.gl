@@ -294,6 +294,6 @@ The current frame of the log.
 
 The metadata of the log.
 
-##### streamMetadata (Object)
+##### streamsMetadata (Object)
 
 A map from stream names to their metadata.

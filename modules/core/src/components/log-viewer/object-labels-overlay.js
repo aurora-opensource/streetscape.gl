@@ -34,7 +34,7 @@ export default class ObjectLabelsOverlay extends PureComponent {
   static propTypes = {
     objectSelection: PropTypes.object,
     frame: PropTypes.object,
-    streamMetadata: PropTypes.object,
+    streamsMetadata: PropTypes.object,
     xvizStyleParser: PropTypes.object,
 
     renderObjectLabel: PropTypes.func,
@@ -73,8 +73,8 @@ export default class ObjectLabelsOverlay extends PureComponent {
       return result;
     }
 
-    const {frame, streamMetadata, getTransformMatrix} = this.props;
-    result = resolveCoordinateTransform(frame, streamMetadata[streamName], getTransformMatrix);
+    const {frame, streamsMetadata, getTransformMatrix} = this.props;
+    result = resolveCoordinateTransform(frame, streamsMetadata[streamName], getTransformMatrix);
     // cache calculated coordinate props by stream name
     coordinateProps[streamName] = result;
 
