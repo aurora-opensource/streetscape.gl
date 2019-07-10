@@ -192,29 +192,31 @@ class XVIZPlotComponent extends PureComponent {
 
     return (
       <MetricCard title={title} description={description} style={style} isLoading={false}>
-        {missingStreams.length !== 0 ? (
-          <MissingDataCard style={style} missingData={missingStreams} />
-        ) : null}
-        {dataProps.isLoading ? (
-          <Spinner />
-        ) : (
-          <MetricChart
-            {...dataProps}
-            getColor={getColor}
-            highlightX={0}
-            width={width}
-            height={height}
-            style={style}
-            xTicks={xTicks}
-            yTicks={yTicks}
-            formatXTick={formatXTick}
-            formatYTick={formatYTick}
-            onClick={this._onClick}
-            formatTitle={this._formatTitle}
-            horizontalGridLines={horizontalGridLines}
-            verticalGridLines={verticalGridLines}
-          />
-        )}
+        <>
+          {missingStreams.length !== 0 ? (
+            <MissingDataCard style={style} missingData={missingStreams} />
+          ) : null}
+          {dataProps.isLoading ? (
+            <Spinner />
+          ) : (
+            <MetricChart
+              {...dataProps}
+              getColor={getColor}
+              highlightX={0}
+              width={width}
+              height={height}
+              style={style}
+              xTicks={xTicks}
+              yTicks={yTicks}
+              formatXTick={formatXTick}
+              formatYTick={formatYTick}
+              onClick={this._onClick}
+              formatTitle={this._formatTitle}
+              horizontalGridLines={horizontalGridLines}
+              verticalGridLines={verticalGridLines}
+            />
+          )}
+        </>
       </MetricCard>
     );
   }

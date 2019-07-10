@@ -137,30 +137,32 @@ class XVIZMetricComponent extends PureComponent {
 
     return (
       <MetricCard title={title} description={description} isLoading={false} style={style}>
-        {missingStreams.length !== 0 ? (
-          <MissingDataCard style={style} missingData={missingStreams} />
-        ) : null}
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <MetricChart
-            {...this.state.timeSeries}
-            getColor={getColor}
-            highlightX={currentTime}
-            width={width}
-            height={height}
-            style={style}
-            xTicks={xTicks}
-            yTicks={yTicks}
-            formatXTick={formatXTick}
-            formatYTick={formatYTick}
-            formatValue={formatValue}
-            xDomain={timeDomain}
-            onClick={this._onClick}
-            horizontalGridLines={horizontalGridLines}
-            verticalGridLines={verticalGridLines}
-          />
-        )}
+        <>
+          {missingStreams.length !== 0 ? (
+            <MissingDataCard style={style} missingData={missingStreams} />
+          ) : null}
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <MetricChart
+              {...this.state.timeSeries}
+              getColor={getColor}
+              highlightX={currentTime}
+              width={width}
+              height={height}
+              style={style}
+              xTicks={xTicks}
+              yTicks={yTicks}
+              formatXTick={formatXTick}
+              formatYTick={formatYTick}
+              formatValue={formatValue}
+              xDomain={timeDomain}
+              onClick={this._onClick}
+              horizontalGridLines={horizontalGridLines}
+              verticalGridLines={verticalGridLines}
+            />
+          )}
+        </>
       </MetricCard>
     );
   }
