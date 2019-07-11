@@ -18,25 +18,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import React from 'react';
-import {Tooltip} from '@streetscape.gl/monochrome';
+import {evaluateStyle, Tooltip} from '@streetscape.gl/monochrome';
 import styled from '@emotion/styled';
 
-const WrapperComponent = styled.div(() => ({
+const Container = styled.div(props => ({
+  ...props.theme.__reset__,
   color: 'red',
   padding: '10px 0',
   width: '350px',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
-  textOverflow: 'ellipsis'
+  textOverflow: 'ellipsis',
+  ...evaluateStyle(props.userStyle, props)
 }));
 
 export const MissingDataCard = props => {
-  const {missingData} = props;
+  const {missingData, theme, style} = props;
   const missingDataAsString = missingData.join(', ');
 
   return (
     <Tooltip style={props.style.tooltip} content={missingDataAsString}>
-      <WrapperComponent>Missing Data: {missingDataAsString}</WrapperComponent>
+      <Container theme={theme} userStyle={style.container}>
+        Missing Data: {missingDataAsString}
+      </Container>
     </Tooltip>
   );
 };

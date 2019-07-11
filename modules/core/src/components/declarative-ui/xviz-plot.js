@@ -74,10 +74,15 @@ class XVIZPlotComponent extends PureComponent {
 
   state = {
     independentVariable: null,
-    dependentVariables: {}
+    dependentVariables: {},
+    missingStreams: []
   };
 
   componentWillReceiveProps(nextProps) {
+    const {dependentVariables} = this.state;
+    const missingStreams = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
+    this.setState({missingStreams});
+
     if (!nextProps.variables) {
       this.setState({independentVariable: null});
       return;
@@ -187,8 +192,8 @@ class XVIZPlotComponent extends PureComponent {
     } = this.props;
 
     const dataProps = this._extractDataProps();
-    const {dependentVariables} = this.state;
-    const missingStreams = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
+    // const {dependentVariables} = this.state;
+    const {missingStreams} = this.state; // = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
 
     return (
       <MetricCard title={title} description={description} style={style} isLoading={false}>
