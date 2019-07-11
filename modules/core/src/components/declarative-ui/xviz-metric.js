@@ -138,8 +138,7 @@ class XVIZMetricComponent extends PureComponent {
     } = this.props;
     const isLoading = currentTime == null; /* eslint-disable-line no-eq-null, eqeqeq */
     const timeDomain = Number.isFinite(startTime) ? [startTime, endTime] : null;
-    // const {timeSeries} = this.state;
-    const {missingStreams} = this.state; // = streams.filter(streamToDisplay => !timeSeries.data[streamToDisplay]);
+    const {missingStreams} = this.state;
 
     return (
       <MetricCard title={title} description={description} isLoading={false} style={style}>

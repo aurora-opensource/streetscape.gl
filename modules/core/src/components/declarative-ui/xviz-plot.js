@@ -192,8 +192,7 @@ class XVIZPlotComponent extends PureComponent {
     } = this.props;
 
     const dataProps = this._extractDataProps();
-    // const {dependentVariables} = this.state;
-    const {missingStreams} = this.state; // = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
+    const {missingStreams} = this.state;
 
     return (
       <MetricCard title={title} description={description} style={style} isLoading={false}>
