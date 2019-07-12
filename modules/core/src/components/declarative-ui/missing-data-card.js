@@ -38,7 +38,7 @@ export const MissingDataCard = props => {
 
   return (
     <Tooltip style={props.style.tooltip} content={missingDataAsString}>
-      <Container theme={theme} userStyle={style.container}>
+      <Container theme={theme} userStyle={style.missingData}>
         Missing Data: {missingDataAsString}
       </Container>
     </Tooltip>
