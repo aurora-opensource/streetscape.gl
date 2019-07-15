@@ -77,7 +77,6 @@ class XVIZMetricComponent extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      missingStreams: [],
       timeSeries: this._getTimeSeries(props)
     };
   }
@@ -92,12 +91,6 @@ class XVIZMetricComponent extends PureComponent {
         timeSeries: this._getTimeSeries(nextProps)
       });
     }
-
-    const {timeSeries} = this.state;
-    const missingStreams = this.props.streams.filter(
-      streamToDisplay => !timeSeries.data[streamToDisplay]
-    );
-    this.setState({missingStreams});
   }
 
   _getTimeSeries(props) {
@@ -138,7 +131,7 @@ class XVIZMetricComponent extends PureComponent {
     } = this.props;
     const isLoading = currentTime == null; /* eslint-disable-line no-eq-null, eqeqeq */
     const timeDomain = Number.isFinite(startTime) ? [startTime, endTime] : null;
-    const {missingStreams} = this.state;
+    const {missingStreams} = this.state.timeSeries;
 
     return (
       <MetricCard title={title} description={description} isLoading={false} style={style}>

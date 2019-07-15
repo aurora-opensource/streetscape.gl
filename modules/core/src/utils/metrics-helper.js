@@ -51,7 +51,8 @@ function getTimeSeriesForStream(streamName, metadata, stream, target) {
 export function getTimeSeries({metadata = {}, streamNames, streams}) {
   const timeSeries = {
     isLoading: true,
-    data: {}
+    data: {},
+    missingStreams: []
   };
   for (const streamName of streamNames) {
     // ui configuration for this stream
@@ -61,6 +62,10 @@ export function getTimeSeries({metadata = {}, streamNames, streams}) {
       getTimeSeriesForStream(streamName, streamMetadata, stream, timeSeries);
     }
   }
+
+  timeSeries.missingStreams = streamNames.filter(
+    streamToDisplay => !timeSeries.data[streamToDisplay]
+  );
 
   return timeSeries;
 }

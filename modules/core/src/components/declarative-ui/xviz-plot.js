@@ -75,14 +75,10 @@ class XVIZPlotComponent extends PureComponent {
   state = {
     independentVariable: null,
     dependentVariables: {},
-    missingStreams: []
+    missingStreams: this.props.dependentVariables
   };
 
   componentWillReceiveProps(nextProps) {
-    const {dependentVariables} = this.state;
-    const missingStreams = Object.keys(dependentVariables).filter(dv => !dependentVariables[dv]);
-    this.setState({missingStreams});
-
     if (!nextProps.variables) {
       this.setState({independentVariable: null});
       return;
@@ -114,7 +110,10 @@ class XVIZPlotComponent extends PureComponent {
     if (independentVariableChanged || dependentVariablesChanged) {
       this.setState({
         independentVariable,
-        dependentVariables: {...this.state.dependentVariables, ...updatedDependentVariable}
+        dependentVariables: {...this.state.dependentVariables, ...updatedDependentVariable},
+        missingStreams: Object.keys(updatedDependentVariable).filter(
+          dv => !updatedDependentVariable[dv]
+        )
       });
     }
   }
