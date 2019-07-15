@@ -49,7 +49,6 @@ class XVIZMetricComponent extends PureComponent {
     streams: PropTypes.arrayOf(PropTypes.string).isRequired,
     title: PropTypes.string,
     description: PropTypes.string,
-    missingData: PropTypes.arrayOf(PropTypes.string),
 
     // From connected log
     currentTime: PropTypes.number,
@@ -136,9 +135,9 @@ class XVIZMetricComponent extends PureComponent {
     return (
       <MetricCard title={title} description={description} isLoading={false} style={style}>
         <>
-          {missingStreams.length !== 0 ? (
+          {missingStreams.length > 0 && (
             <MissingDataCard style={style} missingData={missingStreams} />
-          ) : null}
+          )}
           {isLoading ? (
             <Spinner />
           ) : (

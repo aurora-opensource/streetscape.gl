@@ -50,7 +50,6 @@ class XVIZPlotComponent extends PureComponent {
     description: PropTypes.string,
     independentVariable: PropTypes.string,
     dependentVariables: PropTypes.arrayOf(PropTypes.string),
-    missingData: PropTypes.arrayOf(PropTypes.string),
 
     // From connected log
     metadata: PropTypes.object,
