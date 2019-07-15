@@ -17,26 +17,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-const test = require('tape');
-const {_enableDOMLogging: enableDOMLogging} = require('@probe.gl/test-utils');
+import test from 'tape';
+import {TEST_CASES, WIDTH, HEIGHT} from './test-cases';
+import {SnapshotTestRunner} from '@deck.gl/test-utils';
 
-/* global window */
-let failed = false;
-test.onFinish(window.browserTestDriver_finish);
-test.onFailure(() => {
-  failed = true;
-  window.browserTestDriver_fail();
+test('Render Test', t => {
+  // tape's default timeout is 500ms
+  t.timeoutAfter(TEST_CASES.length * 2000);
+
+  new SnapshotTestRunner({width: WIDTH, height: HEIGHT})
+    .add(TEST_CASES)
+    .run({
+      onTestStart: testCase => t.comment(testCase.name),
+      onTestPass: (testCase, result) => t.pass(`match: ${result.matchPercentage}`),
+      onTestFail: (testCase, result) => t.fail(result.error || `match: ${result.matchPercentage}`),
+
+      imageDiffOptions: {
+        threshold: 0.995
+        // uncomment to save screenshot to disk
+        // , saveOnFail: true
+        // uncomment `saveAs` to overwrite current golden images
+        // if left commented will be saved as `[name]-fail.png.` enabling comparison
+        // , saveAs: '[name].png'
+      }
+    })
+    .then(() => t.end());
 });
-
-// tap-browser-color alternative
-enableDOMLogging({
-  getStyle: message => ({
-    background: failed ? '#F28E82' : '#8ECA6C',
-    position: 'absolute',
-    top: '450px',
-    width: '100%'
-  })
-});
-
-require('./modules/core');
-require('./render');

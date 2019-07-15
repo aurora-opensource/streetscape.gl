@@ -19,7 +19,6 @@
 // THE SOFTWARE.
 
 export default `
-#extension GL_OES_standard_derivatives : enable
 #define SHADER_NAME imagery-layer-fragment-shader
 
 #ifdef GL_ES
