@@ -53,7 +53,7 @@ void main(void) {
   vec2 vertex_offset = (texCoords / 2.0 + instanceOffsets / iconSize) * sizeScale * instanceSizes;
   vec3 vertex = vec3(
     vertex_offset.x,
-    vertex_offset.y * (1.0 - render3D),
+    vertex_offset.y * (render3D - 1.0),
     -vertex_offset.y * render3D
   );
 

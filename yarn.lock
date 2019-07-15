@@ -787,6 +787,11 @@
   dependencies:
     prop-types "^15.6.0"
 
+"@deck.gl/test-utils@^7.1.0":
+  version "7.1.10"
+  resolved "https://registry.yarnpkg.com/@deck.gl/test-utils/-/test-utils-7.1.10.tgz#b11735203de45c01aedf3cb3d69e39afe939fe6e"
+  integrity sha512-ogBlSnJqcm/F2DlnJE1Ugvx3gNyu6TpQK9zqJxrIeSjKyDpiFk8rxtys6vFHPbT3dAww7VA+yDU7YwxEXKx2qA==
+
 "@emotion/cache@^10.0.9":
   version "10.0.9"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-10.0.9.tgz#e0c7b7a289f7530edcfad4dcf3858bd2e5700a6f"

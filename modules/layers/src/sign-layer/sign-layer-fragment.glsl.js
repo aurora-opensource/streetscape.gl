@@ -23,6 +23,7 @@ export default `\
 
 precision highp float;
 
+uniform float render3D;
 uniform float opacity;
 uniform sampler2D iconsTexture;
 
@@ -36,7 +37,7 @@ void main(void) {
 
   // front of the sign, uses pixel color from the texture
   // back of the sign uses texture as transparency mask
-  vec3 color = gl_FrontFacing ? texColor.rgb : vColor.rgb;
+  vec3 color = render3D < 0.5 || gl_FrontFacing ? texColor.rgb : vColor.rgb;
   float a = texColor.a * opacity;
 
   if (a < MIN_ALPHA) {
