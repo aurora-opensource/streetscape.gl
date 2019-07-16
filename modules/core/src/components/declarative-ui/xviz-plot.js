@@ -195,9 +195,9 @@ class XVIZPlotComponent extends PureComponent {
     return (
       <MetricCard title={title} description={description} style={style} isLoading={false}>
         <>
-          {missingStreams.length !== 0 ? (
+          {missingStreams.length > 0 && (
             <MissingDataCard style={style} missingData={missingStreams} />
-          ) : null}
+          )}
           {dataProps.isLoading ? (
             <Spinner />
           ) : (
