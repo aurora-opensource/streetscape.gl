@@ -20,7 +20,8 @@
 import {CarMesh} from 'streetscape.gl';
 
 /* eslint-disable camelcase */
-export const MAPBOX_TOKEN = "pk.eyJ1Ijoiam9uLXRyaSIsImEiOiJjanhnbzVmdGgwNDBqM3lxeTc0eDZ6eXRkIn0.I-8tKdRx8Qw2LiqO_rpA_g"; // eslint-disable-line
+export const MAPBOX_TOKEN =
+  'pk.eyJ1Ijoiam9uLXRyaSIsImEiOiJjanhnbzVmdGgwNDBqM3lxeTc0eDZ6eXRkIn0.I-8tKdRx8Qw2LiqO_rpA_g'; // eslint-disable-line
 
 // export const MAP_STYLE = 'mapbox://styles/mapbox/satellite-streets-v9';
 export const MAP_STYLE = 'mapbox://styles/mapbox/streets-v11';
