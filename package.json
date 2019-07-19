@@ -29,7 +29,7 @@
     "coveralls": "^3.0.0",
     "eslint-config-uber-jsx": "^3.3.3",
     "eslint-plugin-react": "^7.5.1",
-    "ocular-dev-tools": "0.0.22",
+    "ocular-dev-tools": "0.0.27",
     "pre-commit": "^1.2.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
