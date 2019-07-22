@@ -135,9 +135,14 @@ class XVIZPlotComponent extends PureComponent {
     const x = independentVariable[0].values;
 
     return variable.map(({id, values}) => {
+      // TypeArray.map() cannot return an array as the result so construct
+      // a new Array explicitly
+      const valueTuple = new Array(values.length);
+      values.forEach((v, k) => (valueTuple[k] = [x[k], v]));
+
       return {
         id,
-        values: values.map((v, k) => [x[k], v])
+        values: valueTuple
       };
     });
   }

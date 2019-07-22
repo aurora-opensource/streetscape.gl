@@ -60,7 +60,7 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
     // TODO - remove when builder updates
     streamTransform = new Pose(pose).getTransformationMatrix();
   }
-  if (streamTransform) {
+  if (streamTransform && streamTransform.length > 0) {
     modelMatrix = modelMatrix
       ? new Matrix4(modelMatrix).multiplyRight(streamTransform)
       : streamTransform;
