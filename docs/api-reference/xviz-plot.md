@@ -33,7 +33,7 @@ Custom CSS overrides. Supports all
 [MetricChart](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling-1)
 and
 [RichMetricChart](https://github.com/uber-web/monochrome/blob/master/src/metric-card/README.md#styling-2)
-options.
+options. Supports `missingData` option as an override to `MissingDataCard` component.
 
 ##### getColor (Object|Function|String, optional)
 

@@ -20,10 +20,11 @@
 
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import {MetricCard, MetricChart} from '@streetscape.gl/monochrome';
+import {MetricCard, MetricChart, Spinner} from '@streetscape.gl/monochrome';
 
 import {DEFAULT_COLOR_SERIES} from './constants';
 import connectToLog from '../connect';
+import {MissingDataCard} from './missing-data-card';
 
 const GET_X = d => d[0];
 const GET_Y = d => d[1];
@@ -72,7 +73,8 @@ class XVIZPlotComponent extends PureComponent {
 
   state = {
     independentVariable: null,
-    dependentVariables: {}
+    dependentVariables: {},
+    missingStreams: this.props.dependentVariables
   };
 
   componentWillReceiveProps(nextProps) {
@@ -107,7 +109,10 @@ class XVIZPlotComponent extends PureComponent {
     if (independentVariableChanged || dependentVariablesChanged) {
       this.setState({
         independentVariable,
-        dependentVariables: {...this.state.dependentVariables, ...updatedDependentVariable}
+        dependentVariables: {...this.state.dependentVariables, ...updatedDependentVariable},
+        missingStreams: Object.keys(updatedDependentVariable).filter(
+          dv => !updatedDependentVariable[dv]
+        )
       });
     }
   }
@@ -185,30 +190,35 @@ class XVIZPlotComponent extends PureComponent {
     } = this.props;
 
     const dataProps = this._extractDataProps();
+    const {missingStreams} = this.state;
 
     return (
-      <MetricCard
-        title={title}
-        description={description}
-        style={style}
-        isLoading={dataProps.isLoading}
-      >
-        <MetricChart
-          {...dataProps}
-          getColor={getColor}
-          highlightX={0}
-          width={width}
-          height={height}
-          style={style}
-          xTicks={xTicks}
-          yTicks={yTicks}
-          formatXTick={formatXTick}
-          formatYTick={formatYTick}
-          onClick={this._onClick}
-          formatTitle={this._formatTitle}
-          horizontalGridLines={horizontalGridLines}
-          verticalGridLines={verticalGridLines}
-        />
+      <MetricCard title={title} description={description} style={style} isLoading={false}>
+        <>
+          {missingStreams.length > 0 && (
+            <MissingDataCard style={style} missingData={missingStreams} />
+          )}
+          {dataProps.isLoading ? (
+            <Spinner />
+          ) : (
+            <MetricChart
+              {...dataProps}
+              getColor={getColor}
+              highlightX={0}
+              width={width}
+              height={height}
+              style={style}
+              xTicks={xTicks}
+              yTicks={yTicks}
+              formatXTick={formatXTick}
+              formatYTick={formatYTick}
+              onClick={this._onClick}
+              formatTitle={this._formatTitle}
+              horizontalGridLines={horizontalGridLines}
+              verticalGridLines={verticalGridLines}
+            />
+          )}
+        </>
       </MetricCard>
     );
   }
