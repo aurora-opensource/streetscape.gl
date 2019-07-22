@@ -38,6 +38,7 @@ import {resolveCoordinateTransform} from '../../utils/transform';
 import {mergeXVIZStyles} from '../../utils/style';
 import {normalizeStreamFilter} from '../../utils/stream-utils';
 import stats from '../../utils/stats';
+import memoize from '../../utils/memoize';
 
 import {DEFAULT_ORIGIN, CAR_DATA, LIGHTS, DEFAULT_CAR} from './constants';
 
@@ -111,8 +112,12 @@ export default class Core3DViewer extends PureComponent {
     super(props);
 
     this.state = {
-      styleParser: this._getStyleParser(props)
+      styleParser: this._getStyleParser(props),
+      views: getViews(props.viewMode)
     };
+
+    this.getLayers = memoize(this._getLayers.bind(this));
+    this.getViewState = memoize(this._getViewState);
   }
 
   deckRef = React.createRef();
@@ -132,6 +137,9 @@ export default class Core3DViewer extends PureComponent {
       };
 
       nextProps.onViewStateChange({viewState, viewOffset});
+      this.setState({
+        views: getViews(nextProps.viewMode)
+      });
     }
     if (
       this.props.metadata !== nextProps.metadata ||
@@ -194,8 +202,7 @@ export default class Core3DViewer extends PureComponent {
     return new XVIZStyleParser(mergeXVIZStyles(metadata && metadata.styles, xvizStyles));
   }
 
-  _getCarLayer() {
-    const {frame, car} = this.props;
+  _getCarLayer({frame, car}) {
     const {
       origin = DEFAULT_ORIGIN,
       mesh,
@@ -229,30 +236,30 @@ export default class Core3DViewer extends PureComponent {
     });
   }
 
-  _getLayers() {
+  _getLayers(opts) {
     const {
       frame,
       streamsMetadata,
       showTooltip,
       objectStates,
       customLayers,
-      getTransformMatrix
-    } = this.props;
+      getTransformMatrix,
+      styleParser
+    } = opts;
     if (!frame) {
       return [];
     }
 
     const {streams, lookAheads = {}} = frame;
-    const {styleParser} = this.state;
 
-    const streamFilter = normalizeStreamFilter(this.props.streamFilter);
+    const streamFilter = normalizeStreamFilter(opts.streamFilter);
     const featuresAndFutures = new Set(
       Object.keys(streams)
         .concat(Object.keys(lookAheads))
         .filter(streamFilter)
     );
 
-    let layerList = [this._getCarLayer()];
+    let layerList = [this._getCarLayer(opts)];
 
     layerList = layerList.concat(
       Array.from(featuresAndFutures)
@@ -348,9 +355,7 @@ export default class Core3DViewer extends PureComponent {
     return this.isHovering ? 'pointer' : 'crosshair';
   };
 
-  _getViewState() {
-    const {viewMode, frame, viewState, viewOffset} = this.props;
-
+  _getViewState({viewMode, frame, viewState, viewOffset}) {
     const trackedPosition = frame
       ? {
           longitude: frame.trackPosition[0],
@@ -367,16 +372,34 @@ export default class Core3DViewer extends PureComponent {
     const {
       mapboxApiAccessToken,
       frame,
+      car,
       streamsMetadata,
+      streamFilter,
+      showTooltip,
       objectStates,
       renderObjectLabel,
+      customLayers,
       getTransformMatrix,
       style,
       mapStyle,
       viewMode,
+      viewState,
+      viewOffset,
       showMap
     } = this.props;
-    const {styleParser} = this.state;
+    const {styleParser, views} = this.state;
+    const layers = this.getLayers({
+      frame,
+      car,
+      streamsMetadata,
+      streamFilter,
+      showTooltip,
+      objectStates,
+      customLayers,
+      getTransformMatrix,
+      styleParser
+    });
+    const viewStates = this.getViewState({viewMode, frame, viewState, viewOffset});
 
     return (
       <DeckGL
@@ -384,9 +407,9 @@ export default class Core3DViewer extends PureComponent {
         height="100%"
         ref={this.deckRef}
         effects={[LIGHTS]}
-        views={getViews(viewMode)}
-        viewState={this._getViewState()}
-        layers={this._getLayers()}
+        views={views}
+        viewState={viewStates}
+        layers={layers}
         layerFilter={this._layerFilter}
         getCursor={this._getCursor}
         onLoad={this._onDeckLoad}
