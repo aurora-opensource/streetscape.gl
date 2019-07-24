@@ -88,7 +88,9 @@ class XVIZTableComponent extends PureComponent {
       };
       rowIds[node.id] = row;
 
-      if (node.parent === undefined) {
+      // Validate the property is on the instance, and not just in the
+      // prototype chain. This comes from how protobuf.js implements messages
+      if (!node.hasOwnProperty('parent') || node.parent === undefined) {
         rows.push(row);
       } else {
         const parentRow = rowIds[node.parent];
