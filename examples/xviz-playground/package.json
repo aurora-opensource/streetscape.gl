@@ -7,7 +7,7 @@
     "build": "NODE_ENV=production webpack -p --env.local --env.prod"
   },
   "dependencies": {
-    "@xviz/builder": "^1.0.0-beta.16",
+    "@xviz/builder": "^1.0.0-beta.19",
     "brace": "^0.8.0",
     "debounce": "^1.2.0",
     "react": "^16.3.0",
