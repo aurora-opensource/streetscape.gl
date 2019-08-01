@@ -87,8 +87,10 @@ class XVIZPanelComponent extends PureComponent {
 const getLogState = (log, ownProps) => {
   const metadata = log.getMetadata();
   const panel = metadata && metadata.ui_config && metadata.ui_config[ownProps.name];
+  // If we have a panel we want to use the 'config', else we just return the panel
+  // which is either the 'beta' structure for UI or undefined
   return {
-    uiConfig: panel.config || panel
+    uiConfig: (panel && panel.config) || panel
   };
 };
 
