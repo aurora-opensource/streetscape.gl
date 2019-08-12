@@ -28,8 +28,8 @@ import * as rangeUtils from '../utils/buffer-range';
 const DEFAULT_LOG_PROFILE = 'default';
 const DEFAULT_RETRY_ATTEMPTS = 3;
 const DEFAULT_BUFFER_LENGTH = {
-  seconds: 30,
-  milliseconds: 30000
+  seconds: 60,
+  milliseconds: 60000
 };
 
 /* eslint-disable no-unused-vars */
