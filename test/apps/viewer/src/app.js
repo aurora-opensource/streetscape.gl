@@ -61,14 +61,17 @@ function buildLoaderOptions() {
   // I prefer to work with an object
   const params = {};
   for (const [k, v] of url.searchParams.entries()) {
-    params[k] = v;
+    if (Number.isNaN(Number.parseFloat(v))) {
+      params[k] = v;
+    } else {
+      params[k] = Number.parseFloat(v);
+    }
   }
 
   const {
     // These will not be passed through to server request
     server = 'ws://localhost:3000',
     worker = true,
-    bufferLength = 10,
     // These will be passed through to server request
     log = 'mock',
     profile,
@@ -100,7 +103,7 @@ function buildLoaderOptions() {
     options.duration = duration;
   }
   if (__IS_LIVE__) {
-    options.bufferLength = bufferLength;
+    options.bufferLength = params.bufferLength || 10;
   }
 
   return options;
