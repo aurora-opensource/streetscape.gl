@@ -15,7 +15,7 @@ viewport, and then render it with a deck.gl
 
 ```js
 import React from 'react';
-import {GeoJSONLayer} from '@deck.gl/layers';
+import {GeoJsonLayer} from '@deck.gl/layers';
 import {LogViewer} from 'streetscape.gl';
 
 class MapView extends React.PureComponent {
@@ -42,15 +42,15 @@ class MapView extends React.PureComponent {
 
   render() {
     const customLayers = [
-      new GeoJSONLayer({
+      new GeoJsonLayer({
         id: 'map-geojson-layer',
         // The layer is only re-generated if this URL changes
         data: this.state.mapGeoJsonUrl,
         stroked: true,
         filled: true,
         extruded: false,
-        getFillColor: f => f.properties.fill,
-        getLineColor: f => f.properties.stroke,
+        getFillColor: f => (f && f.properties && f.properties.fill) || [255, 0, 0],
+        getLineColor: f => (f && f.properties && f.properties.stroke) || [0, 255, 0],
         getLineWidth: 0.5
       })
     ];
