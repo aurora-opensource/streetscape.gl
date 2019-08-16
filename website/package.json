@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "version": "0.0.1",
   "engines": {
-    "node": ">=8.0.0",
-    "npm": ">=5.4.2",
+    "node": ">=10.16",
+    "npm": ">=6",
     "yarn": ">=1.10.0"
   },
   "scripts": {
