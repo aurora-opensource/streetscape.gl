@@ -21,7 +21,7 @@
     "@deck.gl/mesh-layers": "^7.1.2",
     "@deck.gl/react": "^7.1.2",
     "@streetscape.gl/monochrome": "^1.0.0-beta.4",
-    "@xviz/parser": "^1.0.0-beta.20",
+    "@xviz/parser": "^1.0.0-beta.22",
     "lodash.merge": "^4.6.1",
     "math.gl": "^2.3.1",
     "promise-retry": "^1.1.1",
