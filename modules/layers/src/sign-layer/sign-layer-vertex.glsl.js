@@ -68,7 +68,7 @@ void main(void) {
 
   vTextureCoords.y = 1.0 - vTextureCoords.y;
 
-  vColor = instanceColors / 255.;
+  vColor = instanceColors;
 
   picking_setPickingColor(instancePickingColors);
 }
