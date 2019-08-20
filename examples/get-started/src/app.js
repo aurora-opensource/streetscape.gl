@@ -37,9 +37,15 @@ import {
 } from 'streetscape.gl';
 import {Form} from '@streetscape.gl/monochrome';
 
+import {load, registerLoaders} from '@loaders.gl/core';
+import {GLTFLoader} from '@loaders.gl/gltf';
+import {ScenegraphLayer} from '@deck.gl/mesh-layers';
+
 import {XVIZ_CONFIG, APP_SETTINGS, MAPBOX_TOKEN, MAP_STYLE, XVIZ_STYLE, CAR} from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
+
+registerLoaders([GLTFLoader]);
 
 const TIMEFORMAT_SCALE = getXVIZConfig().TIMESTAMP_FORMAT === 'seconds' ? 1000 : 1;
 
@@ -213,6 +219,31 @@ const geojson =
     }
   ]
 };
+
+const duckURL = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb';
+const gltfData =
+  [
+    {
+      position:
+      [
+        0.0,
+        0.0,
+        1.0 
+      ],
+      color: [255, 0, 0]
+    },
+    {
+      position:
+      [
+        0,
+        0,
+        1
+      ],
+      color: [0, 255, 0]
+    }
+  ]
+
+
 // __IS_STREAMING__ and __IS_LIVE__ are defined in webpack.config.js
 const exampleLog = require(__IS_STREAMING__
   ? './log-from-stream'
@@ -226,11 +257,23 @@ class Example extends PureComponent {
     settings: {
       viewMode: 'PERSPECTIVE',
       showTooltip: false
-    }
+    },
+    duckLayer: null
   };
 
   componentDidMount() {
     this.state.log.on('error', console.error).connect();
+    load(duckURL, GLTFLoader)
+      .then(data => {
+        this.setState({duckLayer: new ScenegraphLayer({
+            id: 'scenegraph-layer',
+            data: gltfData,
+            coordinate: 'VEHICLE_RELATIVE',
+            scenegraph: data,
+            getOrientation: [0, -90, 90]
+          })
+        });
+      });
   }
 
   _onSettingsChange = changedSettings => {
@@ -240,8 +283,9 @@ class Example extends PureComponent {
   };
 
   render() {
-    const {log, settings} = this.state;
+    const {log, settings, duckLayer} = this.state;
     const frame = log.getCurrentFrame();
+
     const customLayers = [
       new GeoJsonLayer({
         id: 'map-geojson-layer',
@@ -255,6 +299,10 @@ class Example extends PureComponent {
         getLineWidth: 0.5
       })
     ];
+
+    if (duckLayer) {
+      customLayers.push(duckLayer);
+    }
 
     return (
       <div id="container">
