@@ -3331,27 +3331,27 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@xviz/io@1.0.0-beta.22":
-  version "1.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@xviz/io/-/io-1.0.0-beta.22.tgz#96e70d8888e09edf699439191d88f0eee83ba495"
-  integrity sha512-1CGkzc7GlC870rVQE+P/UWLsI9ESRkaluNIJkUBBDE9lNQZaduIIg4jwv8qmO1mJYSUBskNq+YrRnsfl9+FDFA==
+"@xviz/io@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@xviz/io/-/io-1.0.0.tgz#906e14e9360aa922e75f5110f8186da6a5894588"
+  integrity sha512-ph+soaTFH3Qe9XlNxTnj026fVdUrjL1cN6dKasuMHcj8lyvvQsTF1qI4SP80VWsZ9slfNvEX2ol6sw5ZP7DRSw==
   dependencies:
     "@loaders.gl/gltf" "~1.1.7"
     "@loaders.gl/polyfills" "~1.1.7"
     "@turf/turf" "^5.1.6"
-    "@xviz/schema" "1.0.0-beta.22"
+    "@xviz/schema" "1.0.0"
     base64-js "^1.3.0"
     math.gl "^2.0.0"
     protobufjs "https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a"
     text-encoding "^0.6.4"
 
-"@xviz/parser@^1.0.0-beta.22":
-  version "1.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0-beta.22.tgz#d1b31fe2691ad65adf2db9d2f7543f4dbecc2d05"
-  integrity sha512-MtoEe8cIRvoR92xM/AXN1NdzwRtRDkWPkm8eUkXYqq1Fz0hBqTBebpjcFe9uOECEjZ4W/489TvUp4aLICPIhYw==
+"@xviz/parser@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.0.tgz#87427f432c070072fea714e6cd3745e4323d8459"
+  integrity sha512-VzWImYfwnyZx6AL3/b7A3B4NkqrL0DYIvcWn1VpIqjwppOqv+yr36m8nE0IQDd5ZSjSjulvD8Mc7TswSITsZpA==
   dependencies:
     "@loaders.gl/gltf" "~1.1.7"
-    "@xviz/io" "1.0.0-beta.22"
+    "@xviz/io" "1.0.0"
     base64-js "^1.3.0"
     color "^3.0.0"
     math.gl "^2.3.1"
@@ -3359,10 +3359,10 @@
     text-encoding "^0.6.4"
     viewport-mercator-project "^6.1.0"
 
-"@xviz/schema@1.0.0-beta.22":
-  version "1.0.0-beta.22"
-  resolved "https://registry.yarnpkg.com/@xviz/schema/-/schema-1.0.0-beta.22.tgz#967897cfb5c58333ed58a744297ae5b0dc8614fb"
-  integrity sha512-GfIovQXqYtMQR/gCVvHPErJlQsMPO1JXnIKvaqWxhg215GAx2IuxEx2yhUr6BonaSvC4z7h1tdPfEa0sH8ibbw==
+"@xviz/schema@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@xviz/schema/-/schema-1.0.0.tgz#b74a4ac815da745d1a6aefe59f69373ccb5fd4bc"
+  integrity sha512-zL3aGmJsAQVlkrR+sq31Rp7VnBCk8f2GGryij6/1uKIctKk9On4Fwv+YvMjG6/3fJ5gcd8ow54kdu8t52Ogu2g==
   dependencies:
     ajv "^6.5.2"
     is "^3.2.1"
