@@ -158,10 +158,8 @@ export default class TrafficLightLayer extends Layer {
     return {box, lights};
   }
 
-  updateAttributes(props) {
-    super.updateAttributes(props);
-    const attributeManager = this.getAttributeManager();
-    const changedAttributes = attributeManager.getChangedAttributes({clearChangedFlags: true});
+  updateAttributes(changedAttributes) {
+    super.updateAttributes(changedAttributes);
 
     for (const model of this.getModels()) {
       model.setInstanceCount(this.props.data.length);

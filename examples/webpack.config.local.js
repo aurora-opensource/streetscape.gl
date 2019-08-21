@@ -55,7 +55,21 @@ function makeLocalDevConfig() {
             '../node_modules/@streetscape.gl/monochrome'
           ),
           react: resolve(__dirname, '../node_modules/react'),
-          'react-dom': resolve(__dirname, '../node_modules/react-dom')
+          'react-dom': resolve(__dirname, '../node_modules/react-dom'),
+          '@deck.gl/core': resolve(__dirname, '../node_modules/@deck.gl/core'),
+          '@deck.gl/layers': resolve(__dirname, '../node_modules/@deck.gl/layers'),
+          '@deck.gl/mesh-layers': resolve(__dirname, '../node_modules/@deck.gl/mesh-layers'),
+          '@deck.gl/react': resolve(__dirname, '../node_modules/@deck.gl/react'),
+          '@luma.gl/addons': resolve(__dirname, '../node_modules/@luma.gl/addons'),
+          '@luma.gl/constants': resolve(__dirname, '../node_modules/@luma.gl/constants'),
+          '@luma.gl/core': resolve(__dirname, '../node_modules/@luma.gl/core'),
+          '@luma.gl/shadertools': resolve(__dirname, '../node_modules/@luma.gl/shadertools'),
+          '@luma.gl/webgl': resolve(__dirname, '../node_modules/@luma.gl/webgl'),
+          '@luma.gl/webgl-state-tracker': resolve(
+            __dirname,
+            '../node_modules/@luma.gl/webgl-state-tracker'
+          ),
+          '@luma.gl/webgl2-polyfill': resolve(__dirname, '../node_modules/@luma.gl/webgl2-polyfill')
         },
         ALIASES
       )

@@ -82,8 +82,8 @@ void main(void) {
     colorPosition = project_uModelMatrix * vec4(instancePositions, 1.0);
     vColor = vec4(distToRgb(colorPosition.z), opacity);
   } else {
-    float alpha = colorSize == 3.0 ? 255. : instanceColors.a;
-    vColor = vec4(instanceColors.rgb, alpha * opacity) / 255.;
+    float alpha = colorSize == 3.0 ? 1.0 : instanceColors.a;
+    vColor = vec4(instanceColors.rgb, alpha * opacity);
   }
 
   // Set color to be rendered to picking fbo (also used to check for selection highlight).
