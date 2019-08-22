@@ -1,5 +1,7 @@
 # What's New
 
-## 1.0.0-beta
+## v1.0.0 Released
 
-Initial beta release
+We finished our beta period and released v1.0.0 in August of 2019.
+
+The latest documentation is available at https://avs.auto
