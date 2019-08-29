@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "streetscape.gl": "^1.0.0-beta"
+    "streetscape.gl": "^1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
