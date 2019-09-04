@@ -17,7 +17,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {SignLayer, TrafficLightLayer} from '@streetscape.gl/layers';
+import {SignLayer, TrafficLightLayer, LaneLayer} from '@streetscape.gl/layers';
 import {COORDINATE_SYSTEM} from '@deck.gl/core';
 
 export const WIDTH = 800;
@@ -102,5 +102,53 @@ export const TEST_CASES = [
       })
     ],
     goldenImage: './test/render/golden-images/traffic-light.png'
+  },
+  {
+    name: 'lane-layer',
+    viewState: {
+      longitude: -122.39995,
+      latitude: 37.80001,
+      zoom: 22,
+      pitch: 0,
+      bearing: 0
+    },
+    layers: [
+      new LaneLayer({
+        id: 'lanes',
+        coordinateSystem: COORDINATE_SYSTEM.METER_OFFSETS,
+        coordinateOrigin: [-122.4, 37.8],
+
+        data: [
+          {
+            path: [
+              [0, 0, 0],
+              [2, 1, 0],
+              [3, 3, 0],
+              [3.05, 3, 0],
+              [3.05, 3.05, 0],
+              [3.1, 3.05, 0],
+              [3.1, 3.1, 0],
+              [3.15, 3.1, 0],
+              [3.15, 3.15, 0],
+              [3.2, 3.15, 0],
+              [3.2, 3.2, 0],
+              [5, 4, 0],
+              [7, 2.4, 0],
+              [7, 0, 0],
+              [10, -1, 0]
+            ]
+          }
+        ],
+
+        highPrecisionDash: true,
+
+        getPath: d => d.path,
+        getColor: [80, 200, 0],
+        getColor2: [0, 128, 255],
+        getWidth: [0.1, 0.05, 0.05],
+        getDashArray: [4, 1, 1, 1]
+      })
+    ],
+    goldenImage: './test/render/golden-images/lanes.png'
   }
 ];

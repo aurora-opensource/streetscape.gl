@@ -61,8 +61,7 @@ const defaultProps = {
 
 export default class TrafficLightLayer extends Layer {
   getShaders() {
-    const projectModule = this.use64bitProjection() ? 'project64' : 'project32';
-    return {vs, fs, modules: [projectModule, 'gouraud-lighting', 'picking']};
+    return {vs, fs, modules: ['project32', 'gouraud-lighting', 'picking']};
   }
 
   initializeState() {
