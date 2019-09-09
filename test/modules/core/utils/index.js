@@ -24,3 +24,4 @@ import './buffer-range.spec';
 import './image-buffer.spec';
 import './metrics-helper.spec';
 import './style.spec';
+import './transform.spec';
