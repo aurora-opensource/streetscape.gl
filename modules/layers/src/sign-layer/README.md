@@ -39,8 +39,6 @@ return (<LogViewer ... customLayers={[layer]} />);
 
 ## Properties
 
-Inherits from all [Base Layer](/docs/api-reference/layer.md) properties.
-
 ### Render Options
 
 ##### `iconAtlas` (Texture2D | String, required)
