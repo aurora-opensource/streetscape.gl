@@ -56,6 +56,7 @@ function makeLocalDevConfig() {
           ),
           react: resolve(__dirname, '../node_modules/react'),
           'react-dom': resolve(__dirname, '../node_modules/react-dom'),
+          'math.gl': resolve(__dirname, '../node_modules/math.gl'),
           '@deck.gl/core': resolve(__dirname, '../node_modules/@deck.gl/core'),
           '@deck.gl/layers': resolve(__dirname, '../node_modules/@deck.gl/layers'),
           '@deck.gl/mesh-layers': resolve(__dirname, '../node_modules/@deck.gl/mesh-layers'),

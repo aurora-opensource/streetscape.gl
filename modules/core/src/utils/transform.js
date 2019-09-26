@@ -75,7 +75,7 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
 
 export function positionToLngLat([x, y, z], {coordinateSystem, coordinateOrigin, modelMatrix}) {
   if (modelMatrix) {
-    [x, y, z] = new Matrix4(modelMatrix).transformVector([x, y, z, 1]);
+    [x, y, z] = new Matrix4(modelMatrix).transformAsPoint([x, y, z]);
   }
 
   switch (coordinateSystem) {
