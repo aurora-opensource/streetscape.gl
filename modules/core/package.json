@@ -32,10 +32,5 @@
   "peerDependencies": {
     "react": ">=16.3.0",
     "react-dom": ">=16.3.0"
-  },
-  "engines": {
-    "node": ">= 10.16",
-    "npm": ">= 6",
-    "yarn": ">= 1.10.0"
   }
 }

@@ -18,10 +18,5 @@
   "peerDependencies": {
     "@deck.gl/core": "^7.3.0",
     "@deck.gl/layers": "^7.3.0"
-  },
-  "engines": {
-    "node": ">= 10.16",
-    "npm": ">= 6",
-    "yarn": ">= 1.10.0"
   }
 }
