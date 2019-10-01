@@ -18,10 +18,5 @@
   "dependencies": {
     "@streetscape.gl/core": "1.0.0",
     "@streetscape.gl/layers": "1.0.0"
-  },
-  "engines": {
-    "node": ">= 10.16",
-    "npm": ">= 6",
-    "yarn": ">= 1.10.0"
   }
 }
