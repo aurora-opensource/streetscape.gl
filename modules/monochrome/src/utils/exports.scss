@@ -1,0 +1,9 @@
+$modules: () !default;
+
+/* Ensure that each module is only imported once */
+@mixin exports($name) {
+  @if (index($modules, $name) == null) {
+    $modules: append($modules, $name) !global;
+    @content;
+  }
+}

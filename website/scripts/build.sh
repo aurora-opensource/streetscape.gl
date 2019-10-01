@@ -31,6 +31,10 @@ PLAYGROUND_DIR=../examples/xviz-playground
 PLAYGROUND_PACKAGE_DIR=${PLAYGROUND_DIR}/dist
 PLAYGROUND_DESTINATION=./dist/playground
 
+STORYBOOK_DIR=../modules/monochrome
+STORYBOOK_PACKAGE_DIR=${STORYBOOK_DIR}/storybook-static
+STORYBOOK_DESTINATION=./dist/monochrome
+
 # install dependencies
 yarn
 
@@ -73,3 +77,17 @@ fi
 
 cp -r ${PLAYGROUND_PACKAGE_DIR} ${PLAYGROUND_DESTINATION}
 cp -r ${PLAYGROUND_DIR}/index.html ${PLAYGROUND_DESTINATION}
+
+
+# build storybook
+(cd $STORYBOOK_DIR && yarn build:storybook)
+
+# copy storybook assets
+echo "Copy from ${STORYBOOK_PACKAGE_DIR} to ${STORYBOOK_DESTINATION}"
+
+if [ -e ${STORYBOOK_DESTINATION} ]; then
+  rm -rf ${STORYBOOK_DESTINATION}
+  mkdir ${STORYBOOK_DESTINATION}
+fi
+
+cp -r ${STORYBOOK_PACKAGE_DIR} ${STORYBOOK_DESTINATION}
