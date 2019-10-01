@@ -16,17 +16,17 @@
   ],
   "scripts": {},
   "dependencies": {
-    "@deck.gl/core": "^7.2.2",
-    "@deck.gl/layers": "^7.2.2",
-    "@deck.gl/mesh-layers": "^7.2.2",
-    "@deck.gl/react": "^7.2.2",
+    "@deck.gl/core": "^7.3.0",
+    "@deck.gl/layers": "^7.3.0",
+    "@deck.gl/mesh-layers": "^7.3.0",
+    "@deck.gl/react": "^7.3.0-beta.8",
     "@streetscape.gl/monochrome": "^1.0.0-beta.4",
     "@xviz/parser": "^1.0.0",
     "lodash.merge": "^4.6.1",
-    "math.gl": "^2.3.1",
+    "math.gl": "^3.0.0",
     "promise-retry": "^1.1.1",
     "prop-types": "^15.6.2",
-    "react-map-gl": "^4.1.2",
+    "react-map-gl": "^5.0.0",
     "reselect": "^3.0.0"
   },
   "peerDependencies": {
