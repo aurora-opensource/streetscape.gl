@@ -50,10 +50,6 @@ function makeLocalDevConfig() {
     resolve: {
       alias: Object.assign(
         {
-          '@streetscape.gl/monochrome': resolve(
-            __dirname,
-            '../node_modules/@streetscape.gl/monochrome'
-          ),
           react: resolve(__dirname, '../node_modules/react'),
           'react-dom': resolve(__dirname, '../node_modules/react-dom'),
           'math.gl': resolve(__dirname, '../node_modules/math.gl'),
@@ -99,6 +95,15 @@ function addLocalDevSettings(config, exampleDir) {
   Object.assign(config.module, {
     rules: (config.module.rules || []).concat(LOCAL_DEV_CONFIG.module.rules)
   });
+
+  const babelLoader = config.module.rules.find(rule => rule.loader === 'babel-loader');
+  if (babelLoader) {
+    babelLoader.options.presets = [
+      '@babel/preset-env',
+      '@babel/preset-react',
+      '@babel/preset-flow'
+    ];
+  }
   return config;
 }
 

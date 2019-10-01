@@ -83,6 +83,10 @@
         "name": "React Components",
         "children": [
           {
+            "name": "Styling Guide",
+            "markdown": "api-reference/styling-guide.md"
+          },
+          {
             "name": "connectToLog",
             "markdown": "api-reference/connect-to-log.md"
           },

@@ -20,5 +20,15 @@
 
 require('@babel/register');
 
+/* global global,window */
+if (typeof window === 'undefined') {
+  const jsdom = require('jsdom');
+  const doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
+  global.document = doc;
+  global.window = doc.defaultView;
+  global.navigator = doc.defaultView.navigator;
+}
+
 require('./modules/core');
+require('./modules/monochrome');
 require('./website');
