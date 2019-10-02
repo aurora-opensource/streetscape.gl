@@ -33,7 +33,7 @@ const ROOT_DIR = resolve(__dirname, '..');
 // Seems to be a Babel bug
 // https://github.com/babel/babel-loader/issues/149#issuecomment-191991686
 const BABEL_CONFIG = {
-  presets: ['@babel/preset-env', '@babel/preset-react'],
+  presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-flow'],
   plugins: ['@babel/proposal-class-properties']
 };
 
