@@ -225,6 +225,7 @@ export default class Core3DViewer extends PureComponent {
           .scale(scale),
       mesh,
       data: CAR_DATA,
+      pickable: true,
       getPosition: d => d,
       getColor: color,
       texture,
@@ -240,7 +241,6 @@ export default class Core3DViewer extends PureComponent {
     const {
       frame,
       streamsMetadata,
-      showTooltip,
       objectStates,
       customLayers,
       getTransformMatrix,
@@ -282,7 +282,7 @@ export default class Core3DViewer extends PureComponent {
               id: `xviz-${streamName}`,
               ...coordinateProps,
 
-              pickable: showTooltip || primitives[0].id,
+              pickable: true,
 
               data: primitives,
               style: stylesheet,
@@ -344,12 +344,21 @@ export default class Core3DViewer extends PureComponent {
     );
   }
 
-  _layerFilter({layer, viewport, isPicking}) {
-    if (viewport.id === 'driver') {
-      return layer.id !== 'car';
+  _layerFilter = ({layer, viewport, isPicking}) => {
+    if (viewport.id === 'driver' && layer.id === 'car') {
+      return false;
+    }
+    if (isPicking) {
+      if (this.props.showTooltip) {
+        return true;
+      }
+      if (layer.id.startsWith('xviz-')) {
+        const sampleData = layer.props.data[0];
+        return sampleData && sampleData.id;
+      }
     }
     return true;
-  }
+  };
 
   _getCursor = () => {
     return this.isHovering ? 'pointer' : 'crosshair';
@@ -375,7 +384,6 @@ export default class Core3DViewer extends PureComponent {
       car,
       streamsMetadata,
       streamFilter,
-      showTooltip,
       objectStates,
       renderObjectLabel,
       customLayers,
@@ -393,7 +401,6 @@ export default class Core3DViewer extends PureComponent {
       car,
       streamsMetadata,
       streamFilter,
-      showTooltip,
       objectStates,
       customLayers,
       getTransformMatrix,

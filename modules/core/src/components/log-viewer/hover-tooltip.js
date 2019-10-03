@@ -57,6 +57,16 @@ class HoverTooltip extends PureComponent {
   }
 
   _renderContent = info => {
+    const {streamName} = info.layer.props;
+
+    if (!streamName) {
+      return (
+        <div>
+          <b>{info.layer.id}</b>
+        </div>
+      );
+    }
+
     const objectId = info.object.base && info.object.base.object_id;
 
     return [
@@ -64,7 +74,7 @@ class HoverTooltip extends PureComponent {
         <div>
           <b>stream</b>
         </div>
-        {info.layer.props.streamName}
+        {streamName}
       </div>,
       objectId ? (
         <div key="-id-">
