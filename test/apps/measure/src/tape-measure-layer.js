@@ -40,7 +40,7 @@ function getDistance(p1, p2) {
   // adjust for z
   const dz = p1[2] - p2[2];
   const d = Math.sqrt(dxy * dxy + dz * dz);
-  return ` ${d.toFixed(3)} m `;
+  return d;
 }
 
 function getAngle(origin, p1, p2) {
@@ -53,7 +53,7 @@ function getAngle(origin, p1, p2) {
   if (angle > 180) {
     angle -= 360;
   }
-  return ` ${angle.toFixed(3)} ° `;
+  return angle;
 }
 
 function getTextAnchor(origin, p, viewport) {
@@ -82,12 +82,10 @@ function dataComparator(data1, data2) {
   return true;
 }
 
-function pickingLayerFilter({layer, viewport}) {
-  if (viewport.id === 'driver') {
-    return layer.id !== 'car';
-  }
-  return true;
-}
+const defaultProps = {
+  onModeChange: {type: 'function', value: () => {}},
+  onUpdate: {type: 'function', value: () => {}}
+};
 
 export default class TapeMeasureLayer extends CompositeLayer {
   initializeState() {
@@ -118,52 +116,72 @@ export default class TapeMeasureLayer extends CompositeLayer {
     if (this.state.mode === MODE_IDLE) {
       return;
     }
+    const layer = this.getCurrentLayer();
+
     evt.stopPropagation();
-    const pt = this._getPosition(evt);
-    const {originPoint, referencePoint} = this.state;
-    this.setState({
+    const pt = layer._getPosition(evt);
+    const {originPoint, referencePoint} = layer.state;
+    layer.setState({
       hoverPoint: pt
     });
-    if (this.state.mode === MODE_DISTANCE) {
-      this.setState({
-        measurement: getDistance(originPoint, pt)
+    if (layer.state.mode === MODE_DISTANCE) {
+      const d = getDistance(originPoint, pt);
+      layer.setState({
+        measurement: ` ${d.toFixed(3)} m `
       });
+      layer.props.onUpdate({mode: 'distance', value: d, units: 'meters'});
     } else {
-      this.setState({
-        measurement: getAngle(originPoint, referencePoint, pt)
+      const angle = getAngle(originPoint, referencePoint, pt);
+      layer.setState({
+        measurement: ` ${angle.toFixed(3)}° `
       });
+      layer.props.onUpdate({mode: 'angle', value: angle, units: 'degrees'});
     }
   }
 
   _onClick(evt) {
     evt.stopPropagation();
-    switch (this.state.mode) {
+    const layer = this.getCurrentLayer();
+
+    switch (layer.state.mode) {
       case MODE_IDLE: {
-        const pt = this._getPosition(evt);
-        this.setState({
+        const pt = layer._getPosition(evt);
+        layer.setState({
           mode: MODE_DISTANCE,
           originPoint: pt,
           hoverPoint: pt
+        });
+        layer.props.onModeChange({
+          mode: 'distance',
+          point0: pt
         });
         break;
       }
 
       case MODE_DISTANCE: {
-        const pt = this._getPosition(evt);
-        this.setState({
+        const pt = layer._getPosition(evt);
+        layer.setState({
           mode: MODE_ANGLE,
           referencePoint: pt,
           hoverPoint: pt
+        });
+        layer.props.onModeChange({
+          mode: 'angle',
+          point0: layer.state.originPoint,
+          point1: pt
         });
         break;
       }
 
       default:
-        this.setState({
+        layer.setState({
           mode: MODE_IDLE,
           originPoint: null,
           referencePoint: null,
           measurement: ''
+        });
+        layer.props.onModeChange({
+          mode: 'none'
         });
     }
   }
@@ -172,11 +190,7 @@ export default class TapeMeasureLayer extends CompositeLayer {
     const {x, y} = evt.offsetCenter;
     const {deck, viewport} = this.context;
 
-    // Hack - replace default layerFilter
-    const layerFilter = deck.deckPicker.layerFilter;
-    deck.deckPicker.setProps({layerFilter: pickingLayerFilter});
     const info = deck.pickObject({x, y, radius: deck.props.pickingRadius, unproject3D: true});
-    deck.deckPicker.setProps({layerFilter});
 
     // TODO - fix in deck viewport.unproject()
     let z = (info && info.coordinate[2]) || 0;
@@ -233,3 +247,6 @@ export default class TapeMeasureLayer extends CompositeLayer {
     ];
   }
 }
+
+TapeMeasureLayer.layerName = 'TapeMeasureLayer';
+TapeMeasureLayer.defaultProps = defaultProps;

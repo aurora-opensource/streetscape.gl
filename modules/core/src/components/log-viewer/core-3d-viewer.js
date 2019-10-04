@@ -344,11 +344,11 @@ export default class Core3DViewer extends PureComponent {
     );
   }
 
-  _layerFilter = ({layer, viewport, isPicking}) => {
+  _layerFilter = ({layer, viewport, renderPass}) => {
     if (viewport.id === 'driver' && layer.id === 'car') {
       return false;
     }
-    if (isPicking) {
+    if (renderPass === 'picking:hover') {
       if (this.props.showTooltip) {
         return true;
       }
