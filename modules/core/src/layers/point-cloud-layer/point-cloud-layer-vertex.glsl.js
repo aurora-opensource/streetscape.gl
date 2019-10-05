@@ -71,6 +71,7 @@ void main(void) {
   // position on the containing square in [-1, 1] space
   unitPosition = positions.xy;
   geometry.uv = unitPosition;
+  geometry.pickingColor = instancePickingColors;
 
   // Find the center of the point and add the current vertex
   vec3 offset = vec3(positions.xy * radiusPixels, 0.0);
@@ -93,7 +94,5 @@ void main(void) {
 
   // Set color to be rendered to picking fbo (also used to check for selection highlight).
   DECKGL_FILTER_COLOR(vColor, geometry);
-
-  picking_setPickingColor(instancePickingColors);
 }
 `;

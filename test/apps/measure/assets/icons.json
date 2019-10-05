@@ -1,0 +1,18 @@
+{
+  "origin": {
+    "x": 0,
+    "y": 0,
+    "width": 128,
+    "height": 128,
+    "anchorX": 92,
+    "anchorY": 118
+  },
+  "reference": {
+    "x": 128,
+    "y": 0,
+    "width": 128,
+    "height": 128,
+    "anchorX": 36,
+    "anchorY": 118
+  }
+}
