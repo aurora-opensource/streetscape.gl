@@ -23,6 +23,7 @@ import {XVIZLiveLoader} from 'streetscape.gl';
 export default new XVIZLiveLoader({
   logGuid: 'mock',
   bufferLength: 10,
+  session_type: 'live',
   serverConfig: {
     defaultLogLength: 30,
     serverUrl: 'ws://localhost:8081'
