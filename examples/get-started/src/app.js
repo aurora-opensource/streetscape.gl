@@ -129,6 +129,7 @@ const geojson = {
 
 const duckURL =
   'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb';
+  // 'assets/SimpleDrone.glb';
 const gltfData = [
   {
     position: [0.0, 0.0, 1.0],
@@ -169,14 +170,15 @@ class Example extends PureComponent {
         const imageUrl = this.setState({blob: img});
       });
 
-    load(duckURL, GLTFLoader).then(data => {
+    load(duckURL, GLTFLoader, {mode: 'no-cors'}).then(data => {
       this.setState({
         duckLayer: new ScenegraphLayer({
           id: 'scenegraph-layer',
           data: gltfData,
           coordinate: 'VEHICLE_RELATIVE',
           scenegraph: data,
-          getOrientation: [0, -90, 90]
+          getOrientation: [0, -90, 90],
+          sizeScale: 10
         })
       });
     });
