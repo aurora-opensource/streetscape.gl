@@ -57,8 +57,8 @@ const STYLE_TO_LAYER_PROP = {
     radius: 'getRadius',
     stroked: 'stroked',
     filled: 'filled',
-    stroke_width_min_pixels: 'widthMinPixels',
-    stroke_width_max_pixels: 'widthMaxPixels',
+    stroke_width_min_pixels: 'lineWidthMinPixels',
+    stroke_width_max_pixels: 'lineWidthMaxPixels',
     stroke_width: 'getLineWidth',
     stroke_color: 'getLineColor',
     fill_color: 'getFillColor'
