@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* eslint-disable camelcase */
 import {COORDINATE_SYSTEM} from '@deck.gl/core';
 import {_Pose as Pose, Matrix4} from 'math.gl';
 import {addMetersToLngLat} from 'viewport-mercator-project';
@@ -27,8 +28,54 @@ import {COORDINATE} from '../constants';
 // keep in sync with core-3d-viewer.js
 const DEFAULT_ORIGIN = [0, 0, 0];
 
-export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransformMatrix) {
-  const {origin, transforms = {}, vehicleRelativeTransform} = frame;
+// Export only for testing
+export function resolveLinksTransform(links, streams, streamName) {
+  const transforms = [];
+  let parentPose = links[streamName] && links[streamName].target_pose;
+
+  // TODO(twojtasz): we could cache the resulting transform based on the entry
+  // into the link structure.
+
+  let missingPose = false;
+
+  // Collect all poses from child to root
+  while (parentPose) {
+    if (!streams[parentPose]) {
+      missingPose = true;
+      break;
+    }
+    transforms.push(streams[parentPose]);
+    parentPose = links[parentPose] && links[parentPose].target_pose;
+  }
+
+  // Resolve pose transforms. If missingPose is true, which can happen if a
+  // persistent link is defined before normal state has been sent, ignore it
+  // TODO(twojtasz): Flag stream affected by missingPose so it can be reported
+  // by application
+  if (!missingPose && transforms.length) {
+    // process from root to child
+    return transforms.reduceRight((acc, val) => {
+      return acc.multiplyRight(new Pose(val).getTransformationMatrix());
+    }, new Matrix4());
+  }
+
+  return null;
+}
+
+/* Return the modelMatrix used for rendering a stream.
+ *
+ * frame - constains all the XVIZ state
+ * streamName - The name of the stream we are rendering
+ * streamMetadata - Anym metadata associated with the stream
+ * getTransformMatrix - A callback function for when stream metadata specifieds a DYNAMIC coordinate system
+ */
+export function resolveCoordinateTransform(
+  frame,
+  streamName,
+  streamMetadata = {},
+  getTransformMatrix
+) {
+  const {origin, links, streams, transforms = {}, vehicleRelativeTransform} = frame;
   const {coordinate, transform, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
@@ -41,6 +88,7 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
       break;
 
     case COORDINATE.DYNAMIC:
+      // TODO(twojtasz): this should work with links and needs streamName passed
       // cache calculated transform matrix for each frame
       transforms[transform] = transforms[transform] || getTransformMatrix(transform, frame);
       modelMatrix = transforms[transform];
@@ -49,18 +97,24 @@ export function resolveCoordinateTransform(frame, streamMetadata = {}, getTransf
       break;
 
     case COORDINATE.VEHICLE_RELATIVE:
+      // NOTE: In XVIZ this setting means a relationship to `/vehicle_pose` stream.
+      // However, with the addition of *links* this really becomes only a convenience
+      // as you could choose arbitrary poses.
       modelMatrix = vehicleRelativeTransform;
       break;
 
-    case COORDINATE.IDENTITY:
     default:
+    case COORDINATE.IDENTITY:
+      modelMatrix = resolveLinksTransform(links, streams, streamName);
+      break;
   }
 
   if (pose) {
-    // TODO - remove when builder updates
+    // TODO(twojtasz): remove when builder updates
     streamTransform = new Pose(pose).getTransformationMatrix();
   }
   if (streamTransform && streamTransform.length > 0) {
+    // TODO(twojtasz): this needs tested with links
     modelMatrix = modelMatrix
       ? new Matrix4(modelMatrix).multiplyRight(streamTransform)
       : streamTransform;
