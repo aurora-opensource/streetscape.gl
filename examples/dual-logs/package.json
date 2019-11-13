@@ -1,0 +1,30 @@
+{
+  "name": "streetscape.gl-quick-start",
+  "description": "A template app of streetscape.gl",
+  "version": "0.1.0",
+  "scripts": {
+    "start-local": "webpack-dev-server --env.local --progress --hot --open",
+    "start-streaming-local": "webpack-dev-server --env.local --env.stream --progress --hot --open",
+    "start-live-local": "webpack-dev-server --env.local --env.live --progress --hot --open",
+    "start": "webpack-dev-server --progress --hot --open",
+    "start-streaming": "webpack-dev-server --env.stream --progress --hot --open",
+    "start-live": "webpack-dev-server --env.live --progress --hot --open"
+  },
+  "dependencies": {
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "streetscape.gl": "^1.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "source-map-loader": "^0.2.3",
+    "webpack": "^4.20.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.1"
+  }
+}
