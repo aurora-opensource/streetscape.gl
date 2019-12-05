@@ -1,0 +1,5 @@
+{
+  "load_extensions": {
+    "streetscape-jupyter/extension": true
+  }
+}
