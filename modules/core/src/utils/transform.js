@@ -75,7 +75,7 @@ export function resolveCoordinateTransform(
   streamMetadata = {},
   getTransformMatrix
 ) {
-  const {origin, links, streams, transforms = {}, vehicleRelativeTransform} = frame;
+  const {origin, links = {}, streams, transforms = {}, vehicleRelativeTransform} = frame;
   const {coordinate, transform, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;

@@ -23,7 +23,7 @@ const {resolve} = require('path');
 const webpack = require('webpack');
 
 const BABEL_CONFIG = {
-  presets: ['@babel/preset-env', '@babel/preset-react'],
+  presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-flow'],
   plugins: ['@babel/proposal-class-properties']
 };
 

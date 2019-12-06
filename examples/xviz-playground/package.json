@@ -20,6 +20,7 @@
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.7.4",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
     "source-map-loader": "^0.2.3",

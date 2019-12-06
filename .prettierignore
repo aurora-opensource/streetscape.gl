@@ -1,2 +1,3 @@
 **/dist*/**/*.js
 *.min.js
+modules/monochrome/storybook-static/**/*.js

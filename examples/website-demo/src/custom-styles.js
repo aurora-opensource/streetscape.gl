@@ -146,14 +146,14 @@ export const HELP_BUTTON_STYLE = {
 };
 
 const PRIMITIVE_TYPE_TO_ICON = {
-  point: '\\e90c',
-  circle: '\\e907',
-  image: '\\e90a',
-  polyline: '\\e90e',
-  polygon: '\\e90d',
-  float: '\\e917',
-  text: '\\e913',
-  group: '\\e909'
+  POINT: '\\e90c',
+  CIRCLE: '\\e907',
+  IMAGE: '\\e90a',
+  POLYLINE: '\\e90e',
+  POLYGON: '\\e90d',
+  FLOAT: '\\e917',
+  TEXT: '\\e913',
+  GROUP: '\\e909'
 };
 
 export const STREAM_SETTINGS_STYLE = {
@@ -182,12 +182,12 @@ export const STREAM_SETTINGS_STYLE = {
   badge: props => ({
     order: -1,
     '&:before':
-      props.type in PRIMITIVE_TYPE_TO_ICON
+      props.type.toUpperCase() in PRIMITIVE_TYPE_TO_ICON
         ? {
             fontFamily: 'streetscape',
             fontSize: 16,
             paddingRight: 12,
-            content: `"${PRIMITIVE_TYPE_TO_ICON[props.type]}"`
+            content: `"${PRIMITIVE_TYPE_TO_ICON[props.type.toUpperCase()]}"`
           }
         : {
             content: '""'
