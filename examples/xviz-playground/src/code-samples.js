@@ -54,7 +54,7 @@ const streamMetadata = {
   .type('POINTS')
   .coordinate('VEHICLE_RELATIVE')
   .streamStyle({
-    point_color_mode: 'elevation',
+    point_color_mode: 'ELEVATION',
     point_color_domain: [0, 3],
     radius_pixels: 4
   })
