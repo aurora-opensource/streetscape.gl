@@ -182,7 +182,7 @@ export const STREAM_SETTINGS_STYLE = {
   badge: props => ({
     order: -1,
     '&:before':
-      props.type.toUpperCase() in PRIMITIVE_TYPE_TO_ICON
+      props.type && props.type.toUpperCase() in PRIMITIVE_TYPE_TO_ICON
         ? {
             fontFamily: 'streetscape',
             fontSize: 16,
