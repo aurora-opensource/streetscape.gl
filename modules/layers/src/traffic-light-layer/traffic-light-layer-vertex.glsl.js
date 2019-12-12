@@ -33,7 +33,7 @@ attribute vec2 texCoords;
 
 // Instance attributes
 attribute vec3 instancePositions;
-attribute vec2 instancePositions64xyLow;
+attribute vec3 instancePositions64Low;
 attribute float instanceAngles;
 attribute float instanceShapes;
 attribute vec3 instanceColors;
@@ -57,7 +57,7 @@ void main(void) {
   vec3 normal_commonspace = project_normal(vec3(rotationMatrix * normals.xy, normals.z));
 
   vec4 position_commonpace;
-  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64xyLow, offset, position_commonpace);
+  gl_Position = project_position_to_clipspace(instancePositions, instancePositions64Low, offset, position_commonpace);
 
   if (useInstanceColor) {
     float ownLight = instanceStates;
