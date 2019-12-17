@@ -71,21 +71,28 @@ export function createFormData(metadata, opts) {
         type: 'checkbox',
         children: {},
         collapsible,
-        badge: <Badge userStyle={style.badge} />
+        badge: (
+          <Badge
+            userStyle={style.badge}
+            type={metadata[streamName] && metadata[streamName].primitive_type || metadata[streamName].scalar_type}
+          />
+        )
       };
       siblings = root[parentKey].children;
     }
 
-    siblings[streamName] = {
-      type: 'checkbox',
-      title: streamName.replace(parentKey, ''),
-      badge: (
-        <Badge
-          userStyle={style.badge}
-          type={metadata[streamName].primitive_type || metadata[streamName].scalar_type}
-        />
-      )
-    };
+    if (!siblings[streamName]) {
+      siblings[streamName] = {
+        type: 'checkbox',
+        title: streamName.replace(parentKey, ''),
+        badge: (
+          <Badge
+            userStyle={style.badge}
+            type={metadata[streamName].primitive_type || metadata[streamName].scalar_type}
+          />
+        )
+      };
+    }
   }
 
   return root;
