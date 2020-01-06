@@ -22,8 +22,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
-import {_MapContext as MapContext} from 'react-map-gl';
-
 import PerspectivePopup from './perspective-popup';
 
 import {resolveCoordinateTransform, positionToLngLat} from '../../utils/transform';
@@ -138,16 +136,12 @@ export default class ObjectLabelsOverlay extends PureComponent {
   };
 
   render() {
-    const {frame, viewport, renderObjectLabel} = this.props;
+    const {frame, renderObjectLabel} = this.props;
 
     if (!frame || !renderObjectLabel) {
       return null;
     }
 
-    return (
-      <MapContext.Provider value={{viewport}}>
-        {Object.values(frame.objects).map(this._renderPerspectivePopup)}
-      </MapContext.Provider>
-    );
+    return Object.values(frame.objects).map(this._renderPerspectivePopup);
   }
 }

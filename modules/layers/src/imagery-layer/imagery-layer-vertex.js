@@ -59,7 +59,7 @@ void main(void) {
   vWorldHeight = z;
   vTexCoord = texCoords;
 
-  gl_Position = project_position_to_clipspace(vec3(position, z), vec2(0.0), vec3(0.0));
+  gl_Position = project_position_to_clipspace(vec3(position, z), vec3(0.0), vec3(0.0));
 
   picking_setPickingColor(vec3(0., 0., 1.));
 }

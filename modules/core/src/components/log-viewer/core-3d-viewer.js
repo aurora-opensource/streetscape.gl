@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import {StaticMap} from 'react-map-gl';
 import DeckGL from '@deck.gl/react';
 import {COORDINATE_SYSTEM} from '@deck.gl/core';
+import {_MapContext as MapContext} from 'react-map-gl';
 
 import ObjectLabelsOverlay from './object-labels-overlay';
 
@@ -425,6 +426,7 @@ export default class Core3DViewer extends PureComponent {
         onHover={this._onLayerHover}
         onClick={this._onLayerClick}
         onViewStateChange={this._onViewStateChange}
+        ContextProvider={MapContext.Provider}
         _onMetrics={this._onMetrics}
       >
         {showMap && (

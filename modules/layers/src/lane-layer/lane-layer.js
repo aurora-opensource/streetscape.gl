@@ -38,55 +38,26 @@ export default class LaneLayer extends PathLayer {
 
     shaders.vs = shaders.vs
       .replace('attribute float instanceStrokeWidths', 'attribute vec3 instanceStrokeWidths')
-      .replace('attribute vec2 instanceDashArrays', 'attribute vec4 instanceDashArrays')
-      .replace('varying vec2 vDashArray', 'varying vec4 vDashArray')
       .replace(
         'instanceStrokeWidths * widthScale',
         '(instanceStrokeWidths.x + instanceStrokeWidths.y + instanceStrokeWidths.z) * widthScale'
       );
 
-    // TODO - move default dash array handling to an extension
-    shaders.fs = shaders.fs
-      .replace(
-        /bool dash_isFragInGap[\s\S]*?\n\}/,
-        `
-bool dash_isFragInGap() {
-  float solid1 = vDashArray.x;
-  float gap1 = solid1 + vDashArray.y;
-  float solid2 = gap1 + vDashArray.z;
-  float unitLength = solid2 + vDashArray.w;
-
-  if (unitLength == 0.0 || vDashArray.y == 0.0) {
-    return false;
-  }
-
-  unitLength = mix(
-    unitLength,
-    vPathLength / round(vPathLength / unitLength),
-    alignMode
-  );
-
-  float offset = mix(vPathOffset, vDashArray.x / 2.0, alignMode);
-  float unitPosition = mod2(vPathPosition.y + offset, unitLength);
-
-  return unitPosition > solid1 && unitPosition < gap1 || unitPosition > solid2;
-}
-`
-      )
-      .replace('varying vec2 vDashArray', 'varying vec4 vDashArray');
-
     shaders.inject = {
       'vs:#decl': `
 uniform float strokeIndex;
+
+attribute vec4 instanceDashArrays;
 attribute float instanceStartRatio;
+
+varying vec4 vDashArray;
 varying vec2 vWidth;
 varying float vPathOffset;
 `,
-      'fs:#decl': `
-varying vec2 vWidth;
-varying float vPathOffset;
-`,
+
       'vs:#main-end': `
+  vDashArray = instanceDashArrays;
+
   float totalWidth = instanceStrokeWidths.x + instanceStrokeWidths.y + instanceStrokeWidths.z;
   if (strokeIndex == 0.0) {
     vWidth = vec2(0.0, instanceStrokeWidths.x / totalWidth);
@@ -94,12 +65,57 @@ varying float vPathOffset;
     vWidth = vec2(1.0 - instanceStrokeWidths.z / totalWidth, 1.0);
   }
   // map to [-1.0, 1.0] space
-  vWidth = vWidth * 2.0 - 1.0;
+  vWidth = 1.0 - vWidth * 2.0;
   vPathOffset = vPathLength * instanceStartRatio;
 `,
+
+      'fs:#decl': `
+uniform float dashAlignMode;
+varying vec4 vDashArray;
+varying vec2 vWidth;
+varying float vPathOffset;
+
+// mod doesn't work correctly for negative numbers
+float mod2(float a, float b) {
+  return a - floor(a / b) * b;
+}
+
+float round(float x) {
+  return floor(x + 0.5);
+}
+`,
+
+      // if given position is in the gap part of the dashed line
+      // dashArray.x: solid stroke length, relative to width
+      // dashArray.y: gap length, relative to width
+      // alignMode:
+      // 0 - no adjustment
+      // o----     ----     ----     ---- o----     -o----     ----     o
+      // 1 - stretch to fit, draw half dash at each end for nicer joints
+      // o--    ----    ----    ----    --o--      --o--     ----     --o
       'fs:#main-start': `
-  if (vPathPosition.x < vWidth.x || vPathPosition.x > vWidth.y) {
+  if (vPathPosition.x > vWidth.x || vPathPosition.x < vWidth.y) {
     discard;
+  }
+
+  float solid1 = vDashArray.x;
+  float gap1 = solid1 + vDashArray.y;
+  float solid2 = gap1 + vDashArray.z;
+  float unitLength = solid2 + vDashArray.w;
+
+  if (unitLength > 0.0 && vDashArray.y > 0.0) {
+    unitLength = mix(
+      unitLength,
+      vPathLength / round(vPathLength / unitLength),
+      dashAlignMode
+    );
+
+    float offset = mix(vPathOffset, vDashArray.x / 2.0, dashAlignMode);
+    float unitPosition = mod2(vPathPosition.y + offset, unitLength);
+
+    if (unitPosition > solid1 && unitPosition < gap1 || unitPosition > solid2) {
+      discard;
+    }
   }
 `
     };
@@ -145,7 +161,8 @@ varying float vPathOffset;
     super.draw(params);
 
     model.setUniforms({
-      strokeIndex: 1
+      strokeIndex: 1,
+      dashAlignMode: this.props.dashJustified ? 1 : 0
     });
     model.setAttributes({
       instanceColors: attributes.instanceColors2,
@@ -164,9 +181,8 @@ varying float vPathOffset;
     const {numInstances} = this.state;
     const {viewport} = this.context;
 
-    let {startPositions, endPositions, instanceTypes} = this.getAttributeManager().getAttributes();
-    startPositions = startPositions.value;
-    endPositions = endPositions.value;
+    let {positions, instanceTypes} = this.getAttributeManager().getAttributes();
+    positions = positions.value;
     instanceTypes = instanceTypes.value;
 
     const target = attribute.value;
@@ -176,17 +192,9 @@ varying float vPathOffset;
     let totalLength = 0;
 
     for (let i = 0; i < numInstances; i++) {
-      startPoint.set(
-        startPositions[i * 3 + 3],
-        startPositions[i * 3 + 4],
-        startPositions[i * 3 + 5]
-      );
+      startPoint.set(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]);
 
-      endPoint.set(
-        (endPoint[0] = endPositions[i * 3]),
-        (endPoint[1] = endPositions[i * 3 + 1]),
-        (endPoint[2] = endPositions[i * 3 + 2])
-      );
+      endPoint.set(positions[i * 3 + 3], positions[i * 3 + 4], positions[i * 3 + 5]);
 
       startPoint.copy(viewport.projectPosition(startPoint));
       endPoint.copy(viewport.projectPosition(endPoint));

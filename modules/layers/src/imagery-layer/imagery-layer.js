@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {Layer} from '@deck.gl/core';
+import {Layer, picking, project32} from '@deck.gl/core';
 import {Model, Texture2D} from '@luma.gl/core';
 import {loadImage} from '@loaders.gl/images';
 
@@ -149,7 +149,7 @@ export default class ImageryLayer extends Layer {
       id: this.props.id,
       vs: IMAGERY_VERTEX_SHADER,
       fs: IMAGERY_FRAGMENT_SHADER,
-      modules: ['picking', 'project32'],
+      modules: [picking, project32],
       shaderCache: this.context.shaderCache,
       vertexCount: 0,
       isIndexed: true
