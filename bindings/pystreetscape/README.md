@@ -1,31 +1,16 @@
-# pystreetscape
+# streetscape_avs
+
 #### A Streetscape.gl module for Jupyter
 
-TODO: brief description
+Provides an ipywidget for viewing XVIZ data with Streetscape.gl in Jupyter
 
-## What is pystreetscape
+## What is streetscape_avs
 
-TODO: detailed description
-With **pystreetscape** you can view and interact with XVIZ data in the Jupyter
+With **streetscape_avs** you can view and interact with XVIZ data in the Jupyter
 environment.
-
-## Who uses widget-cookiecutter
-
-TODO: remove
-
-Popular widget libraries such as
-[bqplot](https://github.com/bloomberg/bqplot),
-[pythreejs](https://github.com/jovyan/pythreejs) and
-[ipyleaflet](https://github.com/ellisonbg/ipyleaflet)
- can serve as advanced examples of usage of the
-Jupyter widget infrastructure.
 
 ## Usage
 
-Install [pystreetscape](https://github.com/uber/streetscape.gl):
+Install [streetscape_avs](https://github.com/uber/streetscape.gl):
 
-    $ pip install pystreetscape
-
-## More information
-
-- [Documentation of Jupyter widgets](https://ipywidgets.readthedocs.io/en/latest/)
+    $ pip install streetscape_avs

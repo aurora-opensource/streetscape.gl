@@ -1,2 +1,2 @@
-recursive-include pystreetscape/static *.*
-include pystreetscape.
+recursive-include streetscape_avs/static *.*
+include streetscape_avs.

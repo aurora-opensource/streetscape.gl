@@ -1,4 +1,4 @@
-- To release a new version of pystreetscape on PyPI:
+- To release a new version of streetscape_avs on PyPI:
 
 Update _version.py (set release version, remove 'dev')
 git add the _version.py file and git commit

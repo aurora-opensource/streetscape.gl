@@ -66,8 +66,8 @@ class NPM(Command):
     node_modules = os.path.join(node_root, 'node_modules')
 
     targets = [
-        os.path.join(here, 'pystreetscape', 'static', 'extension.js'),
-        os.path.join(here, 'pystreetscape', 'static', 'index.js')
+        os.path.join(here, 'streetscape_avs', 'static', 'extension.js'),
+        os.path.join(here, 'streetscape_avs', 'static', 'index.js')
     ]
 
     def initialize_options(self):
@@ -121,20 +121,20 @@ class NPM(Command):
         update_package_data(self.distribution)
 
 version_ns = {}
-with open(os.path.join(here, 'pystreetscape', '_version.py')) as f:
+with open(os.path.join(here, 'streetscape_avs', '_version.py')) as f:
     exec(f.read(), {}, version_ns)
 
 setup_args = {
-    'name': 'pystreetscape',
+    'name': 'streetscape_avs',
     'version': version_ns['__version__'],
     'description': 'Streetscape.gl Jupyter Widget',
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
         ('share/jupyter/nbextensions/streetscape-jupyter', [
-            'pystreetscape/static/extension.js',
-            'pystreetscape/static/index.js',
-            'pystreetscape/static/index.js.map',
+            'streetscape_avs/static/extension.js',
+            'streetscape_avs/static/index.js',
+            'streetscape_avs/static/index.js.map',
         ],),
         ('etc/jupyter/nbconfig/notebook.d', ['streetscape-jupyter.json'])
     ],

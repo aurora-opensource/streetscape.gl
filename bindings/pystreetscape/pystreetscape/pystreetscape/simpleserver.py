@@ -3,8 +3,8 @@ import os
 import logging
 import asyncio
 
-import xviz
-from xviz.server import XVIZServer, XVIZBaseSession
+import xviz_avs
+from xviz_avs.server import XVIZServer, XVIZBaseSession
 
 
 class XVIZMemorySourceSession(XVIZBaseSession):

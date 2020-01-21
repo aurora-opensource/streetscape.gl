@@ -6,7 +6,7 @@ build/
 node_modules/
 
 # Compiled javascript
-pystreetscape/static/
+streetscape_avs/static/
 
 # OS X
 .DS_Store

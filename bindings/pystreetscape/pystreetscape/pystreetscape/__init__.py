@@ -1,6 +1,6 @@
 from ._version import version_info, __version__
 
-from .pystreetscape import *
+from .streetscape_avs import *
 from .simpleserver import *
 
 def _jupyter_nbextension_paths():

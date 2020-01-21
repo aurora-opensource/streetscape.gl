@@ -1,5 +1,5 @@
-pystreetscape
-=============
+streetscape_avs
+===============
 
 A Jupyter widget usin streetscape.gl to view XVIZ data.
 
@@ -8,20 +8,20 @@ Installation
 
 To install use pip:
 
-    $ pip install pystreetscape
-    $ jupyter nbextension enable --py --sys-prefix pystreetscape
+    $ pip install streetscape_avs
+    $ jupyter nbextension enable --py --sys-prefix streetscape_avs
 
 To install for jupyterlab
 
-    $ jupyter labextension install pystreetscape
+    $ jupyter labextension install streetscape_avs
 
 For a development installation (requires npm),
 
     $ git clone https://github.com/uber/streetscape.gl.git
     $ cd streetscape.gl
     $ pip install -e .
-    $ jupyter nbextension install --py --symlink --sys-prefix pystreetscape
-    $ jupyter nbextension enable --py --sys-prefix pystreetscape
+    $ jupyter nbextension install --py --symlink --sys-prefix streetscape_avs
+    $ jupyter nbextension enable --py --sys-prefix streetscape_avs
     $ jupyter labextension install js
 
 When actively developing your extension, build Jupyter Lab with the command:
