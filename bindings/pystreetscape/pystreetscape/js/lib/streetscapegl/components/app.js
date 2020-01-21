@@ -1,13 +1,28 @@
+// Copyright (c) 2019 Uber Technologies, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 import React, {useEffect, useState, useRef} from 'react';
 import {StreetscapeJupyter} from './component';
 
-export const KEPLER_GL_JUPYTER_VERSION = "__PACKAGE_VERSION__";
+export const STREETSCAPE_GL_JUPYTER_VERSION = "__PACKAGE_VERSION__";
 
-// const MAPBOX_TOKEN = process.env.MapboxAccessTokenJupyter; // eslint-disable-line
-const MAPBOX_TOKEN = 'pk.eyJ1IjoidGltb3RoeS13b2p0YXN6ZWsiLCJhIjoiY2pwa2l0NzYyMDN3MjQycDV2d2ZpcjRtNyJ9.N3ZPx2knZh5cwXz2hxIVKQ'
-
-function App() {
-
+function App(props) {
   const rootElm = useRef(null);
   const [windowDimension, setDimension] = useState({});
 
@@ -26,7 +41,7 @@ function App() {
     setDimension(dimensionToSet);
   };
 
-  // in Jupyter Lab,  parent component has transition when window resize.
+  // in Jupyter Lab, parent component has transition when window resize.
   // need to delay call to get the final parent width,
   const resizeDelay = () => window.setTimeout(handleResize, 500);
 
@@ -41,7 +56,10 @@ function App() {
       ref={rootElm}
       className="streetscapegl-widget-container"
     >
-      <StreetscapeJupyter mapbox={MAPBOX_TOKEN} />
+      <StreetscapeJupyter />
+      <div style={{position: 'absolute', top:0, right:0}}>
+        Ver: {STREETSCAPE_GL_JUPYTER_VERSION}
+      </div>
     </div>
   );
 }

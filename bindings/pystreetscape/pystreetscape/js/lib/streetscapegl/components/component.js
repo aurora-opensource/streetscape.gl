@@ -1,9 +1,28 @@
+// Copyright (c) 2019 Uber Technologies, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 import React, {PureComponent} from 'react';
+import { connect } from 'react-redux'
 
-// TODO(twojtasz): Add these as hideable panels
-// import {
-//   StreamSettingsPanel,
-// } from 'streetscape.gl';
+import {
+StreamSettingsPanel,
+} from 'streetscape.gl';
 
 import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
 import {
@@ -13,11 +32,10 @@ import {
   VIEW_MODE
 } from 'streetscape.gl';
 
-import {Form} from '@streetscape.gl/monochrome';
+import {Form, Button} from '@streetscape.gl/monochrome';
 import {
   XVIZ_CONFIG,
   APP_SETTINGS,
-  MAPBOX_TOKEN,
   MAP_STYLE,
   XVIZ_STYLE,
   CAR,
@@ -28,28 +46,11 @@ setXVIZConfig(XVIZ_CONFIG);
 
 const TIMEFORMAT_SCALE = getXVIZConfig().TIMESTAMP_FORMAT === 'seconds' ? 1000 : 1;
 
-function buildLoaderOptions() {
-  const server = 'ws://localhost:3000';
-  const worker = false;
-  const pathname = ''; // '/scenario-circle';
-
-  const options = {
-    logGuid: 'mock',
-    serverConfig: {
-      defaultLogLength: 30,
-      serverUrl: `${server}${pathname}`
-    },
-    worker: worker !== 'false',
-    maxConcurrency: 4
-  };
-
-  return options;
-}
 import {XVIZStreamLoader} from 'streetscape.gl';
 
-export class StreetscapeJupyter extends PureComponent {
+class StreetscapeJupyterComponent extends PureComponent {
   state = {
-    log: new XVIZStreamLoader(buildLoaderOptions()),
+    log: null,
     settings: {
       viewMode: 'TOP_DOWN',
       showTooltip: false
@@ -64,7 +65,38 @@ export class StreetscapeJupyter extends PureComponent {
   };
 
   componentDidMount() {
-    const {log} = this.state;
+    this._loadLog();
+  }
+
+  _onSettingsChange = changedSettings => {
+    this.setState({
+      settings: {...this.state.settings, ...changedSettings}
+    });
+  };
+
+  _setupStream() {
+    const {port, log} = this.props;
+    const server = `ws://localhost:${port}`;
+    const worker = false;
+
+    return {
+      logGuid: log,
+      serverConfig: {
+        defaultLogLength: 30,
+        serverUrl: `${server}`
+      },
+      worker: worker !== 'false',
+      maxConcurrency: 4
+    };
+  }
+
+  _loadLog = () => {
+    let {log} = this.state;
+    if (log) {
+      log.close();
+    }
+
+    log = new XVIZStreamLoader(this._setupStream())
     log
       .on('ready', () => {
         const metadata = log.getMetadata();
@@ -74,12 +106,8 @@ export class StreetscapeJupyter extends PureComponent {
       })
       .on('error', console.error)
       .connect();
-  }
 
-  _onSettingsChange = changedSettings => {
-    this.setState({
-      settings: {...this.state.settings, ...changedSettings}
-    });
+    this.setState({log});
   };
 
   render() {
@@ -121,6 +149,7 @@ export class StreetscapeJupyter extends PureComponent {
     return (
       <div id="container" style={style['container']}>
         <div id="control-panel" style={style['controlPanel']}>
+          <Button onClick={this._loadLog}>Reload</Button>
           {panels.map(panelName => [
             <XVIZPanel key={panelName} log={log} name={panelName} />,
             <hr key={`${panelName}-divider`} />
@@ -130,12 +159,13 @@ export class StreetscapeJupyter extends PureComponent {
             values={this.state.settings}
             onChange={this._onSettingsChange}
           />
+          <StreamSettingsPanel log={log} />
         </div>
         <div id="log-panel" style={style['logPanel']}>
           <div id="map-view">
             <LogViewer
               log={log}
-              mapboxApiAccessToken={this.props.mapbox}
+              mapboxApiAccessToken={this.props.mapboxAccessToken}
               mapStyle={MAP_STYLE}
               car={CAR}
               xvizStyles={XVIZ_STYLE}
@@ -155,4 +185,14 @@ export class StreetscapeJupyter extends PureComponent {
       </div>
     );
   }
+};
+
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    log: state.log,
+    port: state.port,
+    mapboxAccessToken: state.mapboxAccessToken
+  };
 }
+
+export const StreetscapeJupyter = connect(mapStateToProps)(StreetscapeJupyterComponent);

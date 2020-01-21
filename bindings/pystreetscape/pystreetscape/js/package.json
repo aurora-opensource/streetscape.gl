@@ -33,6 +33,7 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
+    "babel-plugin-search-and-replace": "^1.0.1",
     "rimraf": "^2.6.1",
     "source-map-loader": "^0.2.3",
     "webpack": "^3.5.5"

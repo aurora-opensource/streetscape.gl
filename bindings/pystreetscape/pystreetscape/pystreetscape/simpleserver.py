@@ -36,7 +36,6 @@ class XVIZMemorySourceHandler:
 
 
 class SimpleServer:
-    '''Simple XVIZ Websocket server that serves data from an xviz.MemorySource'''
     def __init__(self, port=3000):
         self.logger = logging.StreamHandler(sys.stdout)
         self.logger.setLevel(logging.DEBUG)

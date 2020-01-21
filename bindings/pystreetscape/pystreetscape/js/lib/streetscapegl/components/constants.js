@@ -20,12 +20,10 @@
 import {CarMesh} from 'streetscape.gl';
 
 /* eslint-disable camelcase */
-export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
-
 export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 
 export const XVIZ_CONFIG = {
-  PLAYBACK_FRAME_RATE: 10
+  PLAYBACK_FRAME_RATE: 20
 };
 
 export const CAR = CarMesh.sedan({
@@ -48,9 +46,8 @@ export const APP_SETTINGS = {
   }
 };
 
+// XVIZ Style overrides
 export const XVIZ_STYLE = {
-  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}],
-  '/lidar/points': [{style: {point_color_mode: 'elevation'}}]
 };
 
 export const STYLES = {

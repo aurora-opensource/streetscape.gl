@@ -1,12 +1,38 @@
+// Copyright (c) 2019 Uber Technologies, Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 import document from 'global/document';
+import { createStore } from 'redux'
 
 import renderRoot from './components/root';
 
-const getData = that => that.model.get('data');
 const getHeight = that => that.model.get('height');
+const getPort = that => that.model.get('port');
+const getLog = that => that.model.get('log');
+const getMapboxAccessToken = that => that.model.get('mapboxAccessToken');
 
 const DOM_EL_ID = 'streetscapegl';
 let counter = 0;
+
+function reducer(state = [], action) {
+  return state;
+}
 
 export class StreetscapeGLJupyter {
   constructor() {
@@ -16,8 +42,11 @@ export class StreetscapeGLJupyter {
   }
 
   create(that) {
-    this.store = {};
-    const config = null;
+    this.store = createStore((state = [], action) => state, {
+      log: getLog(that),
+      port: getPort(that),
+      mapboxAccessToken: getMapboxAccessToken(that)
+    });
 
     const height = 600; // getHeight(that);
 
@@ -31,53 +60,5 @@ export class StreetscapeGLJupyter {
     that.el.appendChild(divElmt);
 
     renderRoot({id: this.id, store: this.store, ele: divElmt});
-    const data = getData(that);
-
-    // After rendering the component,
-    // we add the data that's already in the model
-    const hasData = data && Object.keys(data).length;
-    const hasConfig = config && config.version;
-
-    if (hasData) {
-      // store.dispatch(action)
-    } else if (hasConfig) {
-      this.onConfigChange(that);
-    }
-  }
-
-  onDataChange(that) {
-    const data = getData(that);
-
-    // store.dispatch(action)
-  }
-
-  onConfigChange(that) {
-    const config = getConfig(that);
-
-    const currentValue = getConfigInStore({hash: true, store: this.store});
-    if (currentValue === JSON.stringify(config)) {
-      // calling model.set('config') inside the js component will trigger another onConfigChange
-      return;
-    }
-
-    this.store.dispatch(
-      addDataToMap({
-        // reuse datasets in state
-        // a hack to apply config to existing data
-        datasets: Object.values(getDatasetsInStore(this.store)).map(d => ({
-          info: {
-            id: d.id,
-            label: d.label,
-            color: d.color
-          },
-          data: {
-            fields: d.fields,
-            rows: d.allData
-          }
-        })),
-        config,
-        options: {centerMap: false}
-      })
-    );
   }
 }
