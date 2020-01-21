@@ -18,29 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import React, {PureComponent} from 'react';
-import { connect } from 'react-redux'
+import {connect} from 'react-redux';
 
-import {
-StreamSettingsPanel,
-} from 'streetscape.gl';
+import {StreamSettingsPanel} from 'streetscape.gl';
 
 import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
-import {
-  LogViewer,
-  PlaybackControl,
-  XVIZPanel,
-  VIEW_MODE
-} from 'streetscape.gl';
+import {LogViewer, PlaybackControl, XVIZPanel, VIEW_MODE} from 'streetscape.gl';
 
 import {Form, Button} from '@streetscape.gl/monochrome';
-import {
-  XVIZ_CONFIG,
-  APP_SETTINGS,
-  MAP_STYLE,
-  XVIZ_STYLE,
-  CAR,
-  STYLES
-} from './constants';
+import {XVIZ_CONFIG, APP_SETTINGS, MAP_STYLE, XVIZ_STYLE, CAR, STYLES} from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
 
@@ -96,7 +82,7 @@ class StreetscapeJupyterComponent extends PureComponent {
       log.close();
     }
 
-    log = new XVIZStreamLoader(this._setupStream())
+    log = new XVIZStreamLoader(this._setupStream());
     log
       .on('ready', () => {
         const metadata = log.getMetadata();
@@ -131,7 +117,7 @@ class StreetscapeJupyterComponent extends PureComponent {
         overflowX: 'hidden',
         overflowY: 'auto'
       },
-      logPanel: { 
+      logPanel: {
         flexGrow: '1',
         display: 'flex',
         flexDirection: 'column',
@@ -185,7 +171,7 @@ class StreetscapeJupyterComponent extends PureComponent {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = (state /*, ownProps*/) => {
   return {
@@ -193,6 +179,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     port: state.port,
     mapboxAccessToken: state.mapboxAccessToken
   };
-}
+};
 
 export const StreetscapeJupyter = connect(mapStateToProps)(StreetscapeJupyterComponent);

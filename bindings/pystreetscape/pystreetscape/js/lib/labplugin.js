@@ -5,12 +5,11 @@ module.exports = {
   id: 'streetscape-jupyter',
   requires: [base.IJupyterWidgetRegistry],
   activate: function(app, widgets) {
-      widgets.registerWidget({
-          name: 'streetscape-jupyter',
-          version: plugin.version,
-          exports: plugin
-      });
+    widgets.registerWidget({
+      name: 'streetscape-jupyter',
+      version: plugin.version,
+      exports: plugin
+    });
   },
   autoStart: true
 };
-

@@ -21,32 +21,31 @@ import * as widgets from '@jupyter-widgets/base';
 import {StreetscapeGLJupyter} from './streetscapegl/streetscape';
 
 export const StreetscapeGLModel = widgets.DOMWidgetModel.extend({
-    defaults: {
-        ...widgets.DOMWidgetModel.prototype.defaults(),
-        _model_name : 'StreetscapeGLModel',
-        _model_module : 'streetscape-jupyter',
-        _model_module_version : '0.1.0',
+  defaults: {
+    ...widgets.DOMWidgetModel.prototype.defaults(),
+    _model_name: 'StreetscapeGLModel',
+    _model_module: 'streetscape-jupyter',
+    _model_module_version: '0.1.0',
 
-        _view_name : 'StreetscapeGLView',
-        _view_module : 'streetscape-jupyter',
-        _view_module_version : '0.1.0',
+    _view_name: 'StreetscapeGLView',
+    _view_module: 'streetscape-jupyter',
+    _view_module_version: '0.1.0',
 
-        port: 3000,
-        log: 'default',
-        mapboxToken: ''
-    }
+    port: 3000,
+    log: 'default',
+    mapboxToken: ''
+  }
 });
-
 
 // Custom View. Renders the widget model.
 export const StreetscapeGLView = widgets.DOMWidgetView.extend({
-    render() {
-        try {
-          this.streetscape = new StreetscapeGLJupyter(); 
-          // Model attributes are access through 'this'
-          this.streetscape.create(this);
-        } catch (err) {
-          console.log(err);
-        }
+  render() {
+    try {
+      this.streetscape = new StreetscapeGLJupyter();
+      // Model attributes are access through 'this'
+      this.streetscape.create(this);
+    } catch (err) {
+      console.log(err);
     }
+  }
 });

@@ -47,8 +47,7 @@ export const APP_SETTINGS = {
 };
 
 // XVIZ Style overrides
-export const XVIZ_STYLE = {
-};
+export const XVIZ_STYLE = {};
 
 export const STYLES = {
   PERF: {fontFamily: '"Helvetica Neue",arial,sans-serif', fontSize: 12}

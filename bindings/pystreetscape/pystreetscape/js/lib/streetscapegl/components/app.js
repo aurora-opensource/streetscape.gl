@@ -20,7 +20,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {StreetscapeJupyter} from './component';
 
-export const STREETSCAPE_GL_JUPYTER_VERSION = "__PACKAGE_VERSION__";
+export const STREETSCAPE_GL_JUPYTER_VERSION = '__PACKAGE_VERSION__';
 
 function App(props) {
   const rootElm = useRef(null);
@@ -57,7 +57,7 @@ function App(props) {
       className="streetscapegl-widget-container"
     >
       <StreetscapeJupyter />
-      <div style={{position: 'absolute', top:0, right:0}}>
+      <div style={{position: 'absolute', top: 0, right: 0}}>
         Ver: {STREETSCAPE_GL_JUPYTER_VERSION}
       </div>
     </div>

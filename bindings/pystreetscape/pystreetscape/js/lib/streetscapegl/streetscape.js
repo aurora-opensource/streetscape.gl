@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import document from 'global/document';
-import { createStore } from 'redux'
+import {createStore} from 'redux';
 
 import renderRoot from './components/root';
 
