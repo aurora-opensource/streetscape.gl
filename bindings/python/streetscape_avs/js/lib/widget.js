@@ -37,6 +37,7 @@ export const StreetscapeGLModel = widgets.DOMWidgetModel.extend({
   }
 });
 
+
 // Custom View. Renders the widget model.
 export const StreetscapeGLView = widgets.DOMWidgetView.extend({
   render() {
@@ -49,3 +50,16 @@ export const StreetscapeGLView = widgets.DOMWidgetView.extend({
     }
   }
 });
+
+/**
+ * Hides a warning in the mapbox-gl.js library from surfacing in the notebook as text.
+ */
+function hideMapboxWarning() {
+  const missingTokenWarning = document.getElementById('no-token-warning');
+  if (missingTokenWarning) {
+    missingTokenWarning.style.display = 'none';
+  }
+}
+
+/* Temporary solution until i get a better one */
+window.setInterval(hideMapboxWarning, 2000);
