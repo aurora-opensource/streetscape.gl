@@ -7,5 +7,5 @@ Package Install
 - [node](http://nodejs.org/)
 
 ```bash
-npm install --save streetscape-jupyter
+npm install --save @streetscape/jupyter-widget
 ```

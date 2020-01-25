@@ -73,6 +73,19 @@ module.exports = [
             libraryTarget: 'amd'
         }
     },
+    {// JupyterLab
+        entry: './lib/index.js',
+        output: {
+            filename: 'lab.js',
+            path: path.resolve(__dirname, 'dist'),
+            libraryTarget: 'commonjs2'
+        },
+        devtool: 'source-map',
+        module: {
+            rules: rules
+        },
+        externals: ['@jupyter-widgets/base']
+    },
     {// Bundle for the notebook containing the custom widget views and models
      //
      // This bundle contains the implementation for the custom widget views and
@@ -91,7 +104,7 @@ module.exports = [
         },
         externals: ['@jupyter-widgets/base']
     },
-    {// Embeddable streetscape-jupyter bundle
+    {// Embeddable @streetscape/jupyter-widget bundle
      //
      // This bundle is generally almost identical to the notebook bundle
      // containing the custom widget views and models.
@@ -110,7 +123,7 @@ module.exports = [
             filename: 'index.js',
             path: path.resolve(__dirname, 'dist'),
             libraryTarget: 'amd',
-            publicPath: 'https://unpkg.com/streetscape-jupyter@' + version + '/dist/'
+            publicPath: 'https://unpkg.com/@streetscape/jupyter-widget@' + version + '/dist/'
         },
         devtool: 'source-map',
         module: {

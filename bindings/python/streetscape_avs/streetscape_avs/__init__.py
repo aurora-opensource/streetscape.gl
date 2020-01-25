@@ -7,6 +7,6 @@ def _jupyter_nbextension_paths():
     return [{
         'section': 'notebook',
         'src': 'static',
-        'dest': 'streetscape-jupyter',
-        'require': 'streetscape-jupyter/extension'
+        'dest': 'streetscape_avs',
+        'require': 'streetscape_avs/extension'
     }]

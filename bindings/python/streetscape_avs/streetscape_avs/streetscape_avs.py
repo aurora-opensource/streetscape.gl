@@ -6,8 +6,8 @@ class Streetscape(widgets.DOMWidget):
     """A Streetscape.gl widget."""
     _view_name = Unicode('StreetscapeGLView').tag(sync=True)
     _model_name = Unicode('StreetscapeGLModel').tag(sync=True)
-    _view_module = Unicode('streetscape-jupyter').tag(sync=True)
-    _model_module = Unicode('streetscape-jupyter').tag(sync=True)
+    _view_module = Unicode('@streetscape/jupyter-widget').tag(sync=True)
+    _model_module = Unicode('@streetscape/jupyter-widget').tag(sync=True)
     _view_module_version = Unicode('^0.1.0').tag(sync=True)
     _model_module_version = Unicode('^0.1.0').tag(sync=True)
 

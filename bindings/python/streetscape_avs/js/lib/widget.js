@@ -24,11 +24,11 @@ export const StreetscapeGLModel = widgets.DOMWidgetModel.extend({
   defaults: {
     ...widgets.DOMWidgetModel.prototype.defaults(),
     _model_name: 'StreetscapeGLModel',
-    _model_module: 'streetscape-jupyter',
+    _model_module: '@streetscape/jupyter-widget',
     _model_module_version: '0.1.0',
 
     _view_name: 'StreetscapeGLView',
-    _view_module: 'streetscape-jupyter',
+    _view_module: '@streetscape/jupyter-widget',
     _view_module_version: '0.1.0',
 
     port: 3000,

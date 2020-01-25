@@ -10,7 +10,7 @@ git add and git commit
 git push
 git push --tags
 
-- To release a new version of streetscape-jupyter on NPM:
+- To release a new version of @streetscape/jupyter-widget on NPM:
 
 ```
 # clean out the `dist` and `node_modules` directories

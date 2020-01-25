@@ -6,14 +6,14 @@
 // url for the notebook is not known at build time and is therefore computed
 // dynamically.
 __webpack_public_path__ =
-  document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/streetscape-jupyter';
+  document.querySelector('body').getAttribute('data-base-url') + 'nbextensions/streetscape_avs';
 
 // Configure requirejs
 if (window.require) {
   window.require.config({
     map: {
       '*': {
-        'streetscape-jupyter': 'nbextensions/streetscape-jupyter/index'
+        '@streetscape/jupyter-widget': 'nbextensions/streetscape_avs/index'
       }
     }
   });

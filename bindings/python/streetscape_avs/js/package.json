@@ -1,5 +1,5 @@
 {
-  "name": "streetscape-jupyter",
+  "name": "@streetscape/jupyter-widget",
   "version": "0.1.0",
   "description": "Streetscape.gl Jupyter Widget",
   "author": "Timothy Wojtaszek",
@@ -13,6 +13,7 @@
     "widgets",
     "ipython",
     "ipywidgets",
+    "jupyterlab",
     "jupyterlab-extension"
   ],
   "files": [
@@ -21,7 +22,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist/",
-    "prepublish": "webpack",
+    "prepare": "webpack",
     "build": "webpack",
     "watch": "webpack --watch --mode=development",
     "test": "echo \"Error: no test specified\" && exit 1"
