@@ -32,3 +32,18 @@ This take a minute or so to get started, but then allows you to hot-reload your 
 To see a change, save your javascript, watch the terminal for an update.
 
 Note on first `jupyter lab --watch`, you may need to touch a file to get Jupyter Lab to open.
+
+Development
+-----------
+
+Useful commands to remove the modules
+
+    $ jupyter nbextension disable streetscape_avs --py --sys-prefix
+    $ jupyter nbextension uninstall --py  --sys-prefix streetscape_avs
+    $ pip uninstall streetscape_avs
+
+For Jupyter Lab
+
+    $ jupyter labextension disable @streetscape/jupyter-widget
+    $ jupyter labextension uninstall @streetscape/jupyter-widget
+    $ jupyter lab clean && jupyter lab build
