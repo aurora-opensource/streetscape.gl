@@ -131,12 +131,12 @@ setup_args = {
     'long_description': LONG_DESCRIPTION,
     'include_package_data': True,
     'data_files': [
-        ('share/jupyter/nbextensions/streetscape-jupyter', [
+        ('share/jupyter/nbextensions/streetscape_avs', [
             'streetscape_avs/static/extension.js',
             'streetscape_avs/static/index.js',
             'streetscape_avs/static/index.js.map',
         ],),
-        ('etc/jupyter/nbconfig/notebook.d', ['streetscape-jupyter.json'])
+        ('etc/jupyter/nbconfig/notebook.d', ['streetscape_avs.json'])
     ],
     'install_requires': [
         'ipywidgets>=7.0.0',
