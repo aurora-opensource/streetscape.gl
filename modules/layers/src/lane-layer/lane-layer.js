@@ -191,7 +191,7 @@ float round(float x) {
     const endPoint = new Vector3();
     let totalLength = 0;
 
-    for (let i = 0; i < numInstances; i++) {
+    for (let i = 0; i < numInstances - 1; i++) {
       startPoint.set(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]);
 
       endPoint.set(positions[i * 3 + 3], positions[i * 3 + 4], positions[i * 3 + 5]);
