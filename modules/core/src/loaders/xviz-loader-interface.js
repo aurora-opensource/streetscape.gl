@@ -109,6 +109,11 @@ export default class XVIZLoaderInterface {
         this.emit('update', message);
         break;
 
+      case LOG_STREAM_MESSAGE.VIDEO_FRAME:
+        this._onXVIZVideoFrame(message);
+        this.emit('update', message);
+        break;
+
       case LOG_STREAM_MESSAGE.DONE:
         this.emit('finish', message);
         break;
@@ -287,6 +292,28 @@ export default class XVIZLoaderInterface {
     }
 
     return bufferUpdated;
+  }
+
+  _onXVIZVideoFrame(message) {
+    const timeSlice = {
+      timestamp: message.timestamp,
+      streams: {
+        [message.stream]: {
+          time: message.timestamp,
+          images: [
+            {
+              type: 'image',
+              height_px: null,
+              width_px: null,
+              imageType: message.imageType,
+              imageData: message.imageData
+            }
+          ]
+        }
+      }
+    };
+
+    return this._onXVIZTimeslice(timeSlice);
   }
 
   _getDataByStream() {
