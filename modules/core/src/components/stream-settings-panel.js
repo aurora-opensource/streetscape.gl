@@ -165,7 +165,6 @@ class StreamSettingsPanel extends PureComponent {
 
     if (nextProps.streamsMetadata !== this.props.streamsMetadata) {
       data = createFormData(nextProps.streamsMetadata, nextProps);
-      values = null;
     }
     if (nextProps.streamSettings !== this.props.streamSettings) {
       values = settingsToFormValues(data, nextProps.streamSettings);
