@@ -1,7 +1,7 @@
 streetscape_avs
 ===============
 
-A Jupyter widget usin streetscape.gl to view XVIZ data.
+A Jupyter widget using streetscape.gl to view XVIZ data.
 
 Installation
 ------------
