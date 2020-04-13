@@ -64,13 +64,14 @@ function offsetViewState(viewState, offset) {
   };
 }
 
-export function getViews(viewMode) {
+export function getViews(viewMode, options = {}) {
   const {name, orthographic, firstPerson, mapInteraction} = viewMode;
 
   const controllerProps = {...mapInteraction, keyboard: false};
 
   if (firstPerson) {
     return new FirstPersonView({
+      ...options,
       id: name,
       fovy: 75,
       near: 1,
@@ -81,6 +82,7 @@ export function getViews(viewMode) {
   }
 
   return new MapView({
+    ...options,
     id: name,
     orthographic,
     controller: controllerProps

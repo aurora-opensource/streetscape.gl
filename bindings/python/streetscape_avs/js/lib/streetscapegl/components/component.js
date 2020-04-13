@@ -25,7 +25,7 @@ import {StreamSettingsPanel} from 'streetscape.gl';
 import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
 import {LogViewer, PlaybackControl, XVIZPanel, VIEW_MODE} from 'streetscape.gl';
 
-import {Form, Button} from '@streetscape.gl/monochrome';
+import {Form, Button, Tooltip} from '@streetscape.gl/monochrome';
 import {XVIZ_CONFIG, APP_SETTINGS, MAP_STYLE, XVIZ_STYLE, CAR, STYLES} from './constants';
 
 setXVIZConfig(XVIZ_CONFIG);
@@ -33,6 +33,8 @@ setXVIZConfig(XVIZ_CONFIG);
 const TIMEFORMAT_SCALE = getXVIZConfig().TIMESTAMP_FORMAT === 'seconds' ? 1000 : 1;
 
 import {XVIZStreamLoader} from 'streetscape.gl';
+import {Recorder} from './recorder';
+import {RefreshIcon} from './icons';
 
 class StreetscapeJupyterComponent extends PureComponent {
   state = {
@@ -41,13 +43,7 @@ class StreetscapeJupyterComponent extends PureComponent {
       viewMode: 'TOP_DOWN',
       showTooltip: false
     },
-    panels: [],
-    // LogViewer perf stats
-    statsSnapshot: {},
-    // XVIZ Parser perf stats
-    backlog: 'NA',
-    dropped: 'NA',
-    workers: {}
+    panels: []
   };
 
   componentDidMount() {
@@ -100,22 +96,25 @@ class StreetscapeJupyterComponent extends PureComponent {
     const {log, settings, panels} = this.state;
     const style = {
       container: {
-        position: 'relative',
+        position: 'absolute',
         display: 'flex',
         width: '100%',
         height: '100%',
-        overflow: 'hidden',
-        background: 'rgb(250, 250, 250)'
+        overvlow: 'hidden'
       },
       controlPanel: {
         position: 'relative',
         zIndex: '1',
-        width: 200,
-        padding: 10,
+        width: '25%',
         height: '100%',
         boxSizing: 'border-box',
         overflowX: 'hidden',
         overflowY: 'auto'
+      },
+      controlBar: {
+        display: 'flex',
+        flexDirection: 'row',
+        height: '26px'
       },
       logPanel: {
         flexGrow: '1',
@@ -123,19 +122,36 @@ class StreetscapeJupyterComponent extends PureComponent {
         flexDirection: 'column',
         height: '100%'
       },
+      mapView: {
+        flexGrow: '1',
+        position: 'relative'
+      },
       timeline: {
-        position: 'absolute',
-        zIndex: '2',
-        width: '100%',
-        bottom: 0,
-        left: 0
       }
     };
+
+    let logOptions = {};
+
+    if (!this.props.mapboxAccessToken) {
+      logOptions.showMap = false;
+      logOptions.viewOptions = {
+        clear: {
+          color: [255, 255, 255, 255]
+        }
+      };
+    }
 
     return (
       <div id="container" style={style['container']}>
         <div id="control-panel" style={style['controlPanel']}>
-          <Button onClick={this._loadLog}>Reload</Button>
+          <div id="control-bar" style={style['controlBar']}>
+            <Recorder/>
+            <Tooltip content={() => <span>Reload</span>}>
+              <Button onClick={this._loadLog}>
+                <RefreshIcon />
+              </Button>
+            </Tooltip>
+          </div>
           {panels.map(panelName => [
             <XVIZPanel key={panelName} log={log} name={panelName} />,
             <hr key={`${panelName}-divider`} />
@@ -148,7 +164,7 @@ class StreetscapeJupyterComponent extends PureComponent {
           <StreamSettingsPanel log={log} />
         </div>
         <div id="log-panel" style={style['logPanel']}>
-          <div id="map-view">
+          <div id="map-view" style={style['mapView']}>
             <LogViewer
               log={log}
               mapboxApiAccessToken={this.props.mapboxAccessToken}
@@ -157,16 +173,16 @@ class StreetscapeJupyterComponent extends PureComponent {
               xvizStyles={XVIZ_STYLE}
               showTooltip={settings.showTooltip}
               viewMode={VIEW_MODE[settings.viewMode]}
-              debug={payload => this.setState({statsSnapshot: payload})}
+              {...logOptions}
             />
           </div>
-        </div>
-        <div id="timeline" style={style['timeline']}>
-          <PlaybackControl
-            width="100%"
-            log={log}
-            formatTimestamp={x => new Date(x * TIMEFORMAT_SCALE).toUTCString()}
-          />
+          <div id="timeline" style={style['timeline']}>
+            <PlaybackControl
+              width="100%"
+              log={log}
+              formatTimestamp={x => new Date(x * TIMEFORMAT_SCALE).toUTCString()}
+            />
+          </div>
         </div>
       </div>
     );

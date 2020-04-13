@@ -74,7 +74,10 @@ export function createFormData(metadata, opts) {
         badge: (
           <Badge
             userStyle={style.badge}
-            type={metadata[streamName] && metadata[streamName].primitive_type || metadata[streamName].scalar_type}
+            type={
+              (metadata[streamName] && metadata[streamName].primitive_type) ||
+              metadata[streamName].scalar_type
+            }
           />
         )
       };
