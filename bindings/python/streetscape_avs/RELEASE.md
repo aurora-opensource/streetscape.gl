@@ -18,3 +18,25 @@ git clean -fdx
 npm install
 npm publish
 ```
+
+
+# clean out dist
+rm dist/*
+
+# build widget (is this necessary?)
+cd js, yarn build
+verify dist/index.js
+j
+# build (dev pyenv) for this
+python setup.py sdist bdist_wheel
+
+# test (separate pyenv for this)
+twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+python3 -m pip uninstall xviz_avs
+python3 -m pip install -i https://test.pypi.org xviz_avs
+python3 -m pip install -i https://test.pypi.org/legacy xviz_avs
+python3 -m pip install -i https://test.pypi.org/simple/ "xviz-avs=0.1.0a3"
+python3 test-xviz.py 
+
+# upload
+twine upload dist/*
