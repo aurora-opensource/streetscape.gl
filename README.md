@@ -1,3 +1,9 @@
+# Raven Setup Steps
+```bash
+$ cd ./examples/get-started
+$ yarn start-live
+```
+
 # streetscape.gl
 
 streetscape.gl is a toolkit for visualizing autonomous and robotics data in the
