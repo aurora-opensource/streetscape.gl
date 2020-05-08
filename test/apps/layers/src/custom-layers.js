@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import {SignLayer, TrafficLightLayer, ImageryLayer, LaneLayer} from '@streetscape.gl/layers';
+import {PathLayer} from '@deck.gl/layers';
 
 const signLayerProps = {
   coordinate: 'VEHICLE_RELATIVE',
@@ -38,6 +39,43 @@ const signLayerProps = {
   getIcon: d => 'marker-warning',
   getSize: 1
 };
+
+
+function getBinaryLaneDataSpiral(lng, lat, alt, numSegments)
+{
+
+  const arc = 3*Math.PI/numSegments;
+  const scaler = 0.0001; // cos => lng/lat scale
+  const a = 0.7;
+  const b = 0.3;
+  const spiral = [];
+  for (let i=0 ; i < numSegments; i++) {
+    const theta = arc * i;
+    const x = a * Math.exp(b*theta) * Math.cos(theta);
+    const y = a * Math.exp(b*theta) * Math.sin(theta);
+    spiral.push([scaler * x, scaler * y]);
+  }
+
+  return new Float64Array(spiral.map(x => [lng + x[0], lat + x[1], alt]).flat());
+}
+
+function getBinaryLaneData(lng, lat, alt, numSegments)
+{
+  const arc = 2*Math.PI/numSegments;
+  const scaler = 0.0001; // cos => lng/lat scale
+
+  const circleData = [];
+  for (let i=0 ; i < numSegments; i++) {
+    const angle = arc * i;
+    circleData.push([scaler * Math.cos(angle), scaler * Math.sin(angle)]);
+  }
+
+  circleData.push(circleData[0]);
+  return new Float64Array(circleData.map(x => [lng + x[0], lat + x[1], alt]).flat());
+}
+
+const numberOfSegments = 16;
+const binaryLaneData = getBinaryLaneDataSpiral(8.4228850417969, 49.011212804408, 115, numberOfSegments);
 
 export default [
   new SignLayer({
@@ -81,8 +119,7 @@ export default [
     vCount: 2,
     transparentColor: [255, 255, 255, 0]
   }),
-
-  new LaneLayer({
+  new PathLayer({
     id: 'lanes',
     coordinate: 'VEHICLE_RELATIVE',
 
@@ -115,5 +152,48 @@ export default [
     getColor2: [0, 128, 255],
     getWidth: [0.1, 0.05, 0.1],
     getDashArray: [4, 1, 1, 1]
+  }),
+  new LaneLayer({
+    id: 'binary_lanes',
+    coordinate: 'GEOGRAPHIC',
+    data: {
+      length: 1,
+      startIndices: [0],
+      attributes: {
+        getPath: {value: binaryLaneData, size: 3},
+      }
+    },
+    _pathType: 'open', // this instructs the layer to skip normalization and use the binary as-is
+
+    highPrecisionDash: true,
+
+    getPath: d => d.path,
+    getColor: [255, 50, 0],
+    getColor2: [0, 50, 255],
+    getWidth: [1.1, 0.55, 1.1],
+    getDashArray: [3, 5],
+    getDashArray2: [7, 10]
+  }),
+  new LaneLayer({
+    id: 'lanes1',
+    coordinate: 'VEHICLE_RELATIVE',
+
+    data: [
+      {
+        path: [
+          [0, 0, 3],
+          [10, 10, 3]
+        ]
+      }
+    ],
+
+    highPrecisionDash: true,
+
+    getPath: d => d.path,
+    getColor: [200, 0, 0],
+    getColor2: [0, 0, 200],
+    getWidth: [1.0, 1.0, 1.0],
+    getDashArray: [1, 1],
+    getDashArray2: [1, 0.5]
   })
 ];

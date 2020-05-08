@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import {PathLayer} from '@deck.gl/layers';
+import PathLayer from './path-layer';
 import GL from '@luma.gl/constants';
 import {Vector3} from 'math.gl';
 
@@ -201,8 +201,12 @@ float round(float x) {
 
       const segmentLength = startPoint.distance(endPoint);
 
+      console.log(i, startPoint, endPoint);
+      console.log(segmentLength);
+
       target[i] = segmentLength ? totalLength / segmentLength : 0;
 
+      console.log(target[i]);
       if (instanceTypes[i] <= 1) {
         totalLength += segmentLength;
       } else {
