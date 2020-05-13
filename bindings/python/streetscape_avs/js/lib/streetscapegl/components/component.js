@@ -59,7 +59,7 @@ class StreetscapeJupyterComponent extends PureComponent {
   _setupStream() {
     const {port, log} = this.props;
     const server = `ws://localhost:${port}`;
-    const worker = false;
+    const worker = true;
 
     return {
       logGuid: log,
@@ -67,7 +67,7 @@ class StreetscapeJupyterComponent extends PureComponent {
         defaultLogLength: 30,
         serverUrl: `${server}`
       },
-      worker: worker !== 'false',
+      worker,
       maxConcurrency: 4
     };
   }
@@ -181,6 +181,7 @@ class StreetscapeJupyterComponent extends PureComponent {
               width="100%"
               log={log}
               formatTimestamp={x => new Date(x * TIMEFORMAT_SCALE).toUTCString()}
+              onLookAheadChange={x => log.setLookAhead(x)}
             />
           </div>
         </div>
