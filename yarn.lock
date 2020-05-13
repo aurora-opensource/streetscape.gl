@@ -1169,10 +1169,10 @@
     "@luma.gl/experimental" "^8.1.2"
     "@luma.gl/shadertools" "^8.1.2"
 
-"@deck.gl/react@^8.l.5":
-  version "8.2.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.2.0-alpha.1.tgz#c141be117d1ad746546d7f45d650e1046588ded1"
-  integrity sha512-zaUQ2lyOMMj6rKG97SIATBPT1GTosscYf4ldvNl8gXcbgkTsw1NCljAa0QBCNYnfzD+iW/irEq7NRI/uchQ4EQ==
+"@deck.gl/react@^8.1.5":
+  version "8.1.5"
+  resolved "https://registry.yarnpkg.com/@deck.gl/react/-/react-8.1.5.tgz#e470cbefc33ecec6a49fdf7598b7fde5ac2421b9"
+  integrity sha512-HUkaSqxOrTevjmYuASV/EN4vx1/5CuOKp6nCRrlyeUSTRiwOLq6ZWL3+/WCDgF3EP0x5YaNJc8ayrpfyFpFhsg==
   dependencies:
     prop-types "^15.6.0"
 
@@ -12248,9 +12248,9 @@ proto-list@~1.2.1:
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
   integrity sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=
 
-"protobufjs@git+https://github.com/jlisee/protobuf.js.git#ed8e699671da6f9a169074aa0f2a160cefe0844a":
+"protobufjs@https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a":
   version "6.8.8"
-  resolved "git+https://github.com/jlisee/protobuf.js.git#ed8e699671da6f9a169074aa0f2a160cefe0844a"
+  resolved "https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a"
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
