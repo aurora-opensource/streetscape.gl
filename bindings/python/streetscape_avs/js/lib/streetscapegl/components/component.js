@@ -100,7 +100,7 @@ class StreetscapeJupyterComponent extends PureComponent {
         display: 'flex',
         width: '100%',
         height: '100%',
-        overvlow: 'hidden'
+        overflow: 'hidden'
       },
       controlPanel: {
         position: 'relative',
