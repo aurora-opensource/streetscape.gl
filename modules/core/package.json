@@ -2,7 +2,7 @@
   "name": "@streetscape.gl/core",
   "description": "Visualizaton toolkit for 3D maps autonomous XVIZ protocol data",
   "license": "MIT",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -19,10 +19,10 @@
     "@deck.gl/core": "^8.1.5",
     "@deck.gl/layers": "^8.1.5",
     "@deck.gl/mesh-layers": "^8.1.5",
-    "@deck.gl/react": "^8.l.5",
+    "@deck.gl/react": "^8.1.5",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
-    "@streetscape.gl/monochrome": "1.0.4",
+    "@streetscape.gl/monochrome": "1.0.5",
     "@xviz/parser": "^1.0.4",
     "lodash.merge": "^4.6.1",
     "math.gl": "^3.0.0",
