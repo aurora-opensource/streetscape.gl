@@ -4360,27 +4360,27 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@xviz/io@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@xviz/io/-/io-1.0.4.tgz#8f9ed69be2ca00ce9bd0f8cd5034fb725d2469b7"
-  integrity sha512-Cu0mqpX/f1L+spyt09sHTBMyWdyouHR2mumNdmCrBs1Rq1wc5D6cctLJX2kZqBTC3nPtDu9AaTZWi5i/FDnE+Q==
+"@xviz/io@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@xviz/io/-/io-1.0.5.tgz#ec2551bb9947247d99f083f5e7fee366576c4e8d"
+  integrity sha512-ekMAw5QvBErW1i+vt2cF3Gv6/68vSOZBJuI4sXBIdmmGhHshW1Zu5/4sYn/PxoBKQNy2b7JqOxqKaK3GAqbSkg==
   dependencies:
     "@loaders.gl/gltf" "^1.3.3"
     "@loaders.gl/polyfills" "^1.3.3"
     "@turf/turf" "^5.1.6"
-    "@xviz/schema" "1.0.4"
+    "@xviz/schema" "1.0.5"
     base64-js "^1.3.0"
     math.gl "^3.0.0"
     protobufjs "https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a"
     text-encoding "^0.6.4"
 
-"@xviz/parser@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.4.tgz#81c66aa29a6030cf6818c90c735396e639ec5570"
-  integrity sha512-ywudRY7iQX4LSppIs7TEvpF9t3WYmUX7QRPgGTXkfWVFTRRO0XK+32RGS+r2EAV/AC4Z/cZ2NCH87ytVRjD4JA==
+"@xviz/parser@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@xviz/parser/-/parser-1.0.5.tgz#97d49958f86b1dbc2e6b60c73cba088f5e8c3324"
+  integrity sha512-nTxSnSTVmOPJDoHzPxnhuJOrcFtmMg+0QmF7KRHJmtk0eBZ51on6lbIbTbAJyhgRZJemTPIZkGhrlmG566yA8w==
   dependencies:
     "@loaders.gl/gltf" "^1.3.3"
-    "@xviz/io" "1.0.4"
+    "@xviz/io" "1.0.5"
     base64-js "^1.3.0"
     color "^3.0.0"
     math.gl "^3.0.0"
@@ -4388,10 +4388,10 @@
     text-encoding "^0.6.4"
     viewport-mercator-project "^6.1.0"
 
-"@xviz/schema@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@xviz/schema/-/schema-1.0.4.tgz#c38bb19d55f45bb72d9dfbfa267b58cdbb3c596c"
-  integrity sha512-d0/7pRY5NjkFsAaIcIPG0mhlFbvHMlmtue5V1j3hH+QXnXjKn59smRU8OwjUer9z6lGXkn9bN3Z8BTNYyKypIQ==
+"@xviz/schema@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@xviz/schema/-/schema-1.0.5.tgz#71d8c10f40aa58acf36a5e83b7d1f9da92eff28e"
+  integrity sha512-++SAIgNOvkavG7IrpRyvzh99yaRT9831kAIqMdvMMwdwiT92TmVuhFkVLUOCDqh7f6FtB5xWcXjJpccyhX5GkA==
   dependencies:
     ajv "^6.5.2"
     is "^3.2.1"
@@ -12248,9 +12248,9 @@ proto-list@~1.2.1:
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
   integrity sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=
 
-"protobufjs@https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a":
+"protobufjs@git+https://github.com/jlisee/protobuf.js.git#ed8e699671da6f9a169074aa0f2a160cefe0844a":
   version "6.8.8"
-  resolved "https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a"
+  resolved "git+https://github.com/jlisee/protobuf.js.git#ed8e699671da6f9a169074aa0f2a160cefe0844a"
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
