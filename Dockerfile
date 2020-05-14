@@ -1,10 +1,10 @@
 # Docker Image for BuildKite CI
 # -----------------------------
-FROM node:10.16.3
+FROM node:10.20
 
 WORKDIR /streetscape
 
-RUN yarn global add yarn@1.16.0
+RUN yarn global add yarn@1.21.1
 
 WORKDIR /streetscape
 ENV PATH /streetscape/node_modules/.bin:$PATH
