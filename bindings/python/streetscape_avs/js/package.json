@@ -1,0 +1,56 @@
+{
+  "name": "@streetscape/jupyter-widget",
+  "version": "0.1.0",
+  "description": "Streetscape.gl Jupyter Widget",
+  "author": "Timothy Wojtaszek",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uber/streetscape.gl.git"
+  },
+  "keywords": [
+    "jupyter",
+    "widgets",
+    "ipython",
+    "ipywidgets",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "files": [
+    "lib/**/*.js",
+    "dist/*.js"
+  ],
+  "scripts": {
+    "clean": "rimraf dist/",
+    "prepare": "webpack",
+    "build": "webpack",
+    "watch": "webpack --watch --mode=development",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "babel-plugin-search-and-replace": "^1.0.1",
+    "rimraf": "^2.6.1",
+    "source-map-loader": "^0.2.3",
+    "webpack": "^3.5.5"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "@jupyter-widgets/base": "^1.1 || ^2",
+    "lodash": "^4.17.4",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "react-redux": "^5.1.1",
+    "redux": "^3.0.0",
+    "streetscape.gl": "^1.0.0"
+  },
+  "jupyterlab": {
+    "extension": "lib/labplugin"
+  }
+}

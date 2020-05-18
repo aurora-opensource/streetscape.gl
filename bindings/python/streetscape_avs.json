@@ -1,0 +1,10 @@
+{
+	"author_name": "Timothy Wojtaszek",
+	"author_email": "twojtasz@uber.com",
+	"github_project_name": "uber/streetscape.gl",
+	"github_organization_name": "uber",
+	"python_package_name": "streetscape_avs",
+	"npm_package_name": "streetscape-jupyter",
+	"npm_package_version": "0.1.0",
+	"project_short_description": "Streetscape XVIZ viewer for Jupyter"
+}

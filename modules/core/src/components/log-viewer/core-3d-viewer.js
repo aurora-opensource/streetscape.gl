@@ -76,6 +76,7 @@ export default class Core3DViewer extends PureComponent {
     customLayers: PropTypes.array,
     renderObjectLabel: PropTypes.func,
     getTransformMatrix: PropTypes.func,
+    viewOptions: PropTypes.object,
 
     // Callbacks
     onMapLoad: PropTypes.func,
@@ -114,7 +115,7 @@ export default class Core3DViewer extends PureComponent {
 
     this.state = {
       styleParser: this._getStyleParser(props),
-      views: getViews(props.viewMode)
+      views: getViews(props.viewMode, props.viewOptions)
     };
 
     this.getLayers = memoize(this._getLayers.bind(this));
@@ -139,7 +140,7 @@ export default class Core3DViewer extends PureComponent {
 
       nextProps.onViewStateChange({viewState, viewOffset});
       this.setState({
-        views: getViews(nextProps.viewMode)
+        views: getViews(nextProps.viewMode, nextProps.viewOptions)
       });
     }
     if (
