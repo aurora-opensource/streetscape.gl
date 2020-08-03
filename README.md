@@ -1,7 +1,23 @@
 # Raven Setup Steps
+## Notes
+1. This visualization requires two parts:
+    a) https://github.com/Smart-Ag/streetscape.gl
+    b) https://github.com/Smart-Ag/xviz
+2. a) is the front end code
+3. b) is the back end code
+
+## To Install
+```bash
+$ install node v11.12.0
+$ install npm v6.7.0
+$ cd ./examples/get-started
+$ npm install
+```
+
+## To Run
 ```bash
 $ cd ./examples/get-started
-$ yarn start-live
+$ npm run start-live
 ```
 
 # streetscape.gl
