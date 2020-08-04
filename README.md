@@ -8,8 +8,9 @@
 
 ## To Install
 ```bash
-$ install node v11.12.0
-$ install npm v6.7.0
+$ install node v11.12.0 (curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash)
+$ nvm install 11.12.0
+$ nvm use 11.12.0
 $ cd ./examples/get-started
 $ npm install
 ```
