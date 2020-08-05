@@ -84,6 +84,26 @@ class Example extends PureComponent {
             onChange={this._onSettingsChange}
           />
           <StreamSettingsPanel log={log} />
+
+          <div>
+            <hr />
+            <h5>Radar</h5>
+            <ul>
+              <li style={{color: 'red'}}>Pass Through Filter - Q FLTR - RED</li>
+              <li style={{color: '#CCAA00'}}>Filtered Out - Q FLTR - YELLOW</li>
+            </ul>
+            <hr />
+            <h5>Camera</h5>
+            <ul>
+              <li style={{color: '#00CCCC'}}>Camera Target - CYAN</li>
+            </ul>
+            <hr />
+            <h5>Tracking</h5>
+            <ul>
+              <li style={{color: 'blue'}}>Tracking Target Camera Only - BLUE</li>
+              <li style={{color: 'green'}}>Tracking Target Camera + Radar - GREEN</li>
+            </ul>
+          </div>
         </div>
         <div id="log-panel">
           <div id="map-view">
@@ -96,7 +116,7 @@ class Example extends PureComponent {
               showTooltip={settings.showTooltip}
               viewMode={VIEW_MODE[settings.viewMode]}
             />
-            <div id="hud">
+            <div id="hud" style={{display: 'none'}}>
               <TurnSignalWidget log={log} streamName="/vehicle/turn_signal" />
               <hr />
               <TrafficLightWidget log={log} streamName="/vehicle/traffic_light" />
