@@ -15,13 +15,15 @@ $ nvm install 11.12.0
 $ nvm use 11.12.0
 $ git clone https://github.com/uber/streetscape.gl.git
 $ cd streetscape.gl
+$ npm install
 $ npm run bootstrap
 ```
 
 ## To Run
 
 ```bash
-$ cd xviz/examples/get-started
+$ cd streetscape.gl/examples/get-started
+$ npm install
 $ npm run start-live
 ```
 
