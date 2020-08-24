@@ -116,7 +116,7 @@ class Example extends PureComponent {
   state = {
     log: exampleLog,
     settings: {
-      viewMode: 'PERSPECTIVE',
+      viewMode: 'TOP_DOWN',
       showTooltip: false,
       showDebug: true
     },

@@ -46,7 +46,7 @@ class Example extends PureComponent {
           mapStyle={MAP_STYLE}
           car={CAR}
           customLayers={customLayers}
-          viewMode={VIEW_MODE.PERSPECTIVE}
+          viewMode={VIEW_MODE.TOP_DOWN}
         />
         <div id="timeline">
           <PlaybackControl
