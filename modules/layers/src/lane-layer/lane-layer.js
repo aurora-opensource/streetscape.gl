@@ -104,13 +104,11 @@ float round(float x) {
   float unitLength = solid2 + vDashArray.w;
 
   if (unitLength > 0.0 && vDashArray.y > 0.0) {
-    unitLength = mix(
-      unitLength,
-      vPathLength / round(vPathLength / unitLength),
-      dashAlignMode
-    );
+    unitLength = dashAlignMode > 0.0
+      ? vPathLength / round(vPathLength / unitLength)
+      : unitLength;
 
-    float offset = mix(vPathOffset, vDashArray.x / 2.0, dashAlignMode);
+    float offset = dashAlignMode > 0.0 ? vDashArray.x / 2.0 : vPathOffset;
     float unitPosition = mod2(vPathPosition.y + offset, unitLength);
 
     if (unitPosition > solid1 && unitPosition < gap1 || unitPosition > solid2) {
