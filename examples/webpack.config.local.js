@@ -85,11 +85,17 @@ function makeLocalDevConfig() {
 }
 
 function addLocalDevSettings(config, exampleDir) {
+
+  const xvizResolve = {
+    '@xviz/parser': resolve(__dirname, '../../xviz/modules/parser/dist/es5'),
+    '@xviz/io': resolve(__dirname, '../../xviz/modules/io/dist/es5')
+  };
+
   const LOCAL_DEV_CONFIG = makeLocalDevConfig(exampleDir);
   config = Object.assign({}, LOCAL_DEV_CONFIG, config);
   config.resolve = Object.assign({}, LOCAL_DEV_CONFIG.resolve, config.resolve || {});
   config.resolve.alias = config.resolve.alias || {};
-  Object.assign(config.resolve.alias, LOCAL_DEV_CONFIG.resolve.alias);
+  Object.assign(config.resolve.alias, LOCAL_DEV_CONFIG.resolve.alias, xvizResolve);
 
   config.module = config.module || {};
   Object.assign(config.module, {
