@@ -170,7 +170,8 @@ class Example extends PureComponent {
         const imageUrl = this.setState({blob: img});
       });
 
-    load(duckURL, GLTFLoader).then(data => {
+    // load(duckURL, GLTFLoader).then(data => {
+    load(duckURL, GLTFLoader, {mode: 'no-cors'}).then(data => {
       this.setState({
         duckLayer: new ScenegraphLayer({
           id: 'scenegraph-layer',
