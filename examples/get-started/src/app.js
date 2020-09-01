@@ -24,7 +24,7 @@ import React, {PureComponent} from 'react';
 import {BitmapLayer, GeoJsonLayer} from '@deck.gl/layers';
 import {CompositeLayer} from '@deck.gl/core';
 import {render} from 'react-dom';
-
+import {Matrix4} from '@math.gl/core';
 import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
 import {
   LogViewer,
@@ -163,9 +163,20 @@ class XVIZImage extends CompositeLayer {
 
   renderLayers() {
     if (this.state.image) {
+      const ratio = 400 / 120;
+      const s = 3;
+      const w = s*ratio/2;
       return new BitmapLayer({
         ...this.props,
-        bounds: [-3, 3, 3, -3],
+        // Here i'm mapping the resulting quad
+        // [left, bottom], [left, top], [right, top], [right, bottom]]
+        bounds: [
+          [ w, 0, 3],
+          [ w, 0, 3+s],
+          [-w, 0, 3+s],
+          [-w, 0, 3]],
+        // here I am applying a transform, not needed when I specify the quad above
+        // modelMatrix: new Matrix4().translate([5, 0, 5]).rotateX(-Math.PI/2).rotateY(Math.PI),
         image: this.state.image
       });
     }
