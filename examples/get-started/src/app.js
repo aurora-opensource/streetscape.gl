@@ -155,26 +155,57 @@ class XVIZImage extends CompositeLayer {
     if (args.changeFlags.dataChanged) {
       const {props, oldProps, changeFlags} = args;
       if (props.data && props.data.length) {
+        // wrapping the array in [] for Blob is important, otherwise decode fails?!
         const blob = new Blob([props.data[0].imageData]); 
-        this.setState({image: createImageBitmap(blob)});
+        this.setState({ image: createImageBitmap(blob) });
       }
     }
   }
 
+  _offsetPoint(pt, offset) {
+    return [
+      pt[0] + offset[0],
+      pt[1] + offset[1],
+      pt[2] + offset[2]
+    ];
+  }
+
   renderLayers() {
     if (this.state.image) {
+      // TODO: this should come from the Image if not set, we
+      //  can get it from the imageBitmap returned from createImageBitmap
       const ratio = 400 / 120;
       const s = 3;
       const w = s*ratio/2;
+      const pos = this.props.data[0].position; // when image has position
       return new BitmapLayer({
         ...this.props,
+        id: this.props.id + '_0', // IMPORTANT: otherwise layer caching screws up with async and it won't appear until interaction
         // Here i'm mapping the resulting quad
         // [left, bottom], [left, top], [right, top], [right, bottom]]
+        //
+        // This works when in VEHICLE_COORDINATE with X forward, Y right, and Z up
+        // this defines a quad perpendicular to the vehicle forward direction, based
+        // on the position of the image itself.
+        // TODO: is the image flipped horizontally?
+        //       otherwise, why would this place the lower left on the right side?
         bounds: [
+          this._offsetPoint(pos, [0, w, 0]), // lower-left
+          this._offsetPoint(pos, [0, w, s]), // upper-left
+          this._offsetPoint(pos, [0, -w, s]), // upper-right
+          this._offsetPoint(pos, [0, -w, 0]) // lower-right
+        ],
+
+        /* Without metadata setting the coordinate for the stream to be
+         * VEHICLE_COORDINATE, we are in normal world space orientation
+         * TODO: why does this follow the vehicle still?
           [ w, 0, 3],
           [ w, 0, 3+s],
           [-w, 0, 3+s],
           [-w, 0, 3]],
+        */
+
+
         // here I am applying a transform, not needed when I specify the quad above
         // modelMatrix: new Matrix4().translate([5, 0, 5]).rotateX(-Math.PI/2).rotateY(Math.PI),
         image: this.state.image
@@ -202,7 +233,7 @@ class Example extends PureComponent {
       .then(response => response.blob())
       .then(blob => createImageBitmap(blob))
       .then(img => {
-        const imageUrl = this.setState({blob: img});
+        this.setState({blob: img});
       });
 
     // load(duckURL, GLTFLoader).then(data => {
