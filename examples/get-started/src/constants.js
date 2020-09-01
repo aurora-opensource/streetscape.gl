@@ -25,7 +25,8 @@ export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-lin
 export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 
 export const XVIZ_CONFIG = {
-  PLAYBACK_FRAME_RATE: 10
+  PLAYBACK_FRAME_RATE: 10,
+  DYNAMIC_STREAM_METADATA: true
 };
 
 export const CAR = CarMesh.sedan({

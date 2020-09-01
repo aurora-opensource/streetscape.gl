@@ -316,6 +316,11 @@ export default class Core3DViewer extends PureComponent {
         if (props.streamName) {
           // Use log data
           const stream = streams[props.streamName];
+          let payload = stream && streams.features;
+          if (!payload) {
+            payload = stream && stream.images; 
+          }
+
           Object.assign(
             additionalProps,
             resolveCoordinateTransform(
@@ -325,7 +330,7 @@ export default class Core3DViewer extends PureComponent {
               getTransformMatrix
             ),
             {
-              data: stream && stream.features
+              data: payload
             }
           );
         } else if (props.coordinate) {

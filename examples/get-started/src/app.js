@@ -22,6 +22,7 @@
 /* eslint-disable no-console, no-unused-vars, no-undef */
 import React, {PureComponent} from 'react';
 import {BitmapLayer, GeoJsonLayer} from '@deck.gl/layers';
+import {CompositeLayer} from '@deck.gl/core';
 import {render} from 'react-dom';
 
 import {setXVIZConfig, getXVIZConfig} from '@xviz/parser';
@@ -148,6 +149,29 @@ const exampleLog = require(__IS_STREAMING__
     ? './log-from-live'
     : './log-from-file').default;
 
+// Use this composite layer to load the image data and change the prop name to 'image'
+class XVIZImage extends CompositeLayer {
+  updateState(args) {
+    if (args.changeFlags.dataChanged) {
+      const {props, oldProps, changeFlags} = args;
+      if (props.data && props.data.length) {
+        const blob = new Blob([props.data[0].imageData]); 
+        this.setState({image: createImageBitmap(blob)});
+      }
+    }
+  }
+
+  renderLayers() {
+    if (this.state.image) {
+      return new BitmapLayer({
+        ...this.props,
+        bounds: [-3, 3, 3, -3],
+        image: this.state.image
+      });
+    }
+  }
+}
+
 class Example extends PureComponent {
   state = {
     log: exampleLog,
@@ -191,6 +215,22 @@ class Example extends PureComponent {
     });
   };
 
+  // This prevents generating the default layer for that given streamName
+  streamFilter(streamName) {
+    // returning false will not render a default stream
+    return !streamName.startsWith('/camera/image')
+  }
+
+  addCustomCameraStreamHandling(customLayers, blob) {
+    customLayers.push(
+      new XVIZImage({
+        id: 'custom-camera-layer',
+        // Place relative to vehicle
+        streamName: '/camera/image_02'
+      })
+    );
+  }
+  
   render() {
     const {log, settings, duckLayer, blob} = this.state;
     const frame = log.getCurrentFrame();
@@ -208,6 +248,8 @@ class Example extends PureComponent {
         getLineWidth: 0.5
       })
     ];
+
+    this.addCustomCameraStreamHandling(customLayers);
 
     if (blob) {
       customLayers.push(
@@ -246,6 +288,7 @@ class Example extends PureComponent {
         <div id="log-panel">
           <div id="map-view">
             <LogViewer
+              streamFilter={this.streamFilter}
               log={log}
               mapboxApiAccessToken={MAPBOX_TOKEN}
               mapStyle={MAP_STYLE}
