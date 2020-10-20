@@ -32,79 +32,108 @@ import deepExtend from 'lodash.merge';
 
 const XVIZ_TO_LAYER_TYPE = {
   // V1
-  points2d: 'scatterplot',
-  points3d: 'pointcloud',
-  point2d: 'scatterplot',
-  circle2d: 'scatterplot',
-  line2d: 'path',
-  path2d: 'path',
-  polygon2d: 'polygon',
+  points2d: "scatterplot",
+  points3d: "pointcloud",
+  point2d: "scatterplot",
+  circle2d: "scatterplot",
+  line2d: "path",
+  path2d: "path",
+  polygon2d: "polygon",
 
   // V2
-  point: 'pointcloud',
-  circle: 'scatterplot',
-  polyline: 'path',
-  polygon: 'polygon',
-  text: 'text',
-  stadium: 'stadium'
+  point: "pointcloud",
+  circle: "scatterplot",
+  polyline: "path",
+  polygon: "polygon",
+  text: "text",
+  stadium: "stadium",
+  image: "image"
 };
 
 const STYLE_TO_LAYER_PROP = {
   scatterplot: {
-    opacity: 'opacity',
-    radius_min_pixels: 'radiusMinPixels',
-    radius_max_pixels: 'radiusMaxPixels',
-    radius: 'getRadius',
-    stroked: 'stroked',
-    filled: 'filled',
-    stroke_width_min_pixels: 'lineWidthMinPixels',
-    stroke_width_max_pixels: 'lineWidthMaxPixels',
-    stroke_width: 'getLineWidth',
-    stroke_color: 'getLineColor',
-    fill_color: 'getFillColor'
+    opacity: "opacity",
+    radius_min_pixels: "radiusMinPixels",
+    radius_max_pixels: "radiusMaxPixels",
+    radiusMinPixels: "radiusMinPixels",
+    radiusMaxPixels: "radiusMaxPixels",
+    radius: "getRadius",
+    stroked: "stroked",
+    filled: "filled",
+    stroke_width_min_pixels: "widthMinPixels",
+    stroke_width_max_pixels: "widthMaxPixels",
+    stroke_width: "getLineWidth",
+    stroke_color: "getLineColor",
+    fill_color: "getFillColor",
+    strokeWidthMinPixels: "widthMinPixels",
+    strokeWidthMaxPixels: "widthMaxPixels",
+    strokeWidth: "getLineWidth",
+    strokeColor: "getLineColor",
+    fillColor: "getFillColor"
   },
   pointcloud: {
-    opacity: 'opacity',
-    radius_pixels: 'pointSize',
-    fill_color: 'getColor',
-    point_color_mode: 'colorMode',
-    point_color_domain: 'colorDomain'
+    point_opacity: "opacity",
+    point_radius_pixels: "pointSize",
+    point_radius_min_pixels: "minPointSize",
+    point_radius_max_pixels: "maxPointSize",
+    point_fill_color: "getColor",
+    point_color_mode: "colorMode",
+    point_color_domain: "colorDomain"
   },
   path: {
-    opacity: 'opacity',
-    stroke_width_min_pixels: 'widthMinPixels',
-    stroke_width_max_pixels: 'widthMaxPixels',
-    stroke_color: 'getColor',
-    stroke_width: 'getWidth'
+    opacity: "opacity",
+    stroke_width_min_pixels: "widthMinPixels",
+    stroke_width_max_pixels: "widthMaxPixels",
+    stroke_color: "getColor",
+    stroke_width: "getWidth",
+    strokeWidthMinPixels: "widthMinPixels",
+    strokeWidthMaxPixels: "widthMaxPixels",
+    strokeColor: "getColor",
+    strokeWidth: "getWidth"
   },
   stadium: {
-    opacity: 'opacity',
-    radius_min_pixels: 'widthMinPixels',
-    radius_max_pixels: 'widthMaxPixels',
-    fill_color: 'getColor',
-    radius: 'getWidth'
+    opacity: "opacity",
+    radius_min_pixels: "widthMinPixels",
+    radius_max_pixels: "widthMaxPixels",
+    fill_color: "getColor",
+    radiusMinPixels: "widthMinPixels",
+    radiusMaxPixels: "widthMaxPixels",
+    fillColor: "getColor",
+    radius: "getWidth"
   },
   polygon: {
-    opacity: 'opacity',
-    stroked: 'stroked',
-    filled: 'filled',
-    extruded: 'extruded',
-    stroke_color: 'getLineColor',
-    stroke_width: 'getLineWidth',
-    stroke_width_min_pixels: 'lineWidthMinPixels',
-    stroke_width_max_pixels: 'lineWidthMaxPixels',
-    fill_color: 'getFillColor',
-    height: 'getElevation'
+    opacity: "opacity",
+    stroked: "stroked",
+    filled: "filled",
+    extruded: "extruded",
+    stroke_color: "getLineColor",
+    stroke_width: "getLineWidth",
+    stroke_width_min_pixels: "lineWidthMinPixels",
+    stroke_width_max_pixels: "lineWidthMaxPixels",
+    fill_color: "getFillColor",
+    strokeColor: "getLineColor",
+    strokeWidth: "getLineWidth",
+    strokeWidthMinPixels: "lineWidthMinPixels",
+    strokeWidthMaxPixels: "lineWidthMaxPixels",
+    fillColor: "getFillColor",
+    height: "getElevation"
   },
   text: {
-    opacity: 'opacity',
-    fill_color: 'getColor',
-    font_family: 'fontFamily',
-    font_weight: 'fontWeight',
-    text_size: 'getSize',
-    text_rotation: 'getAngle',
-    text_anchor: 'getTextAnchor',
-    text_baseline: 'getAlignmentBaseline'
+    opacity: "opacity",
+    fill_color: "getColor",
+    font_family: "fontFamily",
+    font_weight: "fontWeight",
+    text_size: "getSize",
+    text_rotation: "getAngle",
+    text_anchor: "getTextAnchor",
+    text_baseline: "getAlignmentBaseline",
+    fillColor: "getColor",
+    fontFamily: "fontFamily",
+    fontWeight: "fontWeight",
+    textSize: "getSize",
+    textRotation: "getAngle",
+    textAnchor: "getTextAnchor",
+    textBaseline: "getAlignmentBaseline"
   }
 };
 
@@ -130,15 +159,22 @@ const getStylesheetProperty = (context, propertyName, objectState) =>
 // to be inline, stylesheet, then default.
 //
 /* eslint-disable complexity */
-function getProperty(context, propertyName, f = EMPTY_OBJECT) {
+function getProperty(
+  context,
+  propertyName,
+  f = EMPTY_OBJECT,
+  primitiveType = null
+) {
   let objectState = f;
 
   // Handle XVIZ v1 color override where our semantic color mapping
   // differs from current OCS colors.  In XVIZ v2 we should be aligned.
   if (context.useSemanticColor) {
     switch (propertyName) {
-      case 'stroke_color':
-      case 'fill_color':
+      case "stroke_color":
+      case "strokeColor":
+      case "fill_color":
+      case "fillColor":
         objectState = XVIZObject.get(f.id) || f;
         break;
 
@@ -152,14 +188,17 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   let altPropertyName = null;
 
   switch (propertyName) {
-    case 'stroke_color':
-    case 'fill_color':
-      altPropertyName = 'color';
+    case "stroke_color":
+    case "fill_color":
+    case "strokeColor":
+    case "fillColor":
+      altPropertyName = "color";
       break;
-    case 'stroke_width':
-      altPropertyName = 'thickness';
+    case "stroke_width":
+    case "strokeWidth":
+      altPropertyName = "thickness";
       break;
-    case 'radius':
+    case "radius":
       // v2 circle inline style
       if (f.radius) {
         return f.radius;
@@ -190,12 +229,23 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
   // 3. Property from default style
   if (property === null) {
-    property = context.style.getPropertyDefault(propertyName);
+    property = context.style.getPropertyDefault(propertyName, primitiveType);
   }
 
-  if (propertyName === 'text_anchor' || propertyName === 'text_baseline') {
+  if (
+    property &&
+    (propertyName === "text_anchor" || propertyName === "text_baseline")
+  ) {
     // These XVIZ enumerations map to Deck.gl as lowercase strings
     property = property.toLowerCase();
+  }
+  if (
+    property &&
+    (propertyName === "textAnchor" || propertyName === "textBaseline")
+  ) {
+    // These XVIZ enumerations map to Deck.gl as lowercase strings
+    const lcProp = property.toLowerCase();
+    property = `${lcProp.substring(0, 4)}_${lcProp.substring(4)}`;
   }
 
   return property;
@@ -204,11 +254,22 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
 export default class XVIZLayer extends CompositeLayer {
   _getProperty(propertyName) {
-    return getProperty(this.props, propertyName);
+    return getProperty(
+      this.props,
+      propertyName,
+      {},
+      this._getLayerType(this.props.data)
+    );
   }
 
   _getPropertyAccessor(propertyName) {
-    return f => getProperty(this.props, propertyName, f);
+    return f =>
+      getProperty(
+        this.props,
+        propertyName,
+        f,
+        this._getLayerType(this.props.data)
+      );
   }
 
   // These props are persistent unless data type and stylesheet change
@@ -219,7 +280,7 @@ export default class XVIZLayer extends CompositeLayer {
 
     for (const stylePropName in styleToLayerProp) {
       const layerPropName = styleToLayerProp[stylePropName];
-      const isAccessor = layerPropName.startsWith('get');
+      const isAccessor = layerPropName.startsWith("get");
       if (isAccessor) {
         layerProps.updateTriggers[layerPropName] = {
           style: stylePropName,
@@ -234,16 +295,16 @@ export default class XVIZLayer extends CompositeLayer {
   }
 
   _getLayerProps() {
-    const {objectStates} = this.props;
-    const {layerProps} = this.state;
-    const {updateTriggers} = layerProps;
+    const { objectStates } = this.props;
+    const { layerProps } = this.state;
+    const { updateTriggers } = layerProps;
 
     for (const key in updateTriggers) {
       const trigger = updateTriggers[key];
 
       layerProps[key] = this._getPropertyAccessor(trigger.style);
 
-      updateTriggers[key] = {...trigger};
+      updateTriggers[key] = { ...trigger };
       trigger.dependencies.forEach(stateName => {
         updateTriggers[key][stateName] = objectStates[stateName];
       });
@@ -259,8 +320,8 @@ export default class XVIZLayer extends CompositeLayer {
     return null;
   }
 
-  updateState({props, oldProps, changeFlags}) {
-    let {type} = this.state;
+  updateState({ props, oldProps, changeFlags }) {
+    let { type } = this.state;
 
     if (changeFlags.dataChanged) {
       // Pre-process data
@@ -268,23 +329,31 @@ export default class XVIZLayer extends CompositeLayer {
       const dataType = this._getLayerType(data);
       type = XVIZ_TO_LAYER_TYPE[dataType];
 
-      if (type === 'scatterplot' && data[0].vertices && Array.isArray(data[0].vertices[0])) {
+      if (
+        !data.vertexBuffer &&
+        type === "scatterplot" &&
+        data[0].vertices &&
+        Array.isArray(data[0].vertices[0])
+      ) {
         // is multi point
         data = data.reduce((arr, multiPoints) => {
           multiPoints.vertices.forEach(pt => {
-            arr.push({...multiPoints, vertices: pt});
+            arr.push({ ...multiPoints, vertices: pt });
           });
           return arr;
         }, []);
       }
 
-      this.setState({data});
+      this.setState({ data });
     }
 
     if (type !== this.state.type || props.style !== oldProps.style) {
       const styleToLayerProp = STYLE_TO_LAYER_PROP[type];
-      const layerProps = this._getDefaultLayerProps(props.style, styleToLayerProp);
-      this.setState({type, layerProps});
+      const layerProps = this._getDefaultLayerProps(
+        props.style,
+        styleToLayerProp
+      );
+      this.setState({ type, layerProps });
     }
   }
 
@@ -331,7 +400,10 @@ export default class XVIZLayer extends CompositeLayer {
               length: data[0].points.length / 3,
               attributes: {
                 getPosition: data[0].points,
-                getColor: data[0].colors
+                getColor: {
+                  value: data[0].colors,
+                  size: data[0].points.length === data[0].colors.length ? 3 : 4
+                }
               }
             },
             vehicleRelativeTransform: this.props.vehicleRelativeTransform,
@@ -348,7 +420,7 @@ export default class XVIZLayer extends CompositeLayer {
             data,
             getPath: f => f.vertices,
             updateTriggers: deepExtend(updateTriggers, {
-              getColor: {useSemanticColor: this.props.useSemanticColor}
+              getColor: { useSemanticColor: this.props.useSemanticColor }
             })
           })
         );
