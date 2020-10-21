@@ -20,7 +20,7 @@
 
 /* eslint-disable camelcase */
 import {CompositeLayer} from '@deck.gl/core';
-import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer} from '@deck.gl/layers';
+import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer, BitmapLayer} from '@deck.gl/layers';
 import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 // TODO/ib - Uncomment to enable binary/flat polygon arrays
 // import PathLayer from './binary-path-layer/binary-path-layer';
@@ -29,6 +29,16 @@ import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 import {XVIZObject} from '@xviz/parser';
 
 import deepExtend from 'lodash.merge';
+
+const XVIZ_PRIMITIVE_TYPES = {
+  circle: "circle",
+  image: "image",
+  point: "point",
+  polygon: "polygon",
+  polyline: "polyline",
+  stadium: "stadium",
+  text: "text"
+};
 
 const XVIZ_TO_LAYER_TYPE = {
   // V1
@@ -55,28 +65,19 @@ const STYLE_TO_LAYER_PROP = {
     opacity: "opacity",
     radius_min_pixels: "radiusMinPixels",
     radius_max_pixels: "radiusMaxPixels",
-    radiusMinPixels: "radiusMinPixels",
-    radiusMaxPixels: "radiusMaxPixels",
     radius: "getRadius",
     stroked: "stroked",
     filled: "filled",
-    stroke_width_min_pixels: "widthMinPixels",
-    stroke_width_max_pixels: "widthMaxPixels",
-    stroke_width: "getLineWidth",
-    stroke_color: "getLineColor",
-    fill_color: "getFillColor",
-    strokeWidthMinPixels: "widthMinPixels",
-    strokeWidthMaxPixels: "widthMaxPixels",
+    stroke_width_min_pixels: "lineWidthMinPixels",
+    stroke_width_max_pixels: "lineWidthMaxPixels",
     strokeWidth: "getLineWidth",
     strokeColor: "getLineColor",
     fillColor: "getFillColor"
   },
   pointcloud: {
-    point_opacity: "opacity",
-    point_radius_pixels: "pointSize",
-    point_radius_min_pixels: "minPointSize",
-    point_radius_max_pixels: "maxPointSize",
-    point_fill_color: "getColor",
+    opacity: "opacity",
+    radius_pixels: "pointSize",
+    fill_color: "getColor",
     point_color_mode: "colorMode",
     point_color_domain: "colorDomain"
   },
@@ -84,10 +85,6 @@ const STYLE_TO_LAYER_PROP = {
     opacity: "opacity",
     stroke_width_min_pixels: "widthMinPixels",
     stroke_width_max_pixels: "widthMaxPixels",
-    stroke_color: "getColor",
-    stroke_width: "getWidth",
-    strokeWidthMinPixels: "widthMinPixels",
-    strokeWidthMaxPixels: "widthMaxPixels",
     strokeColor: "getColor",
     strokeWidth: "getWidth"
   },
@@ -95,9 +92,6 @@ const STYLE_TO_LAYER_PROP = {
     opacity: "opacity",
     radius_min_pixels: "widthMinPixels",
     radius_max_pixels: "widthMaxPixels",
-    fill_color: "getColor",
-    radiusMinPixels: "widthMinPixels",
-    radiusMaxPixels: "widthMaxPixels",
     fillColor: "getColor",
     radius: "getWidth"
   },
@@ -106,34 +100,22 @@ const STYLE_TO_LAYER_PROP = {
     stroked: "stroked",
     filled: "filled",
     extruded: "extruded",
-    stroke_color: "getLineColor",
-    stroke_width: "getLineWidth",
-    stroke_width_min_pixels: "lineWidthMinPixels",
-    stroke_width_max_pixels: "lineWidthMaxPixels",
-    fill_color: "getFillColor",
     strokeColor: "getLineColor",
     strokeWidth: "getLineWidth",
-    strokeWidthMinPixels: "lineWidthMinPixels",
-    strokeWidthMaxPixels: "lineWidthMaxPixels",
+    stroke_width_min_pixels: "lineWidthMinPixels",
+    stroke_width_max_pixels: "lineWidthMaxPixels",
     fillColor: "getFillColor",
     height: "getElevation"
   },
   text: {
     opacity: "opacity",
-    fill_color: "getColor",
+    fillColor: "getColor",
     font_family: "fontFamily",
     font_weight: "fontWeight",
-    text_size: "getSize",
+    textSize: "getSize",
     text_rotation: "getAngle",
     text_anchor: "getTextAnchor",
-    text_baseline: "getAlignmentBaseline",
-    fillColor: "getColor",
-    fontFamily: "fontFamily",
-    fontWeight: "fontWeight",
-    textSize: "getSize",
-    textRotation: "getAngle",
-    textAnchor: "getTextAnchor",
-    textBaseline: "getAlignmentBaseline"
+    text_baseline: "getAlignmentBaseline"
   }
 };
 
@@ -450,6 +432,7 @@ export default class XVIZLayer extends CompositeLayer {
             data,
             lightSettings,
             wireframe: layerProps.stroked,
+            extruded: layerProps.stroked,
             getPolygon: f => f.vertices,
             updateTriggers: deepExtend(updateTriggers, {
               getLineColor: {useSemanticColor: this.props.useSemanticColor},
@@ -469,6 +452,22 @@ export default class XVIZLayer extends CompositeLayer {
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })
+          })
+        );
+
+      case XVIZ_PRIMITIVE_TYPES.image:
+        // TODO (mauricio): images stream is being filtered out, figure out why
+        // TODO (mauricio): also figure out wht a box appears on top of the stadium
+        return new BitmapLayer(
+          forwardProps,
+          layerProps,
+          this.getSubLayerProps({
+            id: XVIZ_PRIMITIVE_TYPES.image,
+            image: URL.createObjectURL(
+              // TODO (mauricio): adjust this once we can send mime type from the backend
+              new Blob([data[0].data], { type: "image/png" })
+            ),
+            bounds: [-1, -1, 1, 1]
           })
         );
 
