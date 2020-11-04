@@ -58,5 +58,8 @@
     "copyright-check",
     "test-fast"
   ],
-  "private": true
+  "private": true,
+  "resolutions": {
+    "@luma.gl/webgl": "8.3.1"
+  }
 }
