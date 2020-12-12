@@ -44,7 +44,7 @@ const TIMEFORMAT_SCALE = getXVIZConfig().TIMESTAMP_FORMAT === 'seconds' ? 1000 :
 
 // __IS_STREAMING__ and __IS_LIVE__ are defined in webpack.config.js
 const exampleLog = require(__IS_STREAMING__
-  ? './log-from-stream'
+  ? './log-from-scc'
   : __IS_LIVE__
     ? './log-from-live'
     : './log-from-file').default;
@@ -83,7 +83,6 @@ class Example extends PureComponent {
             values={this.state.settings}
             onChange={this._onSettingsChange}
           />
-          <StreamSettingsPanel log={log} />
         </div>
         <div id="log-panel">
           <div id="map-view">

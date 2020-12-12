@@ -17,41 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-import {CarMesh} from 'streetscape.gl';
 
-/* eslint-disable camelcase */
-export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+import {StudioFileLoader} from './studio-file-loader';
 
-export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
-
-export const XVIZ_CONFIG = {
-  currentMajorVersion: 2,
-  PLAYBACK_FRAME_RATE: 10,
-  DYNAMIC_STREAM_METADATA: true,
-  PRIMARY_POSE_STREAM: "/vehicle/LoggedContinuousPose"
-};
-
-export const CAR = CarMesh.sedan({
-  origin: [1.08, -0.32, 0],
-  length: 4.3,
-  width: 2.2,
-  height: 1.5,
-  color: [160, 160, 160]
+export default new StudioFileLoader({
+  url: 'http://192.168.1.7:4080/rvt-1-3000.scc',
+  worker: true,
+  maxConcurrency: 4
 });
-
-export const APP_SETTINGS = {
-  viewMode: {
-    type: 'select',
-    title: 'View Mode',
-    data: {TOP_DOWN: 'Top Down', PERSPECTIVE: 'Perspective', DRIVER: 'Driver'}
-  },
-  showTooltip: {
-    type: 'toggle',
-    title: 'Show Tooltip'
-  }
-};
-
-export const XVIZ_STYLE = {
-  '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}],
-  '/lidar/points': [{style: {point_color_mode: 'ELEVATION'}}]
-};
