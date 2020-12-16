@@ -20,7 +20,7 @@
 
 /* eslint-disable camelcase */
 import {CompositeLayer} from '@deck.gl/core';
-import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer} from '@deck.gl/layers';
+import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer, BitmapLayer} from '@deck.gl/layers';
 import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 // TODO/ib - Uncomment to enable binary/flat polygon arrays
 // import PathLayer from './binary-path-layer/binary-path-layer';
@@ -46,42 +46,61 @@ const XVIZ_TO_LAYER_TYPE = {
   polyline: 'path',
   polygon: 'polygon',
   text: 'text',
-  stadium: 'stadium'
+  stadium: 'stadium',
+  image: 'image'
 };
 
 const STYLE_TO_LAYER_PROP = {
   scatterplot: {
     opacity: 'opacity',
     radius_min_pixels: 'radiusMinPixels',
+    radiusMinPixels: 'radiusMinPixels',
     radius_max_pixels: 'radiusMaxPixels',
+    radiusMaxPixels: 'radiusMaxPixels',
     radius: 'getRadius',
     stroked: 'stroked',
     filled: 'filled',
     stroke_width_min_pixels: 'lineWidthMinPixels',
+    strokeWidthMinPixels: 'lineWidthMinPixels',
     stroke_width_max_pixels: 'lineWidthMaxPixels',
+    strokeWidthMaxPixels: 'lineWidthMaxPixels',
     stroke_width: 'getLineWidth',
+    strokeWidth: 'getLineWidth',
     stroke_color: 'getLineColor',
-    fill_color: 'getFillColor'
+    strokeColor: 'getLineColor',
+    fill_color: 'getFillColor',
+    fillColor: 'getFillColor'
   },
   pointcloud: {
     opacity: 'opacity',
     radius_pixels: 'pointSize',
+    radiusPixels: 'pointSize',
     fill_color: 'getColor',
+    fillColor: 'getColor',
     point_color_mode: 'colorMode',
-    point_color_domain: 'colorDomain'
+    pointColorMode: 'colorMode',
+    point_color_domain: 'colorDomain',
+    pointColorDomain: 'colorDomain'
   },
   path: {
     opacity: 'opacity',
     stroke_width_min_pixels: 'widthMinPixels',
+    strokeWidthMinPixels: 'widthMinPixels',
     stroke_width_max_pixels: 'widthMaxPixels',
+    strokeWidthMaxPixels: 'widthMaxPixels',
     stroke_color: 'getColor',
-    stroke_width: 'getWidth'
+    strokeColor: 'getColor',
+    stroke_width: 'getWidth',
+    strokeWidth: 'getWidth'
   },
   stadium: {
     opacity: 'opacity',
     radius_min_pixels: 'widthMinPixels',
+    radiusMinPixels: 'widthMinPixels',
     radius_max_pixels: 'widthMaxPixels',
+    radiusMaxPixels: 'widthMaxPixels',
     fill_color: 'getColor',
+    fillColor: 'getColor',
     radius: 'getWidth'
   },
   polygon: {
@@ -90,21 +109,33 @@ const STYLE_TO_LAYER_PROP = {
     filled: 'filled',
     extruded: 'extruded',
     stroke_color: 'getLineColor',
+    strokeColor: 'getLineColor',
     stroke_width: 'getLineWidth',
+    strokeWidth: 'getLineWidth',
     stroke_width_min_pixels: 'lineWidthMinPixels',
+    strokeWidthMinPixels: 'lineWidthMinPixels',
     stroke_width_max_pixels: 'lineWidthMaxPixels',
+    strokeWidthMaxPixels: 'lineWidthMaxPixels',
     fill_color: 'getFillColor',
+    fillColor: 'getFillColor',
     height: 'getElevation'
   },
   text: {
     opacity: 'opacity',
     fill_color: 'getColor',
+    fillColor: 'getColor',
     font_family: 'fontFamily',
+    fontFamily: 'fontFamily',
     font_weight: 'fontWeight',
+    fontWeight: 'fontWeight',
     text_size: 'getSize',
+    textSize: 'getSize',
     text_rotation: 'getAngle',
+    textRotation: 'getAngle',
     text_anchor: 'getTextAnchor',
-    text_baseline: 'getAlignmentBaseline'
+    textAnchor: 'getTextAnchor',
+    text_baseline: 'getAlignmentBaseline',
+    textBaseline: 'getAlignmentBaseline'
   }
 };
 
@@ -130,7 +161,12 @@ const getStylesheetProperty = (context, propertyName, objectState) =>
 // to be inline, stylesheet, then default.
 //
 /* eslint-disable complexity */
-function getProperty(context, propertyName, f = EMPTY_OBJECT) {
+function getProperty(
+  context,
+  propertyName,
+  f = EMPTY_OBJECT,
+  primitiveType = null // TODO: this is for different primitive default styles, find a better way?
+) {
   let objectState = f;
 
   // Handle XVIZ v1 color override where our semantic color mapping
@@ -138,7 +174,9 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   if (context.useSemanticColor) {
     switch (propertyName) {
       case 'stroke_color':
+      case 'strokeColor':
       case 'fill_color':
+      case 'fillColor':
         objectState = XVIZObject.get(f.id) || f;
         break;
 
@@ -154,9 +192,12 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   switch (propertyName) {
     case 'stroke_color':
     case 'fill_color':
+    case 'strokeColor':
+    case 'fillColor':
       altPropertyName = 'color';
       break;
     case 'stroke_width':
+    case 'strokeWidth':
       altPropertyName = 'thickness';
       break;
     case 'radius':
@@ -190,13 +231,27 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
   // 3. Property from default style
   if (property === null) {
-    property = context.style.getPropertyDefault(propertyName);
+    property = context.style.getPropertyDefault(propertyName, primitiveType);
   }
 
-  if (propertyName === 'text_anchor' || propertyName === 'text_baseline') {
+  if (
+    property &&
+    (propertyName === 'text_anchor' || propertyName === 'text_baseline' ||
+     propertyName === 'textAnchor' || propertyName === 'textBaseline')
+  ) {
     // These XVIZ enumerations map to Deck.gl as lowercase strings
     property = property.toLowerCase();
   }
+  /*
+  if (
+    property &&
+    (propertyName === 'textAnchor' || propertyName === 'textBaseline')
+  ) {
+    // These XVIZ enumerations map to Deck.gl as lowercase strings
+    const lcProp = property.toLowerCase();
+    property = `${lcProp.substring(0, 4)}_${lcProp.substring(4)}`;
+  }
+  */
 
   return property;
 }
@@ -204,11 +259,22 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
 export default class XVIZLayer extends CompositeLayer {
   _getProperty(propertyName) {
-    return getProperty(this.props, propertyName);
+    return getProperty(
+      this.props,
+      propertyName,
+      {},
+      this._getLayerType(this.props.data)
+    );
   }
 
   _getPropertyAccessor(propertyName) {
-    return f => getProperty(this.props, propertyName, f);
+    return f =>
+      getProperty(
+        this.props,
+        propertyName,
+        f,
+        this._getLayerType(this.props.data)
+      );
   }
 
   // These props are persistent unless data type and stylesheet change
@@ -332,6 +398,12 @@ export default class XVIZLayer extends CompositeLayer {
               attributes: {
                 getPosition: data[0].points,
                 getColor: data[0].colors
+                /* TODO:
+                getColor: {
+                  value: data[0].colors,
+                  size: data[0].points.length === data[0].colors.length ? 3 : 4
+                }
+                */
               }
             },
             vehicleRelativeTransform: this.props.vehicleRelativeTransform,
@@ -397,6 +469,21 @@ export default class XVIZLayer extends CompositeLayer {
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })
+          })
+        );
+
+      case 'image':
+        // TODO: add width height mapping
+        return new BitmapLayer(
+          forwardProps,
+          layerProps,
+          this.getSubLayerProps({
+            id: 'image',
+            image: URL.createObjectURL(
+              // TODO: adjust this once we can send mime type from the backend
+              new Blob([data[0].data], { type: 'image/png' })
+            ),
+            bounds: [-1, -1, 1, 1]
           })
         );
 
