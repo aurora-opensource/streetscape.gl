@@ -251,7 +251,12 @@ const getStylesheetProperty = (context, propertyName, objectState) =>
 // to be inline, stylesheet, then default.
 //
 /* eslint-disable complexity */
-function getProperty(context, propertyName, f = EMPTY_OBJECT) {
+function getProperty(
+  context,
+  propertyName,
+  f = EMPTY_OBJECT,
+  primitiveType = null
+) {
   let objectState = f;
 
   // Handle XVIZ v1 color override where our semantic color mapping
@@ -311,10 +316,13 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
   // 3. Property from default style
   if (property === null) {
-    property = context.style.getPropertyDefault(propertyName);
+    property = context.style.getPropertyDefault(propertyName, primitiveType);
   }
 
-  if (propertyName === 'text_anchor' || propertyName === 'text_baseline') {
+  if (
+    property &&
+    (propertyName === 'text_anchor' || propertyName === 'text_baseline')
+  ) {
     // These XVIZ enumerations map to Deck.gl as lowercase strings
     property = property.toLowerCase();
   }
@@ -325,11 +333,22 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
 export default class XVIZLayer extends CompositeLayer {
   _getProperty(propertyName) {
-    return getProperty(this.props, propertyName);
+    return getProperty(
+      this.props,
+      propertyName,
+      {},
+      this._getLayerType(this.props.data)
+    );
   }
 
   _getPropertyAccessor(propertyName) {
-    return f => getProperty(this.props, propertyName, f);
+    return f =>
+      getProperty(
+        this.props,
+        propertyName,
+        f,
+        this._getLayerType(this.props.data)
+      );
   }
 
   // These props are persistent unless data type and stylesheet change
