@@ -92,7 +92,10 @@ export default class Core3DViewer extends PureComponent {
     // States
     viewState: PropTypes.object,
     viewOffset: PropTypes.object,
-    objectStates: PropTypes.object
+    objectStates: PropTypes.object,
+
+    // Experimental
+    _XVIZLayerClass: PropTypes.func
   };
 
   static defaultProps = {
@@ -107,7 +110,8 @@ export default class Core3DViewer extends PureComponent {
     onClick: noop,
     onContextMenu: noop,
     showMap: true,
-    showTooltip: false
+    showTooltip: false,
+    _XVIZLayerClass: XVIZLayer
   };
 
   constructor(props) {
@@ -240,6 +244,7 @@ export default class Core3DViewer extends PureComponent {
   }
 
   _getLayers(opts) {
+    const {_XVIZLayerClass} = this.props;
     const {
       frame,
       streamsMetadata,
@@ -281,7 +286,7 @@ export default class Core3DViewer extends PureComponent {
           // Support both features and lookAheads, respectively
           const primitives = (stream && stream.features) || stream;
           if (primitives && primitives.length) {
-            return new XVIZLayer({
+            return new _XVIZLayerClass({
               id: `xviz-${streamName}`,
               ...coordinateProps,
 
@@ -368,7 +373,7 @@ export default class Core3DViewer extends PureComponent {
     return this.isHovering ? 'pointer' : 'crosshair';
   };
 
-  _getViewState({viewMode, frame, viewState, viewOffset}) {
+  _getViewState({viewMode, frame, viewState, viewOffset, viewOptions}) {
     const trackedPosition = frame
       ? {
           longitude: frame.trackPosition[0],
@@ -378,7 +383,7 @@ export default class Core3DViewer extends PureComponent {
         }
       : null;
 
-    return getViewStates({viewState, viewMode, trackedPosition, offset: viewOffset});
+    return getViewStates({viewState, viewMode, trackedPosition, offset: viewOffset, options: viewOptions});
   }
 
   render() {
@@ -397,6 +402,7 @@ export default class Core3DViewer extends PureComponent {
       viewMode,
       viewState,
       viewOffset,
+      viewOptions,
       showMap
     } = this.props;
     const {styleParser, views} = this.state;
@@ -410,7 +416,7 @@ export default class Core3DViewer extends PureComponent {
       getTransformMatrix,
       styleParser
     });
-    const viewStates = this.getViewState({viewMode, frame, viewState, viewOffset});
+    const viewStates = this.getViewState({viewMode, frame, viewState, viewOffset, viewOptions});
 
     return (
       <DeckGL
