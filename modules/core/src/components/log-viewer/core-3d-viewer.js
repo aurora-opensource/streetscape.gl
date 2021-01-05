@@ -97,10 +97,7 @@ export default class Core3DViewer extends PureComponent {
     objectStates: PropTypes.object,
 
     // React
-    children: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.node),
-      PropTypes.node
-    ]),
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 
     // Experimental
     _XVIZLayerClass: PropTypes.func
@@ -293,7 +290,7 @@ export default class Core3DViewer extends PureComponent {
           const stylesheet = styleParser.getStylesheet(streamName);
 
           // Support both features and lookAheads, respectively
-          const primitives = stream && stream.features || stream;
+          const primitives = (stream && stream.features) || stream;
           if (primitives && primitives.length) {
             return new _XVIZLayerClass({
               id: `xviz-${streamName}`,
@@ -399,7 +396,13 @@ export default class Core3DViewer extends PureComponent {
         }
       : null;
 
-    return getViewStates({viewState, viewMode, trackedPosition, offset: viewOffset, options: viewOptions});
+    return getViewStates({
+      viewState,
+      viewMode,
+      trackedPosition,
+      offset: viewOffset,
+      options: viewOptions
+    });
   }
 
   render() {
