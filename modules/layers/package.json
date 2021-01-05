@@ -16,7 +16,7 @@
   ],
   "scripts": {},
   "peerDependencies": {
-    "@deck.gl/core": "^8.1.5",
-    "@deck.gl/layers": "^8.l.5"
+    "@deck.gl/core": "^8.3.11",
+    "@deck.gl/layers": "^8.3.11"
   }
 }
