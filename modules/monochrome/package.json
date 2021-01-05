@@ -1,6 +1,6 @@
 {
   "name": "@streetscape.gl/monochrome",
-  "version": "1.0.6",
+  "version": "1.0.7-alpha.0",
   "description": "A toolkit of React components for streetscape.gl",
   "license": "MIT",
   "keywords": [
