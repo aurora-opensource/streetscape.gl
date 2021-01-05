@@ -62,6 +62,7 @@ export default class Core3DViewer extends PureComponent {
     // Rendering options
     showMap: PropTypes.bool,
     showTooltip: PropTypes.bool,
+    style: PropTypes.object,
     mapboxApiAccessToken: PropTypes.string,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     xvizStyles: PropTypes.object,
@@ -86,6 +87,7 @@ export default class Core3DViewer extends PureComponent {
     onClick: PropTypes.func,
     onContextMenu: PropTypes.func,
     onViewStateChange: PropTypes.func,
+    onAfterRender: PropTypes.func,
 
     // Debug info listener
     debug: PropTypes.func,
@@ -94,6 +96,12 @@ export default class Core3DViewer extends PureComponent {
     viewState: PropTypes.object,
     viewOffset: PropTypes.object,
     objectStates: PropTypes.object,
+
+    // React
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.node),
+      PropTypes.node
+    ]),
 
     // Experimental
     _XVIZLayerClass: PropTypes.func
@@ -111,6 +119,7 @@ export default class Core3DViewer extends PureComponent {
     onHover: noop,
     onClick: noop,
     onContextMenu: noop,
+    onAfterRender: noop,
     showMap: true,
     showTooltip: false,
     _XVIZLayerClass: XVIZLayer
@@ -325,6 +334,14 @@ export default class Core3DViewer extends PureComponent {
         if (props.streamName) {
           // Use log data
           const stream = streams[props.streamName];
+          let dependentData = null;
+          if (props.dependentStreams) {
+            dependentData = props.dependentStreams.map(streamName => {
+              const stream = streams[streamName];
+              return (stream && stream.features) || stream;
+            });
+          }
+
           Object.assign(
             additionalProps,
             resolveCoordinateTransform(
@@ -334,7 +351,8 @@ export default class Core3DViewer extends PureComponent {
               getTransformMatrix
             ),
             {
-              data: stream && stream.features
+              data: (stream && stream.features) || stream,
+              dependentData
             }
           );
         } else if (props.coordinate) {
@@ -343,8 +361,6 @@ export default class Core3DViewer extends PureComponent {
             additionalProps,
             resolveCoordinateTransform(frame, null, props, getTransformMatrix)
           );
-        } else {
-          return layer;
         }
 
         return layer.clone(additionalProps);
@@ -438,6 +454,7 @@ export default class Core3DViewer extends PureComponent {
         onLoad={this._onDeckLoad}
         onHover={this._onLayerHover}
         onClick={this._onLayerClick}
+        onAfterRender={this.props.onAfterRender}
         onViewStateChange={this._onViewStateChange}
         ContextProvider={MapContext.Provider}
         _onMetrics={this._onMetrics}
