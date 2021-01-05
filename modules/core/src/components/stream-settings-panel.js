@@ -88,6 +88,7 @@ export function createFormData(metadata, opts) {
       siblings[streamName] = {
         type: 'checkbox',
         title: streamName.replace(parentKey, ''),
+        children: {},
         badge: (
           <Badge
             userStyle={style.badge}
