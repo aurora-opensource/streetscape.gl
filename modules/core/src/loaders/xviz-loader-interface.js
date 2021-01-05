@@ -276,7 +276,8 @@ export default class XVIZLoaderInterface {
       const streamSettings = this.get('streamSettings') || {};
 
       for (const streamName in timeslice.streams) {
-        if (timeslice.streams[streamName]) {
+        const haveStreamMetadata = Boolean(streamsMetadata[streamName]);
+        if (timeslice.streams[streamName] && !haveStreamMetadata) {
           streamsMetadata[streamName] = timeslice.streams[streamName].__metadata;
         }
 
@@ -285,7 +286,22 @@ export default class XVIZLoaderInterface {
           streamSettings[streamName] = true;
         }
       }
+
+      // Had to add this to get poses to show up and not be filtered out
+      for (const streamName in timeslice.poses) {
+        const haveStreamMetadata = Boolean(streamsMetadata[streamName]);
+        if (timeslice.poses[streamName] && !haveStreamMetadata) {
+          streamsMetadata[streamName] = timeslice.poses[streamName].__metadata;
+        }
+
+        // Add new stream name to stream settings (default on)
+        if (!(streamName in streamSettings)) {
+          streamSettings[streamName] = true;
+        }
+      }
+
       this.set('streamsMetadata', streamsMetadata);
+      this.set('streamSettings', {...streamSettings});
     }
 
     return bufferUpdated;
