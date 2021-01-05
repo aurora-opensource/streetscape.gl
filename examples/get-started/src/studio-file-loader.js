@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-/* eslint-disable camelcase */
-import assert from 'assert';
+/* global console */
+/* eslint-disable consistent-return, camelcase, no-console, no-unused-vars, no-undef */
 import {parseStreamMessage, XVIZStreamBuffer} from '@xviz/parser';
 import {XVIZ_PROTOBUF_MESSAGE} from '@xviz/io';
 import {_XVIZLoaderInterface} from 'streetscape.gl';
@@ -54,14 +54,14 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
     const strippedBuffer = new Uint8Array(arrayBuffer, 4);
     const envelope = XVIZ_PROTOBUF_MESSAGE.Envelope.decode(strippedBuffer);
     const xviz = {
-      type: envelope.type.substring(envelope.type.lastIndexOf("/") + 1),
+      type: envelope.type.substring(envelope.type.lastIndexOf('/') + 1),
       data: null
     };
 
     let state = null;
 
     switch (envelope.type) {
-        /*
+      /*
       case '/xviz/metadata':
         const tmpMeta = XVIZ_PROTOBUF_MESSAGE.Metadata.decode(envelope.data.value);
         xviz.data = postProcessProtobuf(tmpMeta);
@@ -71,23 +71,23 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
       case '/xviz/stream_set':
         const tmpSet = XVIZ_PROTOBUF_MESSAGE.StreamSet.decode(envelope.data.value);
 
-        state =  {
-          update_type: "INCREMENTAL",
+        state = {
+          update_type: 'INCREMENTAL',
           updates: [tmpSet]
         };
         break;
       default:
         break;
-        // throw new Error(`Unknown Message type ${envelope.type}`);
+      // throw new Error(`Unknown Message type ${envelope.type}`);
     }
 
     if (state) {
       const env = {
-        type: "xviz/state_update",
+        type: 'xviz/state_update',
         data: state
-      }
+      };
       return env;
-    } 
+    }
 
     return undefined;
   }
@@ -96,14 +96,14 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
     const strippedBuffer = new Uint8Array(arrayBuffer, 4);
     const envelope = XVIZ_PROTOBUF_MESSAGE.Envelope.decode(strippedBuffer);
     const xviz = {
-      type: envelope.type.substring(envelope.type.lastIndexOf("/") + 1),
+      type: envelope.type.substring(envelope.type.lastIndexOf('/') + 1),
       data: null
     };
 
     let state = null;
 
     switch (envelope.type) {
-        /*
+      /*
       case '/xviz/metadata':
         const tmpMeta = XVIZ_PROTOBUF_MESSAGE.Metadata.decode(envelope.data.value);
         xviz.data = postProcessProtobuf(tmpMeta);
@@ -113,10 +113,10 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
       case '/xviz/stream_set':
         const tmpSet = XVIZ_PROTOBUF_MESSAGE.StreamSet.decode(envelope.data.value);
 
-        const update =  {
+        const update = {
           update_type: XVIZ_PROTOBUF_MESSAGE.StateUpdate.UpdateType.INCREMENTAL,
           updates: [tmpSet]
-        }
+        };
 
         const errMsg = XVIZ_PROTOBUF_MESSAGE.StateUpdate.verify(update);
         if (errMsg) {
@@ -127,20 +127,20 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
         break;
       default:
         break;
-        // throw new Error(`Unknown Message type ${envelope.type}`);
+      // throw new Error(`Unknown Message type ${envelope.type}`);
     }
 
     if (state) {
       const env = {
-        type: "xviz/state_update",
+        type: 'xviz/state_update',
         data: {type_url: 'xviz.v2.StateUpdate', value: state}
-      }
+      };
       const msg = XVIZ_PROTOBUF_MESSAGE.Envelope.encode(env).finish();
       const buffer = new Uint8Array(msg.byteLength + 4);
       buffer.set(XVIZ_PROTOBUF_MAGIC, 0);
       buffer.set(msg, 4);
       return buffer.buffer;
-    } 
+    }
 
     return undefined;
   }
@@ -148,7 +148,7 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
   connect() {
     this.log = new SCCLog(message => {
       const msg = this.handleStudioMsg(message);
-      
+
       if (!msg) {
         return;
       }
@@ -161,24 +161,24 @@ export class StudioFileLoader extends _XVIZLoaderInterface {
         worker: false,
         maxConcurrency: this.options.maxConcurrency
       });
-    }); 
+    });
     this.log.open(this.url);
     this._isOpen = true;
   }
 
   _onXVIZTimeslice(message) {
     message.timestamp = this.counter;
-    this.counter +=0.2;
+    this.counter += 0.2;
 
     super._onXVIZTimeslice(message);
 
     if (message.timestamp === 0) {
       this._onXVIZMetadata({
-        type: "xviz/metadata",
+        type: 'xviz/metadata',
         start_time: 0,
         end_time: 180,
         data: {
-          version: "2.0.0"
+          version: '2.0.0'
         },
         streams: {}
       });

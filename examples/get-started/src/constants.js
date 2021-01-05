@@ -28,7 +28,7 @@ export const XVIZ_CONFIG = {
   currentMajorVersion: 2,
   PLAYBACK_FRAME_RATE: 10,
   DYNAMIC_STREAM_METADATA: true,
-  PRIMARY_POSE_STREAM: "/vehicle/LoggedContinuousPose"
+  PRIMARY_POSE_STREAM: '/vehicle/LoggedContinuousPose'
 };
 
 export const CAR = CarMesh.sedan({

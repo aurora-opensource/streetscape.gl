@@ -17,6 +17,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+
+/* global fetch, ReadableStream, console */
+/* eslint-disable consistent-return, no-console, no-unused-vars, no-undef */
 const COMMS_CACHE_HEADER_VERSION = 0x033b0002;
 const MESSAGE_HEADER = 8;
 /* SCC Binary Layout
@@ -31,99 +34,6 @@ const MESSAGE_HEADER = 8;
  * [*]      data
  */
 
-export class SCCLog {
-  constructor(onMessage) {
-    this.array = null;  // for slicing data
-    this.buffer = null; // for appending data
-    this.view = null;   // for reading data
-    this.limit = 0;
-
-    this.mark = 0;
-    this.onMessage = onMessage;
-  }
-
-  open(url) { 
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          this.console.log(response.statusText);
-          return;
-        }
-
-        const reader = response.body.getReader();
-        const self = this;
-        return new ReadableStream({
-          start() {
-            return pump();
-
-            function pump() {
-              reader.read().then(({ done, value }) => {
-                if (!done) {
-                  self._addChunk(response, value);
-                  return pump();
-                }
-              });
-            }
-          }
-        });
-      })
-      .catch(error => {
-        console.log("Error fetching log: " + error);
-      });
-  }
-
-  _addChunk(response, data) {
-    if (this.limit === 0) {
-      const length = response.headers.get("content-length");
-
-      this.array = new ArrayBuffer(length);
-
-      this.buffer = new Uint8Array(this.array);
-      this.buffer.set(data, 0);
-      this.limit = data.length;
-
-      this.view = new DataView(this.array);
-    } else {
-      this.buffer.set(data, this.limit);
-      this.limit += data.length;
-    }
-
-    this.publishMessages();
-  }
-
-  publishMessages() {
-    if (!this.message) {
-      const startOffset = this._readHeader(); 
-      if (startOffset) {
-        this.message = new SCCMessage(this.array, this.view, startOffset, this.limit);
-      } else {
-        return;
-      }
-    } else {
-      this.message.setLimit(this.limit);
-    }
-
-    while (this.message.available()) {
-      this.onMessage(this.message.data(), this.message.timestamp);
-      this.message.next();
-    }
-  }
-
-  _readHeader() {
-    const magic = this.view.getUint32(0, true);
-    if (magic !== COMMS_CACHE_HEADER_VERSION) {
-      throw new Error("File does not start with the expected signature.");
-    }
-
-    const headerSize = this.view.getUint32(4, true);
-    if (headerSize + 8 > this.limit) {
-      throw new Error("Header is larger than file");
-    }
-
-    return headerSize + 8;
-  }
-}
-
 class SCCMessage {
   constructor(array, view, start, limit) {
     this.array = array;
@@ -131,7 +41,7 @@ class SCCMessage {
     this.start = start;
     this.limit = limit;
     this.mark = start;
-    
+
     this._size = undefined;
     this._timestamp = undefined;
   }
@@ -152,7 +62,7 @@ class SCCMessage {
     if (this._size === undefined && this._sizeCheck(4)) {
       this._size = this.view.getUint32(this.mark, true);
     }
-    
+
     return this._size;
   }
 
@@ -160,7 +70,7 @@ class SCCMessage {
     if (this.size) {
       return this.mark + MESSAGE_HEADER + this.size;
     }
-    return undefined
+    return undefined;
   }
 
   get timestamp() {
@@ -176,17 +86,110 @@ class SCCMessage {
       return this._endOffset < this.limit;
     }
 
-    return false; 
+    return false;
   }
 
   next() {
     if (this.available()) {
       this.mark = this._endOffset;
 
-      this._size = undefined
-      this._timestamp = undefined
+      this._size = undefined;
+      this._timestamp = undefined;
       return true;
     }
     return false;
+  }
+}
+
+export class SCCLog {
+  constructor(onMessage) {
+    this.array = null; // for slicing data
+    this.buffer = null; // for appending data
+    this.view = null; // for reading data
+    this.limit = 0;
+
+    this.mark = 0;
+    this.onMessage = onMessage;
+  }
+
+  open(url) {
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          this.console.log(response.statusText);
+          return;
+        }
+
+        const reader = response.body.getReader();
+        const self = this;
+        return new ReadableStream({
+          start() {
+            return pump();
+
+            function pump() {
+              reader.read().then(({done, value}) => {
+                if (!done) {
+                  self._addChunk(response, value);
+                  return pump();
+                }
+              });
+            }
+          }
+        });
+      })
+      .catch(error => {
+        console.log(`Error fetching log: ${error}`);
+      });
+  }
+
+  _addChunk(response, data) {
+    if (this.limit === 0) {
+      const length = response.headers.get('content-length');
+
+      this.array = new ArrayBuffer(length);
+
+      this.buffer = new Uint8Array(this.array);
+      this.buffer.set(data, 0);
+      this.limit = data.length;
+
+      this.view = new DataView(this.array);
+    } else {
+      this.buffer.set(data, this.limit);
+      this.limit += data.length;
+    }
+
+    this.publishMessages();
+  }
+
+  publishMessages() {
+    if (!this.message) {
+      const startOffset = this._readHeader();
+      if (startOffset) {
+        this.message = new SCCMessage(this.array, this.view, startOffset, this.limit);
+      } else {
+        return;
+      }
+    } else {
+      this.message.setLimit(this.limit);
+    }
+
+    while (this.message.available()) {
+      this.onMessage(this.message.data(), this.message.timestamp);
+      this.message.next();
+    }
+  }
+
+  _readHeader() {
+    const magic = this.view.getUint32(0, true);
+    if (magic !== COMMS_CACHE_HEADER_VERSION) {
+      throw new Error('File does not start with the expected signature.');
+    }
+
+    const headerSize = this.view.getUint32(4, true);
+    if (headerSize + 8 > this.limit) {
+      throw new Error('Header is larger than file');
+    }
+
+    return headerSize + 8;
   }
 }
