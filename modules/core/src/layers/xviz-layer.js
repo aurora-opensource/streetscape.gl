@@ -54,53 +54,35 @@ const STYLE_TO_LAYER_PROP = {
   scatterplot: {
     opacity: 'opacity',
     radius_min_pixels: 'radiusMinPixels',
-    radiusMinPixels: 'radiusMinPixels',
     radius_max_pixels: 'radiusMaxPixels',
-    radiusMaxPixels: 'radiusMaxPixels',
     radius: 'getRadius',
     stroked: 'stroked',
     filled: 'filled',
     stroke_width_min_pixels: 'lineWidthMinPixels',
-    strokeWidthMinPixels: 'lineWidthMinPixels',
     stroke_width_max_pixels: 'lineWidthMaxPixels',
-    strokeWidthMaxPixels: 'lineWidthMaxPixels',
     stroke_width: 'getLineWidth',
-    strokeWidth: 'getLineWidth',
     stroke_color: 'getLineColor',
-    strokeColor: 'getLineColor',
-    fill_color: 'getFillColor',
-    fillColor: 'getFillColor'
+    fill_color: 'getFillColor'
   },
   pointcloud: {
     opacity: 'opacity',
     radius_pixels: 'pointSize',
-    radiusPixels: 'pointSize',
     fill_color: 'getColor',
-    fillColor: 'getColor',
     point_color_mode: 'colorMode',
-    pointColorMode: 'colorMode',
-    point_color_domain: 'colorDomain',
-    pointColorDomain: 'colorDomain'
+    point_color_domain: 'colorDomain'
   },
   path: {
     opacity: 'opacity',
     stroke_width_min_pixels: 'widthMinPixels',
-    strokeWidthMinPixels: 'widthMinPixels',
     stroke_width_max_pixels: 'widthMaxPixels',
-    strokeWidthMaxPixels: 'widthMaxPixels',
     stroke_color: 'getColor',
-    strokeColor: 'getColor',
-    stroke_width: 'getWidth',
-    strokeWidth: 'getWidth'
+    stroke_width: 'getWidth'
   },
   stadium: {
     opacity: 'opacity',
     radius_min_pixels: 'widthMinPixels',
-    radiusMinPixels: 'widthMinPixels',
     radius_max_pixels: 'widthMaxPixels',
-    radiusMaxPixels: 'widthMaxPixels',
     fill_color: 'getColor',
-    fillColor: 'getColor',
     radius: 'getWidth'
   },
   polygon: {
@@ -109,33 +91,21 @@ const STYLE_TO_LAYER_PROP = {
     filled: 'filled',
     extruded: 'extruded',
     stroke_color: 'getLineColor',
-    strokeColor: 'getLineColor',
     stroke_width: 'getLineWidth',
-    strokeWidth: 'getLineWidth',
     stroke_width_min_pixels: 'lineWidthMinPixels',
-    strokeWidthMinPixels: 'lineWidthMinPixels',
     stroke_width_max_pixels: 'lineWidthMaxPixels',
-    strokeWidthMaxPixels: 'lineWidthMaxPixels',
     fill_color: 'getFillColor',
-    fillColor: 'getFillColor',
     height: 'getElevation'
   },
   text: {
     opacity: 'opacity',
     fill_color: 'getColor',
-    fillColor: 'getColor',
     font_family: 'fontFamily',
-    fontFamily: 'fontFamily',
     font_weight: 'fontWeight',
-    fontWeight: 'fontWeight',
     text_size: 'getSize',
-    textSize: 'getSize',
     text_rotation: 'getAngle',
-    textRotation: 'getAngle',
     text_anchor: 'getTextAnchor',
-    textAnchor: 'getTextAnchor',
-    text_baseline: 'getAlignmentBaseline',
-    textBaseline: 'getAlignmentBaseline'
+    text_baseline: 'getAlignmentBaseline'
   }
 };
 
@@ -165,7 +135,7 @@ function getProperty(
   context,
   propertyName,
   f = EMPTY_OBJECT,
-  primitiveType = null // TODO: this is for different primitive default styles, find a better way?
+  primitiveType = null
 ) {
   let objectState = f;
 
@@ -174,9 +144,7 @@ function getProperty(
   if (context.useSemanticColor) {
     switch (propertyName) {
       case 'stroke_color':
-      case 'strokeColor':
       case 'fill_color':
-      case 'fillColor':
         objectState = XVIZObject.get(f.id) || f;
         break;
 
@@ -192,12 +160,9 @@ function getProperty(
   switch (propertyName) {
     case 'stroke_color':
     case 'fill_color':
-    case 'strokeColor':
-    case 'fillColor':
       altPropertyName = 'color';
       break;
     case 'stroke_width':
-    case 'strokeWidth':
       altPropertyName = 'thickness';
       break;
     case 'radius':
@@ -236,22 +201,11 @@ function getProperty(
 
   if (
     property &&
-    (propertyName === 'text_anchor' || propertyName === 'text_baseline' ||
-     propertyName === 'textAnchor' || propertyName === 'textBaseline')
+    (propertyName === 'text_anchor' || propertyName === 'text_baseline')
   ) {
     // These XVIZ enumerations map to Deck.gl as lowercase strings
     property = property.toLowerCase();
   }
-  /*
-  if (
-    property &&
-    (propertyName === 'textAnchor' || propertyName === 'textBaseline')
-  ) {
-    // These XVIZ enumerations map to Deck.gl as lowercase strings
-    const lcProp = property.toLowerCase();
-    property = `${lcProp.substring(0, 4)}_${lcProp.substring(4)}`;
-  }
-  */
 
   return property;
 }
@@ -398,12 +352,6 @@ export default class XVIZLayer extends CompositeLayer {
               attributes: {
                 getPosition: data[0].points,
                 getColor: data[0].colors
-                /* TODO:
-                getColor: {
-                  value: data[0].colors,
-                  size: data[0].points.length === data[0].colors.length ? 3 : 4
-                }
-                */
               }
             },
             vehicleRelativeTransform: this.props.vehicleRelativeTransform,
