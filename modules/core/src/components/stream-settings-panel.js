@@ -88,7 +88,7 @@ export function createFormData(metadata, opts) {
       siblings[streamName] = {
         type: 'checkbox',
         title: streamName.replace(parentKey, ''),
-        children: {},
+        // children: {}, TODO: figure out why this breaks test
         badge: (
           <Badge
             userStyle={style.badge}
