@@ -131,12 +131,7 @@ const getStylesheetProperty = (context, propertyName, objectState) =>
 // to be inline, stylesheet, then default.
 //
 /* eslint-disable complexity */
-function getProperty(
-  context,
-  propertyName,
-  f = EMPTY_OBJECT,
-  primitiveType = null
-) {
+function getProperty(context, propertyName, f = EMPTY_OBJECT, primitiveType = null) {
   let objectState = f;
 
   // Handle XVIZ v1 color override where our semantic color mapping
@@ -199,10 +194,7 @@ function getProperty(
     property = context.style.getPropertyDefault(propertyName, primitiveType);
   }
 
-  if (
-    property &&
-    (propertyName === 'text_anchor' || propertyName === 'text_baseline')
-  ) {
+  if (property && (propertyName === 'text_anchor' || propertyName === 'text_baseline')) {
     // These XVIZ enumerations map to Deck.gl as lowercase strings
     property = property.toLowerCase();
   }
@@ -213,22 +205,11 @@ function getProperty(
 
 export default class XVIZLayer extends CompositeLayer {
   _getProperty(propertyName) {
-    return getProperty(
-      this.props,
-      propertyName,
-      {},
-      this._getLayerType(this.props.data)
-    );
+    return getProperty(this.props, propertyName, {}, this._getLayerType(this.props.data));
   }
 
   _getPropertyAccessor(propertyName) {
-    return f =>
-      getProperty(
-        this.props,
-        propertyName,
-        f,
-        this._getLayerType(this.props.data)
-      );
+    return f => getProperty(this.props, propertyName, f, this._getLayerType(this.props.data));
   }
 
   // These props are persistent unless data type and stylesheet change
@@ -429,7 +410,7 @@ export default class XVIZLayer extends CompositeLayer {
             id: 'image',
             image: URL.createObjectURL(
               // TODO: adjust this once we can send mime type from the backend
-              new Blob([data[0].data], { type: 'image/png' })
+              new Blob([data[0].data], {type: 'image/png'})
             ),
             bounds: [-1, -1, 1, 1]
           })
