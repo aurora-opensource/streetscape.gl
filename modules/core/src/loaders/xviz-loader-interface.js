@@ -264,6 +264,7 @@ export default class XVIZLoaderInterface {
     }
   }
 
+  /* eslint-disable complexity */
   _onXVIZTimeslice(timeslice) {
     const oldStreamCount = this.streamBuffer.streamCount;
     const bufferUpdated = this.streamBuffer.insert(timeslice);
@@ -306,6 +307,7 @@ export default class XVIZLoaderInterface {
 
     return bufferUpdated;
   }
+  /* eslint-enable complexity */
 
   _getDataByStream() {
     // XVIZStreamBuffer.getStreams filters out missing streams. This has significant impact
