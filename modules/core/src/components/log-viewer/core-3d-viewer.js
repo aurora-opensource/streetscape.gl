@@ -330,8 +330,8 @@ export default class Core3DViewer extends PureComponent {
           let dependentData = null;
           if (props.dependentStreams) {
             dependentData = props.dependentStreams.map(streamName => {
-              const stream = streams[streamName];
-              return (stream && stream.features) || stream;
+              const depStream = streams[streamName];
+              return (depStream && depStream.features) || depStream;
             });
           }
 

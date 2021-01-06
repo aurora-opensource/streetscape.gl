@@ -20,7 +20,7 @@
 
 /* eslint-disable camelcase */
 import {CompositeLayer} from '@deck.gl/core';
-import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer, BitmapLayer} from '@deck.gl/layers';
+import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer} from '@deck.gl/layers';
 import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 // TODO/ib - Uncomment to enable binary/flat polygon arrays
 // import PathLayer from './binary-path-layer/binary-path-layer';
@@ -46,8 +46,7 @@ const XVIZ_TO_LAYER_TYPE = {
   polyline: 'path',
   polygon: 'polygon',
   text: 'text',
-  stadium: 'stadium',
-  image: 'image'
+  stadium: 'stadium'
 };
 
 const STYLE_TO_LAYER_PROP = {
@@ -398,21 +397,6 @@ export default class XVIZLayer extends CompositeLayer {
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })
-          })
-        );
-
-      case 'image':
-        // TODO: add width height mapping
-        return new BitmapLayer(
-          forwardProps,
-          layerProps,
-          this.getSubLayerProps({
-            id: 'image',
-            image: URL.createObjectURL(
-              // TODO: adjust this once we can send mime type from the backend
-              new Blob([data[0].data], {type: 'image/png'})
-            ),
-            bounds: [-1, -1, 1, 1]
           })
         );
 
