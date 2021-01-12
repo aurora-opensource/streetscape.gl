@@ -49,7 +49,10 @@ class LogViewer extends PureComponent {
     // Optional: to use with external state management (e.g. Redux)
     viewState: PropTypes.object,
     viewOffset: PropTypes.object,
-    objectStates: PropTypes.object
+    objectStates: PropTypes.object,
+
+    // Experimental
+    _Core3DViewerClass: PropTypes.func
   };
 
   static defaultProps = {
@@ -60,7 +63,8 @@ class LogViewer extends PureComponent {
     onObjectStateChange: noop,
     onSelectObject: noop,
     onContextMenu: noop,
-    getTransformMatrix: (streamName, context) => null
+    getTransformMatrix: (streamName, context) => null,
+    _Core3DViewerClass: Core3DViewer
   };
 
   constructor(props) {
@@ -139,10 +143,11 @@ class LogViewer extends PureComponent {
     const viewState = this.props.viewState || this.state.viewState;
     const viewOffset = this.props.viewOffset || this.state.viewOffset;
     const objectStates = this.props.objectStates || this.state.objectStates;
+    const CoreViewer = this.props._Core3DViewerClass;
 
     return (
       <div onContextMenu={preventDefault}>
-        <Core3DViewer
+        <CoreViewer
           {...this.props}
           onViewStateChange={this._onViewStateChange}
           onClick={this._onClickObject}
@@ -153,7 +158,7 @@ class LogViewer extends PureComponent {
           objectStates={objectStates}
         >
           {this._renderTooltip()}
-        </Core3DViewer>
+        </CoreViewer>
       </div>
     );
   }

@@ -30,6 +30,7 @@ export {default as XVIZLayer} from './layers/xviz-layer';
 export {default as connectToLog} from './components/connect';
 
 export {default as LogViewer} from './components/log-viewer';
+export {default as _Core3DViewer} from './components/log-viewer/core-3d-viewer';
 export {default as PlaybackControl} from './components/playback-control';
 export {default as PerspectivePopup} from './components/log-viewer/perspective-popup';
 export {default as StreamSettingsPanel} from './components/stream-settings-panel';
