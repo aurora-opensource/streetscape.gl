@@ -2,7 +2,7 @@
   "name": "@streetscape.gl/layers",
   "description": "A collection of deck.gl map layers for autonomy visualization",
   "license": "MIT",
-  "version": "1.0.7-alpha.0",
+  "version": "1.0.7-alpha.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
