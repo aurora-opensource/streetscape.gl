@@ -84,7 +84,7 @@ export function createFormData(metadata, opts) {
       siblings = root[parentKey].children;
     }
 
-    if (!siblings[streamName]) {
+    if (siblings && !siblings[streamName]) {
       siblings[streamName] = {
         type: 'checkbox',
         title: streamName.replace(parentKey, ''),
