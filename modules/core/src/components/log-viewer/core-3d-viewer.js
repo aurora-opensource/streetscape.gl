@@ -279,7 +279,7 @@ export default class Core3DViewer extends PureComponent {
           const stylesheet = styleParser.getStylesheet(streamName);
 
           // Support both features and lookAheads, respectively
-          const primitives = stream.features || stream;
+          const primitives = (stream && stream.features) || stream;
           if (primitives && primitives.length) {
             return new XVIZLayer({
               id: `xviz-${streamName}`,

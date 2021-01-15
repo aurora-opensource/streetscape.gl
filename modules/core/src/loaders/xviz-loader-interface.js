@@ -273,10 +273,12 @@ export default class XVIZLoaderInterface {
 
     if (getXVIZConfig().DYNAMIC_STREAM_METADATA && this.streamBuffer.streamCount > oldStreamCount) {
       const streamsMetadata = {};
-      const streamSettings = this.get('streamSettings');
+      const streamSettings = this.get('streamSettings') || {};
 
       for (const streamName in timeslice.streams) {
-        streamsMetadata[streamName] = timeslice.streams[streamName].__metadata;
+        if (timeslice.streams[streamName]) {
+          streamsMetadata[streamName] = timeslice.streams[streamName].__metadata;
+        }
 
         // Add new stream name to stream settings (default on)
         if (!(streamName in streamSettings)) {
