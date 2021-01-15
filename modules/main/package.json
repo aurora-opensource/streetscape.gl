@@ -2,7 +2,7 @@
   "name": "streetscape.gl",
   "description": "Visualizaton toolkit for 3D maps and autonomous XVIZ protocol data",
   "license": "MIT",
-  "version": "1.0.7-alpha.1",
+  "version": "1.0.7-alpha.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/uber/streetscape.gl.git"
@@ -16,7 +16,7 @@
   ],
   "scripts": {},
   "dependencies": {
-    "@streetscape.gl/core": "1.0.7-alpha.1",
-    "@streetscape.gl/layers": "1.0.7-alpha.1"
+    "@streetscape.gl/core": "1.0.7-alpha.2",
+    "@streetscape.gl/layers": "1.0.7-alpha.2"
   }
 }
