@@ -28,7 +28,7 @@
     "math.gl": "^3.0.0",
     "promise-retry": "^1.1.1",
     "prop-types": "^15.6.2",
-    "react-map-gl": "^5.0.0",
+    "react-map-gl": "~5.2.0",
     "reselect": "^3.0.0"
   },
   "peerDependencies": {
