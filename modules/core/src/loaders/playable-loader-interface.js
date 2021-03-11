@@ -35,32 +35,41 @@ export default class PlayableLoaderInterface extends LoaderInterface {
   }
 
   /**
-   * Play the log.
+   * Whether the loader is loading data.
+   *
+   * @returns {Boolean} isOpen
    */
-  play() {
-    throw new Error('Not implemented');
+  isOpen() {
+    return false;
   }
 
   /**
-   * Pause the log.
+   * Called to start loading data.
    */
-  pause() {
+  connect() {
+    throw new Error('not implemented');
+  }
+
+  /**
+   * Called to stop loading data.
+   */
+  close() {
     throw new Error('Not implemented');
   }
 
   /**
    * Returns the current timestamp in seconds.
+   *
+   * @returns {Number} current time.
    */
-  getCurrentTime() {
-    throw new Error('Not implemented');
-  }
+  getCurrentTime = () => this.get('timestamp');
 
   /**
    * Returns the current look ahead offset in seconds.
+   *
+   * @returns {Number} look ahead.
    */
-  getLookAhead() {
-    throw new Error('Not implemented');
-  }
+  getLookAhead = () => this.get('lookAhead');
 
   /**
    * Set the look ahead offset in seconds.
@@ -69,11 +78,13 @@ export default class PlayableLoaderInterface extends LoaderInterface {
    * @param {Number} lookAhead - look ahead in seconds.
    */
   setLookAhead(lookAhead) {
-    throw new Error('Not implemented');
+    this.set('lookAhead', lookAhead);
   }
 
   /**
    * Returns the start timestamp of the log.
+   *
+   * @returns {Number} start timestamp.
    */
   getLogStartTime() {
     throw new Error('Not implemented');
@@ -81,6 +92,8 @@ export default class PlayableLoaderInterface extends LoaderInterface {
 
   /**
    * Returns the end timestamp of the log.
+   *
+   * @returns {Number} end timestamp.
    */
   getLogEndTime() {
     throw new Error('Not implemented');
@@ -88,6 +101,7 @@ export default class PlayableLoaderInterface extends LoaderInterface {
 
   /**
    * Returns the loaded time ranges of the buffer, as an array of `[start, end]` timestamps.
+   * @returns {[Number, Number]} - [start, end] timestamps.
    */
   getBufferedTimeRanges() {
     throw new Error('Not implemented');
