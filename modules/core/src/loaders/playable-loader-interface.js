@@ -31,7 +31,6 @@ export default class PlayableLoaderInterface extends LoaderInterface {
    * @param {Number} timestamp
    */
   seek(timestamp) {
-    this.set('timestamp', timestamp);
     throw new Error('Not implemented');
   }
 
