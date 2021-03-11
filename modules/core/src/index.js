@@ -27,6 +27,8 @@ export {default as XVIZLayer} from './layers/xviz-layer';
 
 // COMPONENTS
 
+export {default as connect} from './components/connect';
+// Keep the old export name "connectToLog" for backwards compatibility.
 export {default as connectToLog} from './components/connect';
 
 export {default as LogViewer} from './components/log-viewer';
@@ -54,6 +56,8 @@ export {mergeXVIZStyles} from './utils/style';
 // Constants
 export {COORDINATE, VIEW_MODE} from './constants';
 
+export {default as _LoaderInterface} from './loaders/loader-interface';
+export {default as _PlayableLoaderInterface} from './loaders/playable-loader-interface';
 export {default as _XVIZLoaderInterface} from './loaders/xviz-loader-interface';
 export {default as XVIZStreamLoader} from './loaders/xviz-stream-loader';
 export {default as XVIZLiveLoader} from './loaders/xviz-live-loader';
