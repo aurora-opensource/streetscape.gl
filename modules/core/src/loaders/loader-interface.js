@@ -33,7 +33,13 @@
  * @example
  *
  * // Define and instantiate a new loader.
- * class MyLoader extends LoaderInterface { ... }
+ * class MyLoader extends LoaderInterface {
+ *   // Some arbitrary internal method that will store the loaded data
+ *   _onMessage(msg) {
+ *     this.set('foo', msg.foo);
+ *     this.set('bar', msg.bar);
+ *   }
+ * }
  * const loader = new MyLoader(...opts);
  *
  * // Create a new component that will connect to the loader state.
