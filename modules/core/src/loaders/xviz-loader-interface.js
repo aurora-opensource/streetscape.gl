@@ -92,15 +92,6 @@ export default class XVIZLoaderInterface extends PlayableLoaderInterface {
     this.emit('error', error);
   };
 
-  /* Connection API */
-  isOpen() {
-    return false;
-  }
-
-  connect() {
-    throw new Error('not implemented');
-  }
-
   seek(timestamp) {
     const metadata = this.getMetadata();
 
@@ -119,30 +110,16 @@ export default class XVIZLoaderInterface extends PlayableLoaderInterface {
     this.streamBuffer.setCurrentTime(timestamp);
   }
 
-  setLookAhead(lookAhead) {
-    this.set('lookAhead', lookAhead);
-  }
-
   updateStreamSettings(settings) {
     const streamSettings = this.get('streamSettings');
     this.set('streamSettings', {...streamSettings, ...settings});
   }
 
-  close() {
-    throw new Error('not implemented');
-  }
-
   /* Data selector API */
-
-  getCurrentTime = () => this.get('timestamp');
-
-  getLookAhead = () => this.get('lookAhead');
 
   getMetadata = () => this.get('metadata');
 
   getStreamSettings = () => this.get('streamSettings');
-
-  _getDataVersion = () => this.get('dataVersion');
 
   _getStreamsMetadata = () => this.get('streamsMetadata');
 

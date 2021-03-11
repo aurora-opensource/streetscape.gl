@@ -95,4 +95,6 @@ export default class LoaderInterface {
     this._updates++;
     this.set('dataVersion', this._updates);
   }
+
+  _getDataVersion = () => this.get('dataVersion');
 }
