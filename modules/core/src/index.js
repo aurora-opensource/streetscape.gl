@@ -27,6 +27,8 @@ export {default as XVIZLayer} from './layers/xviz-layer';
 
 // COMPONENTS
 
+export {default as connect} from './components/connect';
+// Keep the old export name "connectToLog" for backwards compatibility.
 export {default as connectToLog} from './components/connect';
 
 export {default as LogViewer} from './components/log-viewer';

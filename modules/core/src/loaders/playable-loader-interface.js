@@ -20,6 +20,10 @@
 
 import LoaderInterface from './loader-interface';
 
+/**
+ * This interfaces exposes the methods required for compatibility with
+ * the PlaybackControl component - that enables scrubbing through a buffered log.
+ */
 export default class PlayableLoaderInterface extends LoaderInterface {
   /**
    * Seek to a given timestamp.

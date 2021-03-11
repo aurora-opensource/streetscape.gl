@@ -18,6 +18,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/**
+ * This class defines the interface for Loader classes. A Loader is factually
+ * a store holding state for connected components. We call the subclasses of this
+ * interface "Loaders" and not simply "Stores" because they are is usually also
+ * responsible for loading data in addition of storing it.
+ *
+ * The pattern of a Loader is very similar to the Redux store.
+ * We provide a "connect()" High Order Component (H.O.C.) to connect React
+ * components to Loader instances. Connected components will react to the loader's
+ * state changes, very much like React components react to the Redux's store state
+ * changes when they are connected it via the Redux connect() HOC.
+ *
+ * @example
+ *
+ * // Define and instantiate a new loader.
+ * class MyLoader extends LoaderInterface { ... }
+ * const loader = new MyLoader(...opts);
+ *
+ * // Create a new component that will connect to the loader state.
+ * const MyComponent = props => <div>{props.foo}:{props.bar}</div>;
+ *
+ * // Connect component to the loader.
+ * import {connect} from 'streetscape.gl';
+ * const mapStateToProps = loader => ({
+ *     foo: loader.get('foo'),
+ *     bar: loader.get('bar')
+ * });
+ * const MyConnectedComponent = connect(mapStateToProps, MyComponent);
+ *
+ * // Render connected component somewhere and feed it the loader. It will
+ * // react to the loader state changes.
+ * <MyConnectedComponent loader={loader} />
+ */
 export default class LoaderInterface {
   constructor() {
     this.listeners = [];
