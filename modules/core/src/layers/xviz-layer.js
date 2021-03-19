@@ -20,7 +20,7 @@
 
 /* eslint-disable camelcase */
 import {CompositeLayer} from '@deck.gl/core';
-import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer} from '@deck.gl/layers';
+import {ScatterplotLayer, PathLayer, PolygonLayer, TextLayer, BitmapLayer} from '@deck.gl/layers';
 import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 // TODO/ib - Uncomment to enable binary/flat polygon arrays
 // import PathLayer from './binary-path-layer/binary-path-layer';
@@ -29,6 +29,16 @@ import PointCloudLayer from './point-cloud-layer/point-cloud-layer';
 import {XVIZObject} from '@xviz/parser';
 
 import deepExtend from 'lodash.merge';
+
+const XVIZ_PRIMITIVE_TYPES = {
+  circle: 'circle',
+  image: 'image',
+  point: 'point',
+  polygon: 'polygon',
+  polyline: 'polyline',
+  stadium: 'stadium',
+  text: 'text'
+};
 
 const XVIZ_TO_LAYER_TYPE = {
   // V1
@@ -46,7 +56,8 @@ const XVIZ_TO_LAYER_TYPE = {
   polyline: 'path',
   polygon: 'polygon',
   text: 'text',
-  stadium: 'stadium'
+  stadium: 'stadium',
+  image: 'image'
 };
 
 const STYLE_TO_LAYER_PROP = {
@@ -59,9 +70,9 @@ const STYLE_TO_LAYER_PROP = {
     filled: 'filled',
     stroke_width_min_pixels: 'lineWidthMinPixels',
     stroke_width_max_pixels: 'lineWidthMaxPixels',
-    stroke_width: 'getLineWidth',
-    stroke_color: 'getLineColor',
-    fill_color: 'getFillColor'
+    strokeWidth: 'getLineWidth',
+    strokeColor: 'getLineColor',
+    fillColor: 'getFillColor'
   },
   pointcloud: {
     opacity: 'opacity',
@@ -74,14 +85,14 @@ const STYLE_TO_LAYER_PROP = {
     opacity: 'opacity',
     stroke_width_min_pixels: 'widthMinPixels',
     stroke_width_max_pixels: 'widthMaxPixels',
-    stroke_color: 'getColor',
-    stroke_width: 'getWidth'
+    strokeColor: 'getColor',
+    strokeWidth: 'getWidth'
   },
   stadium: {
     opacity: 'opacity',
     radius_min_pixels: 'widthMinPixels',
     radius_max_pixels: 'widthMaxPixels',
-    fill_color: 'getColor',
+    fillColor: 'getColor',
     radius: 'getWidth'
   },
   polygon: {
@@ -89,19 +100,19 @@ const STYLE_TO_LAYER_PROP = {
     stroked: 'stroked',
     filled: 'filled',
     extruded: 'extruded',
-    stroke_color: 'getLineColor',
-    stroke_width: 'getLineWidth',
+    strokeColor: 'getLineColor',
+    strokeWidth: 'getLineWidth',
     stroke_width_min_pixels: 'lineWidthMinPixels',
     stroke_width_max_pixels: 'lineWidthMaxPixels',
-    fill_color: 'getFillColor',
+    fillColor: 'getFillColor',
     height: 'getElevation'
   },
   text: {
     opacity: 'opacity',
-    fill_color: 'getColor',
+    fillColor: 'getColor',
     font_family: 'fontFamily',
     font_weight: 'fontWeight',
-    text_size: 'getSize',
+    textSize: 'getSize',
     text_rotation: 'getAngle',
     text_anchor: 'getTextAnchor',
     text_baseline: 'getAlignmentBaseline'
@@ -130,7 +141,12 @@ const getStylesheetProperty = (context, propertyName, objectState) =>
 // to be inline, stylesheet, then default.
 //
 /* eslint-disable complexity */
-function getProperty(context, propertyName, f = EMPTY_OBJECT) {
+function getProperty(
+  context,
+  propertyName,
+  f = EMPTY_OBJECT,
+  primitiveType = null
+) {
   let objectState = f;
 
   // Handle XVIZ v1 color override where our semantic color mapping
@@ -138,7 +154,9 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   if (context.useSemanticColor) {
     switch (propertyName) {
       case 'stroke_color':
+      case 'strokeColor':
       case 'fill_color':
+      case 'fillColor':
         objectState = XVIZObject.get(f.id) || f;
         break;
 
@@ -154,9 +172,12 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
   switch (propertyName) {
     case 'stroke_color':
     case 'fill_color':
+    case 'strokeColor':
+    case 'fillColor':
       altPropertyName = 'color';
       break;
     case 'stroke_width':
+    case 'strokeWidth':
       altPropertyName = 'thickness';
       break;
     case 'radius':
@@ -190,12 +211,23 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
   // 3. Property from default style
   if (property === null) {
-    property = context.style.getPropertyDefault(propertyName);
+    property = context.style.getPropertyDefault(propertyName, primitiveType);
   }
 
-  if (propertyName === 'text_anchor' || propertyName === 'text_baseline') {
+  if (
+    property &&
+    (propertyName === 'text_anchor' || propertyName === 'text_baseline')
+  ) {
     // These XVIZ enumerations map to Deck.gl as lowercase strings
     property = property.toLowerCase();
+  }
+  if (
+    property &&
+    (propertyName === 'textAnchor' || propertyName === 'textBaseline')
+  ) {
+    // These XVIZ enumerations map to Deck.gl as lowercase strings
+    const lcProp = property.toLowerCase();
+    property = `${lcProp.substring(0, 4)}_${lcProp.substring(4)}`;
   }
 
   return property;
@@ -204,11 +236,22 @@ function getProperty(context, propertyName, f = EMPTY_OBJECT) {
 
 export default class XVIZLayer extends CompositeLayer {
   _getProperty(propertyName) {
-    return getProperty(this.props, propertyName);
+    return getProperty(
+      this.props,
+      propertyName,
+      {},
+      this._getLayerType(this.props.data)
+    );
   }
 
   _getPropertyAccessor(propertyName) {
-    return f => getProperty(this.props, propertyName, f);
+    return f =>
+      getProperty(
+        this.props,
+        propertyName,
+        f,
+        this._getLayerType(this.props.data)
+      );
   }
 
   // These props are persistent unless data type and stylesheet change
@@ -331,7 +374,10 @@ export default class XVIZLayer extends CompositeLayer {
               length: data[0].points.length / 3,
               attributes: {
                 getPosition: data[0].points,
-                getColor: data[0].colors
+                getColor: {
+                  value: data[0].colors,
+                  size: data[0].points.length === data[0].colors.length ? 3 : 4
+                }
               }
             },
             vehicleRelativeTransform: this.props.vehicleRelativeTransform,
@@ -353,6 +399,7 @@ export default class XVIZLayer extends CompositeLayer {
           })
         );
 
+      // TODO (mauricio): also figure out wht a box appears on top of the stadium
       case 'stadium':
         return new PathLayer(
           forwardProps,
@@ -378,6 +425,7 @@ export default class XVIZLayer extends CompositeLayer {
             data,
             lightSettings,
             wireframe: layerProps.stroked,
+            extruded: layerProps.stroked, //TODO: check for height instead
             getPolygon: f => f.vertices,
             updateTriggers: deepExtend(updateTriggers, {
               getLineColor: {useSemanticColor: this.props.useSemanticColor},
@@ -397,6 +445,21 @@ export default class XVIZLayer extends CompositeLayer {
             updateTriggers: deepExtend(updateTriggers, {
               getColor: {useSemanticColor: this.props.useSemanticColor}
             })
+          })
+        );
+
+      case XVIZ_PRIMITIVE_TYPES.image:
+        // TODO (mauricio): images stream is being filtered out, figure out why
+        return new BitmapLayer(
+          forwardProps,
+          layerProps,
+          this.getSubLayerProps({
+            id: XVIZ_PRIMITIVE_TYPES.image,
+            image: URL.createObjectURL(
+              // TODO (mauricio): adjust this once we can send mime type from the backend
+              new Blob([data[0].data], { type: 'image/png' })
+            ),
+            bounds: [-1, -1, 1, 1]
           })
         );
 
