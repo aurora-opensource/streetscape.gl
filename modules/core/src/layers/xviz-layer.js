@@ -107,6 +107,129 @@ const STYLE_TO_LAYER_PROP = {
     text_baseline: 'getAlignmentBaseline'
   }
 };
+/* 
+ ####### EXTENDING XVIZ LAYER FOR PRIMITIVES #########
+*/
+// not sure if necessary, just to have enums for existing primitives
+const LAYER_TYPES = {
+  SCATTERPLOT: 'scatterplot',
+  PATH: 'path',
+  POINTCLOUD: 'pointcloud',
+  STADIUM: 'stadium',
+  POLYGON: 'polygon',
+  TEXT: 'text'
+};
+
+// Defines the way that each primitive layer type is handled in the application
+const LAYER_HANDLERS = {
+  [LAYER_TYPES.SCATTERPLOT]: {
+    layerType: LAYER_TYPES.SCATTERPLOT,
+    layerClass: ScatterplotLayer,
+    // returns data to hold in state
+    // updateState calls `getState({data: preprocessData})`
+    preprocessData: props => {
+      const {data} = props;
+      if (data[0].vertices && Array.isArray(data[0].vertices[0])) {
+        const processedData = data.reduce((arr, multiPoints) => {
+          multiPoints.vertices.forEach(pt => {
+            arr.push({...multiPoints, vertices: pt});
+          });
+          return arr;
+        }, []);
+        return processedData;
+      }
+      return data;
+    },
+    getLayerTypeProps: ({xvizLayerProps, layerProps}) => {
+      const {updateTriggers} = layerProps;
+      return {
+        // `vertices` is used xviz V1 and `center` is used by xviz V2
+        getPosition: f => f.vertices || f.center,
+        updateTriggers: deepExtend(updateTriggers, {
+          getFillColor: {useSemanticColor: xvizLayerProps.useSemanticColor}
+        })
+      };
+    }
+  },
+  [LAYER_TYPES.STADIUM]: {
+    layerType: LAYER_TYPES.STADIUM,
+    layerClass: PathLayer,
+    getLayerTypeProps: ({xvizLayerProps, layerProps}) => {
+      const {updateTriggers} = layerProps;
+      return {
+        getPath: f => [f.start, f.end],
+        rounded: true,
+        updateTriggers: deepExtend(updateTriggers, {
+          getColor: {useSemanticColor: xvizLayerProps.useSemanticColor}
+        })
+      };
+    }
+  },
+  [LAYER_TYPES.POINTCLOUD]: {
+    layerType: LAYER_TYPES.POINTCLOUD,
+    layerClass: PointCloudLayer,
+    getLayerTypeProps: ({xvizLayerProps, state}) => {
+      const {data} = state;
+      return {
+        data: {
+          length: data[0].points.length / 3,
+          attributes: {
+            getPosition: data[0].points,
+            getColor: data[0].colors
+          }
+        },
+        vehicleRelativeTransform: xvizLayerProps.vehicleRelativeTransform,
+        getPosition: p => p
+      };
+    }
+  },
+  [LAYER_TYPES.PATH]: {
+    layerType: LAYER_TYPES.PATH,
+    layerClass: PathLayer,
+    getLayerTypeProps: ({xvizLayerProps, layerProps}) => {
+      const {updateTriggers} = layerProps;
+      return {
+        getPath: f => f.vertices,
+        updateTriggers: deepExtend(updateTriggers, {
+          getColor: {useSemanticColor: xvizLayerProps.useSemanticColor}
+        })
+      };
+    }
+  },
+  [LAYER_TYPES.POLYGON]: {
+    layerType: LAYER_TYPES.POLYGON,
+    layerClass: PolygonLayer,
+    getLayerTypeProps: ({xvizLayerProps, layerProps}) => {
+      const {updateTriggers} = layerProps;
+      const {lightSettings, useSemanticColor, opacity} = xvizLayerProps;
+      const {stroked} = layerProps;
+      return {
+        opacity: opacity || 1,
+        lightSettings,
+        wireframe: stroked,
+        getPolygon: f => f.vertices,
+        updateTriggers: deepExtend(updateTriggers, {
+          getLineColor: {useSemanticColor},
+          getFillColor: {useSemanticColor}
+        })
+      };
+    }
+  },
+  [LAYER_TYPES.TEXT]: {
+    layerType: LAYER_TYPES.TEXT,
+    layerClass: TextLayer,
+    getLayerTypeProps: ({xvizLayerProps, layerProps}) => {
+      const {updateTriggers} = layerProps;
+      const {useSemanticColor} = xvizLayerProps;
+      return {
+        getText: f => f.text,
+        updateTriggers: deepExtend(updateTriggers, {
+          getColor: {useSemanticColor}
+        })
+      };
+    }
+  }
+};
 
 const EMPTY_OBJECT = {};
 
@@ -267,15 +390,9 @@ export default class XVIZLayer extends CompositeLayer {
       let data = props.data;
       const dataType = this._getLayerType(data);
       type = XVIZ_TO_LAYER_TYPE[dataType];
-
-      if (type === 'scatterplot' && data[0].vertices && Array.isArray(data[0].vertices[0])) {
-        // is multi point
-        data = data.reduce((arr, multiPoints) => {
-          multiPoints.vertices.forEach(pt => {
-            arr.push({...multiPoints, vertices: pt});
-          });
-          return arr;
-        }, []);
+      const layerHandler = LAYER_HANDLERS[type];
+      if (layerHandler && layerHandler.preprocessData) {
+        data = layerHandler.preprocessData(props);
       }
 
       this.setState({data});
@@ -289,120 +406,69 @@ export default class XVIZLayer extends CompositeLayer {
   }
 
   renderLayers() {
-    const {lightSettings} = this.props;
     const {type, data} = this.state;
 
     if (!type) {
       return null;
     }
 
-    const {linkTitle, streamName, objectType} = this.props;
+    const {linkTitle, streamName, streamMetadata, objectType} = this.props;
     const layerProps = this._getLayerProps();
-    const updateTriggers = layerProps.updateTriggers;
     const forwardProps = {
       linkTitle,
       streamName,
       objectType
     };
+    // multiple layers?
+    const customXvizLayerMatch = this.props.customXVIZLayers.find(({streamMatch}) =>
+      streamMatch(streamName, streamMetadata)
+    );
 
-    switch (type) {
-      case 'scatterplot':
-        return new ScatterplotLayer(
-          forwardProps,
+    if (customXvizLayerMatch) {
+      let primitiveLayerProps = {};
+      const parentLayerHandler = LAYER_HANDLERS[customXvizLayerMatch.extendPrimitive];
+      if (parentLayerHandler) {
+        primitiveLayerProps = parentLayerHandler.getLayerTypeProps({
+          xvizLayerProps: this.props,
           layerProps,
-          this.getSubLayerProps({
-            id: 'scatterplot',
-            data,
-            // `vertices` is used xviz V1 and `center` is used by xviz V2
-            getPosition: f => f.vertices || f.center,
-            updateTriggers: deepExtend(updateTriggers, {
-              getFillColor: {useSemanticColor: this.props.useSemanticColor}
-            })
-          })
-        );
+          state: this.state
+        });
+      }
 
-      case 'pointcloud':
-        return new PointCloudLayer(
-          forwardProps,
-          layerProps,
-          this.getSubLayerProps({
-            id: 'pointcloud',
-            data: {
-              length: data[0].points.length / 3,
-              attributes: {
-                getPosition: data[0].points,
-                getColor: data[0].colors
-              }
-            },
-            vehicleRelativeTransform: this.props.vehicleRelativeTransform,
-            getPosition: p => p
+      const LayerClass = customXvizLayerMatch.layerClass || parentLayerHandler?.layerClass;
+      return new LayerClass(
+        forwardProps,
+        layerProps,
+        this.getSubLayerProps({
+          id: customXvizLayerMatch.id,
+          data,
+          ...primitiveLayerProps,
+          ...customXvizLayerMatch.getSubProps({
+            xvizLayerProps: this.props,
+            primitiveLayerProps,
+            state: this.state
           })
-        );
-
-      case 'path':
-        return new PathLayer(
-          forwardProps,
-          layerProps,
-          this.getSubLayerProps({
-            id: 'path',
-            data,
-            getPath: f => f.vertices,
-            updateTriggers: deepExtend(updateTriggers, {
-              getColor: {useSemanticColor: this.props.useSemanticColor}
-            })
-          })
-        );
-
-      case 'stadium':
-        return new PathLayer(
-          forwardProps,
-          layerProps,
-          this.getSubLayerProps({
-            id: 'stadium',
-            data,
-            getPath: f => [f.start, f.end],
-            rounded: true,
-            updateTriggers: deepExtend(updateTriggers, {
-              getColor: {useSemanticColor: this.props.useSemanticColor}
-            })
-          })
-        );
-
-      case 'polygon':
-        return new PolygonLayer(
-          forwardProps,
-          layerProps,
-          this.getSubLayerProps({
-            id: 'polygon',
-            opacity: this.props.opacity || 1,
-            data,
-            lightSettings,
-            wireframe: layerProps.stroked,
-            getPolygon: f => f.vertices,
-            updateTriggers: deepExtend(updateTriggers, {
-              getLineColor: {useSemanticColor: this.props.useSemanticColor},
-              getFillColor: {useSemanticColor: this.props.useSemanticColor}
-            })
-          })
-        );
-
-      case 'text':
-        return new TextLayer(
-          forwardProps,
-          layerProps,
-          this.getSubLayerProps({
-            id: 'text',
-            data,
-            getText: f => f.text,
-            updateTriggers: deepExtend(updateTriggers, {
-              getColor: {useSemanticColor: this.props.useSemanticColor}
-            })
-          })
-        );
-
-      default:
-        return null;
+        })
+      );
     }
+    if (!LAYER_HANDLERS[type]) {
+      return null;
+    }
+
+    const {layerClass: LayerClass, getLayerTypeProps} = LAYER_HANDLERS[type];
+    return new LayerClass(
+      forwardProps,
+      layerProps,
+      this.getSubLayerProps({
+        id: type,
+        data,
+        ...getLayerTypeProps({
+          xvizLayerProps: this.props,
+          layerProps,
+          state: this.state
+        })
+      })
+    );
   }
 }
 
