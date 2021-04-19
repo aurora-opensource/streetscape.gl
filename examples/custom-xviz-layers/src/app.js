@@ -100,8 +100,9 @@ class Example extends PureComponent {
                 {
                   // {string} id - passed into layer
                   id: 'dual',
-                  //
-                  extendPrimitive: 'path',
+                  // {string} primitive - defines what xviz primitive renderer you want to extend
+                  primitive: 'polyline',
+                  // {Deckgl Layer Class} layerClass - defines what deck.gl layer you would like to use in rendering
                   layerClass: LaneLayer,
                   /* 
                   * Determines whether the layer handler should be used for a specific stream
@@ -126,6 +127,7 @@ class Example extends PureComponent {
                       getPath: f => f.vertices,
                       getDashArray: () => [1, 2],
                       getDashArray2: () => [2, 4],
+                      // shows how you can use existing layer accessors to extend functionality
                       getColor2: state.layerProps.getColor,
                       extensions: [new PathStyleExtension({dash: true})]
                     };

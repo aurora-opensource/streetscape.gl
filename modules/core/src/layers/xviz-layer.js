@@ -30,27 +30,37 @@ import {XVIZObject} from '@xviz/parser';
 
 import deepExtend from 'lodash.merge';
 
+// not sure if necessary, just to have enums for existing primitives
+const LAYER_TYPES = {
+  SCATTERPLOT: 'scatterplot',
+  PATH: 'path',
+  POINTCLOUD: 'pointcloud',
+  STADIUM: 'stadium',
+  POLYGON: 'polygon',
+  TEXT: 'text'
+};
+
 const XVIZ_TO_LAYER_TYPE = {
   // V1
-  points2d: 'scatterplot',
-  points3d: 'pointcloud',
-  point2d: 'scatterplot',
-  circle2d: 'scatterplot',
-  line2d: 'path',
-  path2d: 'path',
-  polygon2d: 'polygon',
+  points2d: LAYER_TYPES.SCATTERPLOT,
+  points3d: LAYER_TYPES.POINTCLOUD,
+  point2d: LAYER_TYPES.SCATTERPLOT,
+  circle2d: LAYER_TYPES.SCATTERPLOT,
+  line2d: LAYER_TYPES.PATH,
+  path2d: LAYER_TYPES.PATH,
+  polygon2d: LAYER_TYPES.POLYGON,
 
   // V2
-  point: 'pointcloud',
-  circle: 'scatterplot',
-  polyline: 'path',
-  polygon: 'polygon',
-  text: 'text',
-  stadium: 'stadium'
+  point: LAYER_TYPES.POINTCLOUD,
+  circle: LAYER_TYPES.SCATTERPLOT,
+  polyline: LAYER_TYPES.PATH,
+  polygon: LAYER_TYPES.POLYGON,
+  text: LAYER_TYPES.TEXT,
+  stadium: LAYER_TYPES.STADIUM
 };
 
 const STYLE_TO_LAYER_PROP = {
-  scatterplot: {
+  [LAYER_TYPES.SCATTERPLOT]: {
     opacity: 'opacity',
     radius_min_pixels: 'radiusMinPixels',
     radius_max_pixels: 'radiusMaxPixels',
@@ -63,28 +73,28 @@ const STYLE_TO_LAYER_PROP = {
     stroke_color: 'getLineColor',
     fill_color: 'getFillColor'
   },
-  pointcloud: {
+  [LAYER_TYPES.POINTCLOUD]: {
     opacity: 'opacity',
     radius_pixels: 'pointSize',
     fill_color: 'getColor',
     point_color_mode: 'colorMode',
     point_color_domain: 'colorDomain'
   },
-  path: {
+  [LAYER_TYPES.PATH]: {
     opacity: 'opacity',
     stroke_width_min_pixels: 'widthMinPixels',
     stroke_width_max_pixels: 'widthMaxPixels',
     stroke_color: 'getColor',
     stroke_width: 'getWidth'
   },
-  stadium: {
+  [LAYER_TYPES.STADIUM]: {
     opacity: 'opacity',
     radius_min_pixels: 'widthMinPixels',
     radius_max_pixels: 'widthMaxPixels',
     fill_color: 'getColor',
     radius: 'getWidth'
   },
-  polygon: {
+  [LAYER_TYPES.POLYGON]: {
     opacity: 'opacity',
     stroked: 'stroked',
     filled: 'filled',
@@ -96,7 +106,7 @@ const STYLE_TO_LAYER_PROP = {
     fill_color: 'getFillColor',
     height: 'getElevation'
   },
-  text: {
+  [LAYER_TYPES.TEXT]: {
     opacity: 'opacity',
     fill_color: 'getColor',
     font_family: 'fontFamily',
@@ -106,18 +116,6 @@ const STYLE_TO_LAYER_PROP = {
     text_anchor: 'getTextAnchor',
     text_baseline: 'getAlignmentBaseline'
   }
-};
-/* 
- ####### EXTENDING XVIZ LAYER FOR PRIMITIVES #########
-*/
-// not sure if necessary, just to have enums for existing primitives
-const LAYER_TYPES = {
-  SCATTERPLOT: 'scatterplot',
-  PATH: 'path',
-  POINTCLOUD: 'pointcloud',
-  STADIUM: 'stadium',
-  POLYGON: 'polygon',
-  TEXT: 'text'
 };
 
 // Defines the way that each primitive layer type is handled in the application
@@ -390,6 +388,8 @@ export default class XVIZLayer extends CompositeLayer {
       let data = props.data;
       const dataType = this._getLayerType(data);
       type = XVIZ_TO_LAYER_TYPE[dataType];
+      // Currently, preprocessing of data is not exposed to customXVIZLayers
+      // It's only available through internal primitives
       const layerHandler = LAYER_HANDLERS[type];
       if (layerHandler && layerHandler.preprocessData) {
         data = layerHandler.preprocessData(props);
@@ -419,14 +419,15 @@ export default class XVIZLayer extends CompositeLayer {
       streamName,
       objectType
     };
-    // multiple layers?
+    // Only allows for single match of a layer to a stream
     const customXvizLayerMatch = this.props.customXVIZLayers.find(({streamMatch}) =>
       streamMatch(streamName, streamMetadata)
     );
 
     if (customXvizLayerMatch) {
       let primitiveLayerProps = {};
-      const parentLayerHandler = LAYER_HANDLERS[customXvizLayerMatch.extendPrimitive];
+      const layerType = XVIZ_TO_LAYER_TYPE[customXvizLayerMatch.primitive];
+      const parentLayerHandler = LAYER_HANDLERS[layerType];
       if (parentLayerHandler) {
         primitiveLayerProps = parentLayerHandler.getLayerTypeProps({
           xvizLayerProps: this.props,
@@ -440,7 +441,7 @@ export default class XVIZLayer extends CompositeLayer {
         forwardProps,
         layerProps,
         this.getSubLayerProps({
-          id: customXvizLayerMatch.id,
+          id: `${layerType ? layerType : ''}-${customXvizLayerMatch.id}`,
           data,
           ...primitiveLayerProps,
           ...customXvizLayerMatch.getSubProps({
