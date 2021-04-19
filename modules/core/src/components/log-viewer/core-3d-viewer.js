@@ -74,6 +74,7 @@ export default class Core3DViewer extends PureComponent {
       PropTypes.func
     ]),
     customLayers: PropTypes.array,
+    customXVIZLayers: PropTypes.array,
     renderObjectLabel: PropTypes.func,
     getTransformMatrix: PropTypes.func,
     viewOptions: PropTypes.object,
@@ -100,6 +101,7 @@ export default class Core3DViewer extends PureComponent {
     viewMode: VIEW_MODE.PERSPECTIVE,
     xvizStyles: {},
     customLayers: [],
+    customXVIZLayers: [],
     onMapLoad: noop,
     onDeckLoad: noop,
     onViewStateChange: noop,
@@ -245,6 +247,7 @@ export default class Core3DViewer extends PureComponent {
       streamsMetadata,
       objectStates,
       customLayers,
+      customXVIZLayers,
       getTransformMatrix,
       styleParser
     } = opts;
@@ -286,7 +289,6 @@ export default class Core3DViewer extends PureComponent {
               ...coordinateProps,
 
               pickable: true,
-
               data: primitives,
               style: stylesheet,
               objectStates,
@@ -297,7 +299,9 @@ export default class Core3DViewer extends PureComponent {
               zIndex: Z_INDEX[primitives[0].type] || 0,
 
               // Selection props (app defined, not used by deck.gl)
-              streamName
+              streamName,
+              streamMetadata: streamsMetadata[streamName],
+              customXVIZLayers
             });
           }
           return null;
@@ -397,7 +401,8 @@ export default class Core3DViewer extends PureComponent {
       viewMode,
       viewState,
       viewOffset,
-      showMap
+      showMap,
+      customXVIZLayers
     } = this.props;
     const {styleParser, views} = this.state;
     const layers = this.getLayers({
@@ -408,7 +413,8 @@ export default class Core3DViewer extends PureComponent {
       objectStates,
       customLayers,
       getTransformMatrix,
-      styleParser
+      styleParser,
+      customXVIZLayers
     });
     const viewStates = this.getViewState({viewMode, frame, viewState, viewOffset});
 
