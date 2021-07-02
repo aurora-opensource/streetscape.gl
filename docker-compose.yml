@@ -1,7 +1,7 @@
 version: '3.2'
 services:
   streetscape-frontend:
-    image: streetscape-frontend:latest
+    image: 407636574581.dkr.ecr.us-east-2.amazonaws.com/streetscapes
     network_mode: host
     ports:
       - "8080:8080"
