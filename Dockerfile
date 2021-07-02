@@ -1,34 +1,34 @@
 # Docker Image for BuildKite CI
 # -----------------------------
-FROM node:10.16.3
+FROM node:14
 
-WORKDIR /streetscape
+# exposing a port to openly transfer data
+EXPOSE 8080
 
-RUN yarn global add yarn@1.16.0
+# changed the current work directory to xviz 
+WORKDIR /streetscape.gl
 
-WORKDIR /streetscape
-ENV PATH /streetscape/node_modules/.bin:$PATH
-
-ENV DISPLAY :99
-
+# update apt get
 RUN apt-get update
 
-# required by lint script
-RUN apt-get -y install jq
+# installing curl
+RUN apt-get install curl git gcc libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev -y
 
-# https://github.com/buildkite/docker-puppeteer/blob/master/Dockerfile
-RUN  apt-get update \
-  # Install latest chrome dev package, which installs the necessary libs to
-  # make the bundled version of Chromium that Puppeteer installs work.
-  && apt-get install -y wget --no-install-recommends \
-  && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-  && apt-get update \
-  && apt-get install -y google-chrome-unstable --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* \
-  && wget --quiet https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /usr/sbin/wait-for-it.sh \
-  && chmod +x /usr/sbin/wait-for-it.sh
+COPY . /streetscape.gl
 
-COPY . /streetscape/
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash
 
-RUN cd /streetscape/ && yarn bootstrap
+RUN apt-get install nodejs -y
+
+ENV PUPPETEER_SKIP_DOWNLOAD=1
+
+RUN npm install
+
+RUN yarn bootstrap
+
+RUN cd examples/get-started
+
+RUN yarn 
+
+RUN yarn start
+
