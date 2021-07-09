@@ -44,7 +44,7 @@ export const APP_SETTINGS = {
   },
   showTooltip: {
     type: 'toggle',
-    title: 'Show Tooltip'
+    title: 'Show stats'
   }
 };
 

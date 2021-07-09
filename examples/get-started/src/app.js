@@ -74,6 +74,8 @@ class Example extends PureComponent {
     return (
       <div id="container">
         <div id="control-panel">
+          <div id="logo"> <img src="/raven_logo.png" alt="" width="100%"/>
+          </div>
           <XVIZPanel log={log} name="Metrics" />
           <hr />
           <XVIZPanel log={log} name="Camera" />
