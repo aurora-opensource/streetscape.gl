@@ -91,19 +91,30 @@ class Example extends PureComponent {
             <hr />
             <h5>Radar</h5>
             <ul>
-              <li style={{color: 'red'}}>Pass Through Filter - Q FLTR - RED</li>
-              <li style={{color: '#CCAA00'}}>Filtered Out - Q FLTR - YELLOW</li>
+              <li style={{color: 'black'}}>
+              Pass Through Filter - Q FLTR: 
+              <span style={{color: 'red'}}> ◍</span></li>
+              <li style={{color: 'black'}}>
+              Filtered Out - Q FLTR: 
+              <span style={{color: 'yellow'}}> ◍</span></li>
             </ul>
             <hr />
             <h5>Camera</h5>
             <ul>
-              <li style={{color: '#00CCCC'}}>Camera Target - CYAN</li>
+              <li style={{color: 'black'}}>
+              Camera Target: 
+              <span style={{color: '#00CCCC'}}> ◍</span></li>
+
             </ul>
             <hr />
             <h5>Tracking</h5>
             <ul>
-              <li style={{color: 'blue'}}>Tracking Target Camera Only - BLUE</li>
-              <li style={{color: 'green'}}>Tracking Target Camera + Radar - GREEN</li>
+              <li style={{color: 'black'}}>
+              Tracking Target Camera Only:     
+              <span style={{color: 'blue'}}> ◍</span></li>
+              <li style={{color: 'black'}}>
+              Tracking Target Camera + Radar: 
+              <span style={{color: 'green'}}> ◍</span></li>
             </ul>
           </div>
         </div>
