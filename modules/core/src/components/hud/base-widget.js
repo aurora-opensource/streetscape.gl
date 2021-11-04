@@ -24,6 +24,7 @@ import {evaluateStyle, withTheme} from '@streetscape.gl/monochrome';
 import styled from '@emotion/styled';
 
 import connectToLog from '../connect';
+import {getTimeSeriesStreamEntry} from '../../utils/stream-utils';
 
 const WrapperComponent = styled.div(props => ({
   ...props.theme.__reset__,
@@ -71,7 +72,7 @@ class BaseWidget extends PureComponent {
       if (streamName) {
         result[key] = {
           ...streamsMetadata[streamName],
-          data: frame && frame.streams[streamName]
+          data: frame && getTimeSeriesStreamEntry(frame.streams[streamName])
         };
       }
     }
