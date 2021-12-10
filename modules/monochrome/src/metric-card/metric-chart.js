@@ -85,7 +85,7 @@ export default class MetricChart extends PureComponent {
   };
 
   _onMouseLeave = evt => {
-    this.setState({isHovered: false, hoveredX: null});
+    this.setState({isHovered: false, hoveredX: null, hoveredValues: {}});
     this.props.onMouseLeave(evt);
   };
 
