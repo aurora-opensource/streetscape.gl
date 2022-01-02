@@ -25,7 +25,8 @@ export const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-lin
 export const MAP_STYLE = 'mapbox://styles/mapbox/light-v9';
 
 export const XVIZ_CONFIG = {
-  PLAYBACK_FRAME_RATE: 10
+  PLAYBACK_FRAME_RATE: 10,
+  ALLOW_MISSING_PRIMARY_POSE: true
 };
 
 export const CAR = CarMesh.sedan({
@@ -50,5 +51,6 @@ export const APP_SETTINGS = {
 
 export const XVIZ_STYLE = {
   '/tracklets/objects': [{name: 'selected', style: {fill_color: '#ff8000aa'}}],
+  '/tracklets/label': [{style: {fill_color: '#00008B'}}],
   '/lidar/points': [{style: {point_color_mode: 'ELEVATION'}}]
 };

@@ -29,6 +29,9 @@ const BABEL_CONFIG = {
 
 const CONFIG = {
   mode: 'development',
+  devServer: {
+    historyApiFallback: true
+  },
   entry: {
     app: resolve('./src/app.js')
   },

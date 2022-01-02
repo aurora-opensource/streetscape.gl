@@ -40,6 +40,7 @@ function makeLocalDevConfig() {
 
     // suppress warnings about bundle size
     devServer: {
+      historyApiFallback: true,
       stats: {
         warnings: false
       }

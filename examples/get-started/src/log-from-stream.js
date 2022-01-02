@@ -18,14 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+/* global URLSearchParams, window */
+
 import {XVIZStreamLoader} from 'streetscape.gl';
 
+const params = new URLSearchParams(window.location.search);
+
 export default new XVIZStreamLoader({
+  ...Object.fromEntries(params.entries()),
   logGuid: 'mock',
   // bufferLength: 15,
   serverConfig: {
     defaultLogLength: 30,
-    serverUrl: 'ws://localhost:8081'
+    serverUrl: `ws://localhost:8081${window.location.pathname}`
   },
   worker: true,
   maxConcurrency: 4

@@ -86,7 +86,7 @@ class Example extends PureComponent {
           <StreamSettingsPanel log={log} />
         </div>
         <div id="log-panel">
-          <div id="map-view">
+          <div id="map-view" style={{backgroundColor: 'lightgray'}}>
             <LogViewer
               log={log}
               mapboxApiAccessToken={MAPBOX_TOKEN}
