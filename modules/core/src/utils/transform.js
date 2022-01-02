@@ -29,30 +29,51 @@ import {COORDINATE} from '../constants';
 const DEFAULT_ORIGIN = [0, 0, 0];
 
 // Export only for testing
-export function resolveLinksTransform(links, streams, streamName) {
+export function resolveLinksTransform(links, poses, streamName) {
   const transforms = [];
-  let parentPose = links[streamName] && links[streamName].target_pose;
+
+  // If streamName has a pose entry, ensure we capture it
+  if (poses[streamName]) {
+    transforms.push(poses[streamName]);
+  }
 
   // TODO(twojtasz): we could cache the resulting transform based on the entry
   // into the link structure.
+  let missingPose = '';
+  let cycleDetected = false;
+  if (links) {
+    let parentPoseName = links[streamName] && links[streamName].target_pose;
+    const seen = new Set();
 
-  let missingPose = false;
+    // Collect all poses from child to root
+    while (parentPoseName) {
+      cycleDetected = seen.has(parentPoseName);
+      if (cycleDetected) {
+        break;
+      }
+      seen.add(parentPoseName);
 
-  // Collect all poses from child to root
-  while (parentPose) {
-    if (!streams[parentPose]) {
-      missingPose = true;
-      break;
+      if (!poses[parentPoseName]) {
+        missingPose = parentPoseName;
+        break;
+      }
+
+      transforms.push(poses[parentPoseName]);
+      parentPoseName = links[parentPoseName] && links[parentPoseName].target_pose;
     }
-    transforms.push(streams[parentPose]);
-    parentPose = links[parentPose] && links[parentPose].target_pose;
   }
 
-  // Resolve pose transforms. If missingPose is true, which can happen if a
-  // persistent link is defined before normal state has been sent, ignore it
-  // TODO(twojtasz): Flag stream affected by missingPose so it can be reported
-  // by application
-  if (!missingPose && transforms.length) {
+  if (missingPose) {
+    // TODO(twojtasz): report issue
+    return null;
+  }
+
+  if (cycleDetected) {
+    // TODO(twojtasz): report issue
+    return null;
+  }
+
+  if (transforms.length) {
     // process from root to child
     return transforms.reduceRight((acc, val) => {
       return acc.multiplyRight(new Pose(val).getTransformationMatrix());
@@ -69,13 +90,14 @@ export function resolveLinksTransform(links, streams, streamName) {
  * streamMetadata - Anym metadata associated with the stream
  * getTransformMatrix - A callback function for when stream metadata specifieds a DYNAMIC coordinate system
  */
+/* eslint-disable complexity */
 export function resolveCoordinateTransform(
   frame,
   streamName,
   streamMetadata = {},
   getTransformMatrix
 ) {
-  const {origin, links = {}, streams, transforms = {}, vehicleRelativeTransform} = frame;
+  const {origin, links, poses, streams, transforms = {}, vehicleRelativeTransform} = frame;
   const {coordinate, transform, pose} = streamMetadata;
 
   let coordinateSystem = COORDINATE_SYSTEM.METER_OFFSETS;
@@ -105,7 +127,7 @@ export function resolveCoordinateTransform(
 
     default:
     case COORDINATE.IDENTITY:
-      modelMatrix = resolveLinksTransform(links, streams, streamName);
+      modelMatrix = resolveLinksTransform(links, poses || streams, streamName);
       break;
   }
 
@@ -126,6 +148,7 @@ export function resolveCoordinateTransform(
     modelMatrix
   };
 }
+/* eslint-enable complexity */
 
 export function positionToLngLat([x, y, z], {coordinateSystem, coordinateOrigin, modelMatrix}) {
   if (modelMatrix) {

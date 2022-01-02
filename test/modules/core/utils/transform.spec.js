@@ -24,13 +24,16 @@ import test from 'tape';
 import {resolveLinksTransform} from '@streetscape.gl/core/utils/transform';
 
 test('resolveLinksTransform', t => {
-  // transation links
+  // translation links
   // A -> B -> C
-  // A -> D
+  // A -> D -> E
   //
   // rotation links
   // r90 -> m10 -> DD
   // rn90 -> m20 -> CC
+  //
+  // cycle links
+  // cycleA -> cycleB -> cycleA
   const links = {
     C: {
       target_pose: 'B'
@@ -40,6 +43,9 @@ test('resolveLinksTransform', t => {
     },
     D: {
       target_pose: 'A'
+    },
+    E: {
+      target_pose: 'D'
     },
     CC: {
       target_pose: 'm20'
@@ -52,10 +58,16 @@ test('resolveLinksTransform', t => {
     },
     m20: {
       target_pose: 'rn90'
+    },
+    cycleA: {
+      target_pose: 'cycleB'
+    },
+    cycleB: {
+      target_pose: 'cycleA'
     }
   };
 
-  const streams = {
+  const poses = {
     A: {
       yaw: 0,
       pitch: 0,
@@ -70,6 +82,22 @@ test('resolveLinksTransform', t => {
       roll: 0,
       x: 20,
       y: 20,
+      z: 0
+    },
+    D: {
+      yaw: 0,
+      pitch: 0,
+      roll: 0,
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    E: {
+      yaw: 0,
+      pitch: 0,
+      roll: 0,
+      x: 10,
+      y: 10,
       z: 0
     },
     r90: {
@@ -103,19 +131,40 @@ test('resolveLinksTransform', t => {
       x: 20,
       y: 20,
       z: 0
+    },
+    cycleA: {
+      yaw: 0,
+      pitch: 0,
+      roll: 0,
+      x: 5,
+      y: 5,
+      z: 0
+    },
+    cycleB: {
+      yaw: 0,
+      pitch: 0,
+      roll: 0,
+      x: 5,
+      y: 5,
+      z: 0
     }
   };
 
   const testCases = [
-    {stream: 'C', expected: [30, 30, 0]},
-    {stream: 'D', expected: [10, 10, 0]},
-    {stream: 'E', expected: null},
-    {stream: 'CC', expected: [20, -20, 0]},
-    {stream: 'DD', expected: [-10, 10, 0]}
+    {stream: 'A', expected: [10, 10, 0]}, // no link, just pose
+    {stream: 'C', expected: [30, 30, 0]}, // 2 links, 2 poses
+    {stream: 'D', expected: [10, 10, 0]}, // 1 link, 1 pose
+    {stream: 'E', expected: [20, 20, 0]}, // 2 links, 3 poses
+    {stream: 'Z', expected: null}, // missing pose
+    {stream: 'CC', expected: [20, -20, 0]}, // rotation & translation path
+    {stream: 'DD', expected: [-10, 10, 0]}, // rotation & translation path
+    {stream: 'cycleB', expected: null} // cycle in path
   ];
 
+  // For each testcase, resolve the transform for the named stream
+  // and verify the expected
   for (const testcase of testCases) {
-    const transformTo = resolveLinksTransform(links, streams, testcase.stream);
+    const transformTo = resolveLinksTransform(links, poses, testcase.stream);
     if (transformTo) {
       const resultOrigin = transformTo.transformVector([0, 0, 0]);
 
@@ -130,7 +179,7 @@ test('resolveLinksTransform', t => {
       t.equal(
         transformTo,
         testcase.expected,
-        `missing links entry matches expected '${testcase.expected}'`
+        `null return matches expected '${testcase.expected}'`
       );
     }
   }
