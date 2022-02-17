@@ -12638,9 +12638,10 @@ proto-list@~1.2.1:
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
   integrity sha1-IS1b/hMYMGpCD2QCuOJv85ZHqEk=
 
-"protobufjs@git+https://github.com/jlisee/protobuf.js.git#ed8e699671da6f9a169074aa0f2a160cefe0844a":
+"protobufjs@https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a":
   version "6.8.8"
-  resolved "git+https://github.com/jlisee/protobuf.js.git#ed8e699671da6f9a169074aa0f2a160cefe0844a"
+  uid ed8e699671da6f9a169074aa0f2a160cefe0844a
+  resolved "https://github.com/jlisee/protobuf.js#ed8e699671da6f9a169074aa0f2a160cefe0844a"
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -15320,9 +15321,9 @@ url-loader@^1.1.2:
     schema-utils "^1.0.0"
 
 url-parse@^1.1.8, url-parse@^1.4.3, url-parse@^1.5.3:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.4.tgz#e4f645a7e2a0852cc8a66b14b292a3e9a11a97fd"
-  integrity sha512-ITeAByWWoqutFClc/lRZnFplgXgEZr3WJ6XngMM/N9DMIm4K8zXPCZ1Jdu0rERwO84w1WC5wkle2ubwTA4NTBg==
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.7.tgz#00780f60dbdae90181f51ed85fb24109422c932a"
+  integrity sha512-HxWkieX+STA38EDk7CE9MEryFeHCKzgagxlGvsdS7WBImq9Mk+PGwiT56w82WI3aicwJA8REp42Cxo98c8FZMA==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
