@@ -108,6 +108,7 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
     let file;
     switch (fileFormat) {
       case 'glb':
+      case 'pbe':
         file = fetch(filePath).then(resp => resp.arrayBuffer());
         break;
 
