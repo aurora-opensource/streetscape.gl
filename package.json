@@ -49,6 +49,9 @@
     "react-dom": "^16.4.1",
     "storybook-readme": "^4.0.5"
   },
+  "resolutions": {
+    "cheerio": "1.0.0-rc.10"
+  },
   "engines": {
     "node": ">= 10.16",
     "npm": ">= 6",
