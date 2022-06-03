@@ -168,9 +168,12 @@ const LAYER_HANDLERS = {
     layerClass: PointCloudLayer,
     getLayerTypeProps: ({xvizLayerProps, state}) => {
       const {data} = state;
+      const length = data[0].points.length / 3;
+      const colorFormat = data[0].colors && data[0].colors.length / 3 === length ? 'RGB' : 'RGBA';
       return {
+        colorFormat,
         data: {
-          length: data[0].points.length / 3,
+          length,
           attributes: {
             getPosition: data[0].points,
             getColor: data[0].colors
