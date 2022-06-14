@@ -18,12 +18,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// TODO move to a GitHub file?
 export const FRAMEWORK_LINKS = {
-  'deck.gl': 'https://uber.github.io/deck.gl',
-  'luma.gl': 'https://uber.github.io/luma.gl',
-  'react-map-gl': 'https://uber.github.io/react-map-gl',
-  'nebula.gl': 'https://uber.github.io/nebula.gl',
+  'deck.gl': 'https://deck.gl/',
+  'luma.gl': 'https://luma.gl/',
+  'react-map-gl': 'https://visgl.github.io/react-map-gl/',
+  'nebula.gl': 'https://nebula.gl/',
   'react-vis': 'https://uber.github.io/react-vis',
   'vis.gl': 'http://vis.gl'
 };
