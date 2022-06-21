@@ -215,7 +215,7 @@ export default class XVIZLoaderInterface extends PlayableLoaderInterface {
         streamsMetadata[streamName] = timeslice.streams[streamName].__metadata;
 
         // Add new stream name to stream settings (default on)
-        if (!(streamName in streamSettings)) {
+        if (streamSettings && !(streamName in streamSettings)) {
           streamSettings[streamName] = true;
         }
       }
