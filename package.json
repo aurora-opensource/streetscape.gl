@@ -42,7 +42,7 @@
     "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-react": "^7.5.1",
     "flow-bin": "^0.80.0",
-    "jsdom": "^9.11.0",
+    "jsdom": "^16.5.0",
     "ocular-dev-tools": "0.0.30",
     "pre-commit": "^1.2.2",
     "react": "^16.4.1",
