@@ -104,7 +104,6 @@ export default class XVIZFileLoader extends XVIZLoaderInterface {
 
   _loadFile(filePath, options) {
     const fileFormat = filePath.toLowerCase().split('?')[0].match(/[^\.]*$/)[0];
-
     let file;
     switch (fileFormat) {
       case 'glb':
