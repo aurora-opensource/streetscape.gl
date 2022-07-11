@@ -193,7 +193,7 @@ export default class Core3DViewer extends PureComponent {
   };
 
   _onLayerClick = (info, evt) => {
-    const isRightClick = evt.which === 3;
+    const isRightClick = evt.rightButton;
 
     if (isRightClick) {
       this.props.onContextMenu(info, evt);
