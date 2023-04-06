@@ -63,6 +63,7 @@ export default class Core3DViewer extends PureComponent {
     showMap: PropTypes.bool,
     showTooltip: PropTypes.bool,
     mapboxApiAccessToken: PropTypes.string,
+    deckParameters: PropTypes.object,
     mapStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
     xvizStyles: PropTypes.object,
     car: PropTypes.object,
@@ -397,6 +398,7 @@ export default class Core3DViewer extends PureComponent {
       customLayers,
       getTransformMatrix,
       style,
+      deckParameters,
       mapStyle,
       viewMode,
       viewState,
@@ -435,6 +437,7 @@ export default class Core3DViewer extends PureComponent {
         onViewStateChange={this._onViewStateChange}
         ContextProvider={MapContext.Provider}
         _onMetrics={this._onMetrics}
+        parameters={deckParameters || {}}
       >
         {showMap && (
           <StaticMap
