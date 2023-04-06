@@ -18,6 +18,13 @@ The log to render - an [XVIZLoader](/docs/api-reference/xviz-loader-interface.md
 
 A [Mapbox API access token](https://www.mapbox.com).
 
+##### deckParameters (Object, optional)
+
+Override default Deck.gl parameters
+
+For more information, see
+[Deck parameters object](https://deck.gl/docs/api-reference/core/deck#parameters)
+
 ##### mapStyle (Object|String, optional)
 
 A [Mapbox style](https://www.mapbox.com/mapbox-gl-js/api/#map) to render the base map with.
